@@ -184,7 +184,7 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     line-height:1.25;
     white-space:nowrap;
     cursor:pointer;
-    transition:all .2s ease;
+    transition:background-color .12s ease, color .12s ease, border-color .12s ease, transform .12s ease, box-shadow .12s ease;
 }
 .main-tabs-nav .nav-btn:hover {
     background:#eff6ff;
@@ -307,10 +307,45 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
                 height: 2.6rem;
             }
         }
+/* ==================================================================
+   محراب العبقري التفاعلي — أنماط معزولة داخل تبويب الأوراد الخاصة
+   ================================================================== */
+.mihrab-wrapper {
+    font-family: 'Amiri', serif;
+    background-color: #fdfbf7;
+    background-image: radial-gradient(#e5decf 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: #2c3e35;
+    border-radius: 1rem;
+    padding: 1.25rem;
+}
+.mihrab-wrapper .font-title {
+    font-family: 'Reem Kufi', sans-serif;
+}
+.mihrab-wrapper .verse-card {
+    background: #ffffff;
+    border: 1px solid #e2d7c5;
+    box-shadow: 0 4px 15px -3px rgba(44, 62, 53, 0.05);
+    transition: all 0.3s ease;
+}
+.mihrab-wrapper .verse-card:hover {
+    border-color: #0d5c3a;
+    box-shadow: 0 8px 25px -5px rgba(13, 92, 58, 0.12);
+}
+.mihrab-wrapper .repeat-shield {
+    background: linear-gradient(90deg, rgba(212,175,55,0.08) 0%, rgba(245,240,230,0.9) 50%, rgba(212,175,55,0.08) 100%);
+    border-right: 4px solid #0d5c3a;
+    border-left: 4px solid #0d5c3a;
+}
+.mihrab-wrapper .islamic-frame {
+    border: 2px solid #d4af37;
+    outline: 3px solid #0d5c3a;
+    outline-offset: -8px;
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@500;700&family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
 /* زر العودة إلى أعلى الصفحة */
@@ -356,8 +391,8 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
 }
 
 
-/* ===== أنماط بوابة الأذكار والتحصينات ===== */
-/* ===== عزل تبويبات بوابة الأذكار عن التبويبات الرئيسية ===== */
+/* ===== أنماط مجلس العبقري للذكر والتسبيح ===== */
+/* ===== عزل تبويبات مجلس العبقري للذكر والتسبيح عن التبويبات الرئيسية ===== */
 #azkar-app .azkar-inner-tab {
     display:block;
     width:100%;
@@ -750,7 +785,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
     <div class="glass-card ivory-bg text-slate-800 rounded-3xl p-5 md:p-5 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
         
         <h3 class="text-xl font-extrabold text-blue-700 mb-0 text-center">★ ( مركز العبقري للتدريب والإستشارات ) ★</h3>
-        <p class="text-center text-xs font-bold text-amber-700 bg-amber-100 py-0 px-0 rounded-full inline-block mx-auto mb-3 w-full border border-amber-300">★ (مركز رسمي مُعتَمد) (س.ت 92527)</p>
+        <p class="text-center text-xs font-bold text-amber-700 bg-amber-100 py-0 px-0 rounded-full inline-block mx-auto mb-3 w-full border border-amber-300">★ (مركز رسمي مُعتَمد) (س.ت.92527)</p>
         
         <div class="space-y-3 text-xs md:text-sm text-slate-700 leading-relaxed">
             <div class="bg-blue-50 p-1 rounded-2xl border border-blue-200">
@@ -839,9 +874,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </div>
         <!-- القسم الأيسر: بيانات السجل التجاري والاسم (في اليسار) -->
         <div class="text-center md:text-left">
-            <p class="text-xs md:text-sm font-semibold tracking-wide text-sky-700 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-100">
-                س.ت: 92527 | د/أحمد السيد رَسَّه
-    </div>
+            <p class="text-xs md:text-sm font-semibold tracking-wide text-sky-700 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-100">د/أحمد السيد رَسَّه | س.ت.92527</div>
 </div>
         <nav class="main-tabs-nav top-0 z-50" aria-label="التبويبات الرئيسية للمنصة">
             <button type="button" onclick="switchTab('home')" class="nav-btn active">الرئيسية</button>
@@ -849,8 +882,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <button type="button" onclick="switchTab('doors')" class="nav-btn">الدبلومات الرسمية المعتمدة</button>
             <button type="button" onclick="switchTab('courses')" class="nav-btn">العلوم والدورات المساعدة</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
-            <button type="button" onclick="switchTab('azkar')" class="nav-btn">بوابة الأذكار والتحصينات</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn">إتصل بنا 📞</button>
+            <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn">تواصل معنا📞</button>
         </nav>
     </div>
     </header>
@@ -870,17 +903,19 @@ img.abq-zoomable-image { cursor: zoom-in; }
     <img src="https://img2link.online/api/file/1787796879272-251972327.png" alt="مدير مركز العبقري" loading="lazy" class="w-full h-auto object-contain block">
 </div>
                     <div class="flex flex-wrap items-center justify-center gap-3">
-	<span class="bg-white/20 text-white text-xs px-3.5 py-1.5 rounded-full font-bold border border-white/30 backdrop-blur-md">مركز رسمي معتمد (س.ت92527)</span>
+	<span class="bg-white/20 text-white text-xs py-3 px-4 rounded-full font-bold border border-white/30 backdrop-blur-md">مركز رسمي معتمد (س.ت.92527)</span>
                         <button onclick="switchTab('contact')" class="bg-green-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-graduation-cap ml-1"></i>حول المركز وتفاصيل الخدمات 🌿</button>
                     </div>
                     <h2 class="text-2xl md:text-4xl font-black leading-tight tracking-tight">نَرتَقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل</h2>
  <p class="text-sm md:text-base font-bold text-white/95 leading-relaxed max-w-4xl">🌿 مركز العبقري للتدريب والإستشارات منصة معرفية وتدريبية متكاملة تجمع بين أصالة القيم الإسلامية 🌿<br>🌿 وأحدث العلوم الإنسانية والتنموية لخدمة الفرد والأسرة والمجتمع بتطوير مهاراتهم، وتعزيز وعيهم، وتحسين جودة حياتهم 🌿</p>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-3xl mt-2">
-                        <button onclick="switchTab('courses')" class="bg-cyan-300 text-blue-700 font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
+                        <button onclick="switchTab('courses')" class="bg-cyan-300 text-green-900 font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
                         <button onclick="switchTab('doors')" class="bg-amber-400 text-amber-950 font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
                         <button onclick="switchTab('azkar')" class="bg-emerald-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
-                        <button onclick="switchTab('contact')" class="bg-white/15 border border-white/40 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg backdrop-blur-md hover:bg-white/25 transition text-xs md:text-sm"><i class="fas fa-phone ml-1"></i> إتصل بنا</button>
+                       
+
+ <button onclick="switchTab('azkar')" class="bg-cyan-400 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
                     </div>
 
 <div class="abq-hero-visitor-welcome w-full flex flex-wrap items-center justify-center gap-3 text-center">
@@ -923,15 +958,9 @@ img.abq-zoomable-image { cursor: zoom-in; }
 وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات ( الطاقة الحيوية / والباراسيكولوجي/ وعلم النفس الإسلامي/ والريكي الإسلامي/ والحجامة الإسلامية/ والتنمية البشرية ) من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي ... ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه.</strong>
         <p class="mb-2">
         </p>
-
-
         </p>
-
-        <p>
-
     </div>
 </div>
-
     </div>
 
                 <!-- رؤيتنا و رسالتنا -->
@@ -2015,6 +2044,32 @@ img.abq-zoomable-image { cursor: zoom-in; }
                                 </ul>
                             </div>
                         </div>
+           <!-- 14 -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                            <div class="flex flex-wrap justify-between items-center mb-3">
+                                <h4 class="font-bold text-slate-900 text-base md:text-lg">14. منهج العبقري في سلامة الوصول (الإطار المنهجي الحاكم)</h4>
+                                <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-xl">علوم الأصول والمنهجية</span>
+                            </div>
+                            <p class="text-xs md:text-sm text-indigo-900 bg-indigo-50 p-3 rounded-xl border border-indigo-200 mb-3">
+                                <strong>الهدف التدريبي:</strong> بناء منهج منضبط يحكم تعامل المتدرب مع مختلف العلوم والمعارف والممارسات؛ بحيث ينتقل من مجرد معرفة المعلومة إلى سلامة تصورها، والتثبت منها، وتأصيلها، وفهمها، والتدرج فيها، ثم تطبيقها بصورة واعية ومسؤولة.
+                            </p>
+                            <div class="space-y-2 text-xs md:text-sm text-slate-800">
+                                <p class="font-bold text-slate-900">المحاور الأساسية:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700 pr-2">
+                                    <li><strong>التصور الصحيح:</strong> ضبط المفاهيم والمصطلحات وتحديد موضوع العلم وحدوده قبل الخوض في تفاصيله.</li>
+                                    <li><strong>التثبت:</strong> التمييز بين المعلومة الموثوقة، والرأي، والتجربة، والدعوى؛ والتحقق من مصادر المعرفة قبل اعتمادها.</li>
+                                    <li><strong>التأصيل:</strong> ردّ المسائل إلى أصولها ومراجعها وضوابطها الشرعية والعلمية والأخلاقية، مع بيان ما هو ثابت وما هو اجتهادي.</li>
+                                    <li><strong>الفهم:</strong> الانتقال من حفظ المعلومات إلى فهم العلاقات والمقاصد والآثار والسياقات.</li>
+                                    <li><strong>التدرج:</strong> مراعاة مستويات المتعلم والانتقال من الأساسيات إلى التطبيقات المتقدمة دون قفز أو خلط بين المراحل.</li>
+                                    <li><strong>التطبيق:</strong> تحويل المعرفة إلى ممارسة قابلة للتقييم، مع مراعاة المسؤولية المهنية وحدود الاختصاص والسلامة.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-4 p-4 rounded-2xl bg-white border border-indigo-100 shadow-sm">
+                                <p class="font-black text-indigo-900 mb-2">منهج العمل الحاكم في منصة العبقري:</p>
+                                <p class="text-sm md:text-base font-bold text-slate-700 leading-8">التصور الصحيح ← التثبت ← التأصيل ← الفهم ← التدرج ← التطبيق</p>
+                                <p class="text-xs md:text-sm text-slate-600 mt-2 leading-7">ويُستحضر هذا المسار بوصفه إطارًا منهجيًا حاكمًا عند بناء البرامج والمناهج، وتقديم المحتوى، وتقييم الممارسات؛ ليكون المقصود هو سلامة الوصول إلى المعرفة النافعة والتطبيق الرشيد، لا مجرد كثرة المعلومات.</p>
+                            </div>
+                        </div>
         </section>
 
 
@@ -2234,7 +2289,92 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </div>
 </section>
 
-        <!-- تبويب اتصل بنا -->
+
+
+<!-- =========================================================
+     CSS خاص بمنطقة نبذة عن المركز
+     ========================================================= -->
+
+<style>
+
+    .about-program {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 1rem;
+        line-height: 1.9;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #334155;
+        transition: all 0.2s ease;
+    }
+
+    .about-program:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,.06);
+        border-color: #93c5fd;
+    }
+
+    .about-course-row {
+        display: grid;
+        grid-template-columns: 55px 1fr;
+        gap: .75rem;
+        padding: .9rem 1rem;
+        line-height: 1.8;
+        align-items: start;
+        background: #fff;
+    }
+
+    .about-course-row > span:first-child {
+        font-weight: 900;
+        color: #1e5aa8;
+    }
+
+    .service-card {
+        background: linear-gradient(135deg, #f8fafc, #ffffff);
+        border: 1px solid #dbeafe;
+        border-radius: 1.25rem;
+        padding: 1.1rem;
+    }
+
+    .service-card h4 {
+        font-size: 1rem;
+        font-weight: 900;
+        color: #0f3b2e;
+        margin-bottom: .45rem;
+    }
+
+    .service-card p {
+        color: #64748b;
+        font-size: .9rem;
+        line-height: 1.8;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    @media (max-width: 640px) {
+
+        .about-course-row {
+            grid-template-columns: 42px 1fr;
+            font-size: .82rem;
+            padding: .75rem;
+            gap: .5rem;
+        }
+
+        .about-program {
+            font-size: .84rem;
+            padding: .85rem;
+        }
+
+        .service-card p {
+            font-size: .82rem;
+        }
+
+    }
+
+</style>
+
+
 <section id="contact" class="tab-content">
     <div class="max-w-4xl mx-auto">
 
@@ -2248,84 +2388,77 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <!-- =========================
                  رأس البطاقة
             ========================= -->
-            <div class="relative bg-gradient-to-br from-green-400 via-blue-400 to-blue-700 px-6 py-8 md:px-10 md:py-10 text-center overflow-hidden">
-
-                <!-- لمعة زخرفية -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-blue-700 to-transparent"></div>
-
-
-
-                    <h2 class="text-2xl md:text-3xl text-white font-black text-white leading-relaxed">
-                        تواصل مع مركز العبقري للتدريب والإستشارات <span class="text-3xl">📞</span>
-                    </h2>
-
-
-
-                    <div class="mt-4 mx-auto max-w-2xl h-px bg-white/20"></div>
-
-                    <p class="text-white/85 text-xl font-bold md:text-base leading-7 mt-4">
-                        نسعد باستفساراتكم وتواصلكم الدائم معنا عبر قنوات التواصل الرسمية
-                        أو من خلال زيارة مقر المركز.
-                    </p>
-
-                </div>
+           
             </div>
                 </div>
-
-
-                <!-- =========================
-                     نبذة مختصرة
-                ========================= -->
-                <div class="relative bg-gradient-to-br from-slate-50 to-blue-50/50
-                            rounded-2xl border border-slate-200 p-5 md:p-6 mb-6">
-
-                    <div class="flex items-start gap-3">
-
-                        <div class="shrink-0 w-10 h-10 rounded-xl
-                                    bg-blue-600 text-white
-                                    flex items-center justify-center shadow-md">
-                            ℹ️
-                        </div>
-
-                        <div class="flex-1 text-right">
-
-                            <h4 class="font-black text-slate-900 text-base mb-2">
-                                نبذة عن المركز
-                            </h4>
-
-                            <p class="text-sm md:text-center text-slate-600 leading-7"><strong>🌿 مركز العبقري للتدريب والإستشارات منصة معرفية وتدريبية متكاملة تجمع بين أصالة القيم الإسلامية وأحدث العلوم الإنسانية والتنموية لخدمة الفرد والأسرة والمجتمع بتطوير مهاراتهم، وتعزيز وعيهم، وتحسين جودة حياتهم 🌿</strong>
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
 
                 <!-- =========================
                      أزرار الخدمات والحسابات
                 ========================= -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-7">
+                    <div class="group p-5 bg-white rounded-2xl
+                                border border-slate-200
+                                shadow-sm hover:shadow-lg
+                                hover:border-blue-300
+                                transition-all duration-300">
 
-                    <button
-                        onclick="openAboutModal()"
-                        class="group w-full px-5 py-3.5
-                               bg-blue-600 hover:bg-green-700
-                               text-white font-bold rounded-xl
-                               transition-all duration-300
-                               shadow-md hover:shadow-xl
-                               flex items-center justify-center gap-2">
+<!-- نافذة (Modal) حول المركز العامة (بأبيض سن الفيل) -->
+<!-- نبذة تعريفية -->
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
+<div class="space-y-2 w-full mx-auto">
+    <div class="w-full text-green-600 text-center leading-relaxed">
+    </div>
+    </div>
+        <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-center"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</p><p class="text-blue-700">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي
+            تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية<p><p class="text-blue-700">
+وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات ( الطاقة الحيوية / والباراسيكولوجي/ وعلم النفس الإسلامي/ والريكي الإسلامي/ والحجامة الإسلامية/ والتنمية البشرية ) من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي ... ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه.</strong>
+        <p class="mb-2">
+        </p>
+        </p>
+    </div>
+     </div>
 
-                        <span class="text-lg group-hover:scale-110 transition-transform">
-                            ℹ️
-                        </span>
+    <!-- الخدمات -->
+    <div class="bg-white rounded-3xl shadow-lg border border-emerald-100 p-3 md:p-3 mb-3">
 
-                        <span>
-                           ( إستعراض الخدمات والنبذة الكاملة )
-                        </span>
+        <div class="flex items-center gap-3 mb-5">
+            <span class="text-3xl">🛡️</span>
 
-                    </button>
+            <h3 class="text-xl md:text-xl font-black text-green-700">
+                  <p><strong>يتشرف الدكتور: </strong>أحمد السيد رسّه.(أحمد الزمخشري) بتقديم الخدمات العلاجية والإستشارية</p>
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+            <div class="service-card">
+                <h4>📖 العلاج الروحاني</h4>
+                <p>علاج الأمراض الروحانية بالقرآن الكريم والحجامة الإسلامية</p>
+            </div>
+
+            <div class="service-card">
+                <h4>👨‍👩‍👧‍👦 الإستشارات الأسرية</h4>
+                <p>علاج المشاكل الأسرية بعلم النفس الإسلامي</p>
+            </div>
+
+            <div class="service-card">
+                <h4>🌿 العلاج الطبيعي</h4>
+                <p>علاج الأمراض العضوية بالريكي الإسلامي</p>
+            </div>
+
+            <div class="service-card">
+                <h4>👥 التدريب والتطوير</h4>
+                <p>تدريب الأفراد والمجموعات في التنمية البشرية</p>
+            </div>
+
+            <div class="service-card md:col-span-2">
+                <h4>🎓 الشهادات المعتمدة</h4>
+                <p>منح شهادات رسمية معتمدة دولياً لجميع البرامج</p>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
 
 
                     <a
@@ -2344,7 +2477,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         </span>
 
                         <span>
-                           ( شجرة حسابات المركز الرسمية )
+                           ( إفتح شجرة حسابات المركز الرسمية )
                         </span>
 
                     </a>
@@ -2490,7 +2623,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <div class="flex items-center space-x-3 space-x-reverse">
                 <span class="text-5xl text-[#00FFFF]"><i class="fa-solid fa-kaaba"></i></span>
                 <div>
-                    <h1 class="text-2xl sm:text-bold text-[#00FFFF]">﴿بوابة العبقري للأذكار والتحصينات﴾</h1>
+                    <h1 class="text-2xl sm:text-bold text-[#00FFFF]">﴿مجلس العبقري للذكر والتسبيح﴾</h1>
                     <p class="text-[10px] text-gray-400 font-medium">بإشراف مركز العبقري للتدريب والإستشارات</p>
                 </div>
             </div>
@@ -2507,47 +2640,58 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </div>
     </header>
 
-<!-- مقدمة بوابة العبقري للأذكار والتحصينات -->
+<!-- مقدمة مجلس العبقري للذكر والتسبيح -->
         <div class="relative overflow-hidden rounded-3xl shadow-2xl border border-blue-200 bg-gradient-to-br from-sky-900 via-green-600 to-sky-600 text-white p-5 md:p-7 mb-4">
             <div class="absolute -left-16 -bottom-20 w-56 h-56 rounded-full bg-blue-400/10 blur-3xl"></div>
             <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-sky-300/10 blur-3xl"></div>
             <div class="relative z-10 max-w-4xl mr-0 ml-auto">
                 <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-bold backdrop-blur-sm mb-2">🧭 مرصد العبقري • الإتزان الشامل</span>
-                <h2 class="text-2xl md:text-4xl font-black tracking-tight mb-2">📿 بوابة العبقري • الأذكار والتحصينات</h2>
-                <p class="text-blue-50 text-xs md:text-base leading-7">مساحة إيمانية تجمع الذكر والتحصين والدعاء والسبحة في تجربة منظمة، تساعدك على جعل الذكر رفيقًا يوميًا للسكينة والطمأنينة</p>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tight mb-2">🕌 مجلس العبقري للذكر والتسبيح</h2>
+                <p class="text-blue-50 text-xs md:text-base leading-7">مساحة إيمانية تجمع الذكر والتحصين والدعاء والسبحة في تجربة منظمة، تساعدك على جعل الذكر رفيقًا يوميًا للسكينة والطمأنينة في حياتك.</p>
             </div>
         </div>
 
 
 
     <!-- لسان التبويبات الرئيسي --><main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
-    <div class="sticky top-0 z-50 grid grid-cols-5 gap-1 bg-[#1E5AA8] text-white rounded-xl p-1 mb-6 shadow-lg border border-[#d4af37]/20 text-center text-[10px] sm:text-xs md:text-sm">
-        <button type="button" onclick="switchAzkarTab('hasanat')" id="btn-hasanat" class="tab-btn active py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center">
-            <i class="fa-solid fa-mountain-sun text-base mb-1"></i>جبال الحسنات
-        </button>
+    <div class="sticky top-0 z-50 bg-[#1E5AA8] text-white rounded-xl p-1 mb-6 shadow-lg border border-[#d4af37]/20">
+        <div class="grid grid-cols-5 gap-1 text-center text-[10px] sm:text-xs md:text-sm">
+            <button type="button" onclick="switchAzkarTab('daily')" id="btn-daily" class="tab-btn active py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center">
+                <i class="fa-solid fa-calendar-day text-base mb-1"></i>الأذكار اليومية
+            </button>
 
-        <button type="button" onclick="switchAzkarTab('tahseen')" id="btn-tahseen" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
-            <i class="fa-solid fa-shield-halved text-base mb-1"></i>التحصينات
-        </button>
+            <button type="button" onclick="switchAzkarTab('tahseen')" id="btn-tahseen" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
+                <i class="fa-solid fa-shield-halved text-base mb-1"></i>التحصينات
+            </button>
 
-        <button type="button" onclick="switchAzkarTab('treatment')" id="btn-treatment" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
-            <i class="fa-solid fa-kit-medical text-base mb-1"></i>علاجات ربانية
-        </button>
+            <button type="button" onclick="toggleAwraadMenu()" id="btn-awraad" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white" aria-expanded="false" aria-controls="awraad-subtabs">
+                <i class="fa-solid fa-book-open text-base mb-1"></i>الأوراد
+            </button>
 
-        <button type="button" onclick="switchAzkarTab('subha')" id="btn-subha" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
-            <i class="fa-solid fa-circle-notch text-base mb-1"></i>السبحة
-        </button>
+            <button type="button" onclick="switchAzkarTab('treatment')" id="btn-treatment" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
+                <i class="fa-solid fa-kit-medical text-base mb-1"></i>علاجات ربانية
+            </button>
 
-        <button type="button" onclick="switchAzkarTab('center')" id="btn-center" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
-            <i class="fa-solid fa-house-chimney-medical text-base mb-1"></i>عن المركز
-        </button>
+            <button type="button" onclick="switchAzkarTab('subha')" id="btn-subha" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
+                <i class="fa-solid fa-circle-notch text-base mb-1"></i>السبحة
+            </button>
+        </div>
+
+        <div id="awraad-subtabs" class="hidden grid grid-cols-2 gap-1 mt-1 pt-1 border-t border-white/10 text-center text-[10px] sm:text-xs md:text-sm">
+            <button type="button" onclick="switchAzkarTab('awraad-general')" id="btn-awraad-general" class="tab-btn text-gray-400 py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2 hover:text-white">
+                <i class="fa-solid fa-mosque"></i>أوراد عامة
+            </button>
+            <button type="button" onclick="switchAzkarTab('awraad-private')" id="btn-awraad-private" class="tab-btn text-gray-400 py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2 hover:text-white">
+                <i class="fa-solid fa-user-shield"></i>أوراد خاصة
+            </button>
+        </div>
     </div>
 
-        <!-- التبويب الأول: جبال الحسنات والأذكار المضاعفة -->
-        <section id="tab-hasanat" class="tab-content azkar-inner-tab space-y-0">
+        <!-- التبويب الأول: الأذكار اليومية -->
+        <section id="tab-daily" class="tab-content azkar-inner-tab space-y-0">
             <div class="text-center mb-2">
-                <h1 class="text-xl font-bold text-[#FFFF00]">📿 جبالٌ من الحسنات والأذكار المضاعفة📿</h1>
-                <p class="text-xl font-text-[#FFFF00]"">أذكار مأثورة بأجور مضاعفة لترطيب لسانك</p>
+                <h1 class="text-xl font-bold text-[#FFFF00]">📿 الأذكار اليومية 📿</h1>
+                <p class="text-xl font-text-[#FFFF00]"">أذكار يومية منظمة تساعد على دوام الذكر والمواظبة عليه</p>
             </div>
 
             <!-- حاوية الأذكار الأساسية والديناميكية -->
@@ -2718,7 +2862,212 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </section>
 
         <!-- التبويب الثالث: علاجات ربانية ومجربات زمخشرية -->
-        <section id="tab-treatment" class="tab-content azkar-inner-tab hidden space-y-0">
+                <!-- قسم الأوراد: عامة وخاصة -->
+        <section id="tab-awraad-general" class="tab-content azkar-inner-tab hidden space-y-0">
+            <div class="bg-white rounded-2xl shadow-md border border-emerald-100 p-6 text-center">
+                <div class="text-4xl mb-3">🕌</div>
+                <h2 class="text-xl md:text-2xl font-black text-[#0f3b2e] mb-2">أوراد عامة</h2>
+                <p class="text-sm text-gray-600 leading-7">قسم الأوراد العامة في مجلس العبقري للذكر والتسبيح، مخصص للأوراد الجامعة التي يمكن اعتمادها ضمن البرنامج اليومي للذكر.</p>
+                <div class="mt-3 rounded-xl bg-emerald-50/70 border border-emerald-100 p-4 text-xs text-emerald-900 leading-6">📖 الأوراد العامة: هي التي وردت من الله ورسوله ﷺ لعامة المسلمين.</div>
+                <div class="mt-4 rounded-xl bg-emerald-50 border border-emerald-100 p-4 text-xs text-emerald-800 font-bold">سيتم تنظيم وإضافة الأوراد العامة هنا دون المساس ببقية أقسام المجلس.</div>
+                <div id="awraad-general-container" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-right"></div>
+            </div>
+        </section>
+
+        <section id="tab-awraad-private" class="tab-content azkar-inner-tab hidden space-y-0">
+            <div class="bg-white rounded-2xl shadow-md border border-amber-100 p-6 text-center mb-4">
+                <div class="text-4xl mb-3">🕌</div>
+                <h2 class="text-xl md:text-2xl font-black text-[#5b3a00] mb-2">أوراد خاصة</h2>
+                <p class="text-sm text-gray-600 leading-7">قسم الأوراد الخاصة في مجلس العبقري للذكر والتسبيح، مخصص للأوراد التي تُرتب وفق الحاجة والبرنامج المحدد لكل مستفيد.</p>
+                <div class="mt-3 rounded-xl bg-amber-50/70 border border-amber-100 p-4 text-xs text-amber-900 leading-6">🕌 الأوراد الخاصة: هي خاصة من عباد الله لرسول الله ﷺ، لله، لعباد الله مرة أخرى، بمشيئة الله.</div>
+            </div>
+
+            <!-- ============== محراب العبقري التفاعلي: حزب السيف القاطع ============== -->
+            <div class="mihrab-wrapper">
+
+
+        <!-- Title Banner -->
+        <div class="text-center bg-gradient-to-b from-[#f2e8d5] to-[#fcfaf5] border-2 border-[#d4af37] rounded-2xl p-6 mb-8 shadow-md relative overflow-hidden islamic-frame">
+            <span class="inline-block px-4 py-1 bg-[#0d5c3a] text-[#d4af37] rounded-full text-xs font-bold mb-3 shadow-sm">ورد حصين مبارك</span>
+            <h2 class="font-title text-3xl md:text-4xl font-bold text-[#0d5c3a] mb-2">حزب السيف القاطع</h2>
+            <p class="text-amber-900 text-sm md:text-base font-semibold">للشيخ أبا العلمين أحمد الرفاعي الكبير (رضي الله عنه وأرضاه)</p>
+        </div>
+
+        <!-- Interactive Tasbeeh / Counter Widget -->
+        <div class="bg-white border border-[#d4af37]/60 rounded-2xl p-4 mb-8 shadow-sm text-center flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-right">
+                <h3 class="font-title text-[#0d5c3a] text-base font-bold">عداد الورد التفاعلي</h3>
+                <p class="text-xs text-amber-900/70 font-semibold">استعن بالعداد أثناء قراءة التكرارات والمحصنات</p>
+            </div>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <span id="counter" class="font-mono text-3xl font-bold text-[#0d5c3a] min-w-[3rem] bg-[#f9f6f0] px-3 py-1 rounded-lg border border-[#d4af37]/50 shadow-inner">0</span>
+                <button onclick="incrementCounter()" class="px-5 py-2.5 bg-[#0d5c3a] hover:bg-[#094229] active:scale-95 text-[#f7f3eb] font-bold rounded-xl transition shadow-md flex items-center gap-2">
+                    <span>تسبيح / تكرار</span> ✨
+                </button>
+                <button onclick="resetCounter()" class="p-2.5 bg-[#f2e8d5] hover:bg-[#e5d8c0] text-[#0d5c3a] rounded-xl transition" title="إعادة ضبط">
+                    🔄
+                </button>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="bg-[#f5efe4] border-r-4 border-[#0d5c3a] p-5 rounded-l-xl mb-8 leading-relaxed text-[#2c3e35] text-sm md:text-base border-y border-l border-amber-200/60 shadow-sm">
+            <p><strong class="text-[#0d5c3a] font-title">📜 مقدمة الحزب:</strong> هذا الحزب حزب جليل التأثير عظيم البركة، ويسمى بين الرجال الأحمدية <strong>بالسيف القاطع</strong>. حصن حصين ودرع متين، من توسل به إلى الله نال بإذن الله مناه، وما دعا به داعٍ وخاب، ولا توسل به متوسل إلا وفتح الله له الباب. 🚪✨</p>
+        </div>
+
+        <!-- Main Content Text Area -->
+        <div id="content-area" class="space-y-6 text-xl md:text-2xl leading-loose text-justify text-[#1c2e25] transition-all duration-200">
+
+            <!-- Fatiha -->
+            <div class="verse-card p-6 rounded-2xl text-center space-y-3 border-amber-300">
+                <p class="text-[#0d5c3a] font-bold text-2xl md:text-3xl font-title">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</p>
+                <p class="leading-loose">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿1﴾ الرَّحْمَنِ الرَّحِيمِ ﴿2﴾ مَالِكِ يَوْمِ الدِّينِ ﴿3﴾ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ﴿4﴾ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ﴿5﴾ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ ﴿6﴾</p>
+                <p class="text-[#0d5c3a] font-bold font-title">آمين 🤲</p>
+            </div>
+
+            <!-- Section 1 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    ✨ <span class="text-[#0d5c3a] font-bold">الْحَمْدُ لِلَّهِ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ وَجَعَلَ الظُّلُمَاتِ وَالنُّورَ ۖ ثُمَّ الَّذِينَ كَفَرُوا بِرَبِّهِمْ يَعْدِلُونَ</span> ✨
+                    فَأَرَادُوا بِهِ كَيْدًا فَجَعَلْنَاهُمُ الْأَسْفَلِينَ • وَنَجَّيْنَاهُ مِنَ الْغَمِّ وَكَذَلِكَ نُنْجِي الْمُؤْمِنِينَ • كَذَلِكَ لِنَصْرِفَ عَنْهُ السُّوءَ وَالْفَحْشَاءَ إِنَّهُ مِنْ عِبَادِنَا الْمُخْلَصِينَ • فَوَقَاهُ اللَّهُ سَيِّئَاتِ مَا مَكَرُوا • مَا هُمْ بِبَالِغِيهِ • فَقَدِ اسْتَمْسَكَ بِالْعُرْوَةِ الْوُثْقَى لَا انْفِصَامَ لَهَا وَاللَّهُ سَمِيعٌ عَلِيمٌ • وَسَنَقُولُ لَهُ مِنْ أَمْرِنَا يُسْرًا.
+                </p>
+            </div>
+
+            <!-- Shield 1 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَقَدِمْنَا إِلَى مَا عَمِلُوا مِنْ عَمَلٍ فَجَعَلْنَاهُ هَبَاءً مَنْثُورًا • وَذَلِكَ جَزَاءُ الظَّالِمِينَ • ثُمَّ نُنَجِّي رُسُلَنَا وَالَّذِينَ آمَنُوا كَذَلِكَ حَقًّا عَلَيْنَا نُنْجِي الْمُؤْمِنِينَ • لَهُ مُعَقِّبَاتٌ مِنْ بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِ يَحْفَظُونَهُ مِنْ أَمْرِ اللَّهِ • وَإِنَّا لَهُ لَحَافِظُونَ • إِنَّهُ لَذُو حَظٍّ عَظِيمٍ • وَإِنَّ لَهُ عِنْدَنَا لَزُلْفَى وَحُسْنَ مَآبٍ.
+                </p>
+            </div>
+
+            <!-- Shield 2 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ • وَتَقَطَّعَتْ بِهِمُ الْأَسْبَابُ • جُنْدٌ مَا هُنَالِكَ مَهْزُومٌ مِنَ الْأَحْزَابِ • وَجَعَلْنَا لَهُ نُورًا يَمْشِي بِهِ فِي النَّاسِ 🌟 • فَلَمَّا رَأَيْنَهُ أَكْبَرْنَهُ وَقَطَّعْنَ أَيْدِيَهُنَّ وَقُلْنَ حَاشَ لِلَّهِ مَا هَذَا بَشَرًا إِنْ هَذَا إِلَّا مَلَكٌ كَرِيمٌ • قَالُوا تَاللَّهِ لَقَدْ آثَرَكَ اللَّهُ عَلَيْنَا • إِنَّ اللَّهَ اصْطَفَاهُ عَلَيْكُمْ وَزَادَهُ بَسْطَةً فِي الْعِلْمِ وَالْجِسْمِ وَاللَّهُ يُؤْتِي مُلْكَهُ مَنْ يَشَاءُ • شَاكِرًا لِأَنْعُمِهِ اجْتَبَاهُ وَهَدَاهُ إِلَى صِرَاطٍ مُسْتَقِيمٍ • وَآتَاهُ اللَّهُ الْمُلْكَ • وَرَفَعْنَاهُ مَكَانًا عَلِيًّا وَقَرَّبْنَاهُ نَجِيًّا • وَكَانَ عِنْدَ رَبِّهِ مَرْضِيًّا • وَسَلَامٌ عَلَيْهِ يَوْمَ وُلِدَ وَيَوْمَ يَمُوتُ وَيَوْمَ يُبْعَثُ حَيًّا.
+                </p>
+            </div>
+
+            <!-- Shield 3 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَإِنْ يُرِيدُوا أَنْ يَخْدَعُوكَ فَإِنَّ حَسْبَكَ اللَّهُ هُوَ الَّذِي أَيَّدَكَ بِنَصْرِهِ وَبِالْمُؤْمِنِينَ • وَأَلَّفَ بَيْنَ قُلُوبِهِمْ لَوْ أَنْفَقْتَ مَا فِي الْأَرْضِ جَمِيعًا مَا أَلَّفْتَ بَيْنَ قُلُوبِهِمْ وَلَكِنَّ اللَّهَ أَلَّفَ بَيْنَهُمْ إِنَّهُ عَزِيزٌ حَكِيمٌ 🤍 • هُمُ الْعَدُوُّ فَاحْذَرْهُمْ قَاتَلَهُمُ اللَّهُ • كُلَّمَا أَوْقَدُوا نَارًا لِلْحَرْبِ أَطْفَأَهَا اللَّهُ 🔥💧 • وَضُرِبَتْ عَلَيْهِمُ الذِّلَّةُ وَالْمَسْكَنَةُ وَبَاءُوا بِغَضَبٍ مِنَ اللَّهِ • سَيَنَالُهُمْ غَضَبٌ مِنْ رَبِّهِمْ وَذِلَّةٌ فِي الْحَيَاةِ الدُّنْيَا • وَإِذَا أَرَادَ اللَّهُ بِقَوْمٍ سُوءًا فَلَا مَرَدَّ لَهُ • خَاشِعَةً أَبْصَارُهُمْ تَرْهَقُهُمْ ذِلَّةٌ • لَوْ أَنْزَلْنَا هَذَا الْقُرْآنَ عَلَى جَبَلٍ لَرَأَيْتَهُ خَاشِعًا مُتَصَدِّعًا مِنْ خَشْيَةِ اللَّهِ 🏔️ • فَلَا تَبْتَئِسْ بِمَا كَانُوا يَعْمَلُونَ • وَلَا تَكُ فِي ضِيقٍ مِمَّا يَمْكُرُونَ • فَإِمَّا نَذْهَبَنَّ بِكَ فَإِنَّا مِنْهُمْ مُنْتَقِمُونَ • إِنَّا كَفَيْنَاكَ الْمُسْتَهْزِئِينَ • فَسَلَامٌ لَكَ مِنْ أَصْحَابِ الْيَمِينِ • لَا تَخَفْ نَجَوْتَ مِنَ الْقَوْمِ الظَّالِمِينَ • لَا تَخَافُ دَرَكًا وَلَا تَخْشَى • إِنِّي لَا يَخَافُ لَدَيَّ الْمُرْسَلُونَ • لَا تَخَفْ وَلَا تَحْزَنْ • لَا تَخَافَا إِنَّنِي مَعَكُمَا أَسْمَعُ وَأَرَى 👁️ • لَا تَخَفْ إِنَّكَ أَنْتَ الْأَعْلَى • فَإِذَا الَّذِي بَيْنَكَ وَبَيْنَهُ عَدَاوَةٌ كَأَنَّهُ وَلِيٌّ حَمِيمٌ • إِذَا أَخْرَجَ يَدَهُ لَمْ يَكَدْ يَرَاهَا • وَأَضَلَّهُ اللَّهُ عَلَى عِلْمٍ وَخَتَمَ عَلَى سَمْعِهِ وَقَلْبِهِ وَجَعَلَ عَلَى بَصَرِهِ غِشَاوَةً • لِيَذُوقَ وَبَالَ أَمْرِهِ • وَلَا يَحِيقُ الْمَكْرُ السَّيِّئُ إِلَّا بِأَهْلِهِ • وَخَشَعَتِ الْأَصْوَاتُ لِلرَّحْمَنِ • فَلَنْ يَضُرُّوكَ شَيْئًا • إِنَّا سَنُلْقِي عَلَيْكَ قَوْلًا ثَقِيلًا • فَاصْبِرْ لِحُكْمِ رَبِّكَ • فَاصْبِرْ صَبْرًا جَمِيلًا ✨ • وَلَوْلَا أَنْ ثَبَّتْنَاكَ لَقَدْ كِدْتَ تَرْكَنُ إِلَيْهِمْ شَيْئًا قَلِيلًا • فَأَعْرِضْ عَنْهُمْ وَتَوَكَّلْ عَلَى اللَّهِ وَكَفَى بِاللَّهِ وَكِيلًا • أَلَيْسَ اللَّهُ بِكَافٍ عَبْدَهُ • وَمَنْ أَصْدَقُ مِنَ اللَّهِ قِيلًا • وَيَنْصُرَكَ اللَّهُ نَصْرًا عَزِيزًا 🕊️.
+                </p>
+            </div>
+
+            <!-- Shield 4 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    مَلْعُونِينَ أَيْنَمَا ثُقِفُوا أُخِذُوا وَقُتِّلُوا تَقْتِيلًا • وَاللَّهُ أَشَدُّ بَأْسًا وَأَشَدُّ تَنْكِيلًا • وَذَلِكَ جَزَاءُ الظَّالِمِينَ • إِنَّكَ الْيَوْمَ لَدَيْنَا مَكِينٌ أَمِينٌ • وَرَفَعْنَا لَكَ ذِكْرَكَ • وَأَلْقَيْتُ عَلَيْكَ مَحَبَّةً مِنِّي ❤️ • إِنِّي اصْطَفَيْتُكَ عَلَى النَّاسِ بِرِسَالَاتِي وَبِكَلَامِي • إِنِّي جَاعِلُكَ لِلنَّاسِ إِمَامًا • إِنَّا فَتَحْنَا لَكَ فَتْحًا مُبِينًا 🔑.
+                </p>
+            </div>
+
+            <!-- Shield 5 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ وَعَلَى سَمْعِهِمْ وَعَلَى أَبْصَارِهِمْ غِشَاوَةٌ • ذَهَبَ اللَّهُ بِنُورِهِمْ وَتَرَكَهُمْ فِي ظُلُمَاتٍ لَا يُبْصِرُونَ 🌑 • صُمٌّ بُكْمٌ عُمْيٌ فَهُمْ لَا يَرْجِعُونَ • كُبِتُوا كَمَا كُبِتَ الَّذِينَ مِنْ قَبْلِهِمْ • فَأَغْشَيْنَاهُمْ فَهُمْ لَا يُبْصِرُونَ • إِنَّا جَعَلْنَا فِي أَعْنَاقِهِمْ أَغْلَالًا فَهِيَ إِلَى الْأَذْقَانِ فَهُمْ مُقْمَحُونَ • وَلَقَدْ آتَيْنَاكَ سَبْعًا مِنَ الْمَثَانِي وَالْقُرْآنَ الْعَظِيمَ 📖 • أُولَئِكَ الَّذِينَ طَبَعَ اللَّهُ عَلَى قُلُوبِهِمْ وَسَمْعِهِمْ وَأَبْصَارِهِمْ وَأُولَئِكَ هُمُ الْغَافِلُونَ • وَمَنْ أَظْلَمُ مِمَّنْ ذُكِّرَ بِآيَاتِ رَبِّهِ ثُمَّ أَعْرَضَ عَنْهَا إِنَّا مِنَ الْمُجْرِمِينَ مُنْتَقِمُونَ • إِنَّا جَعَلْنَا عَلَى قُلُوبِهِمْ أَكِنَّةً أَنْ يَفْقَهُوهُ وَفِي آذَانِهِمْ وَقْرًا • وَإِذَا ذَكَرْتَ رَبَّكَ فِي الْقُرْآنِ وَحْدَهُ وَلَّوْا عَلَى أَدْبَارِهِمْ نُفُورًا • وَإِنْ تَدْعُهُمْ إِلَى الْهُدَى فَلَنْ يَهْتَدُوا إِذًا أَبَدًا • أَفَرَأَيْتَ مَنِ اتَّخَذَ إِلَهَهُ هَوَاهُ وَأَضَلَّهُ اللَّهُ عَلَى عِلْمٍ وَخَتَمَ عَلَى سَمْعِهِ وَقَلْبِهِ وَجَعَلَ عَلَى بَصَرِهِ غِشَاوَةً • عَلَيْهِمْ دَائِرَةُ السَّوْءِ وَغَضِبَ اللَّهُ عَلَيْهِمْ • فَأَصْبَحُوا لَا يُرَى إِلَّا مَسَاكِنُهُمْ • دَمَّرَ اللَّهُ عَلَيْهِمْ • ثُمَّ عَمُوا وَصَمُّوا كَثِيرٌ مِنْهُمْ وَاللَّهُ أَرْكَسَهُمْ بِمَا كَسَبُوا • وَذَلِكَ جَزَاءُ الظَّالِمِينَ • وَمَنْ يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ وَمَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ✨ • فَإِذَا قَرَأْتَ الْقُرْآنَ فَاسْتَعِذْ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ • وَقُلْ رَبِّ أَدْخِلْنِي مُدْخَلَ صِدْقٍ وَأَخْرِجْنِي مُخْرَجَ صِدْقٍ وَاجْعَلْ لِي مِنْ لَدُنْكَ سُلْطَانًا نَصِيرًا • قُلْ إِنَّنِي هَدَانِي رَبِّي إِلَى صِرَاطٍ مُسْتَقِيمٍ • إِنَّ مَعِيَ رَبِّ سَيَهْدِينِ • عَسَى رَبِّي أَنْ يَهْدِيَنِي سَوَاءَ السَّبِيلِ • إِنَّ وَلِيِّيَ اللَّهُ الَّذِي نَزَّلَ الْكِتَابَ وَهُوَ يَتَوَلَّى الصَّالِحِينَ • رَبِّ قَدْ آتَيْتَنِي مِنَ الْمُلْكِ وَعَلَّمْتَنِي مِنْ تَأْوِيلِ الْأَحَادِيثِ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ أَنْتَ وَلِيِّي فِي الدُّنْيَا وَالْآخِرَةِ تَوَفَّنِي مُسْلِمًا وَأَلْحِقْنِي بِالصَّالِحِينَ • أَوَمَنْ كَانَ مَيْتًا فَأَحْيَيْنَاهُ وَجَعَلْنَا لَهُ نُورًا يَمْشِي بِهِ فِي النَّاسِ • وَقَالَ لَهُمْ نَبِيُّهُمْ إِنَّ آيَةَ مُلْكِهِ أَنْ يَأْتِيَكُمُ التَّابُوتُ فِيهِ سَكِينَةٌ مِنْ رَبِّكُمْ وَبَقِيَّةٌ • قَالُوا رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ 🌿 • الَّذِينَ قَالَ لَهُمُ النَّاسُ إِنَّ النَّاسَ قَدْ جَمَعُوا لَكُمْ فَاخْشَوْهُمْ فَزَادَهُمْ إِيمَانًا وَقَالُوا حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ • فَانْقَلَبُوا بِنِعْمَةٍ مِنَ اللَّهِ وَفَضْلٍ لَمْ يَمْسَسْهُمْ سُوءٌ • قُلْ أَغَيْرَ اللَّهِ أَتَّخِذُ وَلِيًّا فَاطِرِ السَّمَاوَاتِ وَالْأَرْضِ • إِنَّهُ كَانَ بِي حَفِيًّا • وَجَعَلَنِي نَبِيًّا • وَجَعَلَنِي مُبَارَكًا أَيْنَ مَا كُنْتُ • وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ.
+                </p>
+            </div>
+
+            <!-- Shield 6 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    صُمٌّ بُكْمٌ عُمْيٌ فَهُمْ لَا يَعْقِلُونَ • صُمٌّ وَبُكْمٌ فِي الظُّلُمَاتِ • يَجْعَلُونَ أَصَابِعَهُمْ فِي آذَانِهِمْ مِنَ الصَّوَاعِقِ حَذَرَ الْمَوْتِ ⚡ • وَلَوْ تَرَى إِذْ فَزِعُوا فَلَا فَوْتَ • وَذَلِكَ جَزَاءُ الظَّالِمِينَ • إِنَّمَا وَلِيُّكُمُ اللَّهُ وَرَسُولُهُ وَالَّذِينَ آمَنُوا • وَمَا بِكُمْ مِنْ نِعْمَةٍ فَمِنَ اللَّهِ • وَهُوَ الْقَاهِرُ فَوْقَ عِبَادِهِ وَيُرْسِلُ عَلَيْكُمْ حَفَظَةً • يَا أَيُّهَا الَّذِينَ آمَنُوا قَاتِلُوا الَّذِينَ يَلُونَكُمْ مِنَ الْكُفَّارِ وَلْيَجِدُوا فِيكُمْ غِلْظَةً • وَقَاتِلُوهُمْ حَتَّى لَا تَكُونَ فِتْنَةٌ • وَيَوْمَئِذٍ يَفْرَحُ الْمُؤْمِنُونَ بِنَصْرِ اللَّهِ يَنْصُرُ مَنْ يَشَاءُ 🏳️ • يُثَبِّتُ اللَّهُ الَّذِينَ آمَنُوا بِالْقَوْلِ الثَّابِتِ فِي الْحَيَاةِ الدُّنْيَا وَفِي الْآخِرَةِ • فَضُرِبَ بَيْنَهُمْ بِسُورٍ لَهُ بَابٌ بَاطِنُهُ فِيهِ الرَّحْمَةُ وَظَاهِرُهُ مِنْ قِبَلِهِ الْعَذَابُ • وَاللَّهُ مِنْ وَرَائِهِمْ مُحِيطٌ • بَلْ هُوَ قُرْآنٌ مَجِيدٌ • وَاللَّهُ أَعْلَمُ بِأَعْدَائِكُمْ وَكَفَى بِاللَّهِ وَلِيًّا وَكَفَى بِاللَّهِ نَصِيرًا • فَلَا تَخْشَوْهُمْ • قُلُوبٌ يَوْمَئِذٍ وَاجِفَةٌ أَبْصَارُهَا خَاشِعَةٌ • تُصِيبُهُمْ بِمَا صَنَعُوا قَارِعَةٌ • وَمَا يَنْظُرُ هَؤُلَاءِ إِلَّا صَيْحَةً وَاحِدَةً • كَأَنَّهُمْ خُشُبٌ مُسَنَّدَةٌ • أَوَلَمْ يَرَوْا أَنَّ اللَّهَ الَّذِي خَلَقَهُمْ هُوَ أَشَدُّ مِنْهُمْ قُوَّةً • فَسَتَذْكُرُونَ مَا أَقُولُ لَكُمْ وَأُفَوِّضُ أَمْرِي إِلَى اللَّهِ • وَإِنْ تَصْبِرُوا وَتَتَّقُوا لَا يَضُرُّكُمْ كَيْدُهُمْ شَيْئًا • ثُمَّ رَدَدْنَا لَكُمُ الْكَرَّةَ عَلَيْهِمْ وَأَمْدَدْنَاكُمْ بِأَمْوَالٍ وَبَنِينَ وَجَعَلْنَاكُمْ أَكْثَرَ نَفِيرًا • وَاذْكُرُوا إِذْ أَنْتُمْ قَلِيلٌ مُسْتَضْعَفُونَ فِي الْأَرْضِ تَخَافُونَ أَنْ يَتَخَطَّفَكُمُ النَّاسُ فَآوَاكُمْ 🤲 • يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا نِعْمَتَ اللَّهِ عَلَيْكُمْ إِذْ هَمَّ قَوْمٌ أَنْ يَبْسُطُوا إِلَيْكُمْ أَيْدِيَهُمْ فَكَفَّ أَيْدِيَهُمْ عَنْكُمْ • يَا أَيُّهَا النَّاسُ اذْكُرُوا نِعْمَتَ اللَّهِ عَلَيْكُمْ هَلْ مِنْ خَالِقٍ غَيْرُ اللَّهِ يرزُقُكُمْ مِنَ السَّمَاءِ وَالْأَرْضِ لَا إِلَهَ إِلَّا هُوَ • عَسَى رَبُّكُمْ أَنْ يُهْلِكَ عَدُوَّكُمْ • عَسَى اللَّهُ أَنْ يَكُفَّ بَأْسَ الَّذِينَ كَفَرُوا • وَمَكَرُوا وَمَكَرَ اللَّهُ وَاللَّهُ خَيْرُ الْمَاكِرِينَ • وَمَكْرُ أُولَئِكَ هُوَ يَبُورُ • فَإِنَّهَا لَا تَعْمَى الْأَبْصَارُ وَلَكِنْ تَعْمَى الْقُلُوبُ الَّتِي فِي الصُّدُورِ • فَأَخَذْنَاهُمْ أَخْذَ عَزِيزٍ مُقْتَدِرٍ • مَا يُرِيدُ اللَّهُ لِيَجْعَلَ عَلَيْكُمْ مِنْ حَرَجٍ وَلَكِنْ يُرِيدُ لِيُطَهِّرَكُمْ وَلِيُتِمَّ نِعْمَتَهُ عَلَيْكُمْ • ذَلِكَ تَخْفِيفٌ مِنْ رَبِّكُمْ وَرَحْمَةٌ • الْآنَ خَفَّفَ اللَّهُ عَنْكُمْ وَعَلِمَ أَنَّ فِيكُمْ ضَعْفًا • يُرِيدُ اللَّهُ بِكُمُ الْيُسْرَ وَلَا يُرِيدُ بِكُمُ الْعُسْرَ • قُلْ إِنَّ هُدَى اللَّهِ هُوَ الْهُدَى • يُؤْتِكُمْ كِفْلَيْنِ مِنْ رَحْمَتِهِ وَيَجْعَلْ لَكُمْ نُورًا تَمْشُونَ بِهِ.
+                </p>
+            </div>
+
+            <!-- Shield 7 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَمَا لَهُمْ مِنْ نَاصِرِينَ • وَذَلِكَ جَزَاءُ الظَّالِمِينَ • عَلَيْهِمْ دَائِرَةُ السَّوْءِ • دَمَّرَ اللَّهُ عَلَيْهِمْ • أُولَئِكَ فِي الْأَذَلِّينَ • فَمَا اسْتَطَاعُوا مِنْ قِيَامٍ وَمَا كَانُوا مُنْتَصِرِينَ • إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ • وَأَنَّ اللَّهَ لَا يَهْدِي كَيْدَ الْخَائِنِينَ • فَأَيَّدْنَا الَّذِينَ آمَنُوا عَلَى عَدُوِّهِمْ فَأَصْبَحُوا ظَاهِرِينَ • إِنَّ اللَّهَ يُدَافِعُ عَنِ الَّذِينَ آمَنُوا • يَسْعَى نُورُهُمْ بَيْنَ أَيْدِيهِمْ وَبِأَيْمَانِهِمْ 💡 • اللَّهُ حَفِيظٌ عَلَيْهِمْ • طُوبَى لَهُمْ وَحُسْنُ مَآبٍ • وَهُمْ مِنْ فَزَعٍ يَوْمَئِذٍ آمِنُونَ • أُولَئِكَ لَهُمُ الْأَمْنُ وَهُمْ مُهْتَدُونَ • أُولَئِكَ الَّذِينَ هَدَى اللَّهُ فَبِهُدَاهُمُ اقْتَدِهْ • فَلَا تَعْلَمُ نَفْسٌ مَا أُخْفِيَ لَهُمْ مِنْ قُرَّةِ أَعْيُنٍ • إِنَّا أَخْلَصْنَاهُمْ بِخَالِصَةٍ ذِكْرَى الدَّارِ • وَإِنَّهُمْ عِنْدَنَا لَمِنَ الْمُصْطَفَيْنَ الْأَخْيَارِ • وَجَعَلْنَا لَهُمْ لِسَانَ صِدْقٍ عَلِيًّا • وَلَقَدِ اخْتَرْنَاهُمْ عَلَى عِلْمٍ عَلَى الْعَالَمِينَ • وَاجْتَبَيْنَاهُمْ وَهَدَيْنَاهُمْ إِلَى صِرَاطٍ مُسْتَقِيمٍ • وَآوَيْنَاهُمَا إِلَى رَبْوَةٍ ذَاتِ قَرَارٍ وَمَعِينٍ • وَإِنَّ جُنْدَنَا لَهُمُ الْغَالِبُونَ • فَانْقَلَبُوا بِنِعْمَةٍ مِنَ اللَّهِ وَفَضْلٍ لَمْ يَمْسَسْهُمْ سُوءٌ • إِلَّا قِيلًا سَلَامًا سَلَامًا 🕊️ • وَيَنْقَلِبُ إِلَى أَهْلِهِ مَسْرُورًا 🎉.
+                </p>
+            </div>
+
+            <!-- Shield 8 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 9 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَمَا يَنْظُرُ هَؤُلَاءِ إِلَّا صَيْحَةً وَاحِدَةً مَا لَهَا مِنْ فَوَاقٍ • وَمَزَّقْنَاهُمْ كُلَّ مُمَزَّقٍ • سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنْفُسِهِمْ حَتَّى يَتَبَيَّنَ لَهُمْ أَنَّهُ الْحَقُّ • فَاسْتَمْسِكْ بِالَّذِي أُوحِيَ إِلَيْكَ إِنَّكَ عَلَى صِرَاطٍ مُسْتَقِيمٍ • فَإِنْ كُنْتَ فِي شَكٍّ مِمَّا أَنْزَلْنَا إِلَيْكَ فَاسْأَلِ الَّذِينَ يَقْرَءُونَ الْكِتَابَ مِنْ قَبْلِكَ لَقَدْ جَاءَكَ الْحَقُّ مِنْ رَبِّكَ فَلَا تَكُونَنَّ مِنَ الْمُمْتَرِينَ • فَلَا أُقْسِمُ بِمَوَاقِعِ النُّجُومِ 🌟 • وَإِنَّهُ لَقَسَمٌ لَوْ تَعْلَمُونَ عَظِيمٌ • وَإِنَّهُ لَهُدًى وَرَحْمَةٌ لِلْمُؤْمِنِينَ • هُوَ الَّذِي أَنْزَلَ عَلَيْكُمُ الْكِتَابَ مِنْهُ آيَاتٌ مُحْكَمَاتٌ هُنَّ أُمُّ الْكِتَابِ • تِلْكَ آيَاتُ اللَّهِ نَتْلُوهَا عَلَيْكَ بِالْحَقِّ فَبِأَيِّ حَدِيثٍ بَعْدَ اللَّهِ وَآيَاتِهِ يُؤْمِنُونَ • لَكِنِ اللَّهُ يَشْهَدُ بِمَا أَنْزَلَ إِلَيْكَ أَنْزَلَهُ بِعِلْمِهِ وَالْمَلَائِكَةُ يَشْهَدُونَ • وَكَفَى بِاللَّهِ شَهِيدًا • وَكَفَى بِاللَّهِ وَكِيلًا • وَكَفَى بِاللَّهِ نَصِيرًا • وَكَانَ اللَّهُ عَلَى كُلِّ شَيْءٍ مُقِيتًا • قُلْ لَوْ كَانَ الْبَحْرُ مِدَادًا لِكَلِمَاتِ رَبِّي لَنَفِدَ الْبَحْرُ قَبْلَ أَنْ تَنْفَدَ كَلِمَاتُ رَبِّي وَلَوْ جِئْنَا بِمِثْلِهِ مَدَدًا 🌊.
+                </p>
+            </div>
+
+            <!-- Shield 9 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 10 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَلَا إِلَى قَوْمِنَا فَسَيَعْلَمُونَ مَنْ أَضْعَفُ نَاصِرًا وَأَقَلُّ عَدَدًا • فَسَيَعْلَمُونَ مَنْ هُوَ شَرٌّ مَكَانًا وَأَضْعَفُ جُنْدًا • وَجَعَلْنَا لِمَهْلِكِهِمْ مَوْعِدًا • وَلَنْ تُفْلِحُوا إِذًا أَبَدًا • وَأَلْقِ مَا فِي يَمِينِكَ تَلْقَفْ مَا صَنَعُوا إِنَّمَا صَنَعُوا كَيْدُ سَاحِرٍ وَلَا يُفْلِحُ السَّاحِرُ حَيْثُ أَتَى ✨ • تَحْسَبُهُمْ جَمِيعًا وَقُلُوبُهُمْ شَتَّى • إِنَّ هَؤُلَاءِ مُتَبَّرٌ مَا هُمْ فِيهِ وَبَاطِلٌ مَا كَانُوا يَعْمَلُونَ • وَخَسِرَ هُنَالِكَ الْمُبْطِلُونَ • أَمْ تَحْسَبُ أَنَّ أَكْثَرَهُمْ يَسْمَعُونَ أَوْ يَعْقِلُونَ إِنْ هُمْ إِلَّا كَالْأَنْعَامِ بَلْ هُمْ أَضَلُّ سَبِيلًا • أُولَئِكَ هُمُ الْغَافِلُونَ • كَذَلِك يَتْبَعُ اللَّهُ عَلَى قُلُوبِ الَّذِينَ لَا يَعْلَمُونَ.
+                </p>
+            </div>
+
+            <!-- Shield 10 -->
+            <div class="repeat-shield p-4 rounded-xl text-center font-bold text-[#0d5c3a] shadow-sm my-4 flex items-center justify-center space-x-2 space-x-reverse border-y border-amber-200">
+                <span>🛡️ أَعْدَاؤُنَا لَنْ يَصِلُوا إِلَيْنَا بِالنَّفْسِ وَلَا بِالْوَاسِطَةِ، لَا قُدْرَةَ لَهُمْ عَلَى إِيصَالِ السُّوءِ إِلَيْنَا بِحَالٍ مِنَ الْأَحْوَالِ. 🛡️</span>
+            </div>
+
+            <!-- Section 11 -->
+            <div class="verse-card p-6 rounded-2xl">
+                <p>
+                    وَوَقَعَ الْقَوْلُ عَلَيْهِمْ بِمَا ظَلَمُوا فَهُمْ لَا يَنْطِقُونَ • وَاللَّهُ أَرْكَسَهُمْ بِمَا كَسَبُوا • هُوَ الَّذِي أَيَّدَكَ بِنَصْرِهِ وَبِالْمُؤْمِنِينَ • قُلْنَا يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَى إِبْرَاهِيمَ ❄️🕊️ • وَأَرَادُوا بِهِ كَيْدًا فَجَعَلْنَاهُمُ الْأَخْسَرِينَ • إِنَّ رَبِّي عَلَى صِرَاطٍ مُسْتَقِيمٍ • وَاللَّهُ مِنْ وَرَائِهِمْ مُحِيطٌ • بَلْ هُوَ قُرْآنٌ مَجِيدٌ • فِي لَوْحٍ مَحْفُوظٍ.
+                </p>
+            </div>
+
+            <!-- Closing -->
+            <div class="bg-gradient-to-b from-[#f2e8d5] to-[#fcfaf5] border-2 border-[#d4af37] p-6 rounded-2xl text-center space-y-3 mt-8 shadow-sm islamic-frame">
+                <p class="text-[#0d5c3a] font-bold">🤲 ختام الدعاء والصلاة</p>
+                <p class="leading-relaxed">وصَلَّى اللَّهُ عَلَى سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الأُمِّيِّ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ، وَسَلَّمَ تَسْلِيمًا كَثِيرًا إِلَى يَوْمِ الدِّينِ.</p>
+                <p class="text-[#0d5c3a] font-bold font-title text-2xl pt-2">وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ 🌸🍃</p>
+            </div>
+
+        </div>
+
+    
+            </div>
+            <!-- ============== نهاية محراب العبقري التفاعلي ============== -->
+        </section>
+
+<section id="tab-treatment" class="tab-content azkar-inner-tab hidden space-y-0">
             <div class="text-center mb-2">
                 <span class="text-xl font-bold text-[#FFFF00]">💊علاجات ربانية فوائد ومجربات زمخشرية💊</span>
                 <h2 class="text-xl font-text-[#FFFF00]">علاجات ربانية ومجربات زمخشرية</h2>
@@ -2784,13 +3133,23 @@ img.abq-zoomable-image { cursor: zoom-in; }
                     <button onclick="toggleSound()" id="btn-sound" class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">الصوت مفعّل</button>
                 </div>
             </div>
+
+            <div class="w-full max-w-3xl mt-5 text-right">
+                <div class="bg-white rounded-2xl shadow-md border border-amber-100 p-4">
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <h3 class="font-black text-amber-700 text-sm">📿 موضوعات وأوراد مرتبطة بالسبحة</h3>
+                        <span class="text-[10px] text-gray-400">تُضاف من لوحة التحكم</span>
+                    </div>
+                    <div id="subha-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
         </section>
 
         <!-- التبويب الخامس: قنوات التواصل والمركز -->
         <section id="tab-center" class="tab-content azkar-inner-tab hidden space-y-0">
             <div class="bg-gradient-to-b from-[#2b221c] to-[#1e1916] text-white p-5 rounded-2xl border border-[#d4af37]/30 text-center shadow-md">
                 <h2 class="text-md font-bold text-[#f5d76e]">مركز العبقري للتدريب والإستشارات</h2>
-                <p class="text-[11px] text-gray-400 mt-0.5">ترخيص رسمي وموثق (س.ت 92527)</p>
+                <p class="text-[11px] text-gray-400 mt-0.5">ترخيص رسمي وموثق (س.ت.92527)</p>
             </div>
 
             <div class="bg-emerald-950/20 border border-emerald-500/30 p-5 rounded-2xl text-center pulse-card">
@@ -2834,9 +3193,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 <div>
                     <label class="block text-xs font-bold text-blue-500 mb-1">اختر القسم المستهدف لإضافة الموضوع:</label>
 <select id="topic-section" class="w-full text-xs p-2.5 border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#d4af37]">
-                        <option value="hasanat">قسم جبال الحسنات (ذكر مضاعف مع عداد)</option>
-                        <option value="tahseen">قسم التحصين والرقية (حصن مع عداد)</option>
-                        <option value="treatment">قسم علاجات ربانية (مقالة علاجية)</option>
+                        <option value="hasanat">📿 الأذكار اليومية</option>
+                        <option value="tahseen">🛡️ التحصينات</option>
+                        <option value="awraad-general">🕌 أوراد عامة</option>
+                        <option value="awraad-private">🕌 أوراد خاصة</option>
+                        <option value="treatment">✨ علاجات ربانية</option>
+                        <option value="subha">📿 السبحة</option>
                     </select>
                 </div>
                 <div>
@@ -3070,6 +3432,13 @@ img.abq-zoomable-image { cursor: zoom-in; }
         document.addEventListener('DOMContentLoaded', function() {
             // الوضع لا يُحفظ بعد إغلاق التبويب؛ يُفعل فقط عند المصادقة.
             setAbqManagerMode(sessionStorage.getItem('abq_topic_admin_auth') === '1');
+            try {
+                const storedTopics = JSON.parse(localStorage.getItem('genius_dynamic_topics') || '[]');
+                if(Array.isArray(storedTopics)) {
+                    dynamicTopics = storedTopics.filter(t => t && t.id && ['hasanat','tahseen','awraad-general','awraad-private','treatment','subha'].includes(t.section));
+                    dynamicTopics.forEach(renderDynamicTopic);
+                }
+            } catch(e) { dynamicTopics = []; }
         });
 
         function requireTopicSecurity(action) {
@@ -3122,67 +3491,72 @@ img.abq-zoomable-image { cursor: zoom-in; }
             }
         });
 
-        // بناء وعرض العناصر المضافة ديناميكياً في الصفحة
+        // بناء وعرض العناصر المضافة ديناميكياً في الصفحة — يدعم جميع نوافذ مجلس الذكر والتسبيح
         function renderDynamicTopic(item) {
             if(!item || !item.id) return;
-            if(document.getElementById(`card-${item.id}`)) return;
+            const cardId = `card-${item.id}`;
+            const existing = document.getElementById(cardId);
+            if(existing) existing.remove();
+
+            const safeTitle = escapeDynamicHTML(item.title);
+            const safeContent = escapeDynamicHTML(item.content).replace(/\n/g, '<br>');
+            const sectionNames = {
+                hasanat: '📿 الأذكار اليومية',
+                tahseen: '🛡️ التحصينات',
+                'awraad-general': '🕌 أوراد عامة',
+                'awraad-private': '🕌 أوراد خاصة',
+                treatment: '✨ علاجات ربانية',
+                subha: '📿 السبحة'
+            };
+            const sectionLabel = sectionNames[item.section] || 'مجلس الذكر والتسبيح';
+            const limit = Math.max(1, parseInt(item.limit) || 1);
+            const isCounterSection = ['hasanat','tahseen','subha'].includes(item.section);
+            const buttonLabel = item.section === 'tahseen' ? 'تكرار التحصين' : (item.section === 'subha' ? 'تكرار' : 'تكرار الذكر');
+            const accent = item.section === 'tahseen' ? 'indigo' : (item.section === 'awraad-private' ? 'amber' : (item.section === 'treatment' ? 'emerald' : 'amber'));
+
+            let html = '';
             if(item.section === 'hasanat') {
-                const html = `
-                    <div id="card-${item.id}" class="bg-white border-t-4 border-amber-500 rounded-2xl shadow-md p-5 transition hover:shadow-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="px-2.5 py-0.5 bg-amber-50 text-amber-800 text-xs font-bold rounded">${item.title}</span>
-                            <span class="text-xs text-gray-400">التكرار المطلوب: ${item.limit}</span>
-                        </div>
-                        <p class="amiri-font text-xl leading-relaxed text-right my-3 text-gray-800 bg-amber-50/30 p-4 rounded-xl border border-amber-100/20">${item.content}</p>
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-xs font-medium text-gray-500">تم القراءة: <span id="count-dyn-${item.id}" class="font-bold text-base text-[#d4af37]">0</span></span>
-                            <button onclick="incrementDynamicCount('${item.id}', ${item.limit})" class="glow-btn px-4 py-1.5 bg-[#d4af37] hover:bg-[#c79a18] text-white text-xs font-bold rounded-lg shadow-md transition">تكرار</button>
-                        </div>
-                        <div class="flex justify-end gap-2 pt-3 border-t border-stone-100 mt-3">
-                            <button onclick="editDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-pen-to-square ml-1"></i>تعديل</button>
-                            <button onclick="deleteDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-trash ml-1"></i>حذف</button>
-                        </div>
-                    </div>`;
-                document.getElementById('hasanat-container').insertAdjacentHTML('beforeend', html);
-            } 
-            else if(item.section === 'tahseen') {
-                const html = `
-                    <div id="card-${item.id}" class="bg-white border-r-4 border-indigo-600 rounded-2xl shadow-md p-5">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">${item.title}</span>
-                            <span class="text-xs text-indigo-600 font-semibold">تكرار: ${item.limit} مرات</span>
-                        </div>
-                        <p class="amiri-font text-xl text-gray-800 leading-relaxed my-3 bg-stone-50/50 p-4 rounded-xl border border-stone-200/20">${item.content}</p>
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-xs text-gray-500 font-medium">العداد: <span id="count-dyn-${item.id}" class="font-bold text-base text-indigo-600">0</span> / ${item.limit}</span>
-                            <button onclick="incrementDynamicCount('${item.id}', ${item.limit})" class="glow-btn px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow transition">تكرار التحصين</button>
-                        </div>
-                        <div class="flex justify-end gap-2 pt-3 border-t border-stone-100 mt-3">
-                            <button onclick="editDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-pen-to-square ml-1"></i>تعديل</button>
-                            <button onclick="deleteDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-trash ml-1"></i>حذف</button>
-                        </div>
-                    </div>`;
-                document.getElementById('tahseen-container').insertAdjacentHTML('beforeend', html);
-            } 
-            else if(item.section === 'treatment') {
-                const nextIndex = document.getElementById('treatment-container').children.length + 1;
-                const html = `
-                    <div id="card-${item.id}" class="bg-white p-5 rounded-xl shadow border-l-4 border-emerald-500">
-                        <h3 class="font-bold text-md text-emerald-700 mb-1">${nextIndex}). ${item.title}</h3>
-                        <p class="text-stone-800">${item.content}</p>
-                        <div class="flex justify-end gap-2 pt-3 border-t border-stone-100 mt-3">
-                            <button onclick="editDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-pen-to-square ml-1"></i>تعديل</button>
-                            <button onclick="deleteDynamicTopic('${item.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only" ><i class="fa-solid fa-trash ml-1"></i>حذف</button>
-                        </div>
-                    </div>`;
-                document.getElementById('treatment-container').insertAdjacentHTML('beforeend', html);
+                html = `<div id="${cardId}" class="bg-white border-t-4 border-amber-500 rounded-2xl shadow-md p-5 transition hover:shadow-lg">
+                    <div class="flex justify-between items-center gap-2 mb-2"><span class="px-2.5 py-0.5 bg-amber-50 text-amber-800 text-xs font-bold rounded">${safeTitle}</span><span class="text-xs text-gray-400">التكرار المطلوب: ${limit}</span></div>
+                    <div class="text-xs text-gray-400 mb-2">${sectionLabel}</div>
+                    <p class="amiri-font text-xl leading-relaxed text-right my-3 text-gray-800 bg-amber-50/30 p-4 rounded-xl border border-amber-100/20">${safeContent}</p>
+                    <div class="flex justify-between items-center pt-2"><span class="text-xs font-medium text-gray-500">تم القراءة: <span id="count-dyn-${item.id}" class="font-bold text-base text-[#d4af37]">0</span> / ${limit}</span><button onclick="incrementDynamicCount('${item.id}', ${limit})" class="glow-btn px-4 py-1.5 bg-[#d4af37] hover:bg-[#c79a18] text-white text-xs font-bold rounded-lg shadow-md transition">${buttonLabel}</button></div>
+                    ${dynamicManagerButtons(item.id)}</div>`;
+                document.getElementById('hasanat-container')?.insertAdjacentHTML('beforeend', html);
+            } else if(item.section === 'tahseen') {
+                html = `<div id="${cardId}" class="bg-white border-r-4 border-indigo-600 rounded-2xl shadow-md p-5">
+                    <div class="flex justify-between items-center gap-2 mb-2"><span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">${safeTitle}</span><span class="text-xs text-indigo-600 font-semibold">تكرار: ${limit} مرات</span></div>
+                    <div class="text-xs text-gray-400 mb-2">${sectionLabel}</div><p class="amiri-font text-xl text-gray-800 leading-relaxed my-3 bg-stone-50/50 p-4 rounded-xl border border-stone-200/20">${safeContent}</p>
+                    <div class="flex justify-between items-center pt-2"><span class="text-xs text-gray-500 font-medium">العداد: <span id="count-dyn-${item.id}" class="font-bold text-base text-indigo-600">0</span> / ${limit}</span><button onclick="incrementDynamicCount('${item.id}', ${limit})" class="glow-btn px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow transition">${buttonLabel}</button></div>
+                    ${dynamicManagerButtons(item.id)}</div>`;
+                document.getElementById('tahseen-container')?.insertAdjacentHTML('beforeend', html);
+            } else if(item.section === 'treatment') {
+                html = `<div id="${cardId}" class="bg-white p-5 rounded-xl shadow border-l-4 border-emerald-500"><div class="text-[10px] text-emerald-600 font-bold mb-1">${sectionLabel}</div><h3 class="font-bold text-md text-emerald-700 mb-2">${safeTitle}</h3><p class="text-stone-800 leading-7">${safeContent}</p>${dynamicManagerButtons(item.id)}</div>`;
+                document.getElementById('treatment-container')?.insertAdjacentHTML('beforeend', html);
+            } else if(item.section === 'awraad-general' || item.section === 'awraad-private') {
+                const target = item.section === 'awraad-general' ? document.getElementById('awraad-general-container') : document.getElementById('awraad-private-container');
+                if(target) {
+                    html = `<div id="${cardId}" class="bg-white p-5 rounded-2xl shadow-md border-r-4 ${item.section === 'awraad-general' ? 'border-emerald-600' : 'border-amber-500'}"><div class="text-xs font-bold mb-1 ${item.section === 'awraad-general' ? 'text-emerald-700' : 'text-amber-700'}">${sectionLabel}</div><h3 class="font-black text-base mb-2">${safeTitle}</h3><p class="amiri-font text-lg text-gray-800 leading-8 whitespace-normal">${safeContent}</p>${dynamicManagerButtons(item.id)}</div>`;
+                    target.insertAdjacentHTML('beforeend', html);
+                }
+            } else if(item.section === 'subha') {
+                const target = document.getElementById('subha-container');
+                if(target) {
+                    html = `<div id="${cardId}" class="bg-stone-50 p-4 rounded-2xl border border-amber-100 shadow-sm"><div class="text-xs font-bold text-amber-700 mb-1">${sectionLabel}</div><h3 class="font-black text-sm mb-2">${safeTitle}</h3><p class="amiri-font text-lg leading-8 text-gray-800">${safeContent}</p><div class="flex justify-between items-center mt-3 pt-3 border-t border-stone-200"><span class="text-xs text-gray-500">العداد: <span id="count-dyn-${item.id}" class="font-bold text-amber-700">0</span> / ${limit}</span><button onclick="incrementDynamicCount('${item.id}', ${limit})" class="px-3 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-lg">تكرار</button></div>${dynamicManagerButtons(item.id)}</div>`;
+                    target.insertAdjacentHTML('beforeend', html);
+                }
             }
 
-            // استعادة قيم العدادات إن وجدت
             const storedVal = localStorage.getItem(`dyn_counter_${item.id}`);
-            if(storedVal && document.getElementById(`count-dyn-${item.id}`)) {
-                document.getElementById(`count-dyn-${item.id}`).innerText = storedVal;
-            }
+            if(storedVal && document.getElementById(`count-dyn-${item.id}`)) document.getElementById(`count-dyn-${item.id}`).innerText = storedVal;
+        }
+
+        function escapeDynamicHTML(value) {
+            return String(value ?? '').replace(/[&<>'"]/g, function(ch){ return ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]); });
+        }
+
+        function dynamicManagerButtons(id) {
+            return `<div class="flex justify-end gap-2 pt-3 border-t border-stone-100 mt-3"><button onclick="editDynamicTopic('${id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only"><i class="fa-solid fa-pen-to-square ml-1"></i>تعديل</button><button onclick="deleteDynamicTopic('${id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold rounded-lg transition abq-manager-only"><i class="fa-solid fa-trash ml-1"></i>حذف</button></div>`;
         }
 
         window.incrementDynamicCount = function incrementDynamicCount(id, maxLimit) {
@@ -3237,6 +3611,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
         window.incrementTCounts = function incrementTCounts(type, maxLimit = null) {
             const display = document.getElementById(`count-tahseen-${type}`);
+            if (!display) return;
             let val = parseInt(display.innerText) + 1;
             display.innerText = val; localStorage.setItem(`tahseen_key_${type}`, val);
             triggerBeep();
@@ -3256,8 +3631,17 @@ img.abq-zoomable-image { cursor: zoom-in; }
         window.resetSubha = function resetSubha() { count = 0; loops = 0; renderSubhaDisplay(); }
         window.toggleSound = function toggleSound() { soundOn = !soundOn; document.getElementById('btn-sound').innerText = soundOn ? "الصوت مفعّل" : "الصوت صامت"; }
 
-        window.switchAzkarTab = function(tabId) {
-            const tabs = ['hasanat', 'tahseen', 'treatment', 'subha', 'center'];
+        window.toggleAwraadMenu = function() {
+            const menu = document.getElementById('awraad-subtabs');
+            const button = document.getElementById('btn-awraad');
+            if (!menu || !button) return;
+            const willOpen = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !willOpen);
+            button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        }
+
+        switchAzkarTab = function(tabId) {
+            const tabs = ['daily', 'tahseen', 'awraad-general', 'awraad-private', 'treatment', 'subha'];
             if (!tabs.includes(tabId)) return;
 
             tabs.forEach(function(t) {
@@ -3281,6 +3665,18 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 activeButton.classList.add('active', 'text-[#f5d76e]', 'bg-[#3f342c]');
                 activeButton.classList.remove('text-gray-400');
             }
+
+            const awraadButton = document.getElementById('btn-awraad');
+            const awraadMenu = document.getElementById('awraad-subtabs');
+            const isAwraad = tabId === 'awraad-general' || tabId === 'awraad-private';
+            if (awraadButton) {
+                awraadButton.classList.toggle('active', isAwraad);
+                awraadButton.classList.toggle('text-[#f5d76e]', isAwraad);
+                awraadButton.classList.toggle('bg-[#3f342c]', isAwraad);
+                awraadButton.classList.toggle('text-gray-400', !isAwraad);
+                awraadButton.setAttribute('aria-expanded', isAwraad ? 'true' : 'false');
+            }
+            if (awraadMenu && isAwraad) awraadMenu.classList.remove('hidden');
         };
 
 function azkarInit() {
@@ -3311,12 +3707,14 @@ function azkarInit() {
             // استعادة قيم العدادات الافتراضية
             for(let i = 1; i <= 2; i++) {
                 const stored = localStorage.getItem(`hasanat_key_${i}`);
-                if(stored) document.getElementById(`count-hasanat-${i}`).innerText = stored;
+                const el = document.getElementById(`count-hasanat-${i}`);
+                if(stored && el) el.innerText = stored;
             }
             const tTypes = ['main', 'sub1', 'sub2', 'sub3', 'sub4'];
             tTypes.forEach(type => {
                 const stored = localStorage.getItem(`tahseen_key_${type}`);
-                if(stored) document.getElementById(`count-tahseen-${type}`).innerText = stored;
+                const el = document.getElementById(`count-tahseen-${type}`);
+                if(stored && el) el.innerText = stored;
             });
         }
     
@@ -3330,7 +3728,7 @@ function azkarInit() {
     <!-- تذييل الصفحة -->
     <footer class="bg-white text-slate-500 py-0 text-center text-sm border-t border-slate-200">
         <div class="container mx-auto px-0">
-            <p class="font-extrabold text-slate-800 mb-2">مركز العبقري للتدريب والإستشارات (س.ت. 92527)</p>
+            <p class="font-extrabold text-slate-800 mb-2">مركز العبقري للتدريب والإستشارات (س.ت.92527)</p>
             <p class="font-bold text-sky-500 mb-2">تحت إشراف الدكتور / أحمد السيد رَسَّه</p>
 
             <p class="text-xs text-slate-900">جميع الحقوق محفوظة © 2026 مركز العبقري للتدريب والإستشارات</p>
@@ -4082,7 +4480,15 @@ window.startAlabqariMatrix = function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     window.switchBalanceWindow('compass');
-    if (window.switchAzkarTab) window.switchAzkarTab('hasanat');
+    if (window.switchAzkarTab) window.switchAzkarTab('daily');
+});
+</script>
+<script>
+/* ===== إصلاح وتشغيل تبويبات مجلس العبقري للذكر والتسبيح ===== */
+document.addEventListener('DOMContentLoaded', function(){
+    if (typeof window.switchAzkarTab === 'function') {
+        window.switchAzkarTab('daily');
+    }
 });
 </script>
 <script>
@@ -4298,7 +4704,7 @@ window.ABQ = {
             /* لا تستخدم هذه الطبقة لإدارة التبويبات الرئيسية.
                عند استدعائها لأحد تبويبات الأذكار الداخلية نمررها
                إلى نظام الأذكار الحالي بدل لمس بقية .tab-content. */
-            const azkarTabs = ['hasanat','tahseen','treatment','subha','center'];
+            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha'];
             if (azkarTabs.includes(tabId) && typeof window.switchAzkarTab === 'function') {
                 window.switchAzkarTab(tabId);
                 ABQ.state.currentTab = tabId;
@@ -4309,7 +4715,7 @@ window.ABQ = {
             /* History الرئيسي يدار حصريًا بواسطة switchTab/popstate أعلاه.
                نحتفظ بواجهة ABQ.tabs للتوافق دون تسجيل popstate ثانٍ. */
             const hash = location.hash.replace('#','');
-            const azkarTabs = ['hasanat','tahseen','treatment','subha','center'];
+            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha'];
             if (azkarTabs.includes(hash) && typeof window.switchAzkarTab === 'function') {
                 window.switchAzkarTab(hash);
                 ABQ.state.currentTab = hash;
@@ -4864,7 +5270,7 @@ const diplomasData = {
 
                     <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900 font-bold flex justify-between items-center">
                         <span>⏳ المدة التدريبية: ${data.duration}</span>
-                        <span>🎓 اعتماد رسمي مسجل (س.ت 92527)</span>
+                        <span>🎓 اعتماد رسمي مسجل (س.ت.92527)</span>
                     </div>
                 </div>
             `;
@@ -4965,16 +5371,11 @@ const diplomasData = {
     target.classList.add('tab-active');
     target.style.display='block';
 
-    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
-      btn.classList.remove('active');
-    });
-
     const buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
     buttons.forEach(function(btn){
       const action=btn.getAttribute('onclick') || '';
-      if(action.indexOf("switchTab('"+tabId+"')") !== -1 || action.indexOf('switchTab("'+tabId+'")') !== -1){
-        btn.classList.add('active');
-      }
+      const isTarget = action.indexOf("switchTab('"+tabId+"')") !== -1 || action.indexOf('switchTab("'+tabId+'")') !== -1;
+      btn.classList.toggle('active', isTarget);
     });
 
     if(tabId==='azkar' && typeof window.azkarInit==='function'){
@@ -5149,6 +5550,34 @@ body > .azkar-inner-tab {
         enforceCurrentMainTab();
     }
 })();
+</script>
+
+<!-- ============== سكريبت محراب العبقري التفاعلي ============== -->
+<script>
+    let mihrabFontSize = 22;
+    let mihrabCount = 0;
+
+    function changeFontSize(delta) {
+        mihrabFontSize = Math.max(16, Math.min(36, mihrabFontSize + delta));
+        const contentArea = document.getElementById('content-area');
+        if (contentArea) contentArea.style.fontSize = `${mihrabFontSize}px`;
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function incrementCounter() {
+        mihrabCount++;
+        const el = document.getElementById('counter');
+        if (el) el.innerText = mihrabCount;
+    }
+
+    function resetCounter() {
+        mihrabCount = 0;
+        const el = document.getElementById('counter');
+        if (el) el.innerText = mihrabCount;
+    }
 </script>
 
 </body>
