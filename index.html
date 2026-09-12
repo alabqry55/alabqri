@@ -22,6 +22,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+
+
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مركز العبقري للتدريب والإستشارات | الطب التكميلي والتنمية البشرية | د. أحمد السيد رسّه | أحمد الزمخشري</title>
     <!-- Tailwind CSS CDN -->
@@ -341,6 +345,42 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     border: 2px solid #d4af37;
     outline: 3px solid #0d5c3a;
     outline-offset: -8px;
+}
+
+/* توحيد أبعاد كروت الدبلومات واحتواء المحتوى بدون فراغات زائدة */
+#doors .abq-diploma-grid {
+    align-items: stretch;
+}
+#doors .abq-diploma-card {
+    height: 100%;
+    min-height: 0;
+}
+#doors .abq-diploma-image {
+    height: 260px;
+    min-height: 260px;
+    flex-shrink: 0;
+}
+#doors .abq-diploma-card > div:last-child {
+    padding: 8px;
+    min-height: 0;
+}
+#doors .abq-diploma-card h3 {
+    margin-bottom: 6px;
+}
+#doors .abq-diploma-card p {
+    margin-bottom: 8px;
+}
+#doors .abq-diploma-card .mt-auto {
+    padding-top: 0;
+}
+#doors .abq-diploma-card .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 8px;
+}
+@media (max-width: 767px) {
+    #doors .abq-diploma-image {
+        height: 230px;
+        min-height: 230px;
+    }
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -766,6 +806,55 @@ img.abq-zoomable-image { cursor: zoom-in; }
   .abq-video-slot h4{font-size:.92rem;}
   .abq-video-slot p{font-size:.7rem;margin-bottom:.7rem;}
   .abq-video-slot a{padding:.5rem .75rem;font-size:.72rem;}
+}
+</style>
+
+
+<style id="abq-diploma-gallery-enhancement">
+/* تحسين عرض صور الدبلومات — إضافة فقط، بدون حذف وظائف أو محتوى */
+#doors .abq-diploma-image {
+    min-height: 270px;
+    height: clamp(270px, 30vw, 360px);
+    background: linear-gradient(135deg, #f8fafc, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+#doors .abq-diploma-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+    object-position: center;
+    display: block;
+    transition: transform .35s ease, filter .35s ease;
+    border-radius: 12px;
+}
+#doors .abq-diploma-image:hover img {
+    transform: scale(1.025);
+    filter: brightness(1.02);
+}
+#doors .abq-diploma-card {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+@media (min-width: 1024px) {
+    #doors .abq-diploma-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    #doors .abq-diploma-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 767px) {
+    #doors .abq-diploma-image {
+        min-height: 230px;
+        height: 230px;
+        padding: 8px;
+    }
 }
 </style>
 
@@ -1382,8 +1471,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
         <!-- تبويب الدبلومات الرسمية المعتمدة -->
         <section id="doors" class="tab-content">
             <div class="bg-white rounded-3xl shadow-xl p-0 md:p-0 border border-blue-200 mb-0">
-                <div class="hero-bg text-white rounded-2xl p-5 md:p-5 shadow-md mb-10 relative overflow-hidden" text-right>
-                    <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl">🧠</div>
+                <div class="hero-bg text-white rounded-2xl p-3 md:p-3 shadow-md mb-3 relative overflow-hidden" text-right>
+                    <div class="absolute -left-10 -bottom-5 opacity-10 text-9xl">🧠</div>
 
    <span class="bg-white/20 text-white text-xs px-4 py-1.5 rounded-full font-bold border border-white/30 backdrop-blur-md inline-block mb-3">دبلومات مهنية متقدمة معتمدة</span>
                     <h3 class="text-lg md:text-lg font-black mb-3 tracking-tight">🎓مسارات تخصصية متقدمة صُممت لبناء المعرفة والمهارة والتطبيق العملي.
@@ -1397,18 +1486,18 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 
             <!-- شبكة الدبلومات الرسمية (جميع الدبلومات مجهزة بخاصية openDiplomaModal) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 abq-diploma-grid">
 
                 <!-- 01: دبلومة العلاج بالرقية الشرعية -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786482193941-317355681.png" alt="دبلومة العلاج بالرقية الشرعية" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">01</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786482193941-317355681.png" alt="دبلومة العلاج بالرقية الشرعية" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">01</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة العلاج بالرقية الشرعية</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">برنامج تخصصي يدمج بين فقه، شريعة، وسنة لتقديم علاج علمي وشرعي موثوق للأمراض الروحانية والنفسية.</p>
-                        <div class="mt-auto pt-4 space-y-3">
+                        <div class="mt-auto pt-0 space-y-3">
                             <button onclick="openDiplomaModal('ruqyah')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow flex items-center justify-center gap-2 text-xs md:text-sm">
                                 <i class="fas fa-book-open"></i>
                                 <span>عرض التفاصيل الكاملة والدليل العلمي</span>
@@ -1420,12 +1509,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 02: دبلومة العلاج بالطاقة الحيوية -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786496134748-997425396.png" alt="دبلومة العلاج بالطاقة الحيوية" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">02</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786496134748-997425396.png" alt="دبلومة العلاج بالطاقة الحيوية" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">02</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة العلاج بالطاقة الحيوية</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">أحدث التقنيات العالمية في مجالات توازن الهالة، مسارات الطاقة الإنسانية، والتأهيل الشامل.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1440,12 +1529,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 03: دبلومة العلاج بالريكي الإسلامي -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786495985624-383609155.png" alt="دبلومة العلاج بالريكي الإسلامي" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">03</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786495985624-383609155.png" alt="دبلومة العلاج بالريكي الإسلامي" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">03</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة العلاج بالريكي الإسلامي</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">استكشاف الوعي الكوني الإسلامي والشفاء الذاتي وفق المناهج الروحية السليمة والمعتمدة دولياً.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1460,12 +1549,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 04: دبلومة العلاج بعلم السوجوك -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786688593001-76479016.png" alt="دبلومة العلاج بعلم السوجوك" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">04</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786688593001-76479016.png" alt="دبلومة العلاج بعلم السوجوك" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">04</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة العلاج بعلم السوجوك</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">إتقان علم النقاط الانعكاسية في الكف والقدم لتسكين الآلام العضوية وتحفيز المناعة بأساليب طبيعية.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1480,12 +1569,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 05: دبلومة تنمية الذات والمهارات -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786488046920-88086953.png" alt="دبلومة تنمية الذات والمهارات" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">05</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786488046920-88086953.png" alt="دبلومة تنمية الذات والمهارات" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">05</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة تنمية الذات والمهارات</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">مهارات التفكير الإيجابي والإبداعي، صناعة الأهداف، وتطوير القدرات الشخصية والمهنية بكفاءة عالية.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1500,12 +1589,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 06: دبلومة الإرشاد الأسري والتربوي -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786487795656-505690665.png" alt="دبلومة الإرشاد الأسري والتربوي" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">06</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786487795656-505690665.png" alt="دبلومة الإرشاد الأسري والتربوي" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">06</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة الإرشاد الأسري والتربوي</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">حل المشاكل الأسرية بعلم النفس الإسلامي وفقه العلاقات الزوجية والتربوية السليمة.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1520,12 +1609,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 07: دبلومة البرمجة اللغوية العصبية -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786495109942-210787351.png" alt="دبلومة البرمجة اللغوية العصبية" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">07</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786495109942-210787351.png" alt="دبلومة البرمجة اللغوية العصبية" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">07</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة البرمجة اللغوية العصبية</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">أدوات العلاج النفسي الخارق وإعادة صياغة الأنماط العقلية والسلوكية لتحقيق الاختراق الذاتي.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1540,12 +1629,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 08: دبلومة الطب البديل والتكميلي -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786487882266-486296257.png" alt="دبلومة الطب البديل والتكميلي" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">08</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786487882266-486296257.png" alt="دبلومة الطب البديل والتكميلي" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">08</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة الطب البديل والتكميلي</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">الطب الروحاني للجسم الإنساني والتأهيل الشامل (6 أشهر / 3 مستويات) بالوسائل الطبيعية المعتمدة.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1560,12 +1649,12 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- 09: دبلومة العلاج باللمسة الشفائية -->
-                <div class="bg-white rounded-2xl shadow-md overflow-border border-slate-200 card-hover flex flex-col">
-                    <div class="h-48 relative overflow-hidden">
-                        <img src="https://img2link.online/api/file/1786687984651-642430563.png" alt="دبلومة العلاج باللمسة الشفائية" class="w-full h-full object-cover">
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">09</span>
+                <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 card-hover flex flex-col abq-diploma-card">
+                    <div class="abq-diploma-image relative overflow-hidden">
+                        <img src="https://img2link.online/api/file/1786687984651-642430563.png" alt="دبلومة العلاج باللمسة الشفائية" class="w-full h-full object-contain">
+                        <span class="absolute top-1 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-lg font-black shadow">09</span>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
+                    <div class="p-1 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-slate-900">دبلومة العلاج باللمسة الشفائية</h3>
                         <p class="text-slate-600 text-sm mb-4 flex-grow">تطبيق البرمجة الروحية وتقنيات اللمسة الشفائية المتقدمة لتنشيط الطاقة الحيوية والتأهيل.</p>
                         <div class="mt-auto pt-4 space-y-3">
@@ -1585,8 +1674,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
                      ثم إضافة بيانات الدبلومة الجديدة في كائن diplomasData أسفل الصفحة في Script. -->
 
             </div>
-
-            <div class="bg-white rounded-3xl shadow-xl p-0 md:p-0 border border-blue-200 mb-0">
+                <!-- دبلومة آليات التحكم النفس عصبي الشاملة ومنظومة الوعي الإنساني -->
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 mb-0">
                 <div class="hero-bg text-white rounded-2xl p-5 md:p-5 shadow-md mb-10 relative overflow-hidden" text-right>
                     <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl">🧠</div>
 
@@ -1601,7 +1690,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
                 <div class="space-y-8 max-w-5xl mx-auto">
                     <!-- الإطار العام والهدف -->
-                    <div class="bg-slate-50 rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                         <h4 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                             <span>📋</span> الإطار العام والهدف الاستراتيجي
                         </h4>
@@ -1625,7 +1714,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 
                     <!-- الهيكل المعماري (المستويات الثلاثة) -->
-                    <div class="bg-slate-50 rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+                      <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                         <h4 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
                             <span>🏛️</span> الهيكل المعماري للدبلومة (المستويات الثلاثة)
                         </h4>
@@ -1707,7 +1796,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
                             </div>
                         </div>
                     </div>
-<div class="border border-indigo-200 bg-indigo-50/50 rounded-2xl p-6">
+
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                     <!-- أدوات التقييم والقياس ومشروع التخرج & الحقيبة المتكاملة -->
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1755,10 +1845,11 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 
             <!-- Sections Container -->
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
             <div class="space-y-10">
                 <!-- أولاً: قسم العلوم الشرعية والقرآنية -->
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                 <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-200">
-                    <div class="border-b border-slate-200 pb-4 mb-6">
                         <h3 class="text-xl md:text-2xl font-black text-blue-900 flex items-center gap-2">
                             <span>📖</span> أولاً: قسم العلوم الشرعية والقرآنية
                         </h3>
@@ -1825,7 +1916,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- ثانياً: قسم علوم الحكمة والتأصيل المعرفي -->
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-200">
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                     <div class="border-b border-slate-200 pb-4 mb-6">
                         <h3 class="text-xl md:text-2xl font-black text-indigo-900 flex items-center gap-2">
                             <span>💡</span> ثانياً: قسم علوم الحكمة والتأصيل المعرفي
@@ -1893,7 +1984,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- ثالثاً: قسم علوم الطاقة والشفاء الشمولي -->
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-200">
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                     <div class="border-b border-slate-200 pb-4 mb-6">
                         <h3 class="text-xl md:text-2xl font-black text-emerald-900 flex items-center gap-2">
                             <span>⚡</span> ثالثاً: قسم علوم الطاقة والشفاء الشمولي
@@ -2018,7 +2109,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- رابعاً: قسم علوم الحياة والتطوير المستدام -->
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-200">
+                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
                     <div class="border-b border-slate-200 pb-4 mb-6">
                         <h3 class="text-xl md:text-2xl font-black text-sky-900 flex items-center gap-2">
                             <span>🌱</span> رابعاً: قسم علوم الحياة والتطوير المستدام
