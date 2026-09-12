@@ -1,0 +1,643 @@
+<!-- 
+  ═══════════════════════════════════════════════════════════════════════════
+  🌍 شاشة المنظومة الموحدة لعالم الاتزان الشامل
+  Ecosystem Introduction Screen — Alabqari Holistic Balance
+  
+  الهدف: تعريف المستخدم بالمنظومة وتوضيح الفرق بين البوصلة والمصفوفة
+  وتقديمهما كأداتين متكاملتين داخل منظومة واحدة
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة العبقري للاتزان الشامل | البوصلة والمصفوفة</title>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="design-system.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ═════════════════════════════════════════════════════════════════ 
+           الأنماط الأساسية للشاشة
+           ═════════════════════════════════════════════════════════════════ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family-primary);
+            background: linear-gradient(135deg, #f0f9ff 0%, #f0fdf4 50%, #f5f3ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+            color: var(--abq-brand-dark);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           الحاوية الرئيسية
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-container {
+            max-width: 1200px;
+            width: 100%;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           قسم المقدمة
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-intro {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+            animation: slideInDown 0.6s ease-out;
+        }
+        
+        .ecosystem-intro-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            animation: pulseCompass 2s infinite;
+        }
+        
+        .ecosystem-intro h1 {
+            font-size: var(--title-main);
+            font-weight: var(--font-black);
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--compass-primary), var(--matrix-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .ecosystem-intro-subtitle {
+            font-size: var(--text-body-lg);
+            color: var(--state-neutral);
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           النص الوصفي
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-description {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(203, 213, 225, 0.3);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            animation: fadeInScale 0.7s ease-out;
+        }
+        
+        .ecosystem-description-title {
+            font-size: var(--title-section);
+            font-weight: var(--font-extrabold);
+            color: var(--abq-brand-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .ecosystem-description-text {
+            font-size: var(--text-body);
+            line-height: 1.8;
+            color: var(--abq-brand-dark);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .ecosystem-description-text strong {
+            color: var(--abq-brand-primary);
+            font-weight: var(--font-bold);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           الأداتان الرئيسيتان
+           ───────────────────────────────────────────────────────────── */
+        
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           بطاقة الأداة
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-card {
+            position: relative;
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            overflow: hidden;
+            transition: all var(--transition-slow);
+            cursor: pointer;
+            transform: translateY(0);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            min-height: 400px;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* بطاقة البوصلة */
+        .tool-card.compass {
+            background: linear-gradient(135deg, var(--compass-light) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border: 2px solid var(--compass-primary);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+            color: var(--compass-accent);
+        }
+        
+        .tool-card.compass:hover {
+            box-shadow: var(--shadow-compass);
+            border-color: var(--compass-accent);
+        }
+        
+        /* بطاقة المصفوفة */
+        .tool-card.matrix {
+            background: linear-gradient(135deg, var(--matrix-light) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border: 2px solid var(--matrix-primary);
+            box-shadow: 0 10px 30px -10px rgba(5, 150, 105, 0.3);
+            color: var(--matrix-accent);
+        }
+        
+        .tool-card.matrix:hover {
+            box-shadow: var(--shadow-matrix);
+            border-color: var(--matrix-accent);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           أيقونة الأداة
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-icon {
+            font-size: 4rem;
+            margin: var(--spacing-md) 0;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .tool-card.compass .tool-icon {
+            animation-delay: 0s;
+        }
+        
+        .tool-card.matrix .tool-icon {
+            animation-delay: 0.3s;
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           عنوان الأداة
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-title {
+            font-size: var(--title-section);
+            font-weight: var(--font-extrabold);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           وصف الأداة
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-description {
+            font-size: var(--text-body-sm);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-lg);
+            flex-grow: 1;
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           خصائص الأداة
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-features {
+            text-align: right;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .tool-feature {
+            font-size: var(--text-caption);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            display: inline-block;
+            margin: var(--spacing-xs);
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid currentColor;
+            opacity: 0.8;
+            transition: all var(--transition-base);
+        }
+        
+        .tool-card:hover .tool-feature {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           زر البدء
+           ───────────────────────────────────────────────────────────── */
+        
+        .tool-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 2px solid currentColor;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-body-sm);
+            font-weight: var(--font-bold);
+            cursor: pointer;
+            background: transparent;
+            color: inherit;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: auto;
+        }
+        
+        .tool-card.compass .tool-btn:hover {
+            background: var(--compass-primary);
+            color: #ffffff;
+            transform: translateX(-5px);
+        }
+        
+        .tool-card.matrix .tool-btn:hover {
+            background: var(--matrix-primary);
+            color: #ffffff;
+            transform: translateX(-5px);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           نص المقارنة
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-comparison {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+            backdrop-filter: blur(10px);
+            animation: fadeInScale 0.8s ease-out;
+        }
+        
+        .comparison-title {
+            font-size: var(--title-subsection);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--spacing-lg);
+            color: var(--abq-brand-primary);
+            text-align: center;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .comparison-item {
+            text-align: center;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .comparison-item.compass {
+            border: 2px solid var(--compass-light);
+        }
+        
+        .comparison-item.matrix {
+            border: 2px solid var(--matrix-light);
+        }
+        
+        .comparison-label {
+            font-size: var(--text-caption);
+            font-weight: var(--font-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .comparison-item.compass .comparison-label {
+            color: var(--compass-primary);
+        }
+        
+        .comparison-item.matrix .comparison-label {
+            color: var(--matrix-primary);
+        }
+        
+        .comparison-value {
+            font-size: var(--text-body-sm);
+            line-height: 1.6;
+            font-weight: var(--font-semibold);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           رسالة النهاية
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-conclusion {
+            text-align: center;
+            padding: var(--spacing-2xl);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(5, 150, 105, 0.05));
+            border-radius: var(--radius-2xl);
+            border: 2px dashed rgba(203, 213, 225, 0.5);
+            animation: fadeInScale 0.9s ease-out;
+        }
+        
+        .conclusion-title {
+            font-size: var(--title-subsection);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--compass-primary), var(--matrix-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .conclusion-text {
+            font-size: var(--text-body);
+            line-height: 1.8;
+            color: var(--abq-brand-dark);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           نقاط الانتقاء
+           ───────────────────────────────────────────────────────────── */
+        
+        .ecosystem-dots {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(203, 213, 225, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .dot.active {
+            background: var(--abq-brand-primary);
+            width: 30px;
+            border-radius: var(--radius-full);
+        }
+        
+        /* ─────────────────────────────────────────────────────────────── 
+           الاستجابة
+           ───────────────────────────────────────────────────────────── */
+        
+        @media (max-width: 768px) {
+            .ecosystem-container {
+                padding: 0;
+            }
+            
+            .ecosystem-intro h1 {
+                font-size: var(--title-section);
+            }
+            
+            .ecosystem-intro-subtitle {
+                font-size: var(--text-body);
+            }
+            
+            .ecosystem-description {
+                padding: var(--spacing-lg);
+            }
+            
+            .tool-card {
+                padding: var(--spacing-lg);
+                min-height: 350px;
+            }
+            
+            .tool-icon {
+                font-size: 3rem;
+            }
+            
+            .tool-title {
+                font-size: var(--title-card);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .ecosystem-intro-icon {
+                font-size: 3rem;
+            }
+            
+            .ecosystem-intro h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tools-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+            
+            .comparison-grid {
+                gap: var(--spacing-md);
+            }
+            
+            .tool-card {
+                padding: var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ecosystem-container">
+        <!-- المقدمة -->
+        <div class="ecosystem-intro">
+            <div class="ecosystem-intro-icon">🌍</div>
+            <h1>🧭 اكتشف عالم بوصلة العبقري ومصفوفة العبقري</h1>
+            <p class="ecosystem-intro-subtitle">
+                في عالم العبقري للاتزان الشامل لا نبحث فقط عن إجابات سريعة، بل نمنحك مساحة واعية 
+                لاكتشاف ذاتك، وفهم واقعك، ورؤية جوانب حياتك بصورة أكثر وضوحًا واتزانًا.
+            </p>
+        </div>
+        
+        <!-- الوصف التفصيلي -->
+        <div class="ecosystem-description">
+            <h2 class="ecosystem-description-title">✨ منظومة متكاملة للاتزان والتطور الشخصي</h2>
+            
+            <p class="ecosystem-description-text">
+                <strong>🧭 بوصلة العبقري</strong> تساعدك على تحديد اتجاهك، والتعرّف إلى جوانب القوة 
+                ومواطن الاحتياج في رحلتك نحو السكينة والاتزان، من خلال مجموعة من المحاور التي ترسم 
+                لك صورة واضحة عن حالتك الراهنة.
+            </p>
+            
+            <p class="ecosystem-description-text">
+                <strong>📊 مصفوفة العبقري</strong> تأخذك خطوة أعمق؛ لتربط بين الجوانب المختلفة، 
+                وتكشف لك العلاقات والتوازنات بينها، فتنتقل من مجرد معرفة موضعك إلى فهم الصورة الكاملة 
+                والتعامل معها بصورة أكثر تنظيمًا ووعيًا.
+            </p>
+            
+            <p class="ecosystem-description-text" style="margin-top: var(--spacing-lg); font-size: var(--title-small);">
+                <strong style="color: var(--abq-brand-primary); font-size: var(--text-body);">
+                    البوصلة تحدد الاتجاه، والمصفوفة تكشف الصورة.
+                </strong>
+            </p>
+        </div>
+        
+        <!-- الأداتان الرئيسيتان -->
+        <div class="tools-container">
+            <!-- بطاقة البوصلة -->
+            <div class="tool-card compass">
+                <div class="tool-icon">🧭</div>
+                <h3 class="tool-title">بوصلة العبقري</h3>
+                <p class="tool-description">
+                    اكتشف اتجاهك وحدد نقاط قوتك، من خلال رحلة استكشافية واعية تساعدك على فهم 
+                    حالتك الراهنة ورؤية الفرص المتاحة أمامك.
+                </p>
+                
+                <div class="tool-features">
+                    <span class="tool-feature">🎯 اكتشاف الذات</span>
+                    <span class="tool-feature">💪 نقاط القوة</span>
+                    <span class="tool-feature">🔍 التقييم</span>
+                    <span class="tool-feature">🌟 التوجيه</span>
+                </div>
+                
+                <button class="tool-btn" onclick="startCompass()">
+                    <i class="fas fa-arrow-left"></i>
+                    ابدأ الآن
+                </button>
+            </div>
+            
+            <!-- بطاقة المصفوفة -->
+            <div class="tool-card matrix">
+                <div class="tool-icon">📊</div>
+                <h3 class="tool-title">مصفوفة العبقري</h3>
+                <p class="tool-description">
+                    افهم منظومتك بشكل عميق من خلال تحليل العلاقات والتوازنات بين الجوانب المختلفة 
+                    في حياتك، واحصل على رؤى تفصيلية تساعدك على النمو والتطور.
+                </p>
+                
+                <div class="tool-features">
+                    <span class="tool-feature">🔗 العلاقات</span>
+                    <span class="tool-feature">⚖️ التوازن</span>
+                    <span class="tool-feature">📈 التحليل</span>
+                    <span class="tool-feature">🎓 التطور</span>
+                </div>
+                
+                <button class="tool-btn" onclick="startMatrix()">
+                    <i class="fas fa-arrow-left"></i>
+                    ابدأ الآن
+                </button>
+            </div>
+        </div>
+        
+        <!-- المقارنة -->
+        <div class="ecosystem-comparison">
+            <h3 class="comparison-title">ما الفرق؟</h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item compass">
+                    <div class="comparison-label">🧭 البوصلة</div>
+                    <div class="comparison-value">
+                        توضح لك الاتجاه<br>
+                        تحدد نقطة البداية<br>
+                        تكشف الإمكانيات
+                    </div>
+                </div>
+                
+                <div class="comparison-item matrix">
+                    <div class="comparison-label">📊 المصفوفة</div>
+                    <div class="comparison-value">
+                        تشرح العلاقات<br>
+                        تربط الأجزاء معاً<br>
+                        توضح الصورة الكاملة
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الخلاصة -->
+        <div class="ecosystem-conclusion">
+            <h3 class="conclusion-title">🌟 رحلة واعية نحو الاتزان الشامل</h3>
+            <p class="conclusion-text">
+                ادخل الآن إلى عالم بوصلة العبقري ومصفوفة العبقري، وابدأ رحلة واعية نحو فهم أعمق 
+                للذات، واتزان أشمل، وخطوات أكثر وضوحًا في طريق التطوير والنمو الشخصي.
+            </p>
+        </div>
+        
+        <!-- نقاط الانتقاء -->
+        <div class="ecosystem-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // دوال البدء (يتم ربطها مع index.html الرئيسي)
+        function startCompass() {
+            console.log('🧭 بدء البوصلة...');
+            // سيتم ربطها مع الدالة الفعلية في index.html
+            // switchTab('matrix'); // مثال
+            alert('🧭 سيتم نقلك إلى بوصلة العبقري قريباً!');
+        }
+        
+        function startMatrix() {
+            console.log('📊 بدء المصفوفة...');
+            // سيتم ربطها مع الدالة الفعلية في index.html
+            // switchTab('matrix'); // مثال
+            alert('📊 سيتم نقلك إلى مصفوفة العبقري قريباً!');
+        }
+        
+        // تحريك نقاط الانتقاء
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                dots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
