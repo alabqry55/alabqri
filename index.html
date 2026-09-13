@@ -5225,7 +5225,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       credentials:'same-origin'
     })
     .then(function(res){
-      if(!res.ok) throw new Error('visitor api '+res.status);
+      if(!res.ok) throw new Error('visitors api '+res.status);
       return res.json();
     })
     .then(function(data){
