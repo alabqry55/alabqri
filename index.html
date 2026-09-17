@@ -5290,7 +5290,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
     })
     .then(function(data){
       if(data && Number.isFinite(Number(data.total))){
-        el.textContent=Number(data.total).toLocaleString('en-US');
+        var ABQ_VISITOR_BASE_OFFSET = 1234; /* رقم بداية ثابت يُضاف فوق العدد الحقيقي الحالي */
+        var displayCount = ABQ_VISITOR_BASE_OFFSET + Number(data.total);
+        el.textContent=displayCount.toLocaleString('en-US');
         if(box) box.classList.remove('loading');
       }
     })
