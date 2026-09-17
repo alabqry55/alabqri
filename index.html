@@ -778,6 +778,13 @@ img.abq-zoomable-image { cursor: zoom-in; }
 </style>
 
 <style>.balance-window{width:100%;}.balance-window-btn{min-height:74px;}.balance-window-btn.active-window{box-shadow:0 10px 24px rgba(15,23,42,.16);}</style>
+<style id="abq-question-area-compact">
+#matrix-window .question-area,
+#compass-window .question-area {
+    padding: 6px 12px !important;
+    min-height: 0 !important;
+}
+</style>
 
 <style id="abq-video-library-responsive">
 /* ===== مكتبة الفيديوهات: مقاسات ثابتة ومتجاوبة PC / Tablet / Mobile ===== */
@@ -862,11 +869,19 @@ img.abq-zoomable-image { cursor: zoom-in; }
 <body class="min-h-screen flex flex-col">
 
     <!-- أزرار الواتساب الثابتة والعائمة -->
-    <div class="fixed bottom-6 left-6 z-50 flex flex-col gap-3">
-        <a href="https://wa.me/201120909856" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-emerald-400/30">
+    <div id="abq-fixed-whatsapp" class="fixed z-50">
+        <a href="https://wa.me/201120909856" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-emerald-400/30">
             <span class="text-xl">💬</span>
             <span class="text-xs font-bold whitespace-nowrap">د. أحمد السيد رَسَّه</span>
         </a>
+    </div>
+
+    <!-- زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات) -->
+    <div id="abq-quran-radio" class="fixed z-50">
+        <button type="button" onclick="AbqQuranRadio.toggle()" aria-label="تشغيل إذاعة القرآن الكريم المباشرة" class="bg-gradient-to-r from-blue-700 to-emerald-600 hover:opacity-95 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-emerald-300/30">
+            <span id="abq-quran-radio-icon" class="text-xl">🎧</span>
+            <span class="text-xs font-bold whitespace-nowrap">إذاعة القرآن الكريم</span>
+        </button>
     </div>
 
 <!-- نافذة (Modal) حول المركز العامة (بأبيض سن الفيل) -->
@@ -936,7 +951,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
             </div>
         </div>
     </div>
-
     <!-- رأس الصفحة -->
 <header class="bg-white border-b border-indigo-900 text-slate-950 shadow-sm">
     <div class="container mx-auto px-6 md:px-10 py-1 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -955,9 +969,9 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 
                     <span class="text-3xl">🎓</span>
-<span>منصة العبقري للتدريب والإستشارات<span class="text-lg font-extrabold text-green-600"><span class="text-xl" "class="text-2xl"> (الطب التكميلي والتنمية البشرية🌿)</span>
-
-	<span class="text-lg font-extrabold text-green-600">
+                    <span>منصة العبقري للتدريب والإستشارات
+                        <span class="text-lg font-extrabold text-green-600"> (الطب التكميلي والتنمية البشرية🌿)</span>
+                    </span>
                 </h1>
             </div>
         </div>
@@ -974,7 +988,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
             <button type="button" onclick="switchTab('contact')" class="nav-btn">تواصل معنا📞</button>
         </nav>
-    </div>
     </header>
 
     <!-- المحتوى الرئيسي -->
@@ -1004,8 +1017,10 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <button onclick="switchTab('azkar')" class="bg-emerald-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
                        
 
- <button onclick="switchTab('azkar')" class="bg-cyan-400 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
+ <button onclick="switchTab('contact')" class="bg-cyan-400 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-phone ml-1"></i> تواصل معنا 📞</button>
                     </div>
+                    </div>
+
 
 <div class="abq-hero-visitor-welcome w-full flex flex-wrap items-center justify-center gap-3 text-center">
     <div class="abq-visitor-counter loading max-w-full flex flex-wrap items-center justify-center gap-2 text-center" aria-live="polite" aria-label="عداد زوار منصة العبقري">
@@ -1018,7 +1033,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
         <strong>🌿أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"🌿</strong>
     </p>
 </div>
-            </div>
+         
 
             <!-- 2) شريط الإحصائيات -->
             <div id="stats-bar" class="grid grid-cols-2 md:grid-cols-5 gap-5 mb-5 reveal">
@@ -1032,48 +1047,48 @@ img.abq-zoomable-image { cursor: zoom-in; }
             </div>
 
 <!-- نبذة تعريفية -->
-                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
-<div class="space-y-2 w-full mx-auto">
+                    <div class="abq-about-blurb bg-blue-50/60 p-2 rounded-xl border border-blue-700">
+                        <div class="space-y-2 w-full mx-auto">
+                            <h3 class="text-xl font-bold text-green-700 flex items-center justify-start  gap-2 text-right border-b border-blue-400 pb-2">
+                                <span>📌</span> نبذة تعريفية :
+                            </h3>
+                            <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-right"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</strong></p>
+                       
+<p class="abq-about-text text-blue-700 abq-about-text text-center abq-single-line">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
 
-    <h3 class="text-xl font-extrabold text-green-700 flex items-center gap-2 border-b border-blue-400 pb-2">
-        <span>📌</span> نبذة تعريفية :
-     </h3>
+وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات (الطاقة الحيوية/والباراسيكولوجي/وعلم النفس الإسلامي/والريكي الإسلامي/والحجامة الإسلامية/والتنمية البشرية)
 
-    <div class="w-full text-green-600 text-center leading-relaxed">
-    </div>
-    </div>
-        <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-center"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</p><p class="text-blue-700">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي
-            تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية<p><p class="text-blue-700">
-وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات ( الطاقة الحيوية / والباراسيكولوجي/ وعلم النفس الإسلامي/ والريكي الإسلامي/ والحجامة الإسلامية/ والتنمية البشرية ) من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي ... ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه.</strong>
-        <p class="mb-2">
-        </p>
-        </p>
-    </div>
-</div>
-    </div>
+من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي.
+</p>
 
-                <!-- رؤيتنا و رسالتنا -->
+<p class="mb-2 border-b text-green-700 text-right">ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه، ونسعى من خلال هذه المنصة إلى أن نفتح آفاقًا جديدة للتعلم والتطور، ونحوّل المعرفة إلى ممارسة واعية لها أثر حقيقي، بما يمنح كل زائر ومشارك فرصة لإكتشاف قدراته، وتنمية إمكاناته، والإنطلاق بخطوات أكثر وضوحًا وثقة نحو مستقبل أكثر توازنًا وإبداعًا وإنجازًا.</p>
+                        </div>
+                    </div>
+
+
+<!-- رؤيتنا و رسالتنا -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200">
-                        <h4 class="font-extrabold text-blue-900 text-base mb-3 flex items-center gap-2">
+                    <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
+                        <h4 class="font-extrabold text-blue-900 text-base mb-2 flex items-center gap-2">
                             <span>🌟</span> رؤيتنا
                         </h4>
                         <p class="text-slate-700 text-xs md:text-sm leading-relaxed">
                             أن يكون <strong>مركز العبقري للتدريب والإستشارات</strong> مرجعاً عربياً رائداً، ومنصةً عالميةً للمعرفة والتطوير، ومركزاً للتميز في إعداد الإنسان، وبناء القيادات، وإنتاج المعرفة، وصناعة الأثر المستدام.
                         </p>
                     </div>
-                    <div class="bg-sky-50/60 p-4 rounded-2xl border border-sky-200">
-                        <h4 class="font-extrabold text-sky-900 text-base mb-3 flex items-center gap-2">
+                    <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
+                        <h4 class="font-extrabold text-sky-900 text-base mb-2 flex items-center gap-2">
                             <span>🎯</span> رسالتنا
                         </h4>
+
+
                         <p class="text-slate-700 text-xs md:text-sm leading-relaxed">
                             أن نُمكّن الأفراد والمؤسسات من تحقيق أقصى إمكاناتهم، عبر التدريب الاحترافي، والإستشارات المتخصصة، والبحث العلمي، والتطوير المهني، في بيئة تعليمية ملهمة، تجمع بين المعرفة، والمهارة، والقيم، والابتكار.
                         </p>
                     </div>
                 </div>
-
                 <!-- رؤيتنا الفكرية -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
                     <h4 class="font-extrabold text-slate-900 text-base mb-3 flex items-center gap-2">
                         <span>💡</span> رؤيتنا الفكرية نؤمن بأن :                    </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-slate-800">
@@ -1087,7 +1102,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
 
                 <!-- مرتكزاتنا الإستراتيجية -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
                     <h4 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
                         <span>🏛️</span> مرتكزاتنا الإستراتيجية
                     </h4>
@@ -1110,7 +1125,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         </div>
                     </div>
                 </div>
-
                 <!-- مجالات التميز -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <h4 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
@@ -1146,11 +1160,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <div class="bg-teal-50 text-teal-900 p-3 rounded-xl border border-teal-900/30">🕌 الالتزام بالقيم الإسلامية</div>
                         <div class="bg-cyan-50 text-cyan-900 p-3 rounded-xl border border-cyan-200">🌍 خدمة المجتمع</div>
                         <div class="bg-blue-100 text-blue-950 p-3 rounded-xl border border-blue-300">🚀 صناعة الأثر</div>
-                    </p>
                     </div>
                 </div>
-                </div>
-                </div>                
 <!-- وعدنا وشعارنا -->
                 <div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white p-6 md:p-8 rounded-2xl text-center space-y-3 shadow-lg">
                     <h4 class="font-bold text-amber-400 text-sm md:text-base">★ وعدنا المؤسسي</h4>
@@ -1162,7 +1173,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <p class="text-[11px] text-sky-400 mt-1 font-semibold">Building People • Creating Knowledge • Leading the Future</p>
                     </div>
                 </div>
-            </div>
 
 
             <!-- 3) بطاقات الخدمات -->
@@ -1335,7 +1345,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <span>تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)</span>
                     </div>
                 </div>
-            </div>
 
             <!-- معرض الصور والشهادات -->
             <div class="mb-8 flex justify-between items-center bg-blue-50 border border-blue-200 p-4 rounded-2xl">
@@ -1463,7 +1472,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-sky-600 font-semibold">★ سجل تجاري 92527</div>
                     </div>
                 </div>            </div>
-            </div>
 
         </section>
 
@@ -1827,6 +1835,10 @@ img.abq-zoomable-image { cursor: zoom-in; }
           </div>
           </div>
                 </div>
+            </div>
+            </div>
+            </div>
+        </div>
 </section>
 
         <!-- تبويب الدورات والعلوم المساعدة -->
@@ -2161,6 +2173,10 @@ img.abq-zoomable-image { cursor: zoom-in; }
                                 <p class="text-xs md:text-sm text-slate-600 mt-2 leading-7">ويُستحضر هذا المسار بوصفه إطارًا منهجيًا حاكمًا عند بناء البرامج والمناهج، وتقديم المحتوى، وتقييم الممارسات؛ ليكون المقصود هو سلامة الوصول إلى المعرفة النافعة والتطبيق الرشيد، لا مجرد كثرة المعلومات.</p>
                             </div>
                         </div>
+                    </div>
+                    </div>
+            </div>
+            </div>
         </section>
 
 
@@ -2200,21 +2216,21 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
             <div class="mb-6">
                 <h2 class="text-2xl md:text-4xl font-bold mb-4 text-slate-900">
-                    🧭 اكتشف عالم بوصلة العبقري ومصفوفة العبقري
+                    🧭 إكتشف عالم بوصلة العبقري ومصفوفة العبقري
                 </h2>
 
                 <p class="max-w-4xl mx-auto text-base md:text-lg leading-8 text-slate-700">
-                    في <strong>عالم العبقري للاتزان الشامل</strong> لا نبحث فقط عن إجابات سريعة،
-                    بل نمنحك مساحة واعية لاكتشاف ذاتك، وفهم واقعك، ورؤية جوانب حياتك بصورة
-                    أكثر وضوحًا واتزانًا.
+                    في <strong>عالم العبقري للإتزان الشامل</strong> لا نبحث فقط عن إجابات سريعة،
+                    بل نمنحك مساحة واعية لإكتشاف ذاتك، وفهم واقعك، ورؤية جوانب حياتك بصورة
+                    أكثر وضوحًا وإتزانًا.
                 </p>
             </div>
 
             <div class="max-w-5xl mx-auto space-y-5 text-right leading-8 text-slate-700">
 
                 <p>
-                    🧭 <strong class="text-blue-700">بوصلة العبقري</strong> تساعدك على تحديد اتجاهك،
-                    والتعرّف إلى جوانب القوة ومواطن الاحتياج في رحلتك نحو السكينة والاتزان،
+                    🧭 <strong class="text-blue-700">بوصلة العبقري</strong> تساعدك على تحديد إتجاهك،
+                    والتعرّف إلى جوانب القوة ومواطن الإحتياج في رحلتك نحو السكينة والإتزان،
                     من خلال مجموعة من المحاور التي ترسم لك صورة واضحة عن حالتك الراهنة.
                 </p>
 
@@ -2237,7 +2253,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
             <p class="max-w-4xl mx-auto leading-8 mb-7 text-slate-700">
                 ادخل الآن إلى عالم <strong>بوصلة العبقري ومصفوفة العبقري</strong>،
-                وابدأ رحلة واعية نحو فهم أعمق للذات، واتزان أشمل،
+                وابدأ رحلة واعية نحو فهم أعمق للذات، وإتزان أشمل،
                 وخطوات أكثر وضوحًا في طريق التطوير والنمو.
             </p>
 
@@ -2265,24 +2281,24 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <button type="button" onclick="switchBalanceWindow('matrix')" id="matrix-window-btn" aria-selected="false" class="balance-window-btn rounded-2xl p-4 text-right border border-blue-600 bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-md transition">⚖️ <span class="font-black">مصفوفة العبقري</span><span class="text-xs opacity-90  block">للتقييم والإتزان الشامل</span></button>
         </div>
 
+<div id="compass-window" class="balance-window">
+    <div class="hero-bg text-white rounded-2xl p-3 md:p-3 shadow-xl mb-3 border border-blue-100 text-center relative overflow-hidden">
+        
+        <div class="absolute -left-5 -bottom-3 opacity-5 text-9xl">📚</div>
 
-     	<div id="compass-window" class="balance-window">
-                <div class="hero-bg text-white rounded-3xl p-6 md:p-10 shadow-2xl mb-6 border border-blue-400 text-right relative overflow-hidden">
-                    <div class="absolute -left-16 -bottom-20 w-56 h-56 rounded-full bg-blue-400/10 blur-3xl"></div>
-                    <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-amber-300/10 blur-3xl"></div>
-                    <div class="relative z-10 max-w-4xl mr-0 ml-auto">
-                    <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-bold backdrop-blur-sm mb-4">🧭 مرصد الإتزان • تجربة واقعية مؤثرة</span>
-                        <h2 class="text-3xl md:text-3xl font-black tracking-tight mb-4">بوصلة العبقري للسكينة والإتزان</h2>
-                        <p class="text-emerald-50 text-sm md:text-lg leading-8 mb-5">خريطة شخصية تساعدك على معرفة موقعك الحالي، فهم إتجاهك، وإختيار خطوة واقعية تعيدك إلى مزيد من السكينة والإتزان الشامل المتكامل.</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs md:text-sm">
-                            <div class="bg-white/10 border border-white/10 rounded-2xl p-3">🧭 <strong>إعرف موقعك</strong><br><span class="text-emerald-100">تقييم ذاتي منظم</span></div>
-                            <div class="bg-white/10 border border-white/10 rounded-2xl p-3">🌿 <strong>إفهم إتجاهك</strong><br><span class="text-emerald-100">حدد مناطق القوة والإنتباه</span></div>
-                            <div class="bg-white/10 border border-white/10 rounded-2xl p-3">✨ <strong>إبدأ خطوتك</strong><br><span class="text-emerald-100">خطة عملية قابلة للمتابعة</span></div>
-                        </div>
+        <div class="max-w-3xl mx-auto w-full py-0">
+            
+            <h2 class="text-2xl md:text-3xl font-black tracking-tight mb-0 text-center leading-tight">
+                🧭 بوصلة العبقري للسكينة والإتزان الشامل
+            </h2>
+
+            <p class="text-emerald-50 text-base md:text-lg leading-8 mb-0 text-center max-w-2xl mx-auto">
+                خريطة شخصية تساعدك على معرفة موقعك الحالي، فهم إتجاهك، وإختيار خطوة واقعية تعيدك إلى مزيد من السكينة والإتزان الشامل المتكامل • إشراف د. أحمد السيد رَسَّه.
+            </p>
                     </div>
                 </div>
 
-                <div id="compass-welcome-screen" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 transition-all duration-500">
+                <div id="compass-welcome-screen" class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 transition-all duration-500">
                     <div class="grid lg:grid-cols-3 gap-6 items-stretch">
                         <div class="lg:col-span-2">
                             <div class="flex items-center gap-3 mb-4">
@@ -2293,12 +2309,13 @@ img.abq-zoomable-image { cursor: zoom-in; }
                                 </div>
                             </div>
                             <p class="text-slate-600 text-sm md:text-base leading-8 mb-5">هذه التجربة لا تسألك: «هل أنت جيد أم سيئ؟» بل تسألك: «أين أنت الآن؟ وما الإتجاه الذي تريد أن تسير إليه؟» أجب كما أنت في واقعك خلال الفترة الحالية، وليس كما تتمنى أن تكون.</p>
+
                             <div class="grid sm:grid-cols-2 gap-3 text-sm">
-                                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4"><strong class="text-emerald-800">٨ محاور</strong><p class="text-slate-600 mt-1">السكينة، الذات، الإيمان، المشاعر، العلاقات، الأولويات، المرونة، المعنى.</p></div>
-                                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4"><strong class="text-amber-800">٦٤ عبارة</strong><p class="text-slate-600 mt-1">٨ عبارات متوازنة لكل محور لقياس الإتجاه العام بصورة عملية.</p></div>
+                                <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-4"><strong class="text-emerald-800">٨ محاور</strong><p class="text-slate-600 mt-1">السكينة، الذات، الإيمان، المشاعر، العلاقات، الأولويات، المرونة، المعنى.</p></div>
+                                <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-4"><strong class="text-amber-800">٦٤ عبارة</strong><p class="text-slate-600 mt-1">٨ عبارات متوازنة لكل محور لقياس الإتجاه العام بصورة عملية.</p></div>
                             </div>
                         </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-3xl p-5 flex flex-col justify-between">
+                        <div class="bg-blue-50/60 rounded-3xl border border-blue-700 p-5 flex flex-col justify-between">
                             <div>
                                 <h4 class="font-black text-slate-900 mb-3">مقياس البوصلة</h4>
                                 <div class="space-y-2 text-xs text-slate-600">
@@ -2309,28 +2326,28 @@ img.abq-zoomable-image { cursor: zoom-in; }
                                     <div class="flex justify-between"><span>5 — ينطبق جدًا</span><span class="font-black text-teal-700">راسخ</span></div>
                                 </div>
                             </div>
-                            <button onclick="startAlabqariCompass()" class="mt-5 w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">إبدأ رحلة البوصلة 🧭</button>
+                            <button onclick="startAlabqariCompass()" class="mt-5 w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">إبدأ استكشاف الخريطة 🧭</button>
                         </div>
                     </div>
-                    <div class="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-900 leading-7"><strong>ملاحظة مهمة:</strong> إذا كانت لديك معاناة نفسية شديدة أو مستمرة، فهذه الأداة لا تستبدل التقييم المتخصص أو الرعاية الصحية المناسبة.</div>
+                    <div class="mt-3 bg-blue-50/60 p-2 rounded-2xl border border-blue-700 leading-7"><strong>ملاحظة مهمة:</strong> إذا كانت لديك معاناة نفسية شديدة أو مستمرة، فهذه الأداة لا تستبدل التقييم المتخصص أو الرعاية الصحية المناسبة.</div>
                 </div>
 
-                <div id="compass-quiz-screen" class="bg-white rounded-3xl p-5 md:p-8 shadow-xl border border-slate-200 hidden">
-                    <div class="mb-6">
+                <div id="compass-quiz-screen" class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 hidden">
+                    <div class="mb-3">
                         <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-emerald-800 mb-2">
                             <span id="compass-category-title" class="bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">المحور الأول</span>
                             <span id="compass-progress-text">السؤال 1 من 64</span>
                         </div>
-                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden"><div id="compass-progress-bar" class="bg-gradient-to-r from-emerald-600 to-teal-400 h-full w-0 transition-all duration-300"></div></div>
+                        <div class="w-full bg-slate-200 h-2  rounded-full overflow-hidden"><div id="compass-progress-bar" class="bg-gradient-to-r from-emerald-600 to-teal-400 h-full w-0 transition-all duration-300"></div></div>
                     </div>
-                    <div class="bg-slate-50 border border-slate-200 rounded-3xl p-5 md:p-7 mb-5">
-                        <div class="text-xs font-bold text-slate-500 mb-3">سؤال البوصلة</div>
-                        <h3 id="compass-question-text" class="text-lg md:text-2xl font-black text-slate-900 leading-relaxed"></h3>
+                    <div class="question-area bg-slate-50 border border-slate-200 rounded-3xl p-2 md:p-2 mb-2">
+                        <div class="text-xs font-bold text-slate-500 mb-0">سؤال البوصلة</div>
+                        <h3 id="compass-question-text" class="text-lg md:text-xl font-black text-slate-900 leading-relaxed"></h3>
                     </div>
-                    <div id="compass-options-container" class="grid gap-3 mb-6"></div>
+                    <div id="compass-options-container" class="grid gap-3 mb-0"></div>
                     <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-200">
-                        <button id="compass-prev-btn" onclick="AlabqariCompass.prev()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">← السابق</button>
-                        <button id="compass-next-btn" onclick="AlabqariCompass.next()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">التالي →</button>
+                        <button id="compass-prev-btn" onclick="AlabqariCompass.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">← السابق</button>
+                        <button id="compass-next-btn" onclick="AlabqariCompass.next()" class="px-3 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">التالي →</button>
                     </div>
                 </div>
 
@@ -2353,32 +2370,34 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <button onclick="AlabqariCompass.reset()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow">إعادة التجربة 🔄</button>
                     </div>
                 </div>
-            </div>
-        
-        </div>
 
+</div>
 
         <div id="matrix-window" class="balance-window hidden">
- <div class="hero-bg text-white rounded-2xl p-5 md:p-5 shadow-xl mb-5 border border-blue-100 text-right relative overflow-hidden">
-                <div class="absolute -left-5 -bottom-5 opacity-5 text-9xl">📚</div>
+            <div class="hero-bg text-white rounded-2xl p-3 md:p-3 shadow-xl mb-3 border border-blue-100 text-right relative overflow-hidden">
+                <div class="absolute -left-5 -bottom-3 opacity-5 text-9xl">📚</div>
 
-            <div class="max-w-3xl mx-auto w-full text-center py-6">
-                <h2 class="text-4xl md:text-4xl font-extrabold tracking-tight text-white mb-4">مصفوفة العبقري للتقييم والإتزان الشامل</h2>    
-                <p class="text-sm md:text-base text-white font-medium">
-                    بوابة الإرشاد النفسي والروحي • إشراف د. أحمد السيد رَسَّه
-                </p>
+                <div class="max-w-3xl mx-auto w-full text-center py-0">
+                    <h2 class="text-3xl md:text-3xl font-extrabold tracking-tight text-white mb-3">⚖️ مصفوفة العبقري للتقييم والإتزان الشامل</h2>    
+                    <p class="text-sm md:text-base text-white font-medium">
+                        أداة تقييم ذاتي متقدمة لقياس وعي البصيرة والمرونة النفسية والعصبية والروحية والطاقية والأسرية، بدقة عاليةّ</p><p>بوابة الإرشاد النفسي والروحي • إشراف د. أحمد السيد رَسَّه.
+                    </p>
+                </div>
             </div>
 
-            <div class="max-w-2xl mx-auto w-full my-4">
-                <div id="matrix-welcome-screen" class="glass-card ivory-bg text-slate-800 rounded-3xl p-6 md:p-8 shadow-xl w-full text-center transition-all duration-500">
-                    <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold mb-5 shadow-md">
-                        🧠
+
+            <div class="w-full my-4">
+
+                <div id="matrix-welcome-screen" class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
+                    <div class="grid sm:grid-cols-2 gap-3 text-right mb-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4"><strong class="text-blue-800 text-sm">العلاج المعرفي (CBT)</strong><p class="text-slate-600 text-xs mt-1">هل أستطيع أن أرصد أفكاري التلقائية وأميّزها عن الحقائق، وأعيد صياغتها بعقلانية؟</p></div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4"><strong class="text-blue-800 text-sm">العلاج الجدلي السلوكي (DBT)</strong><p class="text-slate-600 text-xs mt-1">هل أحتمل الضيق العاطفي وأنظّم انفعالاتي دون اندفاع أو سلوك مدمّر؟</p></div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4"><strong class="text-blue-800 text-sm">علم النفس العصبي</strong><p class="text-slate-600 text-xs mt-1">هل أفهم كيف يستجيب جهازي العصبي للضغط، وأملك أدوات لتهدئته وإعادة توازنه؟</p></div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4"><strong class="text-blue-800 text-sm">علم النفس الإسلامي</strong><p class="text-slate-600 text-xs mt-1">هل ترتكز صحتي النفسية على أساس إيماني يمنحني معنى وسكينة وثباتًا؟</p></div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 sm:col-span-2"><strong class="text-blue-800 text-sm">الطاقة الحيوية والأسرة</strong><p class="text-slate-600 text-xs mt-1">هل أدير طاقتي الجسدية والحيوية وعلاقاتي الأسرية بما يحفظ توازني العام؟</p>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-5">مصفوفة مركز العبقري للتقييم والاتزان الشامل</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        أداة تقييم ذاتي متقدمة لقياس وعي البصيرة والمرونة النفسية والعصبية والروحية والطاقية والأسرية، وموزعة على 5 محاور رئيسية بدقة عالية. يمكنك التنقل بحرية بين الأسئلة.
-                    </p>
-                    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6 text-right">
+                    </div>
+                    <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-4 mb-6 text-right">
                         <h4 class="font-bold text-blue-900 text-xs mb-2">تعليمات المشارك (مقياس التقدير من 1 إلى 5)</h4>
                         <ul class="text-xs text-slate-700 space-y-1">
                             <li><strong class="text-blue-700">1:</strong> نادرًا — لا ينطبق على الإطلاق.</li>
@@ -2392,27 +2411,32 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         بدء الاختبار الشامل (100 سؤال)
                     </button>
                 </div>
+            </div>
 
-                <div id="matrix-quiz-screen" class="glass-card ivory-bg text-slate-800 rounded-3xl p-6 md:p-8 shadow-xl w-full hidden transition-all duration-300">
-                    <div class="mb-6">
-                        <div class="flex justify-between text-xs font-bold text-blue-700 mb-2">
-                            <span id="matrix-category-title" class="bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-200">المحور الأول</span>
+            <div class="w-full my-4">
+
+                <div id="matrix-quiz-screen" class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700 hidden">
+
+                    <div class="mb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-blue-800 mb-2">
+                            <span id="matrix-category-title" class="bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200">المحور الأول</span>
                             <span id="matrix-progress-text">السؤال 1 من 100</span>
                         </div>
-                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                            <div id="matrix-progress-bar" class="bg-gradient-to-r from-blue-600 to-sky-400 h-full w-0 transition-all duration-300"></div>
-                        </div>
+                        <div class="w-full bg-slate-200 h-2  rounded-full overflow-hidden"><div id="matrix-progress-bar" class="bg-gradient-to-r from-blue-600 to-sky-400 h-full w-0 transition-all duration-300"></div></div>
                     </div>
 
-                    <h3 id="matrix-question-text" class="text-lg md:text-xl font-bold text-slate-900 mb-6 leading-relaxed"></h3>
+                    <div class="question-area bg-slate-50 border border-slate-200 rounded-3xl p-2 md:p-2 mb-2">
+                        <div class="text-xs font-bold text-slate-500 mb-0">سؤال المصفوفة</div>
+                        <h3 id="matrix-question-text" class="text-lg md:text-xl font-black text-slate-900 leading-relaxed"></h3>
+                    </div>
 
-                    <div id="matrix-options-container" class="space-y-3 mb-6"></div>
+                    <div id="matrix-options-container" class="grid gap-3 mb-0"></div>
 
                     <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-200">
-                        <button id="matrix-prev-btn" onclick="AlabqariMatrix.prev()" class="px-5 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                        <button id="matrix-prev-btn" onclick="AlabqariMatrix.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
                             ← السابق
                         </button>
-                        <button id="matrix-next-btn" onclick="AlabqariMatrix.next()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">
+                        <button id="matrix-next-btn" onclick="AlabqariMatrix.next()" class="px-3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">
                             التالي →
                         </button>
                     </div>
@@ -2429,6 +2453,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
                         <span class="text-xs text-blue-700 font-bold block mb-1">النسبة المئوية الإجمالية</span>
                         <span id="matrix-final-score" class="text-4xl font-extrabold text-slate-900">0%</span>
                     </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3 mb-6 text-right" id="matrix-axis-results"></div>
 
                     <div id="matrix-result-feedback" class="text-slate-700 text-xs md:text-sm leading-relaxed mb-6 font-medium bg-white p-4 rounded-xl border border-slate-200 text-right space-y-3"></div>
 
@@ -2447,6 +2473,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 
@@ -2536,7 +2563,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 
 <section id="contact" class="tab-content">
-    <div class="max-w-4xl mx-auto">
+    <div class="w-full max-w-7xl mx-auto">
 
         <!-- البطاقة الرئيسية -->
         <div class="relative overflow-hidden bg-white rounded-[2rem] shadow-2xl border border-slate-200">
@@ -2549,8 +2576,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
                  رأس البطاقة
             ========================= -->
            
-            </div>
-                </div>
 
                 <!-- =========================
                      أزرار الخدمات والحسابات
@@ -2563,19 +2588,23 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
 <!-- نافذة (Modal) حول المركز العامة (بأبيض سن الفيل) -->
 <!-- نبذة تعريفية -->
-                    <div class="bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
-<div class="space-y-2 w-full mx-auto">
-    <div class="w-full text-green-600 text-center leading-relaxed">
-    </div>
-    </div>
-        <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-center"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</p><p class="text-blue-700">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي
-            تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية<p><p class="text-blue-700">
-وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات ( الطاقة الحيوية / والباراسيكولوجي/ وعلم النفس الإسلامي/ والريكي الإسلامي/ والحجامة الإسلامية/ والتنمية البشرية ) من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي ... ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه.</strong>
-        <p class="mb-2">
-        </p>
-        </p>
-    </div>
-     </div>
+<div class="abq-about-blurb bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
+    <div class="space-y-2 w-100%">
+
+
+       
+
+ <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-right"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</strong></p>
+
+<p class="abq-about-text text-blue-700 abq-about-text text-center abq-single-line">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
+وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات (الطاقة الحيوية/والباراسيكولوجي/وعلم النفس الإسلامي/والريكي الإسلامي/والحجامة الإسلامية/والتنمية البشرية)
+من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي.
+</p>
+
+<p class="mb-2 border-b text-green-700 text-right">ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه، ونسعى من خلال هذه المنصة إلى أن نفتح آفاقًا جديدة للتعلم والتطور، ونحوّل المعرفة إلى ممارسة واعية لها أثر حقيقي، بما يمنح كل زائر ومشارك فرصة لإكتشاف قدراته، وتنمية إمكاناته، والإنطلاق بخطوات أكثر وضوحًا وثقة نحو مستقبل أكثر توازنًا وإبداعًا وإنجازًا.</p>
+                        </div>
+                    </div>
+
 
     <!-- الخدمات -->
     <div class="bg-white rounded-3xl shadow-lg border border-emerald-100 p-3 md:p-3 mb-3">
@@ -2617,8 +2646,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </div>
     </div>
     </div>
-</div>
-
 
 
                     <a
@@ -2769,7 +2796,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
             </div>
 
-        </div>
 </section>
 
         <!-- تبويب الأذكار والتحصينات -->
@@ -2805,7 +2831,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
             <div class="absolute -left-16 -bottom-20 w-56 h-56 rounded-full bg-blue-400/10 blur-3xl"></div>
             <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-sky-300/10 blur-3xl"></div>
             <div class="relative z-10 max-w-4xl mr-0 ml-auto">
-                <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-bold backdrop-blur-sm mb-2">🧭 مرصد العبقري • الإتزان الشامل</span>
                 <h2 class="text-2xl md:text-4xl font-black tracking-tight mb-2">🕌 مجلس العبقري للذكر والتسبيح</h2>
                 <p class="text-blue-50 text-xs md:text-base leading-7">مساحة إيمانية تجمع الذكر والتحصين والدعاء والسبحة في تجربة منظمة، تساعدك على جعل الذكر رفيقًا يوميًا للسكينة والطمأنينة في حياتك.</p>
             </div>
@@ -2815,7 +2840,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
     <!-- لسان التبويبات الرئيسي --><main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
     <div class="sticky top-0 z-50 bg-[#1E5AA8] text-white rounded-xl p-1 mb-6 shadow-lg border border-[#d4af37]/20">
-        <div class="grid grid-cols-5 gap-1 text-center text-[10px] sm:text-xs md:text-sm">
+        <div class="grid grid-cols-6 gap-1 text-center text-[10px] sm:text-xs md:text-sm">
             <button type="button" onclick="switchAzkarTab('daily')" id="btn-daily" class="tab-btn active py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center">
                 <i class="fa-solid fa-calendar-day text-base mb-1"></i>الأذكار اليومية
             </button>
@@ -2834,6 +2859,10 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
             <button type="button" onclick="switchAzkarTab('subha')" id="btn-subha" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
                 <i class="fa-solid fa-circle-notch text-base mb-1"></i>السبحة
+            </button>
+
+            <button type="button" onclick="switchAzkarTab('center')" id="btn-center" class="tab-btn text-gray-400 py-3 rounded-lg font-bold transition-all flex flex-col items-center justify-center hover:text-white">
+                <i class="fa-solid fa-mosque text-base mb-1"></i>المركز
             </button>
         </div>
 
@@ -2921,6 +2950,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
         </button>
     </div>
 
+</div>
 </div>
         </section>
 
@@ -3339,6 +3369,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                     <i class="fa-solid fa-location-dot"></i><span>فتح الموقع عبر Google Maps</span>
                 </a>
             </div>
+            </div>
         </section>
     </main>
 
@@ -3389,8 +3420,6 @@ img.abq-zoomable-image { cursor: zoom-in; }
     </div>
 
     <!-- جافا سكريبت للتحكم التفاعلي ولوحة التحكم -->
-    
-</div>
 
     <!-- حماية تعديل وحذف الموضوعات -->
     <div id="topic-security-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
@@ -3801,7 +3830,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
         }
 
         switchAzkarTab = function(tabId) {
-            const tabs = ['daily', 'tahseen', 'awraad-general', 'awraad-private', 'treatment', 'subha'];
+            const tabs = ['daily', 'tahseen', 'awraad-general', 'awraad-private', 'treatment', 'subha', 'center'];
             if (!tabs.includes(tabId)) return;
 
             tabs.forEach(function(t) {
@@ -3881,6 +3910,7 @@ function azkarInit() {
         if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',azkarInit);}else{azkarInit();}
 
 </script>
+</div>
 </section>
 
     </main>
@@ -4267,7 +4297,7 @@ const questions = [
             compassOptions.forEach(opt => {
                 const btn = document.createElement('button');
                 const selected = userAnswers[currentQuestion] === opt.val;
-                btn.className = `w-full text-right p-4 md:p-5 rounded-2xl border text-sm md:text-base font-bold transition flex items-center justify-between gap-3 ${selected ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg scale-[1.01]' : 'bg-white hover:bg-emerald-50 text-slate-800 border-slate-200'}`;
+                btn.className = `w-full text-right p-3.5 rounded-xl border text-xs md:text-sm font-semibold transition flex items-center justify-between gap-3 ${selected ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white hover:bg-emerald-50 text-slate-800 border-slate-200'}`;
                 btn.innerHTML = `<span>${opt.label}</span><span class="text-lg">${selected ? '✓' : '○'}</span>`;
                 btn.onclick = () => selectOption(opt.val);
                 optionsContainer.appendChild(btn);
@@ -4372,6 +4402,13 @@ return {start,next,prev,reset,saveResult};
    ALABQARI 1.3 PRO — MATRIX ENGINE
    ========================================================= */
 window.AlabqariMatrix = (function(){
+const matrixAxes = [
+    { cat: "المحور الأول: العلاج المعرفي (CBT)", name: "العلاج المعرفي (CBT)", desc: "هل أستطيع أن أرصد أفكاري التلقائية وأميّزها عن الحقائق، وأعيد صياغتها بعقلانية؟" },
+    { cat: "المحور الثاني: العلاج الجدلي السلوكي (DBT)", name: "العلاج الجدلي السلوكي (DBT)", desc: "هل أحتمل الضيق العاطفي وأنظّم انفعالاتي دون اندفاع أو سلوك مدمّر؟" },
+    { cat: "المحور الثالث: علم النفس العصبي", name: "علم النفس العصبي", desc: "هل أفهم كيف يستجيب جهازي العصبي للضغط، وأملك أدوات لتهدئته وإعادة توازنه؟" },
+    { cat: "المحور الرابع: علم النفس الإسلامي", name: "علم النفس الإسلامي", desc: "هل ترتكز صحتي النفسية على أساس إيماني يمنحني معنى وسكينة وثباتًا؟" },
+    { cat: "المحور الخامس: الطاقة الحيوية والأسرة", name: "الطاقة الحيوية والأسرة", desc: "هل أدير طاقتي الجسدية والحيوية وعلاقاتي الأسرية بما يحفظ توازني العام؟" }
+];
 const questions = [
             { cat: "المحور الأول: العلاج المعرفي (CBT)", text: "أدرك بوضوح أفكاري السلبية التلقائية فور ظهورها في المواقف الضاغطة." },
             { cat: "المحور الأول: العلاج المعرفي (CBT)", text: "أستطيع التمييز بوضوح بين الحقائق الموضوعية وتفسيراتي الشخصية للأحداث." },
@@ -4511,10 +4548,10 @@ const questions = [
             optionsText.forEach(opt => {
                 const btn = document.createElement('button');
                 const isSelected = userAnswers[currentQuestion] === opt.val;
-                btn.className = `w-full text-right p-3.5 rounded-xl border text-xs md:text-sm font-semibold transition flex items-center justify-between ${
-                    isSelected ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-white hover:bg-slate-100 text-slate-800 border-slate-200'
+                btn.className = `w-full text-right p-3.5 rounded-xl border text-xs md:text-sm font-semibold transition flex items-center justify-between gap-3 ${
+                    isSelected ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-white hover:bg-blue-50 text-slate-800 border-slate-200'
                 }`;
-                btn.innerHTML = `<span>${opt.label}</span><span>${isSelected ? '✓' : ''}</span>`;
+                btn.innerHTML = `<span>${opt.label}</span><span class="text-lg">${isSelected ? '✓' : '○'}</span>`;
                 btn.onclick = () => selectOption(opt.val);
                 optionsContainer.appendChild(btn);
             });
@@ -4550,6 +4587,13 @@ const questions = [
             }
         }
 
+        function matrixLevel(pct) {
+            if (pct < 45) return { label: 'بحاجة ماسة للانتباه', cls: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-200', bar: 'from-rose-500 to-rose-400' };
+            if (pct < 65) return { label: 'يحتاج دعمًا', cls: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', bar: 'from-amber-500 to-amber-400' };
+            if (pct < 85) return { label: 'توازن جيد', cls: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200', bar: 'from-blue-600 to-sky-400' };
+            return { label: 'اتزان ممتاز', cls: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', bar: 'from-emerald-600 to-teal-400' };
+        }
+
         function showResult() {
             document.getElementById('matrix-quiz-screen').classList.add('hidden');
             document.getElementById('matrix-result-screen').classList.remove('hidden');
@@ -4559,6 +4603,22 @@ const questions = [
             const percentage = Math.round((totalScore / maxScore) * 100);
 
             document.getElementById('matrix-final-score').innerText = `${percentage}%`;
+
+            const axisResults = matrixAxes.map((axis, i) => {
+                const slice = userAnswers.slice(i * 20, i * 20 + 20);
+                const score = slice.reduce((a, b) => a + b, 0);
+                const pct = Math.round((score / (20 * 5)) * 100);
+                return { ...axis, pct };
+            });
+            document.getElementById('matrix-axis-results').innerHTML = axisResults.map(r => {
+                const lv = matrixLevel(r.pct);
+                return `<div class="${lv.bg} ${lv.border} border rounded-2xl p-4">
+                    <div class="flex items-center justify-between gap-3 mb-1"><strong class="text-slate-900 text-sm">${r.name}</strong><span class="font-black ${lv.cls}">${r.pct}%</span></div>
+                    <div class="w-full h-2 bg-white/80 rounded-full overflow-hidden mb-2"><div class="h-full bg-gradient-to-r ${lv.bar} rounded-full" style="width:${r.pct}%"></div></div>
+                    <div class="text-[11px] font-bold ${lv.cls} mb-1">${lv.label}</div>
+                    <p class="text-[11px] text-slate-600 leading-5">${r.desc}</p>
+                </div>`;
+            }).join('');
 
             let feedback = '';
             if (percentage >= 85) {
@@ -4864,7 +4924,7 @@ window.ABQ = {
             /* لا تستخدم هذه الطبقة لإدارة التبويبات الرئيسية.
                عند استدعائها لأحد تبويبات الأذكار الداخلية نمررها
                إلى نظام الأذكار الحالي بدل لمس بقية .tab-content. */
-            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha'];
+            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha','center'];
             if (azkarTabs.includes(tabId) && typeof window.switchAzkarTab === 'function') {
                 window.switchAzkarTab(tabId);
                 ABQ.state.currentTab = tabId;
@@ -4875,7 +4935,7 @@ window.ABQ = {
             /* History الرئيسي يدار حصريًا بواسطة switchTab/popstate أعلاه.
                نحتفظ بواجهة ABQ.tabs للتوافق دون تسجيل popstate ثانٍ. */
             const hash = location.hash.replace('#','');
-            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha'];
+            const azkarTabs = ['daily','tahseen','awraad-general','awraad-private','treatment','subha','center'];
             if (azkarTabs.includes(hash) && typeof window.switchAzkarTab === 'function') {
                 window.switchAzkarTab(hash);
                 ABQ.state.currentTab = hash;
@@ -5219,7 +5279,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var el=document.getElementById('abq-visitor-count');
     var box=el && el.closest('.abq-visitor-counter');
     if(!el) return;
-    fetch('/api/visitor', {
+    fetch('/api/visitors', {
       method:'GET',
       cache:'no-store',
       credentials:'same-origin'
@@ -5229,8 +5289,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
       return res.json();
     })
     .then(function(data){
-      if(data && Number.isFinite(Number(data.count))){
-        el.textContent=Number(data.count).toLocaleString('en-US');
+      if(data && Number.isFinite(Number(data.total))){
+        el.textContent=Number(data.total).toLocaleString('en-US');
         if(box) box.classList.remove('loading');
       }
     })
@@ -5738,6 +5798,193 @@ body > .azkar-inner-tab {
         const el = document.getElementById('counter');
         if (el) el.innerText = mihrabCount;
     }
+</script>
+
+<!-- =========================================================
+     ALABQARI — زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات)
+     ========================================================= -->
+<style id="abq-responsive-intro-and-fixed-controls">
+/* ===== نبذة العبقري: عرض متجاوب واحتواء احترافي للنص ===== */
+.abq-about-blurb {
+    direction: rtl;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    overflow-x: hidden;
+}
+.abq-about-blurb .space-y-2 {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+/* محاذاة يمين لنص الفقرات فقط — العنوان (h3) غير متأثر ويبقى كما هو */
+.abq-about-blurb p {
+    direction: rtl;
+    text-align: right !important;
+    margin-inline: 0;
+    max-width: 100%;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.95;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* تصغير محسوب للموبايل */
+@media (max-width: 767px) {
+    .abq-about-blurb {
+        padding: .6rem !important;
+    }
+    .abq-about-blurb p {
+        font-size: .88rem;
+        line-height: 1.85;
+    }
+}
+
+/* دعم الهواتف الصغيرة جدًا */
+@media (max-width: 380px) {
+    .abq-about-blurb {
+        padding: .5rem !important;
+    }
+    .abq-about-blurb p {
+        font-size: .78rem;
+        line-height: 1.75;
+    }
+}
+
+/* ===== توزيع الأزرار الثابتة بدون تداخل ===== */
+#abq-fixed-whatsapp {
+    left: 20px;
+    bottom: 20px;
+    z-index: 9998;
+}
+#abq-quran-radio {
+    left: 20px;
+    bottom: 88px;
+    z-index: 9997;
+}
+#abq-safe-history-nav {
+    right: 20px;
+    bottom: 88px;
+}
+#scrollTopBtn {
+    right: 20px;
+    bottom: 20px;
+}
+@media (max-width: 768px) {
+    #abq-fixed-whatsapp {
+        left: 16px;
+        bottom: 16px;
+    }
+    #abq-quran-radio {
+        left: 16px;
+        bottom: 76px;
+    }
+    #abq-safe-history-nav {
+        right: 16px;
+        bottom: 76px;
+    }
+    #scrollTopBtn {
+        right: 16px;
+        bottom: 16px;
+    }
+}
+@media (max-width: 420px) {
+    #abq-fixed-whatsapp {
+        left: 12px;
+        bottom: 12px;
+    }
+    #abq-quran-radio {
+        left: 12px;
+        bottom: 70px;
+    }
+    #abq-quran-radio button span:last-child {
+        display: none;
+    }
+    #abq-safe-history-nav {
+        right: 12px;
+        bottom: 70px;
+        gap: .35rem;
+    }
+    #scrollTopBtn {
+        right: 12px;
+        bottom: 12px;
+        width: 50px;
+        height: 50px;
+    }
+}
+#abq-quran-radio.abq-radio-playing button {
+    animation: abq-radio-pulse 1.8s infinite;
+}
+@keyframes abq-radio-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+</style>
+
+<script id="abq-quran-radio-js">
+window.AbqQuranRadio = (function () {
+    var STREAM_URL = 'https://qurango.net/radio/tarateel';
+    var audio = null;
+    var playing = false;
+
+    function ensureAudio() {
+        if (!audio) {
+            audio = new Audio(STREAM_URL);
+            audio.preload = 'none';
+            audio.addEventListener('playing', function () {
+                playing = true;
+                updateUI();
+            });
+            audio.addEventListener('pause', function () {
+                playing = false;
+                updateUI();
+            });
+            audio.addEventListener('error', function () {
+                playing = false;
+                updateUI();
+                console.warn('تعذّر تشغيل إذاعة القرآن الكريم حالياً.');
+            });
+        }
+        return audio;
+    }
+
+    function updateUI() {
+        var icon = document.getElementById('abq-quran-radio-icon');
+        var wrap = document.getElementById('abq-quran-radio');
+        if (!icon || !wrap) return;
+        icon.textContent = playing ? '⏸️' : '🎧';
+        wrap.classList.toggle('abq-radio-playing', playing);
+        try { localStorage.setItem('abq_quran_radio_playing', playing ? '1' : '0'); } catch (e) {}
+    }
+
+    function play() {
+        ensureAudio();
+        audio.play().catch(function () {
+            console.warn('المتصفح منع التشغيل التلقائي؛ اضغط الزر مرة أخرى.');
+        });
+    }
+
+    function pause() {
+        if (audio) audio.pause();
+    }
+
+    function toggle() {
+        ensureAudio();
+        if (playing) { pause(); } else { play(); }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateUI();
+    });
+
+    return { toggle: toggle, play: play, pause: pause };
+})();
 </script>
 
 </body>
