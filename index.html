@@ -865,6 +865,209 @@ img.abq-zoomable-image { cursor: zoom-in; }
 }
 </style>
 
+
+<style id="abq-feedback-and-contact-enhancement">
+/* ===== تفاعل الزوار + تحسين منطقة النبذة في تواصل معنا ===== */
+.abq-about-blurb{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    overflow:hidden;
+}
+.abq-about-blurb > div{
+    width:100%;
+    max-width:1200px;
+    margin-inline:auto;
+    box-sizing:border-box;
+}
+.abq-about-blurb p{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:normal;
+}
+.abq-about-blurb .abq-about-text{
+    text-align:right !important;
+    white-space:normal !important;
+    line-height:1.95;
+}
+.abq-about-blurb .abq-about-lead{
+    font-size:clamp(.82rem,1.15vw,.98rem);
+    line-height:1.9;
+}
+.abq-services-heading{
+    width:100%;
+    display:flex;
+    align-items:flex-start;
+    gap:.75rem;
+    margin-bottom:1.25rem;
+    box-sizing:border-box;
+}
+.abq-services-heading h3{
+    flex:1;
+    min-width:0;
+    margin:0;
+}
+.abq-services-heading h3 p{
+    margin:0;
+    line-height:1.9;
+    overflow-wrap:anywhere;
+}
+.abq-feedback{
+    width:100%;
+    box-sizing:border-box;
+    margin-top:1rem;
+    padding:1.25rem;
+    border:1px solid #bfdbfe;
+    border-radius:1.5rem;
+    background:linear-gradient(135deg,#eff6ff 0%,#ffffff 55%,#ecfdf5 100%);
+    box-shadow:0 12px 28px -20px rgba(15,23,42,.35);
+}
+.abq-feedback-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    flex-wrap:wrap;
+}
+.abq-feedback-title{
+    margin:0;
+    color:#0f172a;
+    font-size:1.05rem;
+    font-weight:900;
+}
+.abq-feedback-subtitle{
+    margin:.25rem 0 0;
+    color:#475569;
+    font-size:.78rem;
+    line-height:1.8;
+}
+.abq-like-btn{
+    border:1px solid #93c5fd;
+    background:#fff;
+    color:#1d4ed8;
+    min-height:44px;
+    padding:.65rem 1rem;
+    border-radius:999px;
+    font-family:'Cairo',sans-serif;
+    font-size:.78rem;
+    font-weight:900;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.45rem;
+    transition:all .2s ease;
+    box-shadow:0 8px 18px -14px rgba(37,99,235,.6);
+}
+.abq-like-btn:hover{transform:translateY(-1px);border-color:#2563eb;background:#eff6ff}
+.abq-like-btn.liked{background:#dcfce7;border-color:#86efac;color:#15803d}
+.abq-like-count{font-variant-numeric:tabular-nums;direction:ltr}
+.abq-feedback-form{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;
+    gap:.7rem;
+    margin-top:1rem;
+}
+.abq-feedback-input{
+    width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    border:1px solid #cbd5e1;
+    background:#fff;
+    color:#0f172a;
+    border-radius:.9rem;
+    padding:.72rem .85rem;
+    font-family:'Cairo',sans-serif;
+    font-size:.78rem;
+    outline:none;
+}
+.abq-feedback-input:focus{
+    border-color:#60a5fa;
+    box-shadow:0 0 0 3px rgba(96,165,250,.15);
+}
+textarea.abq-feedback-input{
+    min-height:46px;
+    resize:vertical;
+}
+.abq-feedback-submit{
+    border:0;
+    background:linear-gradient(135deg,#2563eb,#0ea5e9);
+    color:#fff;
+    border-radius:.9rem;
+    padding:.72rem 1.05rem;
+    font-family:'Cairo',sans-serif;
+    font-size:.78rem;
+    font-weight:900;
+    cursor:pointer;
+    white-space:nowrap;
+    box-shadow:0 10px 20px -14px rgba(37,99,235,.75);
+    transition:all .2s ease;
+}
+.abq-feedback-submit:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.abq-feedback-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.abq-feedback-note{
+    margin:.65rem 0 0;
+    color:#64748b;
+    font-size:.68rem;
+    line-height:1.7;
+}
+.abq-feedback-list{
+    display:grid;
+    gap:.65rem;
+    margin-top:1rem;
+}
+.abq-feedback-empty{
+    text-align:center;
+    padding:.8rem;
+    border:1px dashed #cbd5e1;
+    border-radius:1rem;
+    color:#64748b;
+    font-size:.72rem;
+    background:rgba(255,255,255,.65);
+}
+.abq-feedback-item{
+    background:rgba(255,255,255,.9);
+    border:1px solid #e2e8f0;
+    border-radius:1rem;
+    padding:.8rem .9rem;
+}
+.abq-feedback-item-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.5rem;
+    margin-bottom:.25rem;
+}
+.abq-feedback-name{font-weight:900;color:#0f172a;font-size:.75rem}
+.abq-feedback-date{font-size:.62rem;color:#94a3b8}
+.abq-feedback-item-text{
+    margin:0;
+    color:#334155;
+    font-size:.74rem;
+    line-height:1.8;
+    overflow-wrap:anywhere;
+    white-space:pre-wrap;
+}
+.abq-feedback-status{
+    min-height:1.25rem;
+    margin-top:.55rem;
+    font-size:.7rem;
+    font-weight:800;
+}
+.abq-feedback-status.success{color:#15803d}
+.abq-feedback-status.error{color:#b91c1c}
+@media (max-width:900px){
+    .abq-feedback-form{grid-template-columns:1fr 1fr}
+    .abq-feedback-submit{grid-column:1 / -1}
+}
+@media (max-width:767px){
+    .abq-feedback{padding:1rem}
+    .abq-feedback-form{grid-template-columns:1fr}
+    .abq-feedback-submit{grid-column:auto;width:100%}
+    .abq-services-heading h3{font-size:1rem}
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1054,7 +1257,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
                             </h3>
                             <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-right"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</strong></p>
                        
-<p class="abq-about-text text-blue-700 abq-about-text text-center abq-single-line">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
+<p class="abq-about-text text-blue-700 text-right abq-about-lead">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
 
 وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات (الطاقة الحيوية/والباراسيكولوجي/وعلم النفس الإسلامي/والريكي الإسلامي/والحجامة الإسلامية/والتنمية البشرية)
 
@@ -2589,7 +2792,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 <!-- نافذة (Modal) حول المركز العامة (بأبيض سن الفيل) -->
 <!-- نبذة تعريفية -->
 <div class="abq-about-blurb bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
-    <div class="space-y-2 w-100%">
+    <div class="space-y-2 w-full">
 
 
        
@@ -2609,11 +2812,10 @@ img.abq-zoomable-image { cursor: zoom-in; }
     <!-- الخدمات -->
     <div class="bg-white rounded-3xl shadow-lg border border-emerald-100 p-3 md:p-3 mb-3">
 
-        <div class="flex items-center gap-3 mb-5">
-            <span class="text-3xl">🛡️</span>
-
+        <div class="abq-services-heading">
+            <span class="text-3xl shrink-0" aria-hidden="true">🛡️</span>
             <h3 class="text-xl md:text-xl font-black text-green-700">
-                  <p><strong>يتشرف الدكتور: </strong>أحمد السيد رسّه.(أحمد الزمخشري) بتقديم الخدمات العلاجية والإستشارية</p>
+                <p><strong>يتشرف الدكتور:</strong> أحمد السيد رسّه (أحمد الزمخشري) بتقديم الخدمات العلاجية والإستشارية</p>
             </h3>
         </div>
 
@@ -2671,6 +2873,32 @@ img.abq-zoomable-image { cursor: zoom-in; }
 
                 </div>
 
+                <!-- =========================
+                     تفاعل زوار المنصة
+                ========================= -->
+                <section id="abq-feedback" class="abq-feedback" aria-labelledby="abq-feedback-title">
+                    <div class="abq-feedback-head">
+                        <div>
+                            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 رأيك يهمنا ويصنع الفرق</h3>
+                            <p class="abq-feedback-subtitle">شاركنا انطباعك عن منصة العبقري، وساعدنا على تطوير تجربة الزائر.</p>
+                        </div>
+
+                        <button type="button" id="abq-like-btn" class="abq-like-btn" aria-pressed="false">
+                            <span aria-hidden="true">👍</span>
+                            <span id="abq-like-label">أعجبتني المنصة</span>
+                            <span class="abq-like-count">(<span id="abq-like-count">0</span>)</span>
+                        </button>
+                    </div>
+
+                    <form id="abq-feedback-form" class="abq-feedback-form" autocomplete="off">
+                        <input id="abq-feedback-name" class="abq-feedback-input" type="text" maxlength="60" placeholder="اسمك (اختياري)" aria-label="اسم الزائر">
+                        <textarea id="abq-feedback-text" class="abq-feedback-input" maxlength="500" placeholder="اكتب رأيك أو اقتراحك..." aria-label="تعليق الزائر" required></textarea>
+                        <button id="abq-feedback-submit" class="abq-feedback-submit" type="submit">💬 إرسال التعليق</button>
+                    </form>
+
+                                 <div id="abq-feedback-status" class="abq-feedback-status" role="status" aria-live="polite"></div>
+                    <div id="abq-feedback-list" class="abq-feedback-list" aria-live="polite"></div>
+                </section>
 
                 <!-- =========================
                      بيانات التواصل
@@ -5986,6 +6214,187 @@ window.AbqQuranRadio = (function () {
     });
 
     return { toggle: toggle, play: play, pause: pause };
+})();
+</script>
+
+
+<script id="abq-visitor-feedback">
+/* =========================================================
+   منصة العبقري — تفاعل الزوار
+   إضافة مستقلة: لا تتدخل في التبويبات أو الوظائف القائمة.
+   تعمل فورًا محليًا، وتدعم /api/feedback تلقائيًا عند توفره.
+   ========================================================= */
+(function(){
+    'use strict';
+
+    var KEYS = {
+        likes: 'abq_feedback_likes_v1',
+        liked: 'abq_feedback_liked_v1',
+        comments: 'abq_feedback_comments_v1'
+    };
+    var API = '/api/feedback';
+
+    function safeGet(key, fallback){
+        try{
+            var value = localStorage.getItem(key);
+            return value === null ? fallback : value;
+        }catch(e){ return fallback; }
+    }
+    function safeSet(key, value){
+        try{ localStorage.setItem(key, value); }catch(e){}
+    }
+    function readComments(){
+        try{
+            var data = JSON.parse(safeGet(KEYS.comments,'[]'));
+            return Array.isArray(data) ? data : [];
+        }catch(e){ return []; }
+    }
+    function esc(value){
+        return String(value == null ? '' : value)
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+            .replace(/'/g,'&#039;');
+    }
+    function showStatus(message, type){
+        var el=document.getElementById('abq-feedback-status');
+        if(!el) return;
+        el.className='abq-feedback-status '+(type||'');
+        el.textContent=message||'';
+    }
+    function renderComments(comments){
+        var list=document.getElementById('abq-feedback-list');
+        if(!list) return;
+        if(!comments.length){
+            list.innerHTML='<div class="abq-feedback-empty">💬 لم تُضف آراء بعد — كن أول من يشاركنا رأيه.</div>';
+            return;
+        }
+        list.innerHTML=comments.slice().reverse().map(function(item){
+            var date='';
+            try{ date=new Date(item.date).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}); }catch(e){}
+            return '<article class="abq-feedback-item">'+
+                '<div class="abq-feedback-item-top">'+
+                    '<span class="abq-feedback-name">'+esc(item.name||'زائر المنصة')+'</span>'+
+                    '<span class="abq-feedback-date">'+esc(date)+'</span>'+
+                '</div>'+
+                '<p class="abq-feedback-item-text">'+esc(item.text)+'</p>'+
+            '</article>';
+        }).join('');
+    }
+    function updateLikeUI(){
+        var btn=document.getElementById('abq-like-btn');
+        var label=document.getElementById('abq-like-label');
+        var count=document.getElementById('abq-like-count');
+        if(!btn||!label||!count) return;
+        var liked=safeGet(KEYS.liked,'0')==='1';
+        var likes=Math.max(0,parseInt(safeGet(KEYS.likes,'0'),10)||0);
+        btn.classList.toggle('liked',liked);
+        btn.setAttribute('aria-pressed',String(liked));
+        label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
+        count.textContent=likes.toLocaleString('en-US');
+    }
+
+    async function apiRequest(payload){
+        try{
+            var res=await fetch(API,{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                credentials:'same-origin',
+                body:JSON.stringify(payload)
+            });
+            if(!res.ok) throw new Error('feedback api '+res.status);
+            return await res.json();
+        }catch(e){ return null; }
+    }
+
+    async function loadFromApi(){
+        try{
+            var res=await fetch(API,{method:'GET',cache:'no-store',credentials:'same-origin'});
+            if(!res.ok) return;
+            var data=await res.json();
+            if(data && Array.isArray(data.comments)){
+                safeSet(KEYS.comments,JSON.stringify(data.comments));
+                renderComments(data.comments);
+            }
+            if(data && Number.isFinite(Number(data.likes))){
+                safeSet(KEYS.likes,String(Number(data.likes)));
+                updateLikeUI();
+            }
+        }catch(e){}
+    }
+
+    function init(){
+        var likeBtn=document.getElementById('abq-like-btn');
+        var form=document.getElementById('abq-feedback-form');
+        if(!likeBtn||!form) return;
+
+        updateLikeUI();
+        renderComments(readComments());
+
+        likeBtn.addEventListener('click',async function(){
+            var liked=safeGet(KEYS.liked,'0')==='1';
+            if(liked){
+                showStatus('ℹ️ تم تسجيل إعجابك من قبل على هذا الجهاز.', '');
+                return;
+            }
+            var likes=(parseInt(safeGet(KEYS.likes,'0'),10)||0)+1;
+            safeSet(KEYS.likes,String(likes));
+            safeSet(KEYS.liked,'1');
+            updateLikeUI();
+            showStatus('✨ شكرًا لك! تم تسجيل إعجابك بالمنصة بنجاح.', 'success');
+
+            var api=await apiRequest({action:'like'});
+            if(api && Number.isFinite(Number(api.likes))){
+                safeSet(KEYS.likes,String(api.likes));
+                updateLikeUI();
+            }
+        });
+
+        form.addEventListener('submit',async function(e){
+            e.preventDefault();
+            var nameEl=document.getElementById('abq-feedback-name');
+            var textEl=document.getElementById('abq-feedback-text');
+            var submit=document.getElementById('abq-feedback-submit');
+            var text=(textEl.value||'').trim();
+            var name=(nameEl.value||'').trim();
+
+            if(!text){
+                showStatus('⚠️ من فضلك اكتب تعليقك أولًا.', 'error');
+                textEl.focus();
+                return;
+            }
+
+            submit.disabled=true;
+            var item={
+                id:'local-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),
+                name:name||'زائر المنصة',
+                text:text,
+                date:new Date().toISOString()
+            };
+
+            var comments=readComments();
+            comments.push(item);
+            comments=comments.slice(-50);
+            safeSet(KEYS.comments,JSON.stringify(comments));
+            renderComments(comments);
+            form.reset();
+            showStatus('✅ تم إرسال تعليقك وظهر مباشرة في قائمة الآراء.', 'success');
+
+            var api=await apiRequest({action:'comment',name:item.name,text:item.text});
+            if(api && Array.isArray(api.comments)){
+                safeSet(KEYS.comments,JSON.stringify(api.comments));
+                renderComments(api.comments);
+            }
+            submit.disabled=false;
+        });
+
+        loadFromApi();
+    }
+
+    if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',init);
+    }else{
+        init();
+    }
 })();
 </script>
 
