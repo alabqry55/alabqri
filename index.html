@@ -962,6 +962,24 @@ img.abq-zoomable-image { cursor: zoom-in; }
 .abq-like-btn:hover{transform:translateY(-1px);border-color:#2563eb;background:#eff6ff}
 .abq-like-btn.liked{background:#dcfce7;border-color:#86efac;color:#15803d}
 .abq-like-count{font-variant-numeric:tabular-nums;direction:ltr}
+.abq-rating-group{margin:.9rem 0 1.1rem}
+.abq-rating-question{font-weight:800;font-size:.85rem;color:#0f172a;margin-bottom:.6rem;text-align:right}
+.abq-rating-options{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
+.abq-rating-btn{
+    display:flex;align-items:center;justify-content:center;gap:.4rem;
+    padding:.65rem .5rem;border-radius:12px;border:1.5px solid #e2e8f0;
+    background:#fff;font-weight:700;font-size:.78rem;color:#334155;
+    cursor:pointer;transition:all .2s ease;
+}
+.abq-rating-btn:hover{border-color:#93c5fd;background:#eff6ff}
+.abq-rating-btn.abq-rating-selected{
+    border-color:#2563eb;background:#eff6ff;color:#1e3a8a;
+    box-shadow:0 6px 16px -10px rgba(37,99,235,.55);
+}
+.abq-rating-emoji{font-size:1.15rem}
+@media (min-width:640px){
+    .abq-rating-options{grid-template-columns:repeat(4,1fr)}
+}
 .abq-feedback-form{
     display:grid;
     grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;
@@ -1040,6 +1058,21 @@ textarea.abq-feedback-input{
 }
 .abq-feedback-name{font-weight:900;color:#0f172a;font-size:.75rem}
 .abq-feedback-date{font-size:.62rem;color:#94a3b8}
+.abq-feedback-rating-badge{
+    display:inline-flex;align-items:center;gap:.25rem;
+    font-size:.68rem;font-weight:800;color:#1e3a8a;
+    background:#eff6ff;border:1px solid #bfdbfe;
+    border-radius:999px;padding:.15rem .55rem;margin-inline-start:.4rem;
+}
+.abq-feedback-item-actions{display:flex;align-items:center;gap:.4rem}
+.abq-feedback-delete-btn{
+    display:none;
+    background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;
+    border-radius:8px;font-size:.65rem;font-weight:800;
+    padding:.2rem .5rem;cursor:pointer;
+}
+body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
+.abq-feedback-delete-btn:hover{background:#fee2e2}
 .abq-feedback-item-text{
     margin:0;
     color:#334155;
@@ -1070,6 +1103,9 @@ textarea.abq-feedback-input{
 
 </head>
 <body class="min-h-screen flex flex-col">
+
+    <!-- حاوية تنبيهات Toast الموحّدة لكل المنصة -->
+    <div id="abq-toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <!-- أزرار الواتساب الثابتة والعائمة -->
     <div id="abq-fixed-whatsapp" class="fixed z-50">
@@ -2791,31 +2827,34 @@ textarea.abq-feedback-input{
 
 <!-- نافذة (Modal) حول المركز العامة (بأبيض سن الفيل) -->
 <!-- نبذة تعريفية -->
-<div class="abq-about-blurb bg-blue-50/60 p-2 rounded-2xl border border-blue-700">
-    <div class="space-y-2 w-full">
+
+                  <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-0 flex flex-col justify-between">
+                        <div class="space-y-2 w-full mx-auto">
+                            <h3 class="text-xl font-bold text-green-700 flex items-center justify-start  gap-2 text-right border-b border-blue-400 pb-0">
+                                <span>📌</span> نبذة تعريفية :
+                            </h3>
+                            <p class="font-bold mb-2 border-b text-green-700 border-blue-400 pb-2 text-right">🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</p>
+                      
+<p class="font-bold mb-2 border-b text-blue-700 text-right text-right abq-about-lead">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
 
 
-       
-
- <p class="mb-2 border-b text-green-700 border-blue-400 pb-2 text-right"><strong>🎓 مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية 🌿 ﴿مركز رسمي معتمد﴾ تأسيس وإشراف وإدارة (الدكتور/ أحمد السيد رسّه (أحمد الزمخشري)</strong></p>
-
-<p class="abq-about-text text-blue-700 abq-about-text text-center abq-single-line">مؤسسة متخصصة في التدريب والتنمية البشرية والإستشارات والتطوير الشخصي والمعرفي، تهدف إلى بناء الإنسان وتنمية قدراته وصناعة المعرفة بأصالة القيم الإسلامية
 وأحدث العلوم الإنسانية والتنموية المتخصصة في مجالات (الطاقة الحيوية/والباراسيكولوجي/وعلم النفس الإسلامي/والريكي الإسلامي/والحجامة الإسلامية/والتنمية البشرية)
+
 من خلال برامج تدريبية وإستشارية متكاملة تجمع بين التنمية البشرية، والجوانب النفسية والأسرية والتربوية، والبرامج المعرفية والإيمانية، ومجالات الطب التكميلي.
 </p>
 
-<p class="mb-2 border-b text-green-700 text-right">ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه، ونسعى من خلال هذه المنصة إلى أن نفتح آفاقًا جديدة للتعلم والتطور، ونحوّل المعرفة إلى ممارسة واعية لها أثر حقيقي، بما يمنح كل زائر ومشارك فرصة لإكتشاف قدراته، وتنمية إمكاناته، والإنطلاق بخطوات أكثر وضوحًا وثقة نحو مستقبل أكثر توازنًا وإبداعًا وإنجازًا.</p>
+<p class="font-bold mb-2 border-b text-green-700 text-right">ليكون المركز مؤسسة علمية وتدريبية واستشارية رائدة، تُسهم في صناعة المعرفة، وتنمية القدرات، وإعداد القيادات، وتمكين الأفراد والمؤسسات من تحقيق أعلى مستويات التميز والاحترافية، وبناء إنسان واعٍ ومتوازن ومنتج وفاعل بصورة إيجابية في مجتمعه، ونسعى من خلال هذه المنصة إلى أن نفتح آفاقًا جديدة للتعلم والتطور، ونحوّل المعرفة إلى ممارسة واعية لها أثر حقيقي، بما يمنح كل زائر ومشارك فرصة لإكتشاف قدراته، وتنمية إمكاناته، والإنطلاق بخطوات أكثر وضوحًا وثقة نحو مستقبل أكثر توازنًا وإبداعًا وإنجازًا.</p>
                         </div>
                     </div>
 
 
-    <!-- الخدمات -->
+  <!-- الخدمات -->
     <div class="bg-white rounded-3xl shadow-lg border border-emerald-100 p-3 md:p-3 mb-3">
 
         <div class="abq-services-heading">
-            <span class="text-3xl shrink-0" aria-hidden="true">🛡️</span>
-            <h3 class="text-xl md:text-xl font-black text-green-700">
-                <p><strong>يتشرف الدكتور:</strong> أحمد السيد رسّه (أحمد الزمخشري) بتقديم الخدمات العلاجية والإستشارية</p>
+            <span class="text-3xl shrink-2" aria-hidden="true">🛡️</span>
+            <h3 class=" text-xl font-bold  md:text-sm text-green-700">
+                <p>يتشرف (مركز العبقري للتدريب والإستشارات) بقيادة الدكتور/ أحمد السيد رسّه (أحمد الزمخشري) بتقديم الخدمات العلاجية والإستشارية التالية:</p>
             </h3>
         </div>
 
@@ -2890,10 +2929,32 @@ textarea.abq-feedback-input{
                         </button>
                     </div>
 
+                    <div class="abq-rating-group" role="radiogroup" aria-label="تقييم تجربتك في منصة العبقري">
+                        <p class="abq-rating-question">ما مدى رضاك عن تجربتك في منصة العبقري؟</p>
+                        <div class="abq-rating-options">
+                            <button type="button" class="abq-rating-btn" data-rating="excellent" data-label="😍 ممتازة" role="radio" aria-checked="false">
+                                <span class="abq-rating-emoji">😍</span>
+                                <span class="abq-rating-text">ممتازة</span>
+                            </button>
+                            <button type="button" class="abq-rating-btn" data-rating="good" data-label="🙂 جيدة" role="radio" aria-checked="false">
+                                <span class="abq-rating-emoji">🙂</span>
+                                <span class="abq-rating-text">جيدة</span>
+                            </button>
+                            <button type="button" class="abq-rating-btn" data-rating="average" data-label="😐 متوسطة" role="radio" aria-checked="false">
+                                <span class="abq-rating-emoji">😐</span>
+                                <span class="abq-rating-text">متوسطة</span>
+                            </button>
+                            <button type="button" class="abq-rating-btn" data-rating="suggestion" data-label="💡 لدي اقتراح" role="radio" aria-checked="false">
+                                <span class="abq-rating-emoji">💡</span>
+                                <span class="abq-rating-text">لدي اقتراح</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <form id="abq-feedback-form" class="abq-feedback-form" autocomplete="off">
                         <input id="abq-feedback-name" class="abq-feedback-input" type="text" maxlength="60" placeholder="اسمك (اختياري)" aria-label="اسم الزائر">
                         <textarea id="abq-feedback-text" class="abq-feedback-input" maxlength="500" placeholder="اكتب رأيك أو اقتراحك..." aria-label="تعليق الزائر" required></textarea>
-                        <button id="abq-feedback-submit" class="abq-feedback-submit" type="submit">💬 إرسال التعليق</button>
+                        <button id="abq-feedback-submit" class="abq-feedback-submit" type="submit">💬 إرسال رأيي</button>
                     </form>
 
                                  <div id="abq-feedback-status" class="abq-feedback-status" role="status" aria-live="polite"></div>
@@ -3697,7 +3758,7 @@ textarea.abq-feedback-input{
             const limit = parseInt(document.getElementById('topic-limit').value) || 1;
 
             if(!title || !content) {
-                alert("يرجى ملء جميع الحقول (العنوان والنص) قبل الحفظ.");
+                AbqToast.show("⚠️ يرجى ملء جميع الحقول (العنوان والنص) قبل الحفظ.", "error");
                 return;
             }
 
@@ -3705,7 +3766,7 @@ textarea.abq-feedback-input{
                 const index = dynamicTopics.findIndex(item => item.id === editingTopicId);
                 if(index === -1) {
                     editingTopicId = null;
-                    alert("تعذر العثور على الموضوع المطلوب تعديله.");
+                    AbqToast.show("⚠️ تعذر العثور على الموضوع المطلوب تعديله.", "error");
                     return;
                 }
                 const oldTopic = dynamicTopics[index];
@@ -3715,7 +3776,7 @@ textarea.abq-feedback-input{
                 const oldCard = document.getElementById(`card-${editingTopicId}`);
                 if(oldCard) oldCard.remove();
                 renderDynamicTopic(updatedTopic);
-                alert("تم تعديل الموضوع بنجاح.");
+                AbqToast.show("✅ تم تعديل الموضوع بنجاح.", "success");
                 editingTopicId = null;
                 document.getElementById('topic-save-btn').innerText = 'نشر الموضوع فوراً';
                 closeAdminPanel();
@@ -3726,7 +3787,7 @@ textarea.abq-feedback-input{
                 localStorage.setItem('genius_dynamic_topics', JSON.stringify(dynamicTopics));
                 renderDynamicTopic(newTopic);
                 closeAdminPanel();
-                alert("تم بنجاح نشر وإضافة الموضوع الجديد إلى القسم المحدد!");
+                AbqToast.show("✅ تم بنجاح نشر وإضافة الموضوع الجديد إلى القسم المحدد!", "success");
             }
 
             document.getElementById('topic-title').value = '';
@@ -3870,7 +3931,7 @@ textarea.abq-feedback-input{
         window.editDynamicTopic = function editDynamicTopic(id) {
             requireTopicSecurity(() => {
                 const item = dynamicTopics.find(topic => topic.id === id);
-                if(!item) { alert("تعذر العثور على الموضوع المطلوب تعديله."); return; }
+                if(!item) { AbqToast.show("⚠️ تعذر العثور على الموضوع المطلوب تعديله.", "error"); return; }
                 editingTopicId = id;
                 document.getElementById('topic-section').value = item.section;
                 document.getElementById('topic-title').value = item.title;
@@ -3884,14 +3945,14 @@ textarea.abq-feedback-input{
         window.deleteDynamicTopic = function deleteDynamicTopic(id) {
             requireTopicSecurity(() => {
                 const item = dynamicTopics.find(topic => topic.id === id);
-                if(!item) { alert("تعذر العثور على الموضوع المطلوب حذفه."); return; }
+                if(!item) { AbqToast.show("⚠️ تعذر العثور على الموضوع المطلوب حذفه.", "error"); return; }
                 if(!confirm(`هل أنت متأكد من حذف الموضوع: ${item.title} ؟\\nلا يمكن التراجع عن هذا الإجراء.`)) return;
                 dynamicTopics = dynamicTopics.filter(topic => topic.id !== id);
                 localStorage.setItem('genius_dynamic_topics', JSON.stringify(dynamicTopics));
                 localStorage.removeItem(`dyn_counter_${id}`);
                 const card = document.getElementById(`card-${id}`);
                 if(card) card.remove();
-                alert("تم حذف الموضوع بنجاح.");
+                AbqToast.show("✅ تم حذف الموضوع بنجاح.", "success");
             });
         }
 
@@ -4569,7 +4630,7 @@ const questions = [
         }
 
         function showResult() {
-            if (userAnswers.some(v => !v)) { alert('هناك أسئلة لم تتم الإجابة عنها. أكملها أولًا.'); return; }
+            if (userAnswers.some(v => !v)) { AbqToast.show('⚠️ هناك أسئلة لم تتم الإجابة عنها. أكملها أولًا.', 'error'); return; }
             const results = compassAxes.map((axis, index) => {
                 const slice = userAnswers.slice(index * 8, index * 8 + 8);
                 const score = slice.reduce((a,b) => a+b, 0) / 8;
@@ -6033,7 +6094,56 @@ body > .azkar-inner-tab {
 <!-- =========================================================
      ALABQARI — زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات)
      ========================================================= -->
+<style id="abq-toast-style">
+#abq-toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 0 16px;
+    pointer-events: none;
+}
+.abq-toast {
+    pointer-events: auto;
+    background: #0f172a;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+    padding: .8rem 1.1rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(15,23,42,.25);
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    direction: rtl;
+    opacity: 0;
+    transform: translateY(-14px);
+    transition: opacity .25s ease, transform .25s ease;
+}
+.abq-toast.abq-toast-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.abq-toast.abq-toast-success { background: #15803d; }
+.abq-toast.abq-toast-error   { background: #b91c1c; }
+.abq-toast.abq-toast-info    { background: #1e3a8a; }
+@media (max-width: 480px) {
+    #abq-toast-container { top: 12px; }
+    .abq-toast { font-size: .8rem; padding: .7rem .9rem; }
+}
+</style>
 <style id="abq-responsive-intro-and-fixed-controls">
+
 /* ===== نبذة العبقري: عرض متجاوب واحتواء احترافي للنص ===== */
 .abq-about-blurb {
     direction: rtl;
@@ -6218,11 +6328,45 @@ window.AbqQuranRadio = (function () {
 </script>
 
 
+<script id="abq-toast-js">
+/* =========================================================
+   نظام التنبيهات الموحّد (Toast) — يستبدل alert() في كل المنصة
+   الاستخدام: AbqToast.show('نص الرسالة', 'success'|'error'|'info')
+   ========================================================= */
+window.AbqToast = (function(){
+    function show(message, type, duration){
+        var container = document.getElementById('abq-toast-container');
+        if(!container){
+            return;
+        }
+        var toast = document.createElement('div');
+        toast.className = 'abq-toast' + (type ? (' abq-toast-' + type) : '');
+        toast.setAttribute('role', 'status');
+        toast.textContent = message || '';
+        container.appendChild(toast);
+
+        requestAnimationFrame(function(){
+            toast.classList.add('abq-toast-show');
+        });
+
+        var life = duration || 3200;
+        setTimeout(function(){
+            toast.classList.remove('abq-toast-show');
+            setTimeout(function(){
+                if(toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 300);
+        }, life);
+    }
+    return { show: show };
+})();
+</script>
+
 <script id="abq-visitor-feedback">
 /* =========================================================
-   منصة العبقري — تفاعل الزوار
+   منصة العبقري — تفاعل الزوار (رأي + تقييم + إعجاب + تعليقات)
    إضافة مستقلة: لا تتدخل في التبويبات أو الوظائف القائمة.
-   تعمل فورًا محليًا، وتدعم /api/feedback تلقائيًا عند توفره.
+   تعمل فورًا محليًا كاحتياط، وتعتمد على /api/feedback كمصدر أساسي
+   للبيانات المشتركة بين كل الزوار عند توفره.
    ========================================================= */
 (function(){
     'use strict';
@@ -6230,9 +6374,31 @@ window.AbqQuranRadio = (function () {
     var KEYS = {
         likes: 'abq_feedback_likes_v1',
         liked: 'abq_feedback_liked_v1',
-        comments: 'abq_feedback_comments_v1'
+        comments: 'abq_feedback_comments_v1',
+        lastSubmit: 'abq_feedback_last_submit_v1'
     };
     var API = '/api/feedback';
+    var SUBMIT_COOLDOWN_MS = 5 * 60 * 1000; /* 5 دقائق بين كل تعليق وآخر لنفس الزائر */
+
+    /* مفتاح إداري بسيط يُرسل فقط عند تفعيل وضع المدير محلياً، للسماح بحذف تعليق من الخادم.
+       يجب ضبط نفس القيمة في متغير بيئة FEEDBACK_ADMIN_KEY في إعدادات Cloudflare Pages. */
+    var ADMIN_KEY = '237945';
+
+    var RATING_META = {
+        excellent:  { emoji:'😍', label:'ممتازة' },
+        good:       { emoji:'🙂', label:'جيدة' },
+        average:    { emoji:'😐', label:'متوسطة' },
+        suggestion: { emoji:'💡', label:'لدي اقتراح' }
+    };
+
+    /* فلتر أساسي للكلمات المسيئة — يُطبَّق أيضاً على الخادم كخط دفاع ثانٍ */
+    var BLOCKED_WORDS = ['كلب','حمار','غبي','لعنة','fuck','shit','bitch','asshole','idiot'];
+    function containsBlockedWord(value){
+        var lower = String(value||'').toLowerCase();
+        return BLOCKED_WORDS.some(function(w){ return lower.indexOf(w.toLowerCase()) !== -1; });
+    }
+
+    var selectedRating = null;
 
     function safeGet(key, fallback){
         try{
@@ -6255,11 +6421,23 @@ window.AbqQuranRadio = (function () {
             .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
             .replace(/'/g,'&#039;');
     }
-    function showStatus(message, type){
+    function notify(message, type){
+        if(window.AbqToast){ window.AbqToast.show(message, type); }
         var el=document.getElementById('abq-feedback-status');
-        if(!el) return;
-        el.className='abq-feedback-status '+(type||'');
-        el.textContent=message||'';
+        if(el){ el.className='abq-feedback-status '+(type||''); el.textContent=message||''; }
+    }
+    function timeAgo(dateStr){
+        var then = new Date(dateStr).getTime();
+        if(!then || isNaN(then)) return '';
+        var diffSec = Math.max(0, Math.floor((Date.now() - then) / 1000));
+        if(diffSec < 60) return 'منذ لحظات';
+        var diffMin = Math.floor(diffSec / 60);
+        if(diffMin < 60) return 'منذ ' + diffMin + (diffMin === 1 ? ' دقيقة' : diffMin === 2 ? ' دقيقتين' : diffMin <= 10 ? ' دقائق' : ' دقيقة');
+        var diffHour = Math.floor(diffMin / 60);
+        if(diffHour < 24) return 'منذ ' + diffHour + (diffHour === 1 ? ' ساعة' : diffHour === 2 ? ' ساعتين' : diffHour <= 10 ? ' ساعات' : ' ساعة');
+        var diffDay = Math.floor(diffHour / 24);
+        if(diffDay < 30) return 'منذ ' + diffDay + (diffDay === 1 ? ' يوم' : diffDay === 2 ? ' يومين' : diffDay <= 10 ? ' أيام' : ' يوماً');
+        try{ return new Date(dateStr).toLocaleDateString('ar-EG',{dateStyle:'medium'}); }catch(e){ return ''; }
     }
     function renderComments(comments){
         var list=document.getElementById('abq-feedback-list');
@@ -6269,16 +6447,27 @@ window.AbqQuranRadio = (function () {
             return;
         }
         list.innerHTML=comments.slice().reverse().map(function(item){
-            var date='';
-            try{ date=new Date(item.date).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}); }catch(e){}
-            return '<article class="abq-feedback-item">'+
+            var meta = RATING_META[item.rating] || null;
+            var badge = meta ? '<span class="abq-feedback-rating-badge">'+meta.emoji+' '+esc(meta.label)+'</span>' : '';
+            var idAttr = esc(item.id != null ? String(item.id) : '');
+            return '<article class="abq-feedback-item" data-id="'+idAttr+'">'+
                 '<div class="abq-feedback-item-top">'+
-                    '<span class="abq-feedback-name">'+esc(item.name||'زائر المنصة')+'</span>'+
-                    '<span class="abq-feedback-date">'+esc(date)+'</span>'+
+                    '<span>'+
+                        '<span class="abq-feedback-name">'+esc(item.name||'زائر المنصة')+'</span>'+
+                        badge+
+                    '</span>'+
+                    '<span class="abq-feedback-item-actions">'+
+                        '<span class="abq-feedback-date">'+esc(timeAgo(item.date))+'</span>'+
+                        '<button type="button" class="abq-feedback-delete-btn abq-manager-only" data-id="'+idAttr+'">🗑 حذف</button>'+
+                    '</span>'+
                 '</div>'+
                 '<p class="abq-feedback-item-text">'+esc(item.text)+'</p>'+
             '</article>';
         }).join('');
+    }
+    function refreshRelativeTimes(){
+        var comments = readComments();
+        if(comments.length) renderComments(comments);
     }
     function updateLikeUI(){
         var btn=document.getElementById('abq-like-btn');
@@ -6292,12 +6481,21 @@ window.AbqQuranRadio = (function () {
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
         count.textContent=likes.toLocaleString('en-US');
     }
+    function selectRating(btn, buttons){
+        buttons.forEach(function(b){
+            b.classList.toggle('abq-rating-selected', b === btn);
+            b.setAttribute('aria-checked', String(b === btn));
+        });
+        selectedRating = btn ? btn.getAttribute('data-rating') : null;
+    }
 
-    async function apiRequest(payload){
+    async function apiRequest(payload, extraHeaders){
         try{
+            var headers = {'Content-Type':'application/json'};
+            if(extraHeaders) Object.assign(headers, extraHeaders);
             var res=await fetch(API,{
                 method:'POST',
-                headers:{'Content-Type':'application/json'},
+                headers:headers,
                 credentials:'same-origin',
                 body:JSON.stringify(payload)
             });
@@ -6327,26 +6525,48 @@ window.AbqQuranRadio = (function () {
         var form=document.getElementById('abq-feedback-form');
         if(!likeBtn||!form) return;
 
+        var ratingButtons = Array.prototype.slice.call(document.querySelectorAll('.abq-rating-btn'));
+        ratingButtons.forEach(function(btn){
+            btn.addEventListener('click', function(){ selectRating(btn, ratingButtons); });
+        });
+
         updateLikeUI();
         renderComments(readComments());
+        setInterval(refreshRelativeTimes, 60000); /* تحديث "منذ كذا دقيقة" كل دقيقة */
 
         likeBtn.addEventListener('click',async function(){
             var liked=safeGet(KEYS.liked,'0')==='1';
             if(liked){
-                showStatus('ℹ️ تم تسجيل إعجابك من قبل على هذا الجهاز.', '');
+                notify('ℹ️ تم تسجيل إعجابك من قبل على هذا الجهاز.', 'info');
                 return;
             }
             var likes=(parseInt(safeGet(KEYS.likes,'0'),10)||0)+1;
             safeSet(KEYS.likes,String(likes));
             safeSet(KEYS.liked,'1');
             updateLikeUI();
-            showStatus('✨ شكرًا لك! تم تسجيل إعجابك بالمنصة بنجاح.', 'success');
+            notify('💚 شكرًا لك! تم تسجيل إعجابك بالمنصة.', 'success');
 
             var api=await apiRequest({action:'like'});
             if(api && Number.isFinite(Number(api.likes))){
                 safeSet(KEYS.likes,String(api.likes));
                 updateLikeUI();
             }
+        });
+
+        document.getElementById('abq-feedback-list').addEventListener('click', async function(e){
+            var delBtn = e.target.closest('.abq-feedback-delete-btn');
+            if(!delBtn) return;
+            if(!document.body.classList.contains('abq-manager-mode')) return;
+            var id = delBtn.getAttribute('data-id');
+            if(!confirm('هل تريد حذف هذا التعليق نهائياً؟')) return;
+
+            var comments = readComments().filter(function(c){ return String(c.id) !== id; });
+            safeSet(KEYS.comments, JSON.stringify(comments));
+            renderComments(comments);
+            notify('🗑 تم حذف التعليق.', 'success');
+
+            await apiRequest({action:'delete', id:id}, {'X-Admin-Key': ADMIN_KEY});
+            loadFromApi();
         });
 
         form.addEventListener('submit',async function(e){
@@ -6357,9 +6577,24 @@ window.AbqQuranRadio = (function () {
             var text=(textEl.value||'').trim();
             var name=(nameEl.value||'').trim();
 
+            if(!selectedRating){
+                notify('⚠️ من فضلك اختر تقييمك أولاً.', 'error');
+                return;
+            }
             if(!text){
-                showStatus('⚠️ من فضلك اكتب تعليقك أولًا.', 'error');
+                notify('⚠️ من فضلك اكتب رأيك أولًا.', 'error');
                 textEl.focus();
+                return;
+            }
+            var last = parseInt(safeGet(KEYS.lastSubmit,'0'),10) || 0;
+            var remaining = SUBMIT_COOLDOWN_MS - (Date.now() - last);
+            if(remaining > 0){
+                var mins = Math.ceil(remaining / 60000);
+                notify('⏳ يمكنك إرسال رأي جديد بعد '+mins+' دقيقة تقريباً.', 'error');
+                return;
+            }
+            if(containsBlockedWord(text) || containsBlockedWord(name)){
+                notify('⚠️ نص التعليق يحتوي على كلمات غير لائقة، برجاء إعادة الصياغة.', 'error');
                 return;
             }
 
@@ -6368,6 +6603,7 @@ window.AbqQuranRadio = (function () {
                 id:'local-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),
                 name:name||'زائر المنصة',
                 text:text,
+                rating:selectedRating,
                 date:new Date().toISOString()
             };
 
@@ -6375,14 +6611,18 @@ window.AbqQuranRadio = (function () {
             comments.push(item);
             comments=comments.slice(-50);
             safeSet(KEYS.comments,JSON.stringify(comments));
+            safeSet(KEYS.lastSubmit, String(Date.now()));
             renderComments(comments);
             form.reset();
-            showStatus('✅ تم إرسال تعليقك وظهر مباشرة في قائمة الآراء.', 'success');
+            selectRating(null, ratingButtons);
+            notify('✨ شكرًا لمشاركتنا رأيك، تم تسجيل مشاركتك بنجاح.', 'success');
 
-            var api=await apiRequest({action:'comment',name:item.name,text:item.text});
+            var api=await apiRequest({action:'comment',name:item.name,text:item.text,rating:item.rating});
             if(api && Array.isArray(api.comments)){
                 safeSet(KEYS.comments,JSON.stringify(api.comments));
                 renderComments(api.comments);
+            } else if(api === null){
+                /* تعذّر الوصول للخادم أو رُفض الطلب (سبام/محتوى مخالف) — إبقاء النسخة المحلية فقط كتجربة أولية للزائر نفسه */
             }
             submit.disabled=false;
         });
