@@ -922,13 +922,18 @@ img.abq-zoomable-image { cursor: zoom-in; }
     background:linear-gradient(135deg,#eff6ff 0%,#ffffff 55%,#ecfdf5 100%);
     box-shadow:0 12px 28px -20px rgba(15,23,42,.35);
 }
-.abq-feedback-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:1rem;
-    flex-wrap:wrap;
+.abq-feedback-head {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
 }
+
+
+
 .abq-feedback-title{
     margin:0;
     color:#0f172a;
@@ -1099,6 +1104,86 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
     .abq-feedback-submit{grid-column:auto;width:100%}
     .abq-services-heading h3{font-size:1rem}
 }
+
+
+/* ==========================================
+   💚 رأيك يهمنا ويصنع الفرق
+   Responsive - جميع الشاشات
+   ========================================== */
+
+/* الحفاظ على Bold للعناصر الثلاثة */
+.abq-feedback-head .abq-feedback-title,
+.abq-feedback-head .abq-feedback-subtitle,
+.abq-feedback-head .abq-like-btn {
+    font-weight: 700;
+}
+
+
+/* 💻 الكمبيوتر والشاشات الكبيرة */
+@media (min-width:1024px){
+
+    .abq-feedback-head{
+        flex-wrap:nowrap;
+    }
+
+    .abq-feedback-head .abq-feedback-title,
+    .abq-feedback-head .abq-feedback-subtitle,
+    .abq-feedback-head .abq-like-btn{
+        white-space:nowrap;
+        flex-shrink:0;
+    }
+
+    .abq-feedback-head .abq-feedback-subtitle{
+        flex:1;
+        min-width:0;
+        text-align:center;
+    }
+}
+
+
+/* 💻 التابلت والشاشات المتوسطة */
+@media (min-width:768px) and (max-width:1023px){
+
+    .abq-feedback-head{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .abq-feedback-head .abq-feedback-title,
+    .abq-feedback-head .abq-feedback-subtitle,
+    .abq-feedback-head .abq-like-btn{
+        white-space:normal;
+    }
+
+    .abq-feedback-head .abq-feedback-subtitle{
+        text-align:center;
+    }
+}
+
+
+/* 📱 الهاتف */
+@media (max-width:767px){
+
+    .abq-feedback-head{
+        flex-direction:column;
+        align-items:stretch;
+        justify-content:center;
+        gap:.5rem;
+    }
+
+    .abq-feedback-head .abq-feedback-title,
+    .abq-feedback-head .abq-feedback-subtitle,
+    .abq-feedback-head .abq-like-btn{
+        width:100%;
+        box-sizing:border-box;
+        white-space:normal;
+        text-align:center;
+    }
+
+    .abq-feedback-head .abq-like-btn{
+        justify-content:center;
+    }
+}
 </style>
 
 </head>
@@ -1115,11 +1200,15 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
         </a>
     </div>
 
-    <!-- زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات) -->
-    <div id="abq-quran-radio" class="fixed z-50">
-        <button type="button" onclick="AbqQuranRadio.toggle()" aria-label="تشغيل إذاعة القرآن الكريم المباشرة" class="bg-gradient-to-r from-blue-700 to-emerald-600 hover:opacity-95 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-emerald-300/30">
-            <span id="abq-quran-radio-icon" class="text-xl">🎧</span>
+    <!-- أزرار إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات) -->
+    <div id="abq-quran-radio" class="fixed z-50 flex flex-col gap-2">
+        <button type="button" onclick="AbqQuranRadio.toggle('cairo')" aria-label="تشغيل إذاعة القرآن الكريم من القاهرة" class="bg-gradient-to-r from-blue-700 to-emerald-600 hover:opacity-95 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-emerald-300/30">
+            <span id="abq-quran-radio-icon-cairo" class="text-xl">📻</span>
             <span class="text-xs font-bold whitespace-nowrap">إذاعة القرآن الكريم</span>
+        </button>
+        <button type="button" onclick="AbqQuranRadio.toggle('tarateel')" aria-label="تشغيل إذاعة التراتيل" class="bg-gradient-to-r from-emerald-700 to-blue-600 hover:opacity-95 text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2.5 transition transform hover:scale-105 border border-blue-300/30">
+            <span id="abq-quran-radio-icon-tarateel" class="text-xl">🎧</span>
+            <span class="text-xs font-bold whitespace-nowrap">إذاعة التراتيل</span>
         </button>
     </div>
 
@@ -2939,20 +3028,19 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
                                 shadow-sm hover:shadow-lg
                                 hover:border-blue-300
                                 transition-all duration-300">
-<div class="abq-feedback-head flex items-center justify-between gap-3 flex-nowrap">
+<div class="abq-feedback-head">
 
-    <h3 id="abq-feedback-title"
-        class="abq-feedback-title font-bold whitespace-nowrap">
+    <h3 id="abq-feedback-title" class="abq-feedback-title">
         💚 رأيك يهمنا ويصنع الفرق
     </h3>
 
-    <p class="abq-feedback-subtitle m-0 font-bold whitespace-nowrap">
-        شاركنا انطباعك عن منصة العبقري، وساعدنا على تطوير تجربة الزائر.
+    <p class="abq-feedback-subtitle">
+        شاركنا إنطباعك عن منصة العبقري، وساعدنا على تطوير تجربة الزائر.
     </p>
 
     <button type="button"
             id="abq-like-btn"
-            class="abq-like-btn font-bold whitespace-nowrap"
+            class="abq-like-btn"
             aria-pressed="false">
 
         <span aria-hidden="true">👍💚💚</span>
@@ -2964,6 +3052,7 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
     </button>
 
 </div>
+
 <div class="group p-2 bg-blue-50/60 rounded-2xl border border-blue-700">
     <div class="abq-rating-group"
          role="radiogroup"
@@ -3195,6 +3284,8 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
                 </div>
 
             </div>
+    </div>
+    </div>
 
 </section>
 
@@ -6368,7 +6459,7 @@ body > .azkar-inner-tab {
         height: 50px;
     }
 }
-#abq-quran-radio.abq-radio-playing button {
+#abq-quran-radio button.abq-radio-playing {
     animation: abq-radio-pulse 1.8s infinite;
 }
 @keyframes abq-radio-pulse {
@@ -6380,13 +6471,18 @@ body > .azkar-inner-tab {
 
 <script id="abq-quran-radio-js">
 window.AbqQuranRadio = (function () {
-    var STREAM_URL = 'https://qurango.net/radio/tarateel';
+    var STREAM_URLS = {
+        cairo: 'https://stream.radiojar.com/8s5u5tpdtwzuv',
+        tarateel: 'https://qurango.net/radio/tarateel'
+    };
+
     var audio = null;
     var playing = false;
+    var currentStation = null;
 
     function ensureAudio() {
         if (!audio) {
-            audio = new Audio(STREAM_URL);
+            audio = new Audio();
             audio.preload = 'none';
             audio.addEventListener('playing', function () {
                 playing = true;
@@ -6396,38 +6492,76 @@ window.AbqQuranRadio = (function () {
                 playing = false;
                 updateUI();
             });
+            audio.addEventListener('ended', function () {
+                playing = false;
+                updateUI();
+            });
             audio.addEventListener('error', function () {
                 playing = false;
                 updateUI();
-                console.warn('تعذّر تشغيل إذاعة القرآن الكريم حالياً.');
+                console.warn('تعذّر تشغيل الإذاعة حالياً.');
             });
         }
         return audio;
     }
 
     function updateUI() {
-        var icon = document.getElementById('abq-quran-radio-icon');
-        var wrap = document.getElementById('abq-quran-radio');
-        if (!icon || !wrap) return;
-        icon.textContent = playing ? '⏸️' : '🎧';
-        wrap.classList.toggle('abq-radio-playing', playing);
-        try { localStorage.setItem('abq_quran_radio_playing', playing ? '1' : '0'); } catch (e) {}
+        var cairoBtn = document.getElementById('abq-quran-radio-icon-cairo');
+        var tarateelBtn = document.getElementById('abq-quran-radio-icon-tarateel');
+        cairoBtn = cairoBtn ? cairoBtn.closest('button') : null;
+        tarateelBtn = tarateelBtn ? tarateelBtn.closest('button') : null;
+        var cairoIcon = document.getElementById('abq-quran-radio-icon-cairo');
+        var tarateelIcon = document.getElementById('abq-quran-radio-icon-tarateel');
+
+        if (cairoIcon) cairoIcon.textContent = (playing && currentStation === 'cairo') ? '⏸️' : '📻';
+        if (tarateelIcon) tarateelIcon.textContent = (playing && currentStation === 'tarateel') ? '⏸️' : '🎧';
+        if (cairoBtn) cairoBtn.classList.toggle('abq-radio-playing', playing && currentStation === 'cairo');
+        if (tarateelBtn) tarateelBtn.classList.toggle('abq-radio-playing', playing && currentStation === 'tarateel');
+
+        try {
+            localStorage.setItem('abq_quran_radio_playing', playing ? '1' : '0');
+            localStorage.setItem('abq_quran_radio_station', currentStation || '');
+        } catch (e) {}
     }
 
-    function play() {
+    function play(station) {
+        var streamURL = STREAM_URLS[station];
+        if (!streamURL) { console.warn('مصدر الإذاعة غير موجود.'); return; }
+
         ensureAudio();
-        audio.play().catch(function () {
-            console.warn('المتصفح منع التشغيل التلقائي؛ اضغط الزر مرة أخرى.');
+
+        if (currentStation !== station) {
+            audio.pause();
+            audio.src = streamURL;
+            audio.load();
+            currentStation = station;
+        }
+
+        audio.play().then(function () {
+            playing = true;
+            updateUI();
+        }).catch(function () {
+            playing = false;
+            updateUI();
+            console.warn('تعذّر تشغيل الإذاعة حالياً؛ اضغط الزر مرة أخرى.');
         });
     }
 
     function pause() {
-        if (audio) audio.pause();
+        if (audio) {
+            audio.pause();
+            playing = false;
+            updateUI();
+        }
     }
 
-    function toggle() {
+    function toggle(station) {
         ensureAudio();
-        if (playing) { pause(); } else { play(); }
+        if (playing && currentStation === station) {
+            pause();
+        } else {
+            play(station);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
