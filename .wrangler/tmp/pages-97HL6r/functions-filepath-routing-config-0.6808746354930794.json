@@ -1,0 +1,37 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/verify-certificate",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/verify-certificate.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/verify-certificate",
+      "mountPath": "/api",
+      "method": "POST",
+      "module": [
+        "api/verify-certificate.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/visitors",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/visitors.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/feedback",
+      "mountPath": "/api",
+      "method": "",
+      "module": [
+        "api/feedback.js:onRequest"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
