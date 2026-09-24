@@ -8308,5 +8308,137 @@ function toggleQualificationDocs() {
     }
 }
 </script>
+
+<!-- =========================================================
+     ALABQRI — MAIN TABS FIRST-CLICK / WHITE-PAGE FIX
+     إصلاح فتح التبويبات من أول ضغطة فقط دون تغيير محتواها
+     ========================================================= -->
+<style id="abq-main-tabs-first-click-fix">
+.main-tabs-content > section.tab-content {
+    display: none !important;
+    visibility: hidden !important;
+}
+.main-tabs-content > section.tab-content.tab-active {
+    display: block !important;
+    visibility: visible !important;
+}
+</style>
+
+<script id="abq-main-tabs-first-click-fix-js">
+(function () {
+    'use strict';
+
+    var IDS = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+
+    function getHost() {
+        return document.querySelector('.main-tabs-content');
+    }
+
+    function normalizeSections() {
+        var host = getHost();
+        if (!host) return [];
+
+        var found = [];
+
+        IDS.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+
+            /* كل تبويب رئيسي يجب أن يكون ابنًا مباشرًا للحاوية الرئيسية */
+            if (el.parentElement !== host) {
+                host.appendChild(el);
+            }
+            found.push(el);
+        });
+
+        return found;
+    }
+
+    function showTab(id) {
+        if (IDS.indexOf(id) === -1) return false;
+
+        var sections = normalizeSections();
+        var target = document.getElementById(id);
+        if (!target || sections.indexOf(target) === -1) return false;
+
+        sections.forEach(function (section) {
+            var active = section === target;
+            section.classList.toggle('tab-active', active);
+            section.style.setProperty('display', active ? 'block' : 'none', 'important');
+            section.style.setProperty('visibility', active ? 'visible' : 'hidden', 'important');
+            section.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+
+        document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function (btn) {
+            var action = btn.getAttribute('onclick') || '';
+            var match = action.match(/switchTab\(['"]([^'"]+)['"]/);
+            var active = match && match[1] === id;
+            btn.classList.toggle('active', !!active);
+            btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        if (id === 'azkar' && typeof window.azkarInit === 'function') {
+            try { window.azkarInit(); } catch (e) {}
+        }
+
+        return true;
+    }
+
+    function getRequestedTab(button) {
+        if (!button) return null;
+
+        var action = button.getAttribute('onclick') || '';
+        var match = action.match(/switchTab\(['"]([^'"]+)['"]/);
+        if (match && IDS.indexOf(match[1]) !== -1) return match[1];
+
+        var id = button.getAttribute('data-tab') || button.getAttribute('data-target');
+        return IDS.indexOf(id) !== -1 ? id : null;
+    }
+
+    /* نضمن أن أول ضغطة نفسها تنتهي بحالة العرض الصحيحة،
+       حتى لو قام أحد المتحكمات القديمة بتغيير الحالة أثناء نفس الحدث. */
+    document.addEventListener('click', function (event) {
+        var button = event.target && event.target.closest
+            ? event.target.closest('.main-tabs-nav .nav-btn')
+            : null;
+
+        if (!button) return;
+
+        var id = getRequestedTab(button);
+        if (!id) return;
+
+        setTimeout(function () {
+            showTab(id);
+            if (id !== 'home') {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            }
+        }, 0);
+    }, true);
+
+    function initialize() {
+        var current = null;
+
+        document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function (btn) {
+            if (!btn.classList.contains('active') && current) return;
+            var id = getRequestedTab(btn);
+            if (id && btn.classList.contains('active')) current = id;
+        });
+
+        if (!current) {
+            var hash = (location.hash || '').replace(/^#/, '');
+            current = IDS.indexOf(hash) !== -1 ? hash : 'home';
+        }
+
+        showTab(current);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize, { once: true });
+    } else {
+        initialize();
+    }
+})();
+</script>
+
 </body>
 </html>
