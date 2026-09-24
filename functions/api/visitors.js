@@ -14,7 +14,7 @@ export async function onRequestGet({ env }) {
         `INSERT INTO visitors (id, total, updated_at)
          VALUES (1, 1, CURRENT_TIMESTAMP)
          ON CONFLICT(id) DO UPDATE SET
-           total = visitors.total + 1,
+           total = total + 1,
            updated_at = CURRENT_TIMESTAMP`
       )
       .run();
