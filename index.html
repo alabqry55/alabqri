@@ -148,6 +148,13 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     }
 }
 
+
+/* ===== حماية ظهور محتوى الرئيسية من تأثير IntersectionObserver ===== */
+#home.tab-active .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
     display: none !important;
