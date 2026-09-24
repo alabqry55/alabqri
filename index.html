@@ -438,6 +438,95 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
 }
 
 
+/* ===== تمييز احترافي لأوراد مجلس العبقري ===== */
+#awraad-subtabs{
+    gap:.55rem !important;
+    padding:.55rem !important;
+    margin-top:.35rem !important;
+    border-top:1px solid rgba(255,255,255,.14) !important;
+}
+#awraad-subtabs .tab-btn{
+    position:relative;
+    min-height:46px;
+    padding:.65rem .8rem !important;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:1rem !important;
+    font-size:.78rem !important;
+    font-weight:900 !important;
+    letter-spacing:.01em;
+    box-shadow:0 6px 16px -12px rgba(0,0,0,.45);
+    transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
+}
+#awraad-subtabs .tab-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px -14px rgba(0,0,0,.6);
+}
+#awraad-subtabs #btn-awraad-general{
+    color:#d1fae5;
+    background:linear-gradient(135deg,rgba(5,150,105,.22),rgba(16,185,129,.10));
+    border-color:rgba(52,211,153,.28);
+}
+#awraad-subtabs #btn-awraad-general.active{
+    color:#fff !important;
+    background:linear-gradient(135deg,#047857,#10b981) !important;
+    border-color:#6ee7b7 !important;
+    box-shadow:0 10px 24px -12px rgba(16,185,129,.7);
+}
+#awraad-subtabs #btn-awraad-private{
+    color:#fef3c7;
+    background:linear-gradient(135deg,rgba(217,119,6,.22),rgba(245,158,11,.10));
+    border-color:rgba(251,191,36,.28);
+}
+#awraad-subtabs #btn-awraad-private.active{
+    color:#fff !important;
+    background:linear-gradient(135deg,#b45309,#f59e0b) !important;
+    border-color:#fcd34d !important;
+    box-shadow:0 10px 24px -12px rgba(245,158,11,.72);
+}
+#tab-awraad-general > div,
+#tab-awraad-private > div:first-child{
+    position:relative;
+    overflow:hidden;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+#tab-awraad-general > div:hover,
+#tab-awraad-private > div:first-child:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 28px -18px rgba(15,23,42,.35);
+}
+#tab-awraad-general > div{
+    border-top:4px solid #059669 !important;
+}
+#tab-awraad-private > div:first-child{
+    border-top:4px solid #d97706 !important;
+}
+#tab-awraad-general > div::after,
+#tab-awraad-private > div:first-child::after{
+    content:"";
+    position:absolute;
+    inset-inline-start:-35px;
+    top:-35px;
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    opacity:.08;
+    pointer-events:none;
+}
+#tab-awraad-general > div::after{ background:#10b981; }
+#tab-awraad-private > div:first-child::after{ background:#f59e0b; }
+
+@media (max-width:640px){
+    #awraad-subtabs .tab-btn{
+        min-height:44px;
+        font-size:.72rem !important;
+        padding:.55rem .4rem !important;
+    }
+    #tab-awraad-general > div,
+    #tab-awraad-private > div:first-child{
+        padding:1rem !important;
+    }
+}
+
 /* ===== أنماط مجلس العبقري للذكر والتسبيح ===== */
 /* ===== عزل تبويبات مجلس العبقري للذكر والتسبيح عن التبويبات الرئيسية ===== */
 #azkar-app .azkar-inner-tab {
@@ -2161,7 +2250,7 @@ html { scroll-behavior: auto !important; }
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
-            <a href="/verify-certificate.html" target="_blank" rel="noopener noreferrer"
+            <a href="/verify-certificate.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-emerald-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">🔐</div>
                 <h4 class="font-black text-emerald-700">بوابة التحقق من الشهادات</h4>
@@ -2169,7 +2258,7 @@ html { scroll-behavior: auto !important; }
                 <span class="inline-block mt-3 text-xs font-black text-blue-700">فتح البوابة ←</span>
             </a>
 
-            <a href="/verification.html" target="_blank" rel="noopener noreferrer"
+            <a href="/verification.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-blue-700 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">🏛️</div>
                 <h4 class="font-black text-blue-700">التوثيق الرسمي للمركز</h4>
@@ -2177,7 +2266,7 @@ html { scroll-behavior: auto !important; }
                 <span class="inline-block mt-3 text-xs font-black text-blue-700">فتح صفحة التوثيق ←</span>
             </a>
 
-            <a href="/certificate-policy.html" target="_blank" rel="noopener noreferrer"
+            <a href="/certificate-policy.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-amber-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">📜</div>
                 <h4 class="font-black text-amber-700">سياسة الشهادات</h4>
@@ -2185,7 +2274,7 @@ html { scroll-behavior: auto !important; }
                 <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض السياسة ←</span>
             </a>
 
-            <a href="/terms-of-use.html" target="_blank" rel="noopener noreferrer"
+            <a href="/terms-of-use.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-slate-500 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">📋</div>
                 <h4 class="font-black text-slate-700">شروط الاستخدام</h4>
@@ -2193,7 +2282,7 @@ html { scroll-behavior: auto !important; }
                 <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض الشروط ←</span>
             </a>
 
-            <a href="/privacy-policy.html" target="_blank" rel="noopener noreferrer"
+            <a href="/privacy-policy.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-cyan-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">🔒</div>
                 <h4 class="font-black text-cyan-700">سياسة الخصوصية</h4>
@@ -2201,7 +2290,7 @@ html { scroll-behavior: auto !important; }
                 <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض السياسة ←</span>
             </a>
 
-            <a href="/disclaimer.html" target="_blank" rel="noopener noreferrer"
+            <a href="/disclaimer.html" target="_self" rel="noopener noreferrer"
                class="bg-white rounded-xl border border-rose-500 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div class="text-2xl mb-2">⚠️</div>
                 <h4 class="font-black text-rose-700">إخلاء المسؤولية</h4>
@@ -8610,6 +8699,44 @@ function toggleQualificationDocs() {
         document.addEventListener('DOMContentLoaded', initialize, { once: true });
     } else {
         initialize();
+    }
+})();
+</script>
+
+<script id="abq-same-frame-link-policy">
+(function(){
+    'use strict';
+    /*
+     * سياسة فتح الروابط:
+     * - جميع روابط المنصة تظل داخل نفس إطار/تبويب الصفحة.
+     * - الاستثناءان الوحيدان المسموح لهما بفتح إطار خارجي:
+     *   TikTok و Linktree.
+     */
+    function enforceSameFrameLinks(){
+        document.querySelectorAll('a[href]').forEach(function(link){
+            var href=(link.getAttribute('href')||'').trim().toLowerCase();
+            var allowExternal =
+                href.indexOf('https://www.tiktok.com/') === 0 ||
+                href.indexOf('https://tiktok.com/') === 0 ||
+                href.indexOf('https://linktr.ee/') === 0;
+
+            if(allowExternal){
+                link.setAttribute('target','_blank');
+                link.setAttribute('rel','noopener noreferrer');
+            }else{
+                link.setAttribute('target','_self');
+                if(link.getAttribute('rel') === 'noopener noreferrer' &&
+                   !/^https?:\/\//i.test(href)){
+                    link.removeAttribute('rel');
+                }
+            }
+        });
+    }
+
+    if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', enforceSameFrameLinks, {once:true});
+    }else{
+        enforceSameFrameLinks();
     }
 })();
 </script>
