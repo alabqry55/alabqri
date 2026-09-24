@@ -7131,24 +7131,38 @@ const diplomasData = {
     const mainTabsContainer = document.querySelector('.main-tabs-content');
     if(!mainTabsContainer) return false;
 
+    /* إصلاح أساسي لفتح التبويب من أول ضغطة: تثبيت جميع التبويبات الرئيسية داخل الحاوية قبل الإظهار. */
+    const mainTabIds = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+    mainTabIds.forEach(function(id){
+      const section = document.getElementById(id);
+      if(section && section.parentElement !== mainTabsContainer){
+        mainTabsContainer.appendChild(section);
+      }
+    });
+
     // إدارة التبويبات الرئيسية فقط: لا نلمس أي تبويب داخلي داخل الأذكار أو المرصد.
     const mainSections = mainTabsContainer.querySelectorAll(':scope > section.tab-content');
     mainSections.forEach(function(section){
       section.classList.remove('tab-active');
-      section.style.display='none';
+      section.style.setProperty('display','none','important');
+      section.style.setProperty('visibility','hidden','important');
+      section.setAttribute('aria-hidden','true');
     });
 
     const target=document.getElementById(tabId);
     if(!target || target.parentElement !== mainTabsContainer) return false;
 
     target.classList.add('tab-active');
-    target.style.display='block';
+    target.style.setProperty('display','block','important');
+    target.style.setProperty('visibility','visible','important');
+    target.setAttribute('aria-hidden','false');
 
     const buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
     buttons.forEach(function(btn){
       const action=btn.getAttribute('onclick') || '';
       const isTarget = action.indexOf("switchTab('"+tabId+"')") !== -1 || action.indexOf('switchTab("'+tabId+'")') !== -1;
       btn.classList.toggle('active', isTarget);
+      btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
     });
 
     if(tabId==='azkar' && typeof window.azkarInit==='function'){
