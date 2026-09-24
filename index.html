@@ -7245,8 +7245,38 @@ const diplomasData = {
     const initial=ABQ_MAIN_TABS.includes(hash)?hash:(ABQ_MAIN_TABS.includes(abqCurrentMainTab)?abqCurrentMainTab:'home');
     applyTab(initial);
     abqCurrentMainTab=initial;
+
+    // استعادة آخر تبويب + آخر موضع تمرير محفوظ للزائر عند العودة للمنصة.
+    try {
+      const raw = JSON.parse(localStorage.getItem(ABQ_HISTORY_KEY) || '{}');
+      if (raw.current === initial && (Number(raw.x) || Number(raw.y))) {
+        const savedPoint = { tab: initial, x: Number(raw.x) || 0, y: Number(raw.y) || 0 };
+        window.requestAnimationFrame(function(){
+          window.requestAnimationFrame(function(){ restoreSnapshot(savedPoint); });
+        });
+      }
+    } catch(e) {}
+
     abqUpdateHistoryButtons();
   }
+
+  // حفظ آخر مكان وصل إليه الزائر باستمرار، وليس فقط عند إغلاق الصفحة.
+  let abqScrollSaveTimer = null;
+  window.addEventListener('scroll', function(){
+    if (abqScrollSaveTimer) return;
+    abqScrollSaveTimer = window.setTimeout(function(){
+      abqScrollSaveTimer = null;
+      try {
+        localStorage.setItem(ABQ_HISTORY_KEY, JSON.stringify({
+          current: abqCurrentMainTab,
+          x: window.scrollX || 0,
+          y: window.scrollY || 0,
+          back: abqNavBackStack.slice(-50),
+          forward: abqNavForwardStack.slice(-50)
+        }));
+      } catch(e) {}
+    }, 150);
+  }, {passive:true});
 
   // Replace the old no-op arrow listeners safely; this listener is attached once.
   document.addEventListener('click',function(e){
@@ -7263,7 +7293,13 @@ const diplomasData = {
       const last=abqNavBackStack[abqNavBackStack.length-1];
       if(last && last.tab===current.tab) abqNavBackStack[abqNavBackStack.length-1]=current;
     }
-    try{localStorage.setItem(ABQ_HISTORY_KEY,JSON.stringify({current:current.tab,back:abqNavBackStack.slice(-50),forward:abqNavForwardStack.slice(-50)}));}catch(e){}
+    try{localStorage.setItem(ABQ_HISTORY_KEY,JSON.stringify({
+      current: current.tab,
+      x: current.x,
+      y: current.y,
+      back: abqNavBackStack.slice(-50),
+      forward: abqNavForwardStack.slice(-50)
+    }));}catch(e){}
   });
 
   window.addEventListener('popstate',function(){
