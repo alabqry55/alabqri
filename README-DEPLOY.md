@@ -18,7 +18,7 @@
 ## نشر Wrangler
 ```bash
 npm install
-npx wrangler d1 execute alabqari-db --remote --file=./schema.sql
+npx wrangler d1 execute alabqri-db --remote --file=./schema.sql
 npx wrangler pages deploy . --project-name alabqri
 ```
 
