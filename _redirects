@@ -1,5 +1,5 @@
 # Redirect www to root (handled by Cloudflare, but as fallback)
-# https://www.alabqari.com/* https://alabqari.com/:splat 301
+# https://www.alabqri.com/* https://alabqri.com/:splat 301
 
 # Old pages.dev URL to custom domain (uncomment after domain activation)
-# https://alabqri.pages.dev/* https://alabqari.com/:splat 301
+# https://alabqri.pages.dev/* https://alabqri.com/:splat 301
