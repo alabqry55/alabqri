@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /functions/
 
-Sitemap: https://alabqari.com/sitemap.xml
+Sitemap: https://alabqri.com/sitemap.xml
