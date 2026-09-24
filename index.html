@@ -1086,6 +1086,49 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
     overflow-wrap:anywhere;
     white-space:pre-wrap;
 }
+.abq-feedback-item-pinned{
+    border-color:#d4af37 !important;
+    background:linear-gradient(135deg,#fffbeb 0%,#ffffff 58%,#eff6ff 100%) !important;
+    box-shadow:0 10px 24px -18px rgba(180,140,20,.55);
+}
+.abq-feedback-pinned-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:.25rem;
+    margin-inline-start:.35rem;
+    padding:.15rem .45rem;
+    border-radius:999px;
+    background:#fef3c7;
+    color:#92400e;
+    border:1px solid #fcd34d;
+    font-size:.62rem;
+    font-weight:900;
+    white-space:nowrap;
+}
+.abq-rating-btn{
+    position:relative;
+    flex-wrap:wrap;
+}
+.abq-rating-count{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:1.55rem;
+    height:1.55rem;
+    padding:0 .35rem;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    border:1px solid #93c5fd;
+    font-size:.66rem;
+    font-weight:900;
+    line-height:1;
+}
+.abq-rating-btn.abq-rating-selected .abq-rating-count{
+    background:#2563eb;
+    color:#fff;
+    border-color:#2563eb;
+}
 .abq-feedback-status{
     min-height:1.25rem;
     margin-top:.55rem;
@@ -4025,7 +4068,7 @@ html { scroll-behavior: auto !important; }
     <div class="abq-feedback-head">
 
         <h3 id="abq-feedback-title" class="abq-feedback-title">
-            💚 رأيك يهمنا ويصنع الفرق
+            💚 شاركنا رأيك
         </h3>
 
 <p class="abq-feedback-subtitle m-0 text-lg md:text-xl font-black text-blue-700">
@@ -4044,7 +4087,7 @@ html { scroll-behavior: auto !important; }
             </span>
 
             <span class="abq-like-count">
-                (<span id="abq-like-count">1</span>)
+                (<span id="abq-like-count">350</span>)
             </span>
 
         </button>
@@ -4064,39 +4107,51 @@ html { scroll-behavior: auto !important; }
 
 <div class="abq-rating-options grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 
-    <!-- 😍 ممتازة -->
+    <!-- 😍 ممتازة — 245 من 350 -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
-                class="abq-rating-btn w-full h-full flex items-center justify-center text-center">
+                class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
+                data-rating="excellent"
+                aria-checked="false">
             <span class="abq-rating-emoji">😍</span>
             <span class="abq-rating-text">ممتازة</span>
+            <span class="abq-rating-count" aria-label="245 تقييمًا">245</span>
         </button>
     </div>
 
-    <!-- 🙂 جيدة -->
+    <!-- 🙂 جيدة — 63 من 350 -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
-                class="abq-rating-btn w-full h-full flex items-center justify-center text-center">
+                class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
+                data-rating="good"
+                aria-checked="false">
             <span class="abq-rating-emoji">🙂</span>
             <span class="abq-rating-text">جيدة</span>
+            <span class="abq-rating-count" aria-label="63 تقييمًا">63</span>
         </button>
     </div>
 
-    <!-- 😐 متوسطة -->
+    <!-- 😐 متوسطة — 27 من 350 -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
-                class="abq-rating-btn w-full h-full flex items-center justify-center text-center">
+                class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
+                data-rating="average"
+                aria-checked="false">
             <span class="abq-rating-emoji">😐</span>
             <span class="abq-rating-text">متوسطة</span>
+            <span class="abq-rating-count" aria-label="27 تقييمًا">27</span>
         </button>
     </div>
 
-    <!-- 💡 لدي إقتراح -->
+    <!-- 💡 لدي اقتراح — 15 من 350 -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
-                class="abq-rating-btn w-full h-full flex items-center justify-center text-center">
+                class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
+                data-rating="suggestion"
+                aria-checked="false">
             <span class="abq-rating-emoji">💡</span>
-            <span class="abq-rating-text">لدي إقتراح</span>
+            <span class="abq-rating-text">لدي اقتراح</span>
+            <span class="abq-rating-count" aria-label="15 تقييمًا">15</span>
         </button>
     </div>
 
@@ -6742,6 +6797,26 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 
+<!-- ===== ALABQRI — NON-BLOCKING IMAGE DECODE =====
+     لا يتم انتظار فك الصور لفتح أي تبويب أو قسم. -->
+<script id="abq-nonblocking-images">
+(function(){
+    'use strict';
+    function optimizeImages(){
+        document.querySelectorAll('img').forEach(function(img){
+            if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
+        });
+        var hero=document.querySelector('#home img');
+        if(hero && !hero.hasAttribute('loading')) hero.setAttribute('loading','eager');
+    }
+    if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',optimizeImages,{once:true});
+    }else{
+        optimizeImages();
+    }
+})();
+</script>
+
 <script id="abq-real-visitor-counter">
 /* =========================================================
    ALABQARI 1.3 PRO — VISITOR COUNTER
@@ -6766,7 +6841,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     })
     .then(function(data){
       if(data && Number.isFinite(Number(data.total))){
-        var ABQ_VISITOR_BASE_OFFSET = 1234; /* رقم بداية ثابت يُضاف فوق العدد الحقيقي الحالي */
+        var ABQ_VISITOR_BASE_OFFSET = 2290; /* 190 سابقًا + أول زيارة = 191؛ 2290 + 191 = 2481 */
         var displayCount = ABQ_VISITOR_BASE_OFFSET + Number(data.total);
         el.textContent=displayCount.toLocaleString('en-US');
         if(box) box.classList.remove('loading');
@@ -7692,6 +7767,16 @@ window.AbqToast = (function(){
 
     var selectedRating = null;
 
+    /* تعليق ثابت ومثبت داخل index.html — لا يعتمد على localStorage أو API */
+    var PINNED_COMMENT = {
+        id: 'abq-pinned-ahmed-20260915',
+        name: 'الدكتور/ أحمد السيد رسّه',
+        text: 'وما توفيقي إلا بالله عليه توكلت وهو رب العرش العظيم وبه نستعين.',
+        rating: 'excellent',
+        date: '2026-09-15T12:00:00+03:00',
+        pinned: true
+    };
+
     function safeGet(key, fallback){
         try{
             var value = localStorage.getItem(key);
@@ -7734,23 +7819,33 @@ window.AbqToast = (function(){
     function renderComments(comments){
         var list=document.getElementById('abq-feedback-list');
         if(!list) return;
-        if(!comments.length){
-            list.innerHTML='<div class="abq-feedback-empty">💬 لم تُضف آراء بعد — كن أول من يشاركنا رأيه.</div>';
-            return;
-        }
-        list.innerHTML=comments.slice().reverse().map(function(item){
+
+        var incoming = Array.isArray(comments) ? comments.slice() : [];
+        /* إزالة أي نسخة مكررة من التعليق المثبت ثم وضعه دائمًا في المقدمة */
+        incoming = incoming.filter(function(item){
+            return String(item && item.id) !== String(PINNED_COMMENT.id);
+        });
+        var allComments = incoming.concat([PINNED_COMMENT]);
+
+        list.innerHTML=allComments.slice().reverse().map(function(item){
             var meta = RATING_META[item.rating] || null;
             var badge = meta ? '<span class="abq-feedback-rating-badge">'+meta.emoji+' '+esc(meta.label)+'</span>' : '';
+            var pinnedBadge = item.pinned ? '<span class="abq-feedback-pinned-badge">📌 مثبت</span>' : '';
             var idAttr = esc(item.id != null ? String(item.id) : '');
-            return '<article class="abq-feedback-item" data-id="'+idAttr+'">'+
+            var dateLabel = item.pinned ? 'منذ 15 سبتمبر 2026' : timeAgo(item.date);
+            var deleteButton = item.pinned ? '' :
+                '<button type="button" class="abq-feedback-delete-btn abq-manager-only" data-id="'+idAttr+'">🗑 حذف</button>';
+
+            return '<article class="abq-feedback-item'+(item.pinned?' abq-feedback-item-pinned':'')+'" data-id="'+idAttr+'">'+
                 '<div class="abq-feedback-item-top">'+
                     '<span>'+
                         '<span class="abq-feedback-name">'+esc(item.name||'زائر المنصة')+'</span>'+
                         badge+
+                        pinnedBadge+
                     '</span>'+
                     '<span class="abq-feedback-item-actions">'+
-                        '<span class="abq-feedback-date">'+esc(timeAgo(item.date))+'</span>'+
-                        '<button type="button" class="abq-feedback-delete-btn abq-manager-only" data-id="'+idAttr+'">🗑 حذف</button>'+
+                        '<span class="abq-feedback-date">'+esc(dateLabel)+'</span>'+
+                        deleteButton+
                     '</span>'+
                 '</div>'+
                 '<p class="abq-feedback-item-text">'+esc(item.text)+'</p>'+
@@ -7767,7 +7862,7 @@ window.AbqToast = (function(){
         var count=document.getElementById('abq-like-count');
         if(!btn||!label||!count) return;
         var liked=safeGet(KEYS.liked,'0')==='1';
-        var likes=Math.max(0,parseInt(safeGet(KEYS.likes,'0'),10)||0);
+        var likes=Math.max(350,parseInt(safeGet(KEYS.likes,'350'),10)||350);
         btn.classList.toggle('liked',liked);
         btn.setAttribute('aria-pressed',String(liked));
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
@@ -7806,7 +7901,7 @@ window.AbqToast = (function(){
                 renderComments(data.comments);
             }
             if(data && Number.isFinite(Number(data.likes))){
-                safeSet(KEYS.likes,String(Number(data.likes)));
+                safeSet(KEYS.likes,String(Math.max(350,Number(data.likes))));
                 updateLikeUI();
             }
         }catch(e){}
