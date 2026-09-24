@@ -8708,27 +8708,14 @@ function toggleQualificationDocs() {
     'use strict';
     /*
      * سياسة فتح الروابط:
-     * - جميع روابط المنصة تظل داخل نفس إطار/تبويب الصفحة.
-     * - الاستثناءان الوحيدان المسموح لهما بفتح إطار خارجي:
-     *   TikTok و Linktree.
+     * - جميع روابط المنصة، بما فيها TikTok وLinktree، تظل داخل نفس إطار/تبويب الصفحة.
+     * - لا توجد استثناءات لفتح تبويب خارجي.
      */
     function enforceSameFrameLinks(){
         document.querySelectorAll('a[href]').forEach(function(link){
-            var href=(link.getAttribute('href')||'').trim().toLowerCase();
-            var allowExternal =
-                href.indexOf('https://www.tiktok.com/') === 0 ||
-                href.indexOf('https://tiktok.com/') === 0 ||
-                href.indexOf('https://linktr.ee/') === 0;
-
-            if(allowExternal){
-                link.setAttribute('target','_blank');
-                link.setAttribute('rel','noopener noreferrer');
-            }else{
-                link.setAttribute('target','_self');
-                if(link.getAttribute('rel') === 'noopener noreferrer' &&
-                   !/^https?:\/\//i.test(href)){
-                    link.removeAttribute('rel');
-                }
+            link.setAttribute('target','_self');
+            if(link.getAttribute('rel') === 'noopener noreferrer'){
+                link.removeAttribute('rel');
             }
         });
     }
