@@ -6954,7 +6954,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     })
     .then(function(data){
       if(data && Number.isFinite(Number(data.total))){
-        var ABQ_VISITOR_BASE_OFFSET = 2290; /* 190 سابقًا + أول زيارة = 191؛ 2290 + 191 = 2481 */
+        var ABQ_VISITOR_BASE_OFFSET = 2343; /* 190 سابقًا + أول زيارة = 191؛ 2290 + 191 = 2481 */
         var displayCount = ABQ_VISITOR_BASE_OFFSET + Number(data.total);
         el.textContent=displayCount.toLocaleString('en-US');
         if(box) box.classList.remove('loading');
