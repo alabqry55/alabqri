@@ -1805,7 +1805,7 @@ html { scroll-behavior: auto !important; }
 
     <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
 
-        <h3 class="section-title text-center">
+        <h3 id="qualifications-why" class="section-title text-center scroll-mt-24">
             لماذا مركز العبقري؟
         </h3>
 
@@ -8728,5 +8728,25 @@ function toggleQualificationDocs() {
 })();
 </script>
 
+
+<script id="abq-why-center-route">
+(function(){
+    'use strict';
+    function openWhyCenterSection(){
+        if(window.location.hash !== '#qualifications-why') return;
+        function go(){
+            if(typeof window.switchTab === 'function') window.switchTab('qualifications', true);
+            setTimeout(function(){
+                var target=document.getElementById('qualifications-why');
+                if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+            }, 120);
+        }
+        if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go, {once:true});
+        else go();
+    }
+    openWhyCenterSection();
+    window.addEventListener('hashchange', openWhyCenterSection);
+})();
+</script>
 </body>
 </html>
