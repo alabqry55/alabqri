@@ -14,3 +14,173 @@ a{color:inherit}.pro-skip-link{position:absolute;right:1rem;top:-100px;backgroun
 .pro-footer{margin-top:2rem;background:#0f172a;color:#cbd5e1;border-top:4px solid var(--abq-gold)}.pro-footer-inner{width:min(1100px,calc(100% - 2rem));margin:auto;padding:2rem 0 1rem}.pro-footer-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}.pro-footer-col{display:flex;flex-direction:column;gap:.35rem}.pro-footer-col h4{margin:0 0 .4rem;color:#fff;font-weight:900}.pro-footer-col a{text-decoration:none;font-size:.82rem}.pro-footer-col a:hover{color:#7dd3fc}.pro-footer-bottom{margin-top:1.5rem;padding-top:1rem;border-top:1px solid #334155;text-align:center;font-size:.75rem}
 @media(max-width:760px){.pro-header-inner{min-height:60px}.pro-menu-toggle{display:block}.pro-nav{display:none;position:absolute;right:1rem;left:1rem;top:65px;background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:.55rem;box-shadow:0 18px 35px -22px #0f172a}.pro-nav.open{display:flex;flex-direction:column;align-items:stretch}.pro-nav a{width:100%;text-align:right}.pro-hero{padding:2.7rem 1rem 3rem}.pro-container-narrow{width:calc(100% - 1rem)}.pro-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pro-legal-content p,.pro-legal-content li{font-size:.88rem}}
 @media(max-width:430px){.pro-footer-grid{grid-template-columns:1fr}.pro-logo span:last-child{font-size:.88rem}}
+/* ===== الهوية الإسلامية الراقية — قسم مركز التوثيق والوثائق ===== */
+:root{
+ --abq-blue:#173b72;
+ --abq-blue-2:#2457a6;
+ --abq-sky:#2f78b7;
+ --abq-green:#176b57;
+ --abq-gold:#c9a227;
+ --abq-gold-soft:#eadb9a;
+ --abq-ink:#142033;
+ --abq-muted:#64748b;
+ --abq-paper:#fbfaf5;
+}
+html{background:#eef3f7}
+body{
+ background:
+   radial-gradient(circle at 12% 8%,rgba(201,162,39,.10),transparent 22rem),
+   radial-gradient(circle at 88% 18%,rgba(23,107,87,.08),transparent 24rem),
+   linear-gradient(180deg,#f8fafc 0%,#f3f6f7 48%,#eef2f4 100%);
+}
+.pro-header{
+ background:rgba(251,250,245,.96);
+ border-bottom:1px solid rgba(201,162,39,.34);
+ box-shadow:0 8px 30px -24px #173b72;
+}
+.pro-header-inner{position:relative}
+.pro-header-inner:after{
+ content:"";
+ position:absolute;inset-inline:0;bottom:-1px;height:2px;
+ background:linear-gradient(90deg,transparent,var(--abq-gold),transparent);
+ opacity:.65;
+}
+.pro-logo-icon{
+ background:linear-gradient(145deg,#173b72,#2457a6);
+ border:1px solid rgba(234,219,154,.75);
+ box-shadow:0 8px 20px -12px #173b72;
+ position:relative;
+}
+.pro-logo-icon:after{
+ content:"✦";
+ position:absolute;inset:0;display:grid;place-items:center;
+ color:rgba(234,219,154,.30);font-size:1.55rem;pointer-events:none;
+}
+.pro-nav a{color:#26384f}
+.pro-nav a:hover,.pro-nav a:focus-visible{background:#f3f7fb;color:#173b72}
+.pro-nav a.active{
+ color:#173b72;
+ background:linear-gradient(180deg,#f5f8fc,#eef4f8);
+ box-shadow:inset 0 -2px 0 var(--abq-gold);
+}
+.pro-hero{
+ background:
+   radial-gradient(circle at 50% 115%,rgba(201,162,39,.20),transparent 28rem),
+   linear-gradient(135deg,#102f5d 0%,#173b72 48%,#176b57 100%);
+ border-bottom:4px solid rgba(201,162,39,.65);
+}
+.pro-hero:before{
+ width:420px;height:420px;right:-150px;top:-230px;
+ border-radius:28%;
+ background:
+   linear-gradient(30deg,transparent 46%,rgba(234,219,154,.10) 47%,rgba(234,219,154,.10) 53%,transparent 54%),
+   linear-gradient(150deg,transparent 46%,rgba(234,219,154,.10) 47%,rgba(234,219,154,.10) 53%,transparent 54%);
+ transform:rotate(22.5deg);
+}
+.pro-hero:after{
+ width:360px;height:360px;left:-150px;bottom:-220px;
+ border-radius:28%;
+ background:
+   linear-gradient(30deg,transparent 46%,rgba(234,219,154,.08) 47%,rgba(234,219,154,.08) 53%,transparent 54%),
+   linear-gradient(150deg,transparent 46%,rgba(234,219,154,.08) 47%,rgba(234,219,154,.08) 53%,transparent 54%);
+ transform:rotate(22.5deg);
+}
+.pro-hero h1{letter-spacing:.01em;text-shadow:0 2px 18px rgba(0,0,0,.18)}
+.pro-hero p{color:#e7f0f5}
+.pro-hero-badge{
+ display:inline-flex;align-items:center;gap:.45rem;
+ margin-top:1rem;padding:.42rem .9rem;border-radius:999px;
+ background:rgba(251,250,245,.12);
+ border:1px solid rgba(234,219,154,.62);
+ color:#fff;box-shadow:0 8px 24px -18px #000;
+ backdrop-filter:blur(6px);
+}
+.pro-container,.pro-container-narrow{position:relative}
+.pro-container:before,.pro-container-narrow:before{
+ content:"✦";
+ position:absolute;top:.15rem;inset-inline-start:0;
+ color:var(--abq-gold);font-size:1.2rem;opacity:.72;
+}
+.pro-breadcrumb{color:#64748b}
+.pro-breadcrumb a{color:#2457a6}
+.pro-card,.pro-verify-box,.pro-cta{
+ background:rgba(255,255,255,.96)!important;
+ border:1px solid rgba(23,59,114,.12)!important;
+ border-top:3px solid rgba(201,162,39,.70)!important;
+ border-radius:1.25rem!important;
+ box-shadow:0 18px 42px -30px rgba(16,47,93,.50)!important;
+}
+.pro-card{padding:1.2rem}
+.pro-card + .pro-card{margin-top:1rem}
+.pro-card-title{
+ color:#173b72!important;
+ font-weight:900!important;
+}
+.pro-info-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;
+}
+.pro-info-item{
+ padding:.85rem;border-radius:.9rem;
+ background:linear-gradient(145deg,#fbfaf5,#f5f8fa);
+ border:1px solid #e2e8f0;
+ border-inline-start:3px solid rgba(201,162,39,.65);
+}
+.pro-info-item label{display:block;color:#64748b;font-size:.76rem;font-weight:800;margin-bottom:.2rem}
+.pro-info-item .value{display:block;color:#172b45;font-weight:800;overflow-wrap:anywhere}
+.pro-info-item a{color:#2457a6;font-weight:900}
+.pro-alert{
+ border-radius:1rem!important;
+ border:1px solid #dbe4ea!important;
+ box-shadow:none!important;
+}
+.pro-alert-info{background:#f4f8f7!important;border-inline-start:4px solid #176b57!important}
+.pro-alert-warning{background:#fffaf0!important;border-inline-start:4px solid #c9a227!important}
+.pro-qr-box{
+ border:2px solid rgba(201,162,39,.55)!important;
+ background:#fff!important;
+ box-shadow:inset 0 0 0 7px #fbfaf5,0 12px 28px -22px #173b72;
+ border-radius:1rem!important;
+}
+.pro-verify-box{padding:1.25rem!important}
+.pro-verify-box h3,.pro-cta h3{color:#173b72!important;font-weight:900}
+.pro-verify-input{border-color:#cbd5e1!important;border-radius:.8rem!important}
+.pro-verify-input:focus{border-color:#2457a6!important;box-shadow:0 0 0 3px rgba(36,87,166,.12)!important}
+.pro-btn{
+ background:linear-gradient(135deg,#173b72,#2457a6)!important;
+ border:1px solid rgba(234,219,154,.55)!important;
+ box-shadow:0 10px 22px -16px #173b72!important;
+}
+.pro-btn:hover{background:linear-gradient(135deg,#102f5d,#176b57)!important}
+.pro-legal-content{
+ background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(251,250,245,.96));
+ border-color:rgba(23,59,114,.12);
+}
+.pro-legal-content:before{
+ width:5px;
+ background:linear-gradient(180deg,#173b72,#c9a227,#176b57);
+}
+.pro-legal-content h2{
+ color:#173b72;
+ background:linear-gradient(90deg,#f4f7f9,#fff);
+ border-right-color:#c9a227;
+ box-shadow:inset 0 -1px 0 #edf1f3;
+}
+.pro-legal-content h3{color:#176b57}
+.pro-legal-content li::marker{color:#c9a227}
+.pro-legal-update{
+ background:#f6f1dc;color:#6f5710;border-color:#e7d79a;
+}
+.pro-footer{
+ background:linear-gradient(145deg,#0d203c,#102f5d 60%,#123f36);
+ border-top:4px solid #c9a227;
+}
+.pro-footer-col a:hover{color:#eadb9a}
+@media(max-width:760px){
+ .pro-info-grid{grid-template-columns:1fr}
+ .pro-container:before,.pro-container-narrow:before{display:none}
+ .pro-hero:before{width:280px;height:280px;right:-130px;top:-150px}
+ .pro-hero:after{width:240px;height:240px;left:-120px;bottom:-160px}
+}
+@media(prefers-reduced-motion:reduce){
+ .pro-btn:hover{transform:none}
+}
