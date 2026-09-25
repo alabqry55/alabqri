@@ -8733,11 +8733,12 @@ function toggleQualificationDocs() {
 (function(){
     'use strict';
     function openWhyCenterSection(){
-        if(window.location.hash !== '#qualifications-why') return;
+        var hash=window.location.hash;
+        if(hash !== '#qualifications-why' && hash !== '#qualifications') return;
         function go(){
             if(typeof window.switchTab === 'function') window.switchTab('qualifications', true);
             setTimeout(function(){
-                var target=document.getElementById('qualifications-why');
+                var target=(hash === '#qualifications-why') ? document.getElementById('qualifications-why') : document.getElementById('qualifications');
                 if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
             }, 120);
         }
