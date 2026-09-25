@@ -8734,11 +8734,15 @@ function toggleQualificationDocs() {
     'use strict';
     function openWhyCenterSection(){
         var hash=window.location.hash;
-        if(hash !== '#qualifications-why' && hash !== '#qualifications') return;
+        if(hash !== '#qualifications-why' && hash !== '#qualifications' && hash !== '#contact') return;
         function go(){
-            if(typeof window.switchTab === 'function') window.switchTab('qualifications', true);
+            var tab = (hash === '#contact') ? 'contact' : 'qualifications';
+            if(typeof window.switchTab === 'function') window.switchTab(tab, true);
             setTimeout(function(){
-                var target=(hash === '#qualifications-why') ? document.getElementById('qualifications-why') : document.getElementById('qualifications');
+                var target;
+                if(hash === '#qualifications-why') target=document.getElementById('qualifications-why');
+                else if(hash === '#qualifications') target=document.getElementById('qualifications');
+                else target=document.getElementById('contact');
                 if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
             }, 120);
         }
