@@ -2216,283 +2216,30 @@ html { scroll-behavior: auto !important; }
 
 <!-- =========================================================
      📚 مركز التوثيق والإعتمادات والوثائق الرسمية
-     زر فرعي داخل تبويب المؤهلات والإعتمادات
+     بوابة موحدة داخل تبويب المؤهلات والإعتمادات
      ========================================================= -->
 <div class="mb-5">
-    <button
-        type="button"
-        id="qualification-docs-toggle"
-        onclick="toggleQualificationDocs()"
-        aria-expanded="false"
-        aria-controls="qualification-docs-panel"
-        class="w-full bg-white/90 border-2 border-blue-700 rounded-2xl p-3 md:p-4 shadow-sm hover:shadow-lg hover:border-blue-500 transition-all duration-200 text-right"
-    >
+    <a href="/documentation.html" target="_self"
+       class="abq-docs-entry group block w-full text-right bg-white/95 border-2 border-blue-700 rounded-2xl p-3 md:p-4 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-200"
+       aria-label="فتح مركز التوثيق والإعتمادات والوثائق الرسمية">
         <span class="flex items-center justify-between gap-3">
-            <span>
-                <span class="block text-base md:text-lg font-black text-green-700">📚 مركز التوثيق والإعتمادات والوثائق الرسمية</span>
-                <span class="block text-xs md:text-sm font-bold text-slate-600 mt-1">التحقق من الشهادات • توثيق المركز • سياسات الشهادات • الوثائق والسياسات الرسمية</span>
-                <span class="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-blue-700 text-white text-[11px] md:text-xs font-black shadow-sm">
-                    👆 اضغط هنا لفتح المركز
+            <span class="flex items-center gap-3 min-w-0">
+                <span class="abq-docs-entry-icon shrink-0" aria-hidden="true">📚</span>
+                <span class="min-w-0">
+                    <span class="block text-base md:text-lg font-black text-green-700">مركز التوثيق والإعتمادات والوثائق الرسمية</span>
+                    <span class="block text-xs md:text-sm font-bold text-slate-600 mt-1">التوثيق الرسمي • سياسة الشهادات والتحقق • شروط الاستخدام • الخصوصية • إخلاء المسؤولية</span>
+                    <span class="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-blue-700 text-white text-[11px] md:text-xs font-black shadow-sm">
+                        👆 افتح البوابة الموحدة
+                    </span>
                 </span>
             </span>
-            <span class="flex flex-col items-center gap-1 shrink-0" aria-hidden="true">
-                <span id="qualification-docs-arrow" class="text-xl text-blue-700 font-black leading-none">⌄</span>
-                <span class="text-[10px] md:text-[11px] text-blue-700 font-black whitespace-nowrap">فتح</span>
+            <span class="shrink-0 text-center text-blue-700 font-black" aria-hidden="true">
+                <span class="block text-2xl leading-none">←</span>
+                <span class="text-[10px] md:text-[11px]">فتح</span>
             </span>
         </span>
-    </button>
-
-    <div id="qualification-docs-panel" class="hidden mt-3 bg-blue-50/60 rounded-2xl border border-blue-700 p-3 md:p-4" aria-hidden="true">
-        <div class="text-center mb-4">
-            <h3 class="text-lg md:text-xl font-black text-blue-800">📚 مركز التوثيق والإعتمادات والوثائق الرسمية</h3>
-            <p class="text-xs md:text-sm font-bold text-slate-600 mt-1">يمكنك فتح أي وثيقة أو بوابة من البطاقات التالية.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-
-            <a href="/verify-certificate.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-emerald-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">🔐</div>
-                <h4 class="font-black text-emerald-700">بوابة التحقق من الشهادات</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">تحقق من رقم الشهادة أو كود التحقق الرقمي.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">فتح البوابة ←</span>
-            </a>
-
-            <a href="/verification.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-blue-700 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">🏛️</div>
-                <h4 class="font-black text-blue-700">التوثيق الرسمي للمركز</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">بيانات الهوية والتوثيق الرسمي ورمز QR.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">فتح صفحة التوثيق ←</span>
-            </a>
-
-            <a href="/certificate-policy.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-amber-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">📜</div>
-                <h4 class="font-black text-amber-700">سياسة الشهادات</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">سياسة إصدار الشهادات وأنواعها وآلية التحقق منها.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض السياسة ←</span>
-            </a>
-
-            <a href="/terms-of-use.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-slate-500 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">📋</div>
-                <h4 class="font-black text-slate-700">شروط الاستخدام</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">القواعد والحقوق والالتزامات الخاصة بالموقع والخدمات.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض الشروط ←</span>
-            </a>
-
-            <a href="/privacy-policy.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-cyan-600 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">🔒</div>
-                <h4 class="font-black text-cyan-700">سياسة الخصوصية</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">كيفية جمع البيانات واستخدامها وحمايتها.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض السياسة ←</span>
-            </a>
-
-            <a href="/disclaimer.html" target="_self" rel="noopener noreferrer"
-               class="bg-white rounded-xl border border-rose-500 p-4 text-right shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="text-2xl mb-2">⚠️</div>
-                <h4 class="font-black text-rose-700">إخلاء المسؤولية</h4>
-                <p class="text-xs font-semibold text-slate-600 mt-1">الضوابط المتعلقة بالمحتوى التعليمي والتكميلي.</p>
-                <span class="inline-block mt-3 text-xs font-black text-blue-700">عرض الوثيقة ←</span>
-            </a>
-
-            <a
-                href="https://linktr.ee/ahmedrassah"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group w-full col-span-full px-5 py-3.5
-                       bg-green-500 hover:bg-green-600
-                       text-white
-                       rounded-xl
-                       shadow-md hover:shadow-xl
-                       flex items-center justify-center gap-2
-                       transition-all duration-300">
-
-                <span class="text-lg group-hover:scale-110 transition-transform">
-                    🔗
-                </span>
-
-                <span class="font-black text-center">
-                    ( إفتح شجرة حسابات المركز الرسمية )
-                </span>
-
-            </a>
-
-        </div>
-
-    </div>
+    </a>
 </div>
-
-<!-- =========================================================
-     🏆 لماذا مركز العبقري + السيرة الذاتية والخبرات والاعتمادات
-     ========================================================= -->
-
-
-    <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-3 mb-3
-                transition-all duration-300
-                hover:shadow-lg hover:border-blue-500">
-
-        <!-- 7) لماذا مركز العبقري -->
-        <div class="mb-6">
-
-            <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
-
-                <h3 class="section-title text-center">
-                    لماذا مركز العبقري؟
-                </h3>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-
-                    <div class="why-card">
-                        <i class="fas fa-award"></i>
-                        <span>إعتماد رسمي</span>
-                    </div>
-
-                    <div class="why-card">
-                        <i class="fas fa-clock-rotate-left"></i>
-                        <span>خبرة طويلة</span>
-                    </div>
-
-                    <div class="why-card">
-                        <i class="fas fa-certificate"></i>
-                        <span>شهادات معتمدة</span>
-                    </div>
-
-                    <div class="why-card">
-                        <i class="fas fa-headset"></i>
-                        <span>متابعة بعد التدريب</span>
-                    </div>
-
-                    <div class="why-card">
-                        <i class="fas fa-laptop-house"></i>
-                        <span>حضوري وأونلاين</span>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- السيرة الذاتية -->
-        <div>
-
-<div class="flex items-center justify-center my-3">
-
-    <div class="relative inline-flex items-center justify-center">
-
-        <!-- الموجة الأولى -->
-        <span
-            class="absolute inset-0 rounded-full border-2 border-green-600
-                   animate-[ripple_2s_ease-out_infinite]"
-            aria-hidden="true">
-        </span>
-
-        <!-- الموجة الثانية -->
-        <span
-            class="absolute inset-0 rounded-full border-2 border-green-500
-                   animate-[ripple_2s_ease-out_infinite_0.7s]"
-            aria-hidden="true">
-        </span>
-
-        <!-- النص -->
-        <div
-            class="relative z-10 bg-white/90
-                   border border-green-700
-                   rounded-full
-                   px-4 py-2
-                   shadow-sm
-                   text-center"
-        >
-            <h3 class="text-xl md:text-2xl font-black text-green-700 leading-8 m-0">
-                🏆 السيرة الذاتية والخبرات والاعتمادات
-            </h3>
-        </div>
-
-    </div>
-
-</div>
-
-
-            <div class="space-y-2">
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        🕯️ <span class="text-blue-700 font-black">[2018]</span>
-                        — عضو رابطة الروحانيين العرب | معالج روحاني معتمد من أكاديمية الجعفري للعلوم الروحانية والطب التكميلي (برقم: 65).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        📜 <span class="text-blue-700 font-black">[2019]</span>
-                         — أستاذ معلم / مدرب مدربين (TOT) | معتمد من الإتحاد العربي للتدريب والإستشارات | لتأهيل وقيادة الكوادر التدريبية المتميزة .
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        🔬 <span class="text-blue-700 font-black">[2020]</span>
-                        — دكتور في علوم الطاقة الحيوية والباراسيكولوجي | معتمد من الإتحاد العربي برقم (3349) ونادي أصدقاء الطاقة الدولي بكامبريدج London برقم (UN12389010).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        🧘‍♂️ <span class="text-blue-700 font-black">[2021]</span>
-                        — أستاذ معلم ومعالج بالريكي الإسلامي | المجلس العالمي للميتافيزيقا والتنمية البشرية وعضو دائم برقم (IRM502021).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        🏛️ <span class="text-blue-700 font-black">[2022]</span>
-                        — المؤسس والمدير العام | لمركز العبقري للتدريب والإستشارات (س.ت.92527).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        ⚖️ <span class="text-blue-700 font-black">[2023]</span>
-                        — مستشار حقوق الإنسان (لجنة تقصي الحقائق) | المنظمة الدولية للتنمية البشرية وحقوق الإنسان (برقم: 200000910).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        🩺 <span class="text-blue-700 font-black">[2024]</span>
-                        — أستاذ معالج ومدرب محترف | العالمية أكاديمي للتدريب والتأهيل الشامل (الحجامة، الإبر الصينية، التدليك، الطب التكميلي).
-                    </p>
-                </div>
-
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        📖 <span class="text-blue-700 font-black">[2025]</span>
-                        — عضو جمعية الإعجاز العلمي المتجدد في القرآن والسنة | (برقم: 1127).
-                    </p>
-                </div>
-
-                <!-- 2026 -->
-                <div class="bg-white/80 rounded-xl border border-blue-700 p-3">
-                    <p class="text-green-800 font-bold leading-8 text-right">
-                        📖
-                        <span class="text-blue-700 font-black">[2026]</span>
-                  
-                         المؤسس والمدير العام | لمنصة العبقري للتدريب والإستشارات (الطب التكميلي والتنمية البشرية🌿) الذي تشرفونا به الآن <span class="text-blue-500 font-black">https://alabqri.pages.dev/</span>
-                    </p>
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-
 
 <!-- =====================================================
      📁 معرض الصور والشهادات والاعتمادات
