@@ -206,3 +206,15 @@ body{
 .abq-docs-back{margin-top:1rem;text-align:center}
 .abq-docs-back p{margin:.25rem 0 1rem}
 @media(max-width:760px){.abq-docs-grid{grid-template-columns:1fr}.abq-doc-tile{grid-column:1;min-height:155px}.abq-doc-row-label{grid-column:1}.abq-doc-icon{width:48px;height:48px}}
+
+/* ===== مدخل مركز التوثيق داخل تبويب المؤهلات ===== */
+.abq-docs-entry{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(251,250,245,.98))!important}
+.abq-docs-entry:before{content:"✦";position:absolute;left:-10px;bottom:-28px;font-size:6rem;color:rgba(201,162,39,.08);pointer-events:none}
+.abq-docs-entry-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:1rem;background:linear-gradient(145deg,#173b72,#176b57);border:2px solid rgba(201,162,39,.55);box-shadow:0 10px 22px -15px #173b72;font-size:1.4rem}
+.abq-policy-verify-panel{margin-top:1rem!important;text-align:center;border-top-color:var(--abq-gold)!important;background:linear-gradient(145deg,#fbfaf5,#f4f8f7)!important}
+.abq-policy-verify-icon{width:52px;height:52px;margin:0 auto .5rem;display:grid;place-items:center;border-radius:50%;background:#173b72;color:#fff;border:2px solid var(--abq-gold-soft);font-size:1.35rem}
+.abq-policy-verify-panel h2{margin:.2rem 0 .4rem!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+.abq-policy-verify-panel p{max-width:760px;margin:.3rem auto 1rem;color:#475569;font-weight:700}
+.abq-policy-verify-actions{display:flex;justify-content:center;align-items:center;gap:.7rem;flex-wrap:wrap}
+.abq-secondary-doc-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#173b72!important;background:#fff;border:1px solid #cbd5e1;border-radius:.85rem;padding:.7rem 1rem;font-weight:900}
+.abq-secondary-doc-btn:hover{border-color:var(--abq-gold);background:#fbfaf5}
