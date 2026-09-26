@@ -2241,6 +2241,49 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 
+
+<style id="abq-mobile-title-align-right-full-width">
+/* ===== احتواء منطقة عنوان الهيدر يمين الشاشة بالموبايل ===== */
+@media (max-width:768px){
+  header > .container > div:first-child{
+    width:100% !important;
+    justify-content:flex-start !important;
+    align-items:center !important;
+    text-align:right !important;
+    direction:rtl !important;
+  }
+  header > .container > div:first-child > div:first-child{
+    flex:0 0 3rem !important;
+    width:3rem !important;
+    min-width:3rem !important;
+    height:3rem !important;
+  }
+  header > .container > div:first-child > div:last-child{
+    flex:1 1 auto !important;
+    width:auto !important;
+    max-width:none !important;
+    min-width:0 !important;
+    text-align:right !important;
+  }
+  header h1{
+    width:100% !important;
+    max-width:none !important;
+    text-align:right !important;
+    overflow:visible !important;
+  }
+  header h1 > span{
+    width:100% !important;
+    text-align:right !important;
+  }
+  header h1 span.text-lg.font-extrabold.text-green-600{
+    width:100% !important;
+    text-align:right !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
