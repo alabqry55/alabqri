@@ -1563,6 +1563,113 @@ html { scroll-behavior: auto !important; }
     }
 }
 </style>
+<style id="abq-hero-layout-final-fix">
+/* ===== الهيرو بعرض الشاشة + الأزرار أسفله + إطار الزوار الموحد ===== */
+.abq-home-live-hero{
+    width:100vw !important;
+    max-width:100vw !important;
+    margin-inline-start:calc(50% - 50vw) !important;
+    margin-inline-end:calc(50% - 50vw) !important;
+    margin-bottom:0 !important;
+    min-height:clamp(420px,48vw,620px) !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    border-radius:0 !important;
+}
+.abq-home-live-actions-below{
+    position:relative;
+    z-index:4;
+    width:min(1100px,calc(100% - 1.5rem));
+    margin:.7rem auto .45rem;
+    padding:.5rem;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:.45rem;
+    border:1px solid rgba(37,99,235,.18);
+    border-radius:1rem;
+    background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(239,246,255,.96));
+    box-shadow:0 10px 25px -18px rgba(15,23,42,.5);
+}
+.abq-home-live-actions-below .abq-home-live-action{
+    flex:0 1 auto;
+}
+.abq-hero-visitor-welcome{
+    width:min(1100px,calc(100% - 1.5rem));
+    margin:.35rem auto 1rem;
+    padding:.7rem .9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:.7rem 1.2rem;
+    border:1px solid rgba(37,99,235,.2);
+    border-radius:1rem;
+    background:linear-gradient(135deg,#eff6ff,#ffffff);
+    box-shadow:0 10px 25px -18px rgba(37,99,235,.38);
+}
+.abq-hero-visitor-welcome .abq-visitor-counter{
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    display:inline-flex !important;
+    font-size:.82rem;
+}
+.abq-hero-visitor-welcome .abq-hero-welcome{
+    margin:0 !important;
+    color:#047857 !important;
+    font-size:clamp(.78rem,1.2vw,.98rem) !important;
+    line-height:1.8 !important;
+    text-align:center;
+}
+@media(max-width:768px){
+    .abq-home-live-hero{
+        min-height:420px !important;
+    }
+    .abq-home-live-actions-below{
+        width:calc(100% - 1rem);
+        gap:.35rem;
+        padding:.4rem;
+        margin-top:.55rem;
+    }
+    .abq-home-live-actions-below .abq-home-live-action{
+        padding:.5rem .55rem;
+        font-size:.66rem;
+        border-radius:.7rem;
+    }
+    .abq-hero-visitor-welcome{
+        width:calc(100% - 1rem);
+        padding:.6rem .5rem;
+        gap:.3rem .7rem;
+        margin-bottom:.8rem;
+    }
+    .abq-hero-visitor-welcome .abq-visitor-counter{
+        font-size:.72rem;
+    }
+    .abq-hero-visitor-welcome .abq-hero-welcome{
+        font-size:.72rem !important;
+        line-height:1.75 !important;
+    }
+}
+@media(max-width:420px){
+    .abq-home-live-hero{min-height:400px !important;}
+    .abq-home-live-actions-below .abq-home-live-action{
+        flex:1 1 calc(50% - .35rem);
+        min-width:0;
+        font-size:.62rem;
+        padding:.48rem .3rem;
+    }
+    .abq-hero-visitor-welcome{
+        flex-direction:column;
+        gap:.15rem;
+    }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1738,34 +1845,27 @@ html { scroll-behavior: auto !important; }
         <section id="home" class="tab-content tab-active animate-in fade-in duration-500">
 
             <!-- 1) HERO -->
-            <div class="abq-home-live-hero hero-bg text-white rounded-3xl shadow-2xl mb-10 border border-blue-400/50 relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
+            <div class="abq-home-live-hero hero-bg text-white shadow-2xl relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
     <div class="abq-home-live-overlay" aria-hidden="true"></div>
-
-    <div class="abq-home-live-content">
-        <div class="abq-home-live-actions" aria-label="روابط سريعة">
-            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
-            <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
-            <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
-            <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
-            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
-        </div>
-
-        <div class="abq-home-live-welcome" aria-live="polite">
-            <span>🌿</span>
-            <strong>أهلاً بأعضاء وزوار منصة العبقري الكرام</strong>
-            <span>🌿</span>
-        </div>
-    </div>
 </div>
 
+<!-- الأزرار الرئيسية أسفل صورة الهيرو -->
+<div class="abq-home-live-actions abq-home-live-actions-below" aria-label="روابط سريعة">
+    <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
+    <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
+    <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
+    <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
+    <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
+</div>
 
-<div class="abq-hero-visitor-welcome w-full flex flex-wrap items-center justify-center gap-3 text-center">
-    <div class="abq-visitor-counter loading max-w-full flex flex-wrap items-center justify-center gap-2 text-center" aria-live="polite" aria-label="عداد زوار منصة العبقري">
+<!-- عداد الزوار ورسالة الترحيب في إطار واحد -->
+<div class="abq-hero-visitor-welcome" aria-live="polite">
+    <div class="abq-visitor-counter loading" aria-label="عداد زوار منصة العبقري">
         <i class="fa-solid fa-eye" aria-hidden="true"></i>
         <span>زوار المنصة</span>
         <span id="abq-visitor-count" class="abq-visitor-count">—</span>
     </div>
-    <p class="abq-hero-welcome text-[19px] md:text-[21px] font-bold text-green-600 mt-0 leading-relaxed">
+    <p class="abq-hero-welcome">
         <strong>🌿أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"🌿</strong>
     </p>
 </div>
