@@ -9058,3 +9058,52 @@ function toggleQualificationDocs() {
     }
 }
 </style>
+
+
+<style id="abq-visitor-welcome-alignment">
+/* ===== محاذاة عداد الزوار والرسالة الترحيبية ===== */
+@media (min-width: 769px){
+    #home .abq-hero-visitor-welcome{
+        display:flex !important;
+        align-items:center !important;
+        justify-content:space-between !important;
+        flex-wrap:nowrap !important;
+        gap:1rem !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-visitor-counter{
+        order:1 !important;
+        margin-right:0 !important;
+        margin-left:0 !important;
+        flex:0 0 auto !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-hero-welcome{
+        order:2 !important;
+        flex:1 1 auto !important;
+        text-align:center !important;
+        margin:0 !important;
+    }
+}
+@media (max-width: 768px){
+    #home .abq-hero-visitor-welcome{
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        flex-direction:column !important;
+        flex-wrap:nowrap !important;
+        gap:.5rem !important;
+        text-align:center !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-visitor-counter{
+        order:1 !important;
+        margin:0 auto !important;
+        max-width:100% !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-hero-welcome{
+        order:2 !important;
+        width:100% !important;
+        margin:0 !important;
+        text-align:center !important;
+        line-height:1.75 !important;
+    }
+}
+</style>
