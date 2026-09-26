@@ -8738,89 +8738,15 @@ html, body {
     }
 }
 </style>
-<script id="abq-fast-scroll-final-controller">
+<script id="abq-scroll-native-final">
 (function(){
-    'use strict';
-
-    /* سرعة الانتقال عند الضغط على الروابط/الأزرار التي تستخدم التمرير */
-    var CLICK_DURATION = 140;
-    var wheelLock = false;
-
-    function ease(t){
-        return t < 0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
-    }
-
-    function fastTo(y, duration){
-        y = Math.max(0, Number(y) || 0);
-        var start = window.pageYOffset || document.documentElement.scrollTop || 0;
-        var distance = y - start;
-        if (Math.abs(distance) < 2) { window.scrollTo(0,y); return; }
-        if (window.__abqScrollRAF) cancelAnimationFrame(window.__abqScrollRAF);
-        var t0 = performance.now();
-        function step(now){
-            var t = Math.min(1,(now-t0)/duration);
-            window.scrollTo(0,start + distance*ease(t));
-            if(t<1) window.__abqScrollRAF=requestAnimationFrame(step);
-            else window.__abqScrollRAF=null;
-        }
-        window.__abqScrollRAF=requestAnimationFrame(step);
-    }
-
-    window.abqFastScrollTo = function(target, duration){
-        var y;
-        if(typeof target === 'number') y=target;
-        else if(target && target.getBoundingClientRect){
-            y=(target.getBoundingClientRect().top + (window.pageYOffset || 0));
-        } else return;
-        fastTo(y, Number(duration)||CLICK_DURATION);
-    };
-
-    /* الماوس: زيادة سرعة عجلة التمرير فقط، مع الحفاظ على السلاسة وعدم التأثير على النقر */
-    document.addEventListener('wheel', function(e){
-        if (wheelLock || Math.abs(e.deltaY) < 1) return;
-        if (e.ctrlKey) return;
-        var target=e.target;
-        if (target && target.closest && target.closest('textarea, input, select, [data-no-fast-scroll]')) return;
-
-        var multiplier = e.deltaMode === 1 ? 1.75 : 1.28;
-        var delta = e.deltaY * multiplier;
-        var max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        var current = window.pageYOffset || document.documentElement.scrollTop || 0;
-        var next = Math.max(0, Math.min(max, current + delta));
-
-        if (Math.abs(next-current) < 1) return;
-        e.preventDefault();
-        window.scrollTo(0,next);
-    }, {passive:false});
-
-    /* اللمس على الموبايل يظل Native بالكامل؛ لا يتم اعتراض swipe */
-    document.addEventListener('touchstart', function(){ wheelLock=false; }, {passive:true});
-
-    /* تأكيد حالة التبويبات الرئيسية بعد تحميل الصفحة: قسم رئيسي واحد فقط */
-    function verifyMainTabs(){
-        var ids=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-        var host=document.querySelector('.main-tabs-content');
-        if(!host) return;
-        var found=[];
-        ids.forEach(function(id){
-            var el=document.getElementById(id);
-            if(el && el.parentElement===host) found.push(el);
-        });
-        if(!found.length) return;
-        var active=found.find(function(el){ return el.classList.contains('tab-active'); }) || found[0];
-        found.forEach(function(el){
-            var on=el===active;
-            el.classList.toggle('tab-active',on);
-            el.style.setProperty('display',on?'block':'none','important');
-            el.style.setProperty('visibility',on?'visible':'hidden','important');
-        });
-    }
-
-    if(document.readyState==='loading'){
-        document.addEventListener('DOMContentLoaded', function(){ setTimeout(verifyMainTabs,50); }, {once:true});
-    } else {
-        setTimeout(verifyMainTabs,50);
-    }
+  'use strict';
+  /* التمرير الطبيعي بالكامل: لمس الموبايل + عجلة الماوس */
+  document.documentElement.style.scrollBehavior='auto';
+  document.documentElement.style.overscrollBehaviorY='none';
+  document.body.style.overscrollBehaviorY='none';
+  document.body.style.overflowX='hidden';
+  /* لا اعتراض على wheel/touch: المتصفح يدير الحركة طبيعيًا */
 })();
 </script>
 
@@ -8848,127 +8774,42 @@ function toggleQualificationDocs() {
      ALABQRI — MAIN TABS FIRST-CLICK / WHITE-PAGE FIX
      إصلاح فتح التبويبات من أول ضغطة فقط دون تغيير محتواها
      ========================================================= -->
-<style id="abq-main-tabs-first-click-fix">
-.main-tabs-content > section.tab-content {
-    display: none !important;
-    visibility: hidden !important;
-}
-.main-tabs-content > section.tab-content.tab-active {
-    display: block !important;
-    visibility: visible !important;
-}
+<style id="abq-main-tabs-clean-fix">
+.main-tabs-content > section.tab-content{display:none!important;visibility:hidden!important}
+.main-tabs-content > section.tab-content.tab-active{display:block!important;visibility:visible!important}
 </style>
 
-<script id="abq-main-tabs-first-click-fix-js">
-(function () {
-    'use strict';
-
-    var IDS = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-
-    function getHost() {
-        return document.querySelector('.main-tabs-content');
-    }
-
-    function getIdFromButton(button) {
-        if (!button) return null;
-        var action = button.getAttribute('onclick') || '';
-        var match = action.match(/switchTab\(['"]([^'"]+)['"]/);
-        if (match && IDS.indexOf(match[1]) !== -1) return match[1];
-
-        var id = button.getAttribute('data-tab') || button.getAttribute('data-target');
-        return IDS.indexOf(id) !== -1 ? id : null;
-    }
-
-    function normalizeSections() {
-        var host = getHost();
-        if (!host) return [];
-        var sections = [];
-        IDS.forEach(function (id) {
-            var el = document.getElementById(id);
-            if (!el) return;
-            if (el.parentElement !== host) host.appendChild(el);
-            sections.push(el);
-        });
-        return sections;
-    }
-
-    function showTab(id) {
-        if (IDS.indexOf(id) === -1) return false;
-
-        var host = getHost();
-        if (!host) return false;
-
-        var sections = normalizeSections();
-        var target = document.getElementById(id);
-        if (!target || sections.indexOf(target) === -1) return false;
-
-        sections.forEach(function (section) {
-            var active = section === target;
-            section.classList.toggle('tab-active', active);
-            section.style.setProperty('display', active ? 'block' : 'none', 'important');
-            section.style.setProperty('visibility', active ? 'visible' : 'hidden', 'important');
-            section.setAttribute('aria-hidden', active ? 'false' : 'true');
-        });
-
-        document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function (btn) {
-            var btnId = getIdFromButton(btn);
-            var active = btnId === id;
-            btn.classList.toggle('active', active);
-            btn.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-
-        if (id === 'azkar' && typeof window.azkarInit === 'function') {
-            try { window.azkarInit(); } catch (e) {}
-        }
-
-        return true;
-    }
-
-    /*
-     * مهم:
-     * نوقف الـ onclick القديم الخاص بالتبويب قبل أن يعمل.
-     * هذا يمنع التداخل بين أكثر من متحكم تبويبات، وهو سبب ظهور
-     * الصفحة البيضاء/الحالة الوسيطة في أول ضغطة.
-     */
-    document.addEventListener('click', function (event) {
-        var button = event.target && event.target.closest
-            ? event.target.closest('.main-tabs-nav .nav-btn')
-            : null;
-
-        if (!button) return;
-
-        var id = getIdFromButton(button);
-        if (!id) return;
-
-        event.preventDefault();
-        event.stopImmediatePropagation();
-
-        showTab(id);
-
-        if (id !== 'home') {
-            window.scrollTo(0, 0);
-        }
-    }, true);
-
-    function initialize() {
-        var current = null;
-
-        var activeButton = document.querySelector('.main-tabs-nav .nav-btn.active');
-        if (activeButton) current = getIdFromButton(activeButton);
-
-        if (!current) {
-            var hash = (location.hash || '').replace(/^#/, '');
-            current = IDS.indexOf(hash) !== -1 ? hash : 'home';
-        }
-
-        showTab(current);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize, { once: true });
-    } else {
-        initialize();
-    }
+<script id="abq-main-tabs-single-controller">
+(function(){
+ 'use strict';
+ const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+ function host(){return document.querySelector('.main-tabs-content');}
+ function activate(id){
+   if(!IDS.includes(id)) return false;
+   const h=host(); if(!h)return false;
+   IDS.forEach(x=>{const el=document.getElementById(x); if(el&&el.parentElement===h){const on=x===id;el.classList.toggle('tab-active',on);el.style.setProperty('display',on?'block':'none','important');el.style.setProperty('visibility',on?'visible':'hidden','important');}});
+   document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(btn=>{
+     const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
+     const bid=String(raw).replace(/^#/,'');
+     btn.classList.toggle('active',bid===id);
+     btn.setAttribute('aria-selected',bid===id?'true':'false');
+   });
+   return true;
+ }
+ window.abqActivateMainTab=activate;
+ document.addEventListener('click',function(e){
+   const btn=e.target.closest?.('.main-tabs-nav .nav-btn'); if(!btn)return;
+   const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
+   const id=String(raw).replace(/^#/,''); if(!IDS.includes(id))return;
+   e.preventDefault(); e.stopImmediatePropagation();
+   activate(id);
+   window.scrollTo(0,0);
+ },true);
+ function init(){
+   const active=IDS.find(id=>document.getElementById(id)?.classList.contains('tab-active'))||'home';
+   activate(active);
+ }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 })();
 </script>
 
