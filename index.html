@@ -8253,9 +8253,20 @@ window.AbqToast = (function(){
     var API = '/api/feedback';
     var SUBMIT_COOLDOWN_MS = 5 * 60 * 1000; /* 5 دقائق بين كل تعليق وآخر لنفس الزائر */
 
-    /* مفتاح إداري بسيط يُرسل فقط عند تفعيل وضع المدير محلياً، للسماح بحذف تعليق من الخادم.
-       يجب ضبط نفس القيمة في متغير بيئة FEEDBACK_ADMIN_KEY في إعدادات Cloudflare Pages. */
-    var ADMIN_KEY = '237945';
+    /* لا نضع مفتاح FEEDBACK_ADMIN_KEY داخل الواجهة العامة.
+       عند الحذف يطلب النظام المفتاح من المدير ويحتفظ به للجلسة الحالية فقط. */
+    function getAdminKey(){
+        try{
+            var saved = sessionStorage.getItem('abq_feedback_admin_key') || '';
+            if(saved) return saved;
+        }catch(e){}
+        var entered = window.prompt('أدخل مفتاح المدير لحذف التعليق:');
+        entered = String(entered || '').trim();
+        if(entered){
+            try{ sessionStorage.setItem('abq_feedback_admin_key', entered); }catch(e){}
+        }
+        return entered;
+    }
 
     var RATING_META = {
         excellent:  { emoji:'😍', label:'ممتازة' },
@@ -8458,7 +8469,17 @@ window.AbqToast = (function(){
             renderComments(comments);
             notify('🗑 تم حذف التعليق.', 'success');
 
-            await apiRequest({action:'delete', id:id}, {'X-Admin-Key': ADMIN_KEY});
+            var adminKey = getAdminKey();
+            if(!adminKey){
+                notify('⚠️ لم يتم إدخال مفتاح المدير.', 'error');
+                return;
+            }
+            var deleteResponse = await apiRequest({action:'delete', id:id}, {'X-Admin-Key': adminKey});
+            if(deleteResponse && deleteResponse.error === 'Unauthorized.'){
+                try{ sessionStorage.removeItem('abq_feedback_admin_key'); }catch(e){}
+                notify('⚠️ مفتاح المدير غير صحيح أو غير مفعّل على Cloudflare.', 'error');
+                return;
+            }
             loadFromApi();
         });
 
