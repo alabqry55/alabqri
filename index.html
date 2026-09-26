@@ -8777,8 +8777,14 @@ window.AbqToast = (function(){
      ========================================================= -->
 <style id="abq-fast-scroll-final-style">
 html, body {
-    overscroll-behavior-y: auto;
+    overscroll-behavior-y: auto !important;
+    overscroll-behavior-x: none !important;
     scroll-behavior: auto !important;
+    overflow-y: auto !important;
+}
+body {
+    height: auto !important;
+    min-height: 100vh !important;
 }
 
 @media (max-width: 767px) {
@@ -8795,12 +8801,14 @@ html, body {
 <script id="abq-scroll-native-final">
 (function(){
   'use strict';
-  /* التمرير الطبيعي بالكامل: لمس الموبايل + عجلة الماوس */
+  /* حركة الماوس واللمس تعتمد على محرك المتصفح الطبيعي بدون اعتراض أو قفزات */
   document.documentElement.style.scrollBehavior='auto';
-  document.documentElement.style.overscrollBehaviorY='none';
-  document.body.style.overscrollBehaviorY='none';
+  document.documentElement.style.overscrollBehaviorY='auto';
+  document.documentElement.style.overflowY='auto';
+  document.body.style.overscrollBehaviorY='auto';
   document.body.style.overflowX='hidden';
-  /* لا اعتراض على wheel/touch: المتصفح يدير الحركة طبيعيًا */
+  document.body.style.overflowY='auto';
+  /* لا wheel/touch listeners هنا: عجلة الماوس والسحب باللمس يعملان طبيعيًا */
 })();
 </script>
 
