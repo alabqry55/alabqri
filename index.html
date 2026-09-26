@@ -9266,3 +9266,62 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+<style id="abq-welcome-green-blue-gold">
+/* ===== الأخضر الملكي + الهالة الزرقاء + الشعاع الذهبي ===== */
+@keyframes abqBlueHaloPulse{
+  0%,100%{
+    text-shadow:
+      0 0 4px rgba(37,99,235,.72),
+      0 0 10px rgba(37,99,235,.5),
+      0 0 18px rgba(59,130,246,.28);
+  }
+  50%{
+    text-shadow:
+      0 0 6px rgba(37,99,235,1),
+      0 0 14px rgba(59,130,246,.82),
+      0 0 25px rgba(96,165,250,.5),
+      0 0 34px rgba(37,99,235,.22);
+  }
+}
+@keyframes abqGoldBeam{
+  0%,42%{background-position:220% center;}
+  72%,100%{background-position:-220% center;}
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  animation:abqBlueHaloPulse 2.6s ease-in-out infinite,
+            abqGoldBeam 5s linear infinite !important;
+  background:linear-gradient(
+    90deg,
+    #047857 0%,
+    #059669 30%,
+    #0f766e 42%,
+    #047857 46%,
+    #d4af37 49%,
+    #fff1a8 50%,
+    #f5d76e 51%,
+    #d4af37 52%,
+    #047857 56%,
+    #0f766e 68%,
+    #059669 82%,
+    #047857 100%
+  ) !important;
+  background-size:320% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  font-weight:900 !important;
+}
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqBlueHaloPulse 2.8s ease-in-out infinite,
+              abqGoldBeam 5.8s linear infinite !important;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqBlueHaloPulse 3s ease-in-out infinite !important;
+  }
+}
+</style>
