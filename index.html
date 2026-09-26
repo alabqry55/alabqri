@@ -9149,3 +9149,34 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+<style id="abq-welcome-gold-royal">
+/* ===== رسالة الترحيب الذهبية الملكية المضيئة ===== */
+@keyframes abqRoyalGoldGlow{
+  0%,100%{
+    text-shadow:0 0 4px rgba(212,175,55,.35),0 0 10px rgba(212,175,55,.22);
+  }
+  50%{
+    text-shadow:0 0 7px rgba(245,215,110,.85),0 0 16px rgba(212,175,55,.65),0 0 28px rgba(245,215,110,.3);
+  }
+}
+@keyframes abqRoyalGoldShimmer{
+  0%{background-position:220% center;}
+  100%{background-position:-220% center;}
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  animation:abqRoyalGoldGlow 2.4s ease-in-out infinite, abqRoyalGoldShimmer 4.8s linear infinite !important;
+  background:linear-gradient(90deg,#9a7418 0%,#d4af37 20%,#f5d76e 40%,#fff1a8 50%,#d4af37 60%,#b8891f 80%,#9a7418 100%) !important;
+  background-size:280% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  font-weight:900 !important;
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqRoyalGoldGlow 3s ease-in-out infinite !important;
+  }
+}
+</style>
