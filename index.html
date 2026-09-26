@@ -2050,6 +2050,121 @@ html { scroll-behavior: auto !important; }
   }
 }
 </style>
+<style id="abq-request-20260926-three-fixes">
+/* ===== إصلاحات 26-09-2026: تبويب تواصل + ضغط شريط المعلومات + الشعار بجوار العنوان على الموبايل ===== */
+
+/* 1) تواصل معنا يتوسط صفه على الموبايل مثل الرئيسية */
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn:last-child{
+    grid-column:1 / -1 !important;
+    justify-self:center !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  /* 2) ضغط الارتفاع العام لمنطقة التاريخ/الساعة/الطقس/الموقع */
+  .abq-top-live-bar{
+    margin:.25rem auto .4rem !important;
+    padding:.2rem !important;
+    gap:.2rem !important;
+    border-radius:.75rem !important;
+  }
+  .abq-top-live-item{
+    min-height:38px !important;
+    height:38px !important;
+    padding:.18rem .2rem !important;
+    gap:.22rem !important;
+    border-radius:.5rem !important;
+  }
+  .abq-top-icon{
+    font-size:.82rem !important;
+  }
+  .abq-top-values{
+    gap:0 !important;
+  }
+  .abq-top-primary{
+    font-size:.59rem !important;
+    line-height:1.15 !important;
+  }
+  .abq-top-secondary{
+    font-size:.49rem !important;
+    line-height:1.1 !important;
+  }
+}
+@media (max-width:420px){
+  .abq-top-live-bar{
+    margin:.2rem auto .35rem !important;
+    padding:.16rem !important;
+    gap:.16rem !important;
+  }
+  .abq-top-live-item{
+    min-height:34px !important;
+    height:34px !important;
+    padding:.12rem .14rem !important;
+  }
+  .abq-top-icon{
+    font-size:.74rem !important;
+  }
+  .abq-top-primary{
+    font-size:.55rem !important;
+  }
+  .abq-top-secondary{
+    font-size:.46rem !important;
+  }
+}
+
+/* 3) على الموبايل: الشعار بجوار سطر «منصة العبقري...» وليس فوقه */
+@media (max-width:768px){
+  header > .container{
+    flex-direction:column !important;
+    align-items:center !important;
+    gap:.35rem !important;
+  }
+  header > .container > div:first-child{
+    width:100% !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.45rem !important;
+    text-align:right !important;
+  }
+  header > .container > div:first-child > div:first-child{
+    width:3rem !important;
+    height:3rem !important;
+    min-width:3rem !important;
+    border-radius:.65rem !important;
+  }
+  header > .container > div:first-child > div:last-child{
+    min-width:0 !important;
+    flex:1 1 auto !important;
+    text-align:right !important;
+  }
+  header h1{
+    justify-content:flex-start !important;
+    text-align:right !important;
+    gap:.2rem !important;
+    margin:0 !important;
+    line-height:1.25 !important;
+  }
+  header h1 > span.text-3xl{
+    font-size:1.15rem !important;
+    flex:0 0 auto !important;
+  }
+  header h1 > span:not(.text-3xl){
+    display:block !important;
+    min-width:0 !important;
+  }
+  header h1 span.text-lg.font-extrabold.text-green-600{
+    display:inline !important;
+    font-size:.7rem !important;
+    line-height:1.15 !important;
+  }
+  header > .container > div:nth-child(2){
+    width:100% !important;
+    text-align:center !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
