@@ -26,3 +26,15 @@ CREATE TABLE IF NOT EXISTS feedback_meta (
 );
 
 INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 350);
+
+
+CREATE TABLE IF NOT EXISTS feedback_ratings (
+  rating TEXT PRIMARY KEY CHECK (rating IN ('excellent','good','average','suggestion')),
+  count INTEGER NOT NULL DEFAULT 0
+);
+
+INSERT OR IGNORE INTO feedback_ratings (rating, count) VALUES
+  ('excellent', 245),
+  ('good', 63),
+  ('average', 27),
+  ('suggestion', 15);
