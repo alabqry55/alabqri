@@ -9600,6 +9600,135 @@ function toggleQualificationDocs() {
     else init();
 })();
 </script>
+<!-- =========================================================
+     ↔️ أزرار السابق واللاحق + منع ارتداد الصفحة
+     ========================================================= -->
+<style id="abq-navigation-motion-controls">
+html,body{
+  overscroll-behavior-y:none !important;
+  overscroll-behavior-x:none !important;
+}
+html{
+  scroll-behavior:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+body{
+  overflow-x:hidden !important;
+}
+#abq-page-prev-next{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:max(.75rem,env(safe-area-inset-bottom));
+  z-index:9990;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  pointer-events:none;
+  padding:0 .75rem;
+}
+#abq-page-prev-next button{
+  pointer-events:auto;
+  border:2px solid #1d4ed8;
+  background:rgba(255,255,255,.96);
+  color:#164e9a;
+  border-radius:999px;
+  min-width:112px;
+  padding:.58rem .9rem;
+  font-size:.78rem;
+  font-weight:900;
+  line-height:1.2;
+  box-shadow:0 8px 20px -10px rgba(15,23,42,.65);
+  transition:transform .15s ease,background .15s ease,opacity .15s ease;
+  backdrop-filter:blur(7px);
+}
+#abq-page-prev-next button:hover{transform:translateY(-2px);background:#eff6ff}
+#abq-page-prev-next button:active{transform:translateY(0)}
+#abq-page-prev-next button:disabled{opacity:.38;cursor:not-allowed;transform:none}
+@media(max-width:768px){
+  #abq-page-prev-next{padding:0 .45rem;bottom:max(.55rem,env(safe-area-inset-bottom))}
+  #abq-page-prev-next button{min-width:96px;padding:.52rem .68rem;font-size:.7rem}
+}
+@media(min-width:769px){
+  #abq-page-prev-next{padding:0 1.25rem}
+}
+</style>
+
+<div id="abq-page-prev-next" aria-label="التنقل بين صفحات المنصة">
+  <button id="abq-prev-btn" type="button" aria-label="السابق">→ السابق</button>
+  <button id="abq-next-btn" type="button" aria-label="اللاحق">اللاحق ←</button>
+</div>
+
+<script id="abq-page-navigation-motion">
+(function(){
+  'use strict';
+
+  /* منع ارتداد الصفحة عند الوصول إلى أعلى/أسفل المحتوى */
+  try{
+    document.documentElement.style.overscrollBehaviorY='none';
+    document.body.style.overscrollBehaviorY='none';
+  }catch(e){}
+
+  const tabs=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+  const labels={
+    home:'الرئيسية',
+    qualifications:'المؤهلات',
+    doors:'الدبلومات',
+    courses:'الدورات',
+    articles:'المقالات',
+    matrix:'المرصد',
+    azkar:'الأذكار',
+    contact:'تواصل معنا'
+  };
+
+  function currentTab(){
+    const visible=tabs.find(id=>{
+      const el=document.getElementById(id);
+      return el && !el.classList.contains('hidden') && getComputedStyle(el).display!=='none';
+    });
+    return visible || 'home';
+  }
+
+  function updateButtons(){
+    const p=document.getElementById('abq-prev-btn');
+    const n=document.getElementById('abq-next-btn');
+    if(!p||!n)return;
+    const i=Math.max(0,tabs.indexOf(currentTab()));
+    p.innerHTML=i>0?'→ السابق':'→ الرئيسية';
+    n.innerHTML=i<tabs.length-1?'اللاحق ←':'النهاية ✓';
+    p.disabled=i===0;
+    n.disabled=i===tabs.length-1;
+    p.setAttribute('aria-label',i>0?'الانتقال إلى القسم السابق':'أنت في الصفحة الرئيسية');
+    n.setAttribute('aria-label',i<tabs.length-1?'الانتقال إلى القسم اللاحق':'أنت في آخر قسم');
+  }
+
+  function go(delta){
+    const i=tabs.indexOf(currentTab());
+    const target=tabs[i+delta];
+    if(!target)return;
+    if(typeof window.switchTab==='function'){
+      window.switchTab(target);
+    }else{
+      const el=document.getElementById(target);
+      if(el)el.scrollIntoView({block:'start',behavior:'auto'});
+    }
+    window.scrollTo({top:0,left:0,behavior:'auto'});
+    setTimeout(updateButtons,30);
+  }
+
+  document.getElementById('abq-prev-btn')?.addEventListener('click',()=>go(-1));
+  document.getElementById('abq-next-btn')?.addEventListener('click',()=>go(1));
+
+  const observer=new MutationObserver(updateButtons);
+  observer.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class','style']});
+  document.addEventListener('click',e=>{
+    if(e.target.closest('.main-tabs-nav .nav-btn')) setTimeout(updateButtons,20);
+  },true);
+
+  updateButtons();
+})();
+</script>
+
 </body>
 </html>
 
