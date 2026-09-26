@@ -8841,39 +8841,7 @@ function toggleQualificationDocs() {
 .main-tabs-content > section.tab-content.tab-active{display:block!important;visibility:visible!important}
 </style>
 
-<script id="abq-main-tabs-single-controller">
-(function(){
- 'use strict';
- const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
- function host(){return document.querySelector('.main-tabs-content');}
- function activate(id){
-   if(!IDS.includes(id)) return false;
-   const h=host(); if(!h)return false;
-   IDS.forEach(x=>{const el=document.getElementById(x); if(el&&el.parentElement===h){const on=x===id;el.classList.toggle('tab-active',on);el.style.setProperty('display',on?'block':'none','important');el.style.setProperty('visibility',on?'visible':'hidden','important');}});
-   document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(btn=>{
-     const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
-     const bid=String(raw).replace(/^#/,'');
-     btn.classList.toggle('active',bid===id);
-     btn.setAttribute('aria-selected',bid===id?'true':'false');
-   });
-   return true;
- }
- window.abqActivateMainTab=activate;
- document.addEventListener('click',function(e){
-   const btn=e.target.closest?.('.main-tabs-nav .nav-btn'); if(!btn)return;
-   const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
-   const id=String(raw).replace(/^#/,''); if(!IDS.includes(id))return;
-   e.preventDefault(); e.stopImmediatePropagation();
-   activate(id);
-   window.scrollTo(0,0);
- },true);
- function init(){
-   const active=IDS.find(id=>document.getElementById(id)?.classList.contains('tab-active'))||'home';
-   activate(active);
- }
- if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-})();
-</script>
+
 <script id="abq-same-frame-link-policy">
 (function(){
     'use strict';
