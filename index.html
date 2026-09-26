@@ -10197,8 +10197,8 @@ document.addEventListener('click',function(event){
 },true);
 })();
 </script>
-<style id="abq-mobile-hero-edge-fix">
-/* ===== الموبايل: الصورة ملاصقة لحواف منطقة الهيرو بدون حشو ===== */
+<style id="abq-mobile-hero-width-fix">
+/* ===== الموبايل: الصورة بنفس عرض منطقة النبذة التعريفية وبدون خلفية زرقاء ===== */
 @media (max-width:768px){
   .abq-home-live-hero{
     width:100% !important;
@@ -10206,13 +10206,15 @@ document.addEventListener('click',function(event){
     margin-inline:auto !important;
     padding:0 !important;
     box-sizing:border-box !important;
-    background-color:#2563eb !important;
+    background-color:transparent !important;
+    background-image:none !important;
     border:0 !important;
+    box-shadow:none !important;
   }
   .abq-home-live-hero .abq-main-hero-image{
     display:block !important;
     width:100% !important;
-    max-width:none !important;
+    max-width:100% !important;
     height:auto !important;
     margin:0 !important;
     padding:0 !important;
