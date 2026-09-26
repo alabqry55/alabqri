@@ -9688,3 +9688,35 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-inline-green-line">
+/* ===== خط أخضر ثابت يمر بمنتصف كلمات الترحيب ويعزز إطار الحروف ===== */
+#home .abq-hero-welcome{
+  padding-bottom:.8rem !important;
+}
+#home .abq-hero-welcome::after{
+  display:none !important;
+}
+#home .abq-hero-welcome strong{
+  text-decoration-line:line-through !important;
+  text-decoration-color:#15803d !important;
+  text-decoration-thickness:2.2px !important;
+  text-decoration-style:solid !important;
+  text-underline-offset:0 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.95),
+    0 2px 0 rgba(203,213,225,.95),
+    0 3px 0 rgba(148,163,184,.9),
+    0 5px 2px rgba(15,23,42,.45),
+    0 8px 7px rgba(15,23,42,.28) !important;
+}
+@media(max-width:768px){
+  #home .abq-hero-welcome{
+    padding-bottom:.7rem !important;
+  }
+  #home .abq-hero-welcome strong{
+    text-decoration-thickness:1.8px !important;
+  }
+}
+</style>
