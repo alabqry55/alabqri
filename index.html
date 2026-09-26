@@ -9654,3 +9654,37 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-bottom-line">
+/* ===== خط ثابت أسفل رسالة الترحيب لزيادة تحديدها ووضوحها ===== */
+#home .abq-hero-welcome{
+  position:relative !important;
+  padding-bottom:1.15rem !important;
+}
+#home .abq-hero-welcome::after{
+  content:"" !important;
+  position:absolute !important;
+  left:8% !important;
+  right:8% !important;
+  bottom:.42rem !important;
+  height:3px !important;
+  border-radius:999px !important;
+  background:#15803d !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.75),
+    0 2px 4px rgba(21,128,61,.35) !important;
+  pointer-events:none !important;
+}
+@media(max-width:768px){
+  #home .abq-hero-welcome{
+    padding-bottom:1rem !important;
+  }
+  #home .abq-hero-welcome::after{
+    left:7% !important;
+    right:7% !important;
+    bottom:.34rem !important;
+    height:2.5px !important;
+  }
+}
+</style>
