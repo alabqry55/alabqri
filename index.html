@@ -1557,54 +1557,49 @@ html { scroll-behavior: auto !important; }
         <section id="home" class="tab-content tab-active animate-in fade-in duration-500">
 
             <!-- 1) HERO -->
-            <div class="hero-bg hero-anim text-white rounded-3xl p-8 md:p-10 shadow-2xl mb-10 border border-blue-400/50 relative overflow-hidden reveal">
-                <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl select-none">🏇</div>
-                <div class="absolute -right-10 -top-10 w-30 h-30 rounded-full bg-white/10 blur-2xl"></div>
-                <div class="relative z-10 flex flex-col items-center text-center gap-10">
-<div class="hero-main-images w-full flex justify-center overflow-hidden">
-    <img src="https://img2link.online/api/file/1787796879272-251972327.png" alt="مدير مركز العبقري" loading="lazy" class="w-full h-auto object-contain block">
+            <div class="abq-home-live-hero hero-bg text-white rounded-3xl shadow-2xl mb-10 border border-blue-400/50 relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
+    <div class="abq-home-live-overlay" aria-hidden="true"></div>
+
+    <div class="abq-cairo-live-panel" aria-label="بيانات اليوم والوقت والطقس في القاهرة">
+        <div class="abq-cairo-live-head">
+            <span>📅</span>
+            <strong>اليوم الحالي</strong>
+        </div>
+        <div class="abq-cairo-live-date" id="abq-cairo-gregorian">—</div>
+        <div class="abq-cairo-live-hijri" id="abq-cairo-hijri">—</div>
+        <div class="abq-cairo-live-time">
+            <span>🕐</span>
+            <strong id="abq-cairo-time">—</strong>
+        </div>
+        <div class="abq-cairo-live-weather">
+            <span id="abq-cairo-weather-icon" aria-hidden="true">☀️</span>
+            <div>
+                <strong id="abq-cairo-weather-temp">—</strong>
+                <small id="abq-cairo-weather-state">جاري تحميل الطقس...</small>
+            </div>
+        </div>
+        <div class="abq-cairo-live-location">📍 القاهرة، مصر</div>
+    </div>
+
+    <div class="abq-home-live-content">
+        <div class="abq-home-live-badge">🎓 منصة العبقري للتدريب والإستشارات</div>
+        <p class="abq-home-live-subtitle">الطب التكميلي والتنمية البشرية 🌿</p>
+
+        <div class="abq-home-live-actions" aria-label="روابط سريعة">
+            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
+            <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
+            <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
+            <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
+            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
+        </div>
+
+        <div class="abq-home-live-welcome" aria-live="polite">
+            <span>🌿</span>
+            <strong>أهلاً بأعضاء وزوار منصة العبقري الكرام</strong>
+            <span>🌿</span>
+        </div>
+    </div>
 </div>
-                    <div class="flex flex-wrap items-center justify-center gap-3">
-	<span class="bg-white/20 text-white text-xs py-3 px-4 rounded-full font-bold border border-white/30 backdrop-blur-md">مركز رسمي معتمد (س.ت.92527)</span>
-                        <button onclick="switchTab('contact')" class="bg-green-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-graduation-cap ml-1"></i>حول المركز وتفاصيل الخدمات 🌿</button>
-                    </div>
-                    <h2 class="text-2xl md:text-4xl font-black leading-tight tracking-tight">نَرتَقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل</h2>
- <p class="text-sm md:text-base font-bold text-white/95 leading-relaxed max-w-4xl">🌿 مركز العبقري للتدريب والإستشارات منصة معرفية وتدريبية متكاملة تجمع بين أصالة القيم الإسلامية 🌿<br>🌿 وأحدث العلوم الإنسانية والتنموية لخدمة الفرد والأسرة والمجتمع بتطوير مهاراتهم، وتعزيز وعيهم، وتحسين جودة حياتهم 🌿</p>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-3xl mt-2">
-                        <button onclick="switchTab('courses')" class="bg-cyan-300 text-green-900 font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
-                        <button onclick="switchTab('doors')" class="bg-amber-400 text-amber-950 font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
-                        <button onclick="switchTab('azkar')" class="bg-emerald-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
-                       
-
- <button onclick="switchTab('contact')" class="bg-cyan-400 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg hover:scale-[1.03] transition text-xs md:text-sm"><i class="fas fa-phone ml-1"></i> تواصل معنا 📞</button>
-                    </div>
-                    </div>
-
-
-<div class="abq-hero-visitor-welcome w-full flex flex-wrap items-center justify-center gap-3 text-center">
-    <div class="abq-visitor-counter loading max-w-full flex flex-wrap items-center justify-center gap-2 text-center" aria-live="polite" aria-label="عداد زوار منصة العبقري">
-        <i class="fa-solid fa-eye" aria-hidden="true"></i>
-        <span>زوار المنصة</span>
-        <span id="abq-visitor-count" class="abq-visitor-count">—</span>
-
-
-    <p class="abq-hero-welcome text-[19px] md:text-[21px] font-bold text-green-600 mt-0 leading-relaxed">
-        <strong>🌿أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"🌿</strong>
-    </p>
-</div>
-         
-
-            <!-- 2) شريط الإحصائيات -->
-            <div id="stats-bar" class="grid grid-cols-2 md:grid-cols-5 gap-5 mb-5 reveal">
-                <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-blue-700"><span class="counter" data-target="50">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">برنامج تدريبي</p></div>
-                <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-emerald-700"><span class="counter" data-target="2420">0</span></div><p class="text-xs font-bold text-slate-600 mt-1">(بحث علمي وروحاني)</p></div>
-                <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-sky-700"><span class="counter" data-target="3000">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">متدرب ومستفيد</p></div>
-                <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-amber-700"><span class="counter" data-target="20">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">شهادة معتمدة</p></div>
-                <div class="glass-card rounded-2xl p-5 text-center col-span-2 md:col-span-1"><div class="text-2xl md:text-3xl font-black text-rose-700"><span class="counter" data-target="25">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">سنوات خبرة وإستشارات</p></div>
-            </div>
-            </div>
-            </div>
 
 <!-- نبذة تعريفية -->
                     <div class="abq-about-blurb bg-blue-50/60 p-2 rounded-xl border border-blue-700">
