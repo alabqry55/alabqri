@@ -9207,3 +9207,62 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+<style id="abq-welcome-premium-glow">
+/* ===== التوهج الاحترافي الواضح لرسالة الترحيب ===== */
+@keyframes abqWelcomePremiumGlow{
+  0%,100%{
+    text-shadow:
+      0 0 3px rgba(4,120,87,.65),
+      0 0 9px rgba(4,120,87,.35),
+      0 0 13px rgba(212,175,55,.22);
+  }
+  50%{
+    text-shadow:
+      0 0 5px rgba(16,185,129,.9),
+      0 0 12px rgba(212,175,55,.9),
+      0 0 22px rgba(245,215,110,.62),
+      0 0 34px rgba(212,175,55,.24);
+  }
+}
+@keyframes abqWelcomeGoldSweep{
+  0%,45%{background-position:220% center;}
+  70%,100%{background-position:-220% center;}
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  position:relative !important;
+  animation:abqWelcomePremiumGlow 2.6s ease-in-out infinite,
+            abqWelcomeGoldSweep 5.2s linear infinite !important;
+  background:linear-gradient(
+    90deg,
+    #047857 0%,
+    #059669 20%,
+    #0f766e 35%,
+    #d4af37 45%,
+    #fff1a8 50%,
+    #f5d76e 55%,
+    #d4af37 60%,
+    #0f766e 70%,
+    #059669 84%,
+    #047857 100%
+  ) !important;
+  background-size:320% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  font-weight:900 !important;
+  filter:drop-shadow(0 1px 1px rgba(4,120,87,.18)) !important;
+}
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqWelcomePremiumGlow 2.8s ease-in-out infinite,
+              abqWelcomeGoldSweep 5.8s linear infinite !important;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqWelcomePremiumGlow 3s ease-in-out infinite !important;
+  }
+}
+</style>
