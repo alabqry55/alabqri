@@ -9122,3 +9122,30 @@ function toggleQualificationDocs() {
     }
 }
 </style>
+
+<style id="abq-welcome-glow-motion">
+/* ===== رسالة الترحيب المضيئة المتحركة ===== */
+@keyframes abqWelcomeGlow{
+  0%,100%{text-shadow:0 0 4px rgba(16,185,129,.35),0 0 10px rgba(59,130,246,.18);opacity:.92;}
+  50%{text-shadow:0 0 7px rgba(16,185,129,.75),0 0 18px rgba(59,130,246,.48),0 0 28px rgba(245,158,11,.22);opacity:1;}
+}
+@keyframes abqWelcomeShimmer{
+  0%{background-position:200% center;}
+  100%{background-position:-200% center;}
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  animation:abqWelcomeGlow 2.2s ease-in-out infinite, abqWelcomeShimmer 4.5s linear infinite !important;
+  background:linear-gradient(90deg,#047857 0%,#0f766e 25%,#2563eb 50%,#047857 75%,#0f766e 100%) !important;
+  background-size:250% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  font-weight:900 !important;
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqWelcomeGlow 3s ease-in-out infinite !important;
+  }
+}
+</style>
