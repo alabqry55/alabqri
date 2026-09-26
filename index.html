@@ -1972,6 +1972,22 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 
+<style id="abq-welcome-blue-outline-final">
+/* ===== جعل الحد الخارجي لحروف رسالة الترحيب أزرق واضحًا ===== */
+#home .abq-hero-welcome,
+#home .abq-hero-welcome strong{
+  -webkit-text-stroke:2.2px #1d4ed8 !important;
+  paint-order:stroke fill !important;
+  text-shadow:none !important;
+}
+@media(max-width:768px){
+  #home .abq-hero-welcome,
+  #home .abq-hero-welcome strong{
+    -webkit-text-stroke:1.7px #1d4ed8 !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
