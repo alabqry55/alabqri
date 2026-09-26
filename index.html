@@ -10198,68 +10198,43 @@ document.addEventListener('click',function(event){
 })();
 </script>
 <style id="abq-mobile-hero-width-fix">
-/* ===== الموبايل فقط: عرض صورة الهيرو كاملة بكل تفاصيلها بدون قص ===== */
+/* ===== الموبايل فقط: الصورة وحدها بعرض الشاشة بالكامل بدون حواف أو هوامش ===== */
 @media (max-width:768px){
-  .abq-home-live-hero{
-    width:100% !important;
-    max-width:100% !important;
-    height:auto !important;
-    min-height:0 !important;
-    max-height:none !important;
-    margin-inline:auto !important;
-    padding:0 !important;
-    box-sizing:border-box !important;
-    background-color:transparent !important;
-    background-image:none !important;
-    background-size:contain !important;
-    background-position:center center !important;
-    background-repeat:no-repeat !important;
-    border:0 !important;
-    box-shadow:none !important;
-    overflow:visible !important;
-  }
-  .abq-home-live-hero .abq-main-hero-image{
-    display:block !important;
-    width:100% !important;
-    max-width:100% !important;
-    height:auto !important;
-    min-height:0 !important;
-    max-height:none !important;
-    object-fit:contain !important;
-    object-position:center center !important;
-    margin:0 !important;
-    padding:0 !important;
-    box-sizing:border-box !important;
-  }
-}
-<style id="abq-mobile-hero-edge-only">
-/* ===== الموبايل فقط: الصورة وحدها بدون أي حواف أو هوامش أو حشوات ===== */
-@media (max-width:768px){
-  .main-tabs-content{padding-inline:0 !important;}
-  .abq-home-live-hero{
+  .main-tabs-content{
     width:100% !important;
     max-width:none !important;
+    margin:0 !important;
+    padding-inline:0 !important;
+  }
+  .abq-home-live-hero{
+    width:100vw !important;
+    max-width:100vw !important;
+    min-height:0 !important;
+    height:auto !important;
     margin:0 !important;
     padding:0 !important;
     border:0 !important;
     outline:0 !important;
-    box-shadow:none !important;
     border-radius:0 !important;
+    box-shadow:none !important;
     background:none !important;
     overflow:visible !important;
   }
   .abq-home-live-hero .abq-main-hero-image{
     display:block !important;
-    width:100% !important;
-    max-width:none !important;
+    width:100vw !important;
+    max-width:100vw !important;
     height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
     margin:0 !important;
     padding:0 !important;
     border:0 !important;
     outline:0 !important;
-    box-shadow:none !important;
     border-radius:0 !important;
+    box-shadow:none !important;
     object-fit:contain !important;
+    object-position:center center !important;
   }
 }
 </style>\n</style>
