@@ -1548,6 +1548,21 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 
+<style id="abq-hero-full-image-fix">
+/* ===== ضبط منطقة صورة الهيرو: إظهار الصورة كاملة بدون قص ===== */
+.abq-home-live-hero{
+    background-size:contain !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-color:#0b3b72 !important;
+}
+@media (max-width:768px){
+    .abq-home-live-hero{
+        background-size:contain !important;
+        background-position:center center !important;
+    }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
