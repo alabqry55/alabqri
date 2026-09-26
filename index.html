@@ -9180,3 +9180,30 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+<style id="abq-welcome-green-gold">
+/* ===== رسالة الترحيب الأخضر الملكي مع التدرج الذهبي ===== */
+@keyframes abqGreenGoldGlow{
+  0%,100%{text-shadow:0 0 4px rgba(4,120,87,.38),0 0 10px rgba(212,175,55,.16);}
+  50%{text-shadow:0 0 7px rgba(16,185,129,.7),0 0 15px rgba(212,175,55,.7),0 0 25px rgba(245,215,110,.28);}
+}
+@keyframes abqGreenGoldShimmer{
+  0%{background-position:220% center;}
+  100%{background-position:-220% center;}
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  animation:abqGreenGoldGlow 2.5s ease-in-out infinite,abqGreenGoldShimmer 5s linear infinite !important;
+  background:linear-gradient(90deg,#047857 0%,#059669 22%,#0f766e 38%,#d4af37 50%,#f5d76e 55%,#d4af37 60%,#0f766e 72%,#059669 84%,#047857 100%) !important;
+  background-size:280% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  font-weight:900 !important;
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    animation:abqGreenGoldGlow 3s ease-in-out infinite !important;
+  }
+}
+</style>
