@@ -413,3 +413,139 @@ body{
 .abq-doc-final-actions{display:flex;align-items:stretch;justify-content:center;gap:.8rem;flex-wrap:nowrap;max-width:900px;margin:.8rem auto 0}
 .abq-doc-final-actions .abq-platform-return-btn{flex:1 1 0;max-width:430px;margin:0!important}
 @media(max-width:760px){.abq-doc-final-actions{flex-direction:column;align-items:stretch;gap:.55rem}.abq-doc-final-actions .abq-platform-return-btn{max-width:none;width:100%}}
+
+/* ===== واجهة الهيرو الرئيسية الديناميكية — القاهرة ===== */
+.abq-home-live-hero{
+    min-height:clamp(520px,52vw,820px);
+    background-image:url('https://img2link.online/api/file/1787796879272-251972327.png');
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+    isolation:isolate;
+    display:flex;
+    align-items:stretch;
+}
+.abq-home-live-overlay{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:linear-gradient(180deg,rgba(8,32,67,.06) 0%,rgba(8,32,67,.02) 42%,rgba(3,20,44,.46) 100%);
+    pointer-events:none;
+}
+.abq-cairo-live-panel{
+    position:absolute;
+    z-index:3;
+    top:1.25rem;
+    right:1.25rem;
+    width:min(285px,30%);
+    padding:1rem 1rem .85rem;
+    border:1px solid rgba(255,255,255,.34);
+    border-radius:1.15rem;
+    background:linear-gradient(145deg,rgba(13,55,105,.88),rgba(18,83,145,.72));
+    box-shadow:0 18px 42px -20px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.18);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    direction:rtl;
+    text-align:right;
+}
+.abq-cairo-live-head{display:flex;align-items:center;gap:.5rem;color:#ffe082;font-size:.78rem;font-weight:900;margin-bottom:.55rem}
+.abq-cairo-live-date{font-size:.92rem;font-weight:900;color:#fff;line-height:1.6}
+.abq-cairo-live-hijri{font-size:.76rem;color:#eaf3ff;font-weight:800;margin-top:.1rem}
+.abq-cairo-live-time{display:flex;align-items:center;gap:.55rem;margin:.7rem 0;padding:.55rem 0;border-top:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);color:#fff}
+.abq-cairo-live-time strong{font-size:1.05rem;letter-spacing:.02em}
+.abq-cairo-live-weather{display:flex;align-items:center;gap:.65rem;color:#fff}
+.abq-cairo-live-weather>span{font-size:1.8rem;line-height:1}
+.abq-cairo-live-weather strong{display:block;font-size:1rem}
+.abq-cairo-live-weather small{display:block;color:#e6f1ff;font-size:.68rem;font-weight:800;margin-top:.08rem}
+.abq-cairo-live-location{margin-top:.6rem;color:#ffe082;font-size:.72rem;font-weight:900}
+.abq-home-live-content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    text-align:center;
+    padding:1.5rem 1.25rem 1.25rem;
+}
+.abq-home-live-badge{
+    margin-bottom:.15rem;
+    padding:.5rem .9rem;
+    border-radius:999px;
+    background:rgba(8,45,86,.72);
+    border:1px solid rgba(255,255,255,.28);
+    box-shadow:0 8px 24px -18px #000;
+    color:#fff;
+    font-size:clamp(.72rem,1.2vw,.95rem);
+    font-weight:900;
+    backdrop-filter:blur(8px);
+}
+.abq-home-live-subtitle{
+    margin:.25rem 0 .8rem;
+    color:#f6d76f;
+    font-size:clamp(.72rem,1.2vw,.9rem);
+    font-weight:900;
+    text-shadow:0 2px 8px rgba(0,0,0,.6);
+}
+.abq-home-live-actions{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:.5rem;
+    width:min(900px,100%);
+}
+.abq-home-live-action{
+    border:1px solid rgba(255,255,255,.38);
+    border-radius:.85rem;
+    padding:.58rem .85rem;
+    color:#fff;
+    font-size:.72rem;
+    font-weight:900;
+    box-shadow:0 10px 22px -18px rgba(0,0,0,.8);
+    backdrop-filter:blur(8px);
+    transition:transform .2s ease,filter .2s ease;
+}
+.abq-home-live-action:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.abq-home-live-action-green{background:rgba(16,133,82,.9)}
+.abq-home-live-action-cyan{background:rgba(8,151,184,.92)}
+.abq-home-live-action-gold{background:rgba(190,137,17,.94);color:#fff}
+.abq-home-live-action-green2{background:rgba(13,145,91,.92)}
+.abq-home-live-action-blue{background:rgba(24,92,177,.92)}
+.abq-home-live-welcome{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.45rem;
+    margin-top:.65rem;
+    padding:.48rem .8rem;
+    border-radius:999px;
+    background:rgba(255,255,255,.9);
+    color:#075e54;
+    font-size:clamp(.68rem,1vw,.82rem);
+    font-weight:900;
+    box-shadow:0 8px 24px -18px rgba(0,0,0,.8);
+}
+@media(max-width:900px){
+    .abq-home-live-hero{min-height:540px;background-position:center center}
+    .abq-cairo-live-panel{width:min(270px,42%);top:.8rem;right:.8rem;padding:.8rem .75rem}
+    .abq-cairo-live-date{font-size:.78rem}.abq-cairo-live-hijri{font-size:.66rem}
+    .abq-cairo-live-time{margin:.45rem 0;padding:.42rem 0}.abq-cairo-live-time strong{font-size:.9rem}
+    .abq-home-live-content{padding:1rem .75rem .8rem}
+    .abq-home-live-actions{gap:.4rem}
+}
+@media(max-width:600px){
+    .abq-home-live-hero{min-height:560px;border-radius:1.1rem!important;background-position:52% center}
+    .abq-cairo-live-panel{top:.65rem;right:.65rem;width:calc(100% - 1.3rem);max-width:245px;padding:.65rem .7rem}
+    .abq-cairo-live-head{font-size:.68rem;margin-bottom:.35rem}
+    .abq-cairo-live-date{font-size:.73rem}.abq-cairo-live-hijri{font-size:.61rem}
+    .abq-cairo-live-time{margin:.35rem 0}.abq-cairo-live-time strong{font-size:.82rem}
+    .abq-cairo-live-weather>span{font-size:1.4rem}.abq-cairo-live-weather strong{font-size:.85rem}.abq-cairo-live-weather small{font-size:.6rem}
+    .abq-cairo-live-location{font-size:.62rem;margin-top:.35rem}
+    .abq-home-live-content{padding:.8rem .55rem .65rem}
+    .abq-home-live-badge{font-size:.62rem;padding:.4rem .65rem}
+    .abq-home-live-subtitle{font-size:.62rem;margin:.2rem 0 .5rem}
+    .abq-home-live-action{font-size:.61rem;padding:.48rem .58rem;border-radius:.7rem}
+    .abq-home-live-welcome{font-size:.59rem;padding:.38rem .55rem}
+}
