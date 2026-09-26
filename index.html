@@ -1698,6 +1698,60 @@ html { scroll-behavior: auto !important; }
     .abq-home-actions-stats-frame #stats-bar .glass-card{padding:.75rem .45rem !important;}
 }
 </style>
+
+<style id="abq-hero-full-image-and-action-buttons">
+/* ===== عرض صورة الهيرو كاملة + تكبيرها مثل صور المنصة ===== */
+.abq-home-live-hero{
+    height:auto !important;
+    min-height:0 !important;
+    padding:0 !important;
+    background-image:none !important;
+    background-color:transparent !important;
+    overflow:hidden !important;
+}
+.abq-main-hero-image{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+    cursor:zoom-in !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    position:relative !important;
+    z-index:1 !important;
+}
+.abq-home-live-hero .abq-home-live-overlay{
+    z-index:2 !important;
+}
+/* كل زر في الإطار الأزرق السابق له إطاره الأزرق الخاص */
+.abq-home-live-actions-below .abq-home-live-action{
+    border:2px solid #2563eb !important;
+    border-radius:.8rem !important;
+    background:#eff6ff !important;
+    color:#0f3b82 !important;
+    box-shadow:0 5px 12px -9px rgba(37,99,235,.75), inset 0 1px 0 rgba(255,255,255,.9) !important;
+    font-weight:900 !important;
+    min-height:42px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+}
+.abq-home-live-actions-below .abq-home-live-action:hover,
+.abq-home-live-actions-below .abq-home-live-action:focus-visible{
+    background:#dbeafe !important;
+    border-color:#1d4ed8 !important;
+    box-shadow:0 8px 16px -10px rgba(37,99,235,.9) !important;
+    transform:translateY(-1px);
+}
+@media(max-width:768px){
+    .abq-home-live-actions-below .abq-home-live-action{
+        border-width:1.5px !important;
+        min-height:40px;
+        padding:.48rem .6rem !important;
+        font-size:.7rem !important;
+    }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1874,6 +1928,7 @@ html { scroll-behavior: auto !important; }
 
             <!-- 1) HERO -->
             <div class="abq-home-live-hero hero-bg text-white shadow-2xl relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
+    <img class="abq-main-hero-image abq-zoomable-image" src="https://img2link.online/api/file/1787796879272-251972327.png" alt="الواجهة الرئيسية لمركز العبقري" loading="eager" decoding="async">
     <div class="abq-home-live-overlay" aria-hidden="true"></div>
 </div>
 
