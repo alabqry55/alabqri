@@ -1417,6 +1417,156 @@ html { scroll-behavior: auto !important; }
   }
 }
 </style>
+<style id="abq-home-live-hero-final-style">
+/* ===== الواجهة الرئيسية الحية: صورة الخلفية + العناصر الأربعة فقط ===== */
+.abq-home-live-hero{
+    position:relative;
+    isolation:isolate;
+    min-height:clamp(420px, 48vw, 620px);
+    padding:clamp(1rem, 2.2vw, 1.75rem);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    background-image:url('https://img2link.online/api/file/1787796879272-251972327.png') !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+}
+.abq-home-live-hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    background:linear-gradient(180deg,rgba(0,0,0,.30),rgba(0,0,0,.08) 48%,rgba(0,0,0,.24));
+    pointer-events:none;
+}
+.abq-home-live-title{
+    position:relative;
+    z-index:2;
+    width:min(94%,1100px);
+    margin:.15rem auto 0;
+    text-align:center;
+    color:#fff;
+    font-size:clamp(1.05rem,2.35vw,2rem);
+    font-weight:900;
+    line-height:1.55;
+    text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.abq-home-live-title span{
+    margin-inline-start:.3rem;
+}
+.abq-cairo-live-panel{
+    position:relative;
+    z-index:2;
+    width:min(96%,1050px);
+    margin-top:auto;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:clamp(.45rem,1.2vw,1rem);
+    padding:clamp(.55rem,1.3vw,.9rem);
+}
+.abq-cairo-live-item{
+    min-width:0;
+    min-height:92px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.65rem;
+    padding:.7rem .8rem;
+    text-align:center;
+    color:#fff;
+    background:rgba(15,23,42,.48);
+    border:1px solid rgba(255,255,255,.42);
+    border-radius:1rem;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    backdrop-filter:blur(7px);
+    -webkit-backdrop-filter:blur(7px);
+}
+.abq-cairo-live-item > div{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.12rem;
+}
+.abq-cairo-live-icon{
+    flex:0 0 auto;
+    font-size:clamp(1.35rem,2.3vw,2rem);
+}
+.abq-cairo-live-item strong{
+    font-size:clamp(.72rem,1vw,.9rem);
+    font-weight:900;
+}
+.abq-cairo-live-date,
+.abq-cairo-live-hijri,
+.abq-cairo-live-value,
+.abq-cairo-live-item small{
+    display:block;
+    max-width:100%;
+    overflow-wrap:anywhere;
+}
+.abq-cairo-live-date,
+.abq-cairo-live-hijri,
+.abq-cairo-live-value{
+    font-size:clamp(.72rem,1.15vw,1rem);
+    font-weight:800;
+    line-height:1.55;
+}
+.abq-cairo-live-item small{
+    font-size:clamp(.58rem,.8vw,.72rem);
+    line-height:1.45;
+    opacity:.92;
+}
+@media (max-width:768px){
+    .abq-home-live-hero{
+        min-height:420px;
+        padding:.85rem .6rem;
+        background-position:center center !important;
+    }
+    .abq-home-live-title{
+        width:100%;
+        font-size:clamp(.92rem,4vw,1.2rem);
+        line-height:1.65;
+    }
+    .abq-cairo-live-panel{
+        width:100%;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:.45rem;
+        padding:.45rem;
+    }
+    .abq-cairo-live-item{
+        min-height:82px;
+        padding:.55rem .4rem;
+        gap:.35rem;
+        border-radius:.85rem;
+    }
+    .abq-cairo-live-icon{
+        font-size:1.25rem;
+    }
+}
+@media (max-width:420px){
+    .abq-home-live-hero{
+        min-height:390px;
+    }
+    .abq-home-live-title{
+        font-size:.86rem;
+    }
+    .abq-cairo-live-item{
+        min-height:78px;
+        padding:.45rem .3rem;
+    }
+    .abq-cairo-live-date,
+    .abq-cairo-live-hijri,
+    .abq-cairo-live-value{
+        font-size:.67rem;
+    }
+    .abq-cairo-live-item small{
+        font-size:.56rem;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1558,45 +1708,43 @@ html { scroll-behavior: auto !important; }
 
             <!-- 1) HERO -->
             <div class="abq-home-live-hero hero-bg text-white rounded-3xl shadow-2xl mb-10 border border-blue-400/50 relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
-    <div class="abq-home-live-overlay" aria-hidden="true"></div>
+    <div class="abq-home-live-title">
+        🎓<span>منصة العبقري للتدريب والإستشارات (الطب التكميلي والتنمية البشرية🌿)</span>
+    </div>
 
-    <div class="abq-cairo-live-panel" aria-label="بيانات اليوم والوقت والطقس في القاهرة">
-        <div class="abq-cairo-live-head">
-            <span>📅</span>
-            <strong>اليوم الحالي</strong>
-        </div>
-        <div class="abq-cairo-live-date" id="abq-cairo-gregorian">—</div>
-        <div class="abq-cairo-live-hijri" id="abq-cairo-hijri">—</div>
-        <div class="abq-cairo-live-time">
-            <span>🕐</span>
-            <strong id="abq-cairo-time">—</strong>
-        </div>
-        <div class="abq-cairo-live-weather">
-            <span id="abq-cairo-weather-icon" aria-hidden="true">☀️</span>
+    <div class="abq-cairo-live-panel" aria-label="بيانات اليوم والوقت والطقس والموقع">
+        <div class="abq-cairo-live-item abq-cairo-live-date-item">
+            <span class="abq-cairo-live-icon" aria-hidden="true">📅</span>
             <div>
-                <strong id="abq-cairo-weather-temp">—</strong>
+                <strong>اليوم والتاريخ</strong>
+                <span class="abq-cairo-live-date" id="abq-cairo-gregorian">—</span>
+                <span class="abq-cairo-live-hijri" id="abq-cairo-hijri">—</span>
+            </div>
+        </div>
+
+        <div class="abq-cairo-live-item">
+            <span class="abq-cairo-live-icon" aria-hidden="true">🕐</span>
+            <div>
+                <strong>الساعة</strong>
+                <span class="abq-cairo-live-value" id="abq-cairo-time">—</span>
+            </div>
+        </div>
+
+        <div class="abq-cairo-live-item">
+            <span class="abq-cairo-live-icon" id="abq-cairo-weather-icon" aria-hidden="true">☀️</span>
+            <div>
+                <strong>الطقس</strong>
+                <span class="abq-cairo-live-value" id="abq-cairo-weather-temp">—</span>
                 <small id="abq-cairo-weather-state">جاري تحميل الطقس...</small>
             </div>
         </div>
-        <div class="abq-cairo-live-location">📍 القاهرة، مصر</div>
-    </div>
 
-    <div class="abq-home-live-content">
-        <div class="abq-home-live-badge">🎓 منصة العبقري للتدريب والإستشارات</div>
-        <p class="abq-home-live-subtitle">الطب التكميلي والتنمية البشرية 🌿</p>
-
-        <div class="abq-home-live-actions" aria-label="روابط سريعة">
-            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
-            <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
-            <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
-            <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
-            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
-        </div>
-
-        <div class="abq-home-live-welcome" aria-live="polite">
-            <span>🌿</span>
-            <strong>أهلاً بأعضاء وزوار منصة العبقري الكرام</strong>
-            <span>🌿</span>
+        <div class="abq-cairo-live-item">
+            <span class="abq-cairo-live-icon" aria-hidden="true">📍</span>
+            <div>
+                <strong>الموقع</strong>
+                <span class="abq-cairo-live-value">القاهرة، مصر</span>
+            </div>
         </div>
     </div>
 </div>
