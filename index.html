@@ -8495,5 +8495,82 @@ function toggleQualificationDocs() {
     window.addEventListener('hashchange', openWhyCenterSection);
 })();
 </script>
+<script id="abq-cairo-live-dashboard">
+(function(){
+    'use strict';
+
+    var TIME_ZONE = 'Africa/Cairo';
+    var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=30.0444&longitude=31.2357&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=Africa%2FCairo';
+
+    var weatherMap = {
+        0:['☀️','سماء صافية'],1:['🌤️','غالبًا صافٍ'],2:['⛅','غائم جزئيًا'],3:['☁️','غائم'],
+        45:['🌫️','ضباب'],48:['🌫️','ضباب متجمد'],
+        51:['🌦️','رذاذ خفيف'],53:['🌦️','رذاذ متوسط'],55:['🌧️','رذاذ كثيف'],
+        56:['🌧️','رذاذ متجمد خفيف'],57:['🌧️','رذاذ متجمد كثيف'],
+        61:['🌦️','أمطار خفيفة'],63:['🌧️','أمطار متوسطة'],65:['🌧️','أمطار غزيرة'],
+        66:['🌧️','أمطار متجمدة خفيفة'],67:['🌧️','أمطار متجمدة غزيرة'],
+        71:['🌨️','ثلوج خفيفة'],73:['🌨️','ثلوج متوسطة'],75:['❄️','ثلوج غزيرة'],77:['❄️','حبيبات ثلجية'],
+        80:['🌦️','زخات خفيفة'],81:['🌧️','زخات متوسطة'],82:['⛈️','زخات غزيرة'],
+        85:['🌨️','زخات ثلجية خفيفة'],86:['🌨️','زخات ثلجية غزيرة'],
+        95:['⛈️','عواصف رعدية'],96:['⛈️','عاصفة رعدية وبَرَد'],99:['⛈️','عاصفة رعدية وبَرَد قوي']
+    };
+
+    function el(id){ return document.getElementById(id); }
+
+    function formatCairoDate(){
+        var now = new Date();
+        var greg = new Intl.DateTimeFormat('ar-EG',{
+            timeZone:TIME_ZONE, weekday:'long', day:'numeric', month:'long', year:'numeric'
+        }).format(now);
+        var hijri;
+        try{
+            hijri = new Intl.DateTimeFormat('ar-EG-u-ca-islamic-umalqura',{
+                timeZone:TIME_ZONE, day:'numeric', month:'long', year:'numeric'
+            }).format(now);
+        }catch(e){
+            hijri = new Intl.DateTimeFormat('ar-EG-u-ca-islamic',{
+                timeZone:TIME_ZONE, day:'numeric', month:'long', year:'numeric'
+            }).format(now);
+        }
+        var time = new Intl.DateTimeFormat('ar-EG',{
+            timeZone:TIME_ZONE, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true
+        }).format(now);
+
+        if(el('abq-cairo-gregorian')) el('abq-cairo-gregorian').textContent = greg;
+        if(el('abq-cairo-hijri')) el('abq-cairo-hijri').textContent = hijri + ' هـ';
+        if(el('abq-cairo-time')) el('abq-cairo-time').textContent = time;
+    }
+
+    function loadCairoWeather(){
+        fetch(WEATHER_URL,{cache:'no-store'})
+            .then(function(res){ if(!res.ok) throw new Error('weather'); return res.json(); })
+            .then(function(data){
+                var current=data.current||{};
+                var code=Number(current.weather_code);
+                var info=weatherMap[code]||['🌤️','حالة الطقس الحالية'];
+                if(el('abq-cairo-weather-icon')) el('abq-cairo-weather-icon').textContent=info[0];
+                if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent =
+                    (Number.isFinite(Number(current.temperature_2m)) ? Math.round(Number(current.temperature_2m)) + '°م' : '—');
+                if(el('abq-cairo-weather-state')) el('abq-cairo-weather-state').textContent =
+                    info[1] + (Number.isFinite(Number(current.relative_humidity_2m)) ? ' • رطوبة ' + Math.round(Number(current.relative_humidity_2m)) + '%' : '');
+            })
+            .catch(function(){
+                if(el('abq-cairo-weather-icon')) el('abq-cairo-weather-icon').textContent='🌤️';
+                if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent='—';
+                if(el('abq-cairo-weather-state')) el('abq-cairo-weather-state').textContent='الطقس غير متاح مؤقتًا';
+            });
+    }
+
+    function init(){
+        formatCairoDate();
+        loadCairoWeather();
+        setInterval(formatCairoDate,1000);
+        setInterval(loadCairoWeather,10*60*1000);
+    }
+
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+    else init();
+})();
+</script>
 </body>
 </html>
