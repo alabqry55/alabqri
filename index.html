@@ -1611,12 +1611,12 @@ html { scroll-behavior: auto !important; }
     box-shadow:0 10px 25px -18px rgba(37,99,235,.38);
 }
 .abq-hero-visitor-welcome .abq-visitor-counter{
-    margin:0 !important;
-    padding:0 !important;
-    border:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    border-radius:0 !important;
+    margin:.15rem auto !important;
+    padding:.55rem .9rem !important;
+    border:2px solid #2563eb !important;
+    background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%) !important;
+    box-shadow:0 7px 18px -12px rgba(37,99,235,.75), inset 0 1px 0 rgba(255,255,255,.95) !important;
+    border-radius:.85rem !important;
     display:inline-flex !important;
     font-size:.82rem;
 }
@@ -1726,29 +1726,66 @@ html { scroll-behavior: auto !important; }
     z-index:2 !important;
 }
 /* كل زر في الإطار الأزرق السابق له إطاره الأزرق الخاص */
+.abq-home-live-actions-below{
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:1rem !important;
+    align-items:stretch !important;
+    justify-content:center !important;
+}
 .abq-home-live-actions-below .abq-home-live-action{
+    width:100% !important;
+    min-width:0 !important;
+    min-height:52px !important;
+    padding:.72rem 1rem !important;
     border:2px solid #2563eb !important;
-    border-radius:.8rem !important;
-    background:#eff6ff !important;
+    border-radius:1rem !important;
+    background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%) !important;
     color:#0f3b82 !important;
-    box-shadow:0 5px 12px -9px rgba(37,99,235,.75), inset 0 1px 0 rgba(255,255,255,.9) !important;
+    box-shadow:0 8px 18px -12px rgba(37,99,235,.8), inset 0 1px 0 rgba(255,255,255,.95) !important;
     font-weight:900 !important;
-    min-height:42px;
-    transition:transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+    font-size:.82rem !important;
+    line-height:1.35 !important;
+    white-space:nowrap !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.42rem !important;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease !important;
 }
 .abq-home-live-actions-below .abq-home-live-action:hover,
 .abq-home-live-actions-below .abq-home-live-action:focus-visible{
-    background:#dbeafe !important;
+    background:linear-gradient(180deg,#eff6ff 0%,#dbeafe 100%) !important;
     border-color:#1d4ed8 !important;
-    box-shadow:0 8px 16px -10px rgba(37,99,235,.9) !important;
-    transform:translateY(-1px);
+    box-shadow:0 11px 22px -12px rgba(37,99,235,.9) !important;
+    transform:translateY(-2px);
 }
-@media(max-width:768px){
+.abq-home-live-actions-below .abq-home-live-action:active{
+    transform:translateY(0) scale(.985);
+}
+@media(max-width:900px){
+    .abq-home-live-actions-below{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:.8rem !important;
+    }
+}
+@media(max-width:640px){
+    .abq-home-live-actions-below{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        gap:.65rem !important;
+    }
     .abq-home-live-actions-below .abq-home-live-action{
-        border-width:1.5px !important;
-        min-height:40px;
-        padding:.48rem .6rem !important;
-        font-size:.7rem !important;
+        min-height:48px !important;
+        padding:.62rem .55rem !important;
+        border-width:1.7px !important;
+        border-radius:.85rem !important;
+        font-size:.72rem !important;
+        white-space:normal !important;
+    }
+    .abq-home-live-actions-below .abq-home-live-action:last-child{
+        grid-column:1 / -1 !important;
+        max-width:70% !important;
+        justify-self:center !important;
     }
 }
 </style>
