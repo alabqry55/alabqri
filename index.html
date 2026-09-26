@@ -1418,15 +1418,75 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 <style id="abq-home-live-hero-final-style">
-/* ===== الواجهة الرئيسية الحية: صورة الخلفية + العناصر الأربعة فقط ===== */
+/* ===== شريط المعلومات العلوي الفاخر ===== */
+.abq-top-live-bar{
+    width:min(96%,1320px);
+    margin:.55rem auto .7rem;
+    padding:.42rem;
+    display:grid;
+    grid-template-columns:1.35fr 1.15fr 1.25fr 1fr;
+    align-items:stretch;
+    gap:.35rem;
+    direction:rtl;
+    border:1px solid rgba(37,99,235,.22);
+    border-radius:1.15rem;
+    background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(239,246,255,.94));
+    box-shadow:0 10px 28px -16px rgba(15,23,42,.55), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.abq-top-live-item{
+    min-width:0;
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.48rem;
+    padding:.38rem .55rem;
+    text-align:center;
+    border-inline-start:1px solid rgba(148,163,184,.22);
+}
+.abq-top-live-item:last-child{border-inline-start:0}
+.abq-top-icon{
+    flex:0 0 auto;
+    font-size:1.15rem;
+    line-height:1;
+}
+.abq-top-values{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:.04rem;
+}
+.abq-top-primary,
+.abq-top-secondary{
+    display:block;
+    max-width:100%;
+    overflow-wrap:anywhere;
+    line-height:1.35;
+}
+.abq-top-primary{
+    color:#0f3b82;
+    font-size:.79rem;
+    font-weight:900;
+    white-space:nowrap;
+}
+.abq-top-secondary{
+    color:#475569;
+    font-size:.66rem;
+    font-weight:700;
+}
+.abq-top-weather .abq-top-primary{color:#0f766e}
+.abq-top-location .abq-top-primary{color:#1d4ed8}
+
 .abq-home-live-hero{
     position:relative;
     isolation:isolate;
-    min-height:clamp(420px, 48vw, 620px);
-    padding:clamp(1rem, 2.2vw, 1.75rem);
+    min-height:clamp(420px,48vw,620px);
+    padding:clamp(1rem,2.2vw,1.75rem);
     display:flex;
     flex-direction:column;
-    justify-content:flex-start;
+    justify-content:center;
     align-items:center;
     background-image:url('https://img2link.online/api/file/1787796879272-251972327.png') !important;
     background-size:cover !important;
@@ -1438,132 +1498,53 @@ html { scroll-behavior: auto !important; }
     position:absolute;
     inset:0;
     z-index:-1;
-    background:linear-gradient(180deg,rgba(0,0,0,.30),rgba(0,0,0,.08) 48%,rgba(0,0,0,.24));
+    background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.05) 50%,rgba(0,0,0,.22));
     pointer-events:none;
 }
-.abq-home-live-title{
+.abq-home-live-content{
     position:relative;
     z-index:2;
-    width:min(94%,1100px);
-    margin:.15rem auto 0;
-    text-align:center;
-    color:#fff;
-    font-size:clamp(1.05rem,2.35vw,2rem);
-    font-weight:900;
-    line-height:1.55;
-    text-shadow:0 2px 12px rgba(0,0,0,.8);
-}
-.abq-home-live-title span{
-    margin-inline-start:.3rem;
-}
-.abq-cairo-live-panel{
-    position:relative;
-    z-index:2;
-    width:min(96%,1050px);
-    margin-top:auto;
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:clamp(.45rem,1.2vw,1rem);
-    padding:clamp(.55rem,1.3vw,.9rem);
-}
-.abq-cairo-live-item{
-    min-width:0;
-    min-height:92px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:.65rem;
-    padding:.7rem .8rem;
-    text-align:center;
-    color:#fff;
-    background:rgba(15,23,42,.48);
-    border:1px solid rgba(255,255,255,.42);
-    border-radius:1rem;
-    box-shadow:0 8px 24px rgba(0,0,0,.18);
-    backdrop-filter:blur(7px);
-    -webkit-backdrop-filter:blur(7px);
-}
-.abq-cairo-live-item > div{
-    min-width:0;
+    width:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:.12rem;
-}
-.abq-cairo-live-icon{
-    flex:0 0 auto;
-    font-size:clamp(1.35rem,2.3vw,2rem);
-}
-.abq-cairo-live-item strong{
-    font-size:clamp(.72rem,1vw,.9rem);
-    font-weight:900;
-}
-.abq-cairo-live-date,
-.abq-cairo-live-hijri,
-.abq-cairo-live-value,
-.abq-cairo-live-item small{
-    display:block;
-    max-width:100%;
-    overflow-wrap:anywhere;
-}
-.abq-cairo-live-date,
-.abq-cairo-live-hijri,
-.abq-cairo-live-value{
-    font-size:clamp(.72rem,1.15vw,1rem);
-    font-weight:800;
-    line-height:1.55;
-}
-.abq-cairo-live-item small{
-    font-size:clamp(.58rem,.8vw,.72rem);
-    line-height:1.45;
-    opacity:.92;
+    justify-content:center;
 }
 @media (max-width:768px){
+    .abq-top-live-bar{
+        width:calc(100% - 1rem);
+        margin:.45rem auto .6rem;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:.3rem;
+        padding:.32rem;
+        border-radius:.95rem;
+    }
+    .abq-top-live-item{
+        min-height:50px;
+        padding:.3rem .25rem;
+        gap:.32rem;
+        border:0;
+        border-radius:.65rem;
+        background:rgba(248,250,252,.72);
+    }
+    .abq-top-icon{font-size:1rem}
+    .abq-top-primary{font-size:.67rem}
+    .abq-top-secondary{font-size:.57rem}
     .abq-home-live-hero{
         min-height:420px;
         padding:.85rem .6rem;
         background-position:center center !important;
     }
-    .abq-home-live-title{
-        width:100%;
-        font-size:clamp(.92rem,4vw,1.2rem);
-        line-height:1.65;
-    }
-    .abq-cairo-live-panel{
-        width:100%;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:.45rem;
-        padding:.45rem;
-    }
-    .abq-cairo-live-item{
-        min-height:82px;
-        padding:.55rem .4rem;
-        gap:.35rem;
-        border-radius:.85rem;
-    }
-    .abq-cairo-live-icon{
-        font-size:1.25rem;
-    }
 }
 @media (max-width:420px){
-    .abq-home-live-hero{
-        min-height:390px;
+    .abq-top-live-bar{
+        width:calc(100% - .7rem);
+        grid-template-columns:1fr 1fr;
     }
-    .abq-home-live-title{
-        font-size:.86rem;
-    }
-    .abq-cairo-live-item{
-        min-height:78px;
-        padding:.45rem .3rem;
-    }
-    .abq-cairo-live-date,
-    .abq-cairo-live-hijri,
-    .abq-cairo-live-value{
-        font-size:.67rem;
-    }
-    .abq-cairo-live-item small{
-        font-size:.56rem;
-    }
+    .abq-top-live-item{min-height:47px}
+    .abq-top-primary{font-size:.61rem}
+    .abq-top-secondary{font-size:.52rem}
+    .abq-home-live-hero{min-height:390px}
 }
 </style>
 
@@ -1700,6 +1681,41 @@ html { scroll-behavior: auto !important; }
         </nav>
     </header>
 
+<!-- شريط المعلومات الحية العلوي -->
+<div class="abq-top-live-bar" role="region" aria-label="اليوم والوقت والطقس والموقع">
+    <div class="abq-top-live-item abq-top-date">
+        <span class="abq-top-icon" aria-hidden="true">📅</span>
+        <div class="abq-top-values">
+            <span id="abq-cairo-hijri" class="abq-top-primary">—</span>
+            <span id="abq-cairo-gregorian" class="abq-top-secondary">—</span>
+        </div>
+    </div>
+
+    <div class="abq-top-live-item abq-top-time">
+        <span class="abq-top-icon" aria-hidden="true">🕐</span>
+        <div class="abq-top-values">
+            <span id="abq-cairo-time" class="abq-top-primary">القاهرة —</span>
+            <span id="abq-user-time" class="abq-top-secondary">موقعك —</span>
+        </div>
+    </div>
+
+    <div class="abq-top-live-item abq-top-weather">
+        <span id="abq-cairo-weather-icon" class="abq-top-icon" aria-hidden="true">☀️</span>
+        <div class="abq-top-values">
+            <span id="abq-cairo-weather-temp" class="abq-top-primary">القاهرة —</span>
+            <span id="abq-cairo-weather-state" class="abq-top-secondary">جاري تحميل الطقس...</span>
+        </div>
+    </div>
+
+    <div class="abq-top-live-item abq-top-location">
+        <span class="abq-top-icon" aria-hidden="true">📍</span>
+        <div class="abq-top-values">
+            <span class="abq-top-primary">القاهرة، مصر</span>
+            <span id="abq-user-weather" class="abq-top-secondary">طقس موقعك —</span>
+        </div>
+    </div>
+</div>
+
     <!-- المحتوى الرئيسي -->
     <main class="main-tabs-content flex-grow container mx-auto px-6 py-0">
 
@@ -1708,43 +1724,21 @@ html { scroll-behavior: auto !important; }
 
             <!-- 1) HERO -->
             <div class="abq-home-live-hero hero-bg text-white rounded-3xl shadow-2xl mb-10 border border-blue-400/50 relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
-    <div class="abq-home-live-title">
-        🎓<span>منصة العبقري للتدريب والإستشارات (الطب التكميلي والتنمية البشرية🌿)</span>
-    </div>
+    <div class="abq-home-live-overlay" aria-hidden="true"></div>
 
-    <div class="abq-cairo-live-panel" aria-label="بيانات اليوم والوقت والطقس والموقع">
-        <div class="abq-cairo-live-item abq-cairo-live-date-item">
-            <span class="abq-cairo-live-icon" aria-hidden="true">📅</span>
-            <div>
-                <strong>اليوم والتاريخ</strong>
-                <span class="abq-cairo-live-date" id="abq-cairo-gregorian">—</span>
-                <span class="abq-cairo-live-hijri" id="abq-cairo-hijri">—</span>
-            </div>
+    <div class="abq-home-live-content">
+        <div class="abq-home-live-actions" aria-label="روابط سريعة">
+            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
+            <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
+            <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
+            <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
+            <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
         </div>
 
-        <div class="abq-cairo-live-item">
-            <span class="abq-cairo-live-icon" aria-hidden="true">🕐</span>
-            <div>
-                <strong>الساعة</strong>
-                <span class="abq-cairo-live-value" id="abq-cairo-time">—</span>
-            </div>
-        </div>
-
-        <div class="abq-cairo-live-item">
-            <span class="abq-cairo-live-icon" id="abq-cairo-weather-icon" aria-hidden="true">☀️</span>
-            <div>
-                <strong>الطقس</strong>
-                <span class="abq-cairo-live-value" id="abq-cairo-weather-temp">—</span>
-                <small id="abq-cairo-weather-state">جاري تحميل الطقس...</small>
-            </div>
-        </div>
-
-        <div class="abq-cairo-live-item">
-            <span class="abq-cairo-live-icon" aria-hidden="true">📍</span>
-            <div>
-                <strong>الموقع</strong>
-                <span class="abq-cairo-live-value">القاهرة، مصر</span>
-            </div>
+        <div class="abq-home-live-welcome" aria-live="polite">
+            <span>🌿</span>
+            <strong>أهلاً بأعضاء وزوار منصة العبقري الكرام</strong>
+            <span>🌿</span>
         </div>
     </div>
 </div>
@@ -8668,8 +8662,8 @@ function toggleQualificationDocs() {
 (function(){
     'use strict';
 
-    var TIME_ZONE = 'Africa/Cairo';
-    var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=30.0444&longitude=31.2357&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=Africa%2FCairo';
+    var CAIRO = {lat:30.0444, lon:31.2357, zone:'Africa/Cairo'};
+    var userCoords = null;
 
     var weatherMap = {
         0:['☀️','سماء صافية'],1:['🌤️','غالبًا صافٍ'],2:['⛅','غائم جزئيًا'],3:['☁️','غائم'],
@@ -8686,55 +8680,108 @@ function toggleQualificationDocs() {
 
     function el(id){ return document.getElementById(id); }
 
+    function formatTime(zone){
+        try{
+            return new Intl.DateTimeFormat('ar-EG',{
+                timeZone:zone, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true
+            }).format(new Date());
+        }catch(e){ return '—'; }
+    }
+
     function formatCairoDate(){
         var now = new Date();
         var greg = new Intl.DateTimeFormat('ar-EG',{
-            timeZone:TIME_ZONE, weekday:'long', day:'numeric', month:'long', year:'numeric'
+            timeZone:CAIRO.zone, weekday:'long', day:'numeric', month:'long', year:'numeric'
         }).format(now);
         var hijri;
         try{
             hijri = new Intl.DateTimeFormat('ar-EG-u-ca-islamic-umalqura',{
-                timeZone:TIME_ZONE, day:'numeric', month:'long', year:'numeric'
+                timeZone:CAIRO.zone, day:'numeric', month:'long', year:'numeric'
             }).format(now);
         }catch(e){
             hijri = new Intl.DateTimeFormat('ar-EG-u-ca-islamic',{
-                timeZone:TIME_ZONE, day:'numeric', month:'long', year:'numeric'
+                timeZone:CAIRO.zone, day:'numeric', month:'long', year:'numeric'
             }).format(now);
         }
-        var time = new Intl.DateTimeFormat('ar-EG',{
-            timeZone:TIME_ZONE, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true
-        }).format(now);
 
         if(el('abq-cairo-gregorian')) el('abq-cairo-gregorian').textContent = greg;
         if(el('abq-cairo-hijri')) el('abq-cairo-hijri').textContent = hijri + ' هـ';
-        if(el('abq-cairo-time')) el('abq-cairo-time').textContent = time;
+        if(el('abq-cairo-time')) el('abq-cairo-time').textContent = 'القاهرة • ' + formatTime(CAIRO.zone);
+
+        var userZone;
+        try{ userZone = Intl.DateTimeFormat().resolvedOptions().timeZone; }catch(e){ userZone=null; }
+        if(!userZone || userZone===CAIRO.zone){
+            if(el('abq-user-time')) el('abq-user-time').textContent = 'موقعك • نفس توقيت القاهرة';
+        }else{
+            if(el('abq-user-time')) el('abq-user-time').textContent = 'موقعك • ' + formatTime(userZone);
+        }
+    }
+
+    function weatherUrl(lat,lon,timezone){
+        return 'https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(lat)+'&longitude='+encodeURIComponent(lon)+'&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone='+encodeURIComponent(timezone||'auto');
+    }
+
+    function renderWeather(prefix,data,label){
+        var current=data.current||{};
+        var code=Number(current.weather_code);
+        var info=weatherMap[code]||['🌤️','حالة الطقس الحالية'];
+        var temp=Number(current.temperature_2m);
+        var humidity=Number(current.relative_humidity_2m);
+        var text=(Number.isFinite(temp)?Math.round(temp)+'°م':'—');
+        var state=info[1]+(Number.isFinite(humidity)?' • رطوبة '+Math.round(humidity)+'%':'');
+        if(prefix==='cairo'){
+            if(el('abq-cairo-weather-icon')) el('abq-cairo-weather-icon').textContent=info[0];
+            if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent='القاهرة • '+text;
+            if(el('abq-cairo-weather-state')) el('abq-cairo-weather-state').textContent=state;
+        }else{
+            if(el('abq-user-weather')) el('abq-user-weather').textContent=(label||'طقس موقعك')+' • '+text+' • '+info[1];
+        }
     }
 
     function loadCairoWeather(){
-        fetch(WEATHER_URL,{cache:'no-store'})
+        fetch(weatherUrl(CAIRO.lat,CAIRO.lon,CAIRO.zone),{cache:'no-store'})
             .then(function(res){ if(!res.ok) throw new Error('weather'); return res.json(); })
-            .then(function(data){
-                var current=data.current||{};
-                var code=Number(current.weather_code);
-                var info=weatherMap[code]||['🌤️','حالة الطقس الحالية'];
-                if(el('abq-cairo-weather-icon')) el('abq-cairo-weather-icon').textContent=info[0];
-                if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent =
-                    (Number.isFinite(Number(current.temperature_2m)) ? Math.round(Number(current.temperature_2m)) + '°م' : '—');
-                if(el('abq-cairo-weather-state')) el('abq-cairo-weather-state').textContent =
-                    info[1] + (Number.isFinite(Number(current.relative_humidity_2m)) ? ' • رطوبة ' + Math.round(Number(current.relative_humidity_2m)) + '%' : '');
-            })
+            .then(function(data){ renderWeather('cairo',data,'القاهرة'); })
             .catch(function(){
                 if(el('abq-cairo-weather-icon')) el('abq-cairo-weather-icon').textContent='🌤️';
-                if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent='—';
+                if(el('abq-cairo-weather-temp')) el('abq-cairo-weather-temp').textContent='القاهرة • —';
                 if(el('abq-cairo-weather-state')) el('abq-cairo-weather-state').textContent='الطقس غير متاح مؤقتًا';
             });
+    }
+
+    function loadUserWeather(lat,lon){
+        fetch(weatherUrl(lat,lon,'auto'),{cache:'no-store'})
+            .then(function(res){ if(!res.ok) throw new Error('weather'); return res.json(); })
+            .then(function(data){
+                renderWeather('user',data,'طقس موقعك');
+            })
+            .catch(function(){
+                if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • غير متاح مؤقتًا';
+            });
+    }
+
+    function requestUserLocation(){
+        if(!navigator.geolocation){
+            if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • غير متاح';
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(function(pos){
+            userCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};
+            loadUserWeather(userCoords.lat,userCoords.lon);
+        },function(){
+            if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • السماح بالموقع اختياري';
+        },{enableHighAccuracy:false,timeout:8000,maximumAge:10*60*1000});
     }
 
     function init(){
         formatCairoDate();
         loadCairoWeather();
+        requestUserLocation();
         setInterval(formatCairoDate,1000);
         setInterval(loadCairoWeather,10*60*1000);
+        setInterval(function(){
+            if(userCoords) loadUserWeather(userCoords.lat,userCoords.lon);
+        },10*60*1000);
     }
 
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
