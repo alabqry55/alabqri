@@ -549,3 +549,15 @@ body{
     .abq-home-live-action{font-size:.61rem;padding:.48rem .58rem;border-radius:.7rem}
     .abq-home-live-welcome{font-size:.59rem;padding:.38rem .55rem}
 }
+
+
+/* =========================================================
+   ↔️ تنقل سريع بين صفحات مركز التوثيق + منع ارتداد الصفحة
+   ========================================================= */
+html,body{overscroll-behavior-y:none!important;overscroll-behavior-x:none!important}
+html{scroll-behavior:auto!important;-webkit-overflow-scrolling:touch}
+body{overflow-x:hidden!important}
+#abq-doc-prev-next{position:fixed;left:0;right:0;bottom:max(.75rem,env(safe-area-inset-bottom));z-index:9990;display:flex;justify-content:space-between;align-items:center;pointer-events:none;padding:0 .9rem}
+#abq-doc-prev-next a{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;min-width:118px;padding:.58rem .9rem;border:2px solid #1d4ed8;border-radius:999px;background:rgba(255,255,255,.96);color:#164e9a!important;text-decoration:none!important;font-size:.78rem;font-weight:900;line-height:1.2;box-shadow:0 8px 20px -10px rgba(15,23,42,.65);backdrop-filter:blur(7px);transition:transform .15s ease,background .15s ease}
+#abq-doc-prev-next a:hover{transform:translateY(-2px);background:#eff6ff}
+@media(max-width:768px){#abq-doc-prev-next{padding:0 .45rem;bottom:max(.55rem,env(safe-area-inset-bottom))}#abq-doc-prev-next a{min-width:96px;padding:.52rem .68rem;font-size:.7rem}}
