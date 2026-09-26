@@ -10175,3 +10175,91 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-final-layout-fix">
+/* ===== الضبط النهائي لرسالة الترحيب + عداد الزوار ===== */
+#home .abq-hero-visitor-welcome{
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  gap:1rem !important;
+  overflow:visible !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-counter{
+  flex:0 0 auto !important;
+  min-width:clamp(9rem,18vw,13rem) !important;
+  padding-inline:1rem !important;
+  padding-block:.55rem !important;
+  box-sizing:border-box !important;
+}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  width:auto !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  overflow:hidden !important;
+}
+/* منع أي نسخة/تكرار بصري للنص من العناصر الداخلية */
+#home .abq-hero-welcome strong::before,
+#home .abq-hero-welcome strong::after,
+#home .abq-welcome-line-1::before,
+#home .abq-welcome-line-1::after,
+#home .abq-welcome-line-2::before,
+#home .abq-welcome-line-2::after{content:none !important;display:none !important;}
+
+@media (min-width:769px){
+  #home .abq-hero-welcome{
+    font-size:clamp(1rem,1.35vw,1.45rem) !important;
+    line-height:1.45 !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+  }
+  #home .abq-hero-welcome strong{
+    display:inline !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+  }
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    display:inline !important;
+    white-space:nowrap !important;
+  }
+}
+
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:.5rem !important;
+    align-items:stretch !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    width:100% !important;
+    min-width:0 !important;
+    justify-content:center !important;
+    padding:.65rem .8rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    width:100% !important;
+    max-width:100% !important;
+    flex:none !important;
+    font-size:clamp(.82rem,3.5vw,1rem) !important;
+    line-height:1.65 !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+    padding-inline:.3rem !important;
+  }
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:normal !important;
+    word-break:normal !important;
+  }
+}
+</style>
