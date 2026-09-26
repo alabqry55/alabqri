@@ -1791,6 +1791,36 @@ html { scroll-behavior: auto !important; }
     }
 }
 </style>
+
+<style id="abq-welcome-single-line-desktop">
+/* ===== رسالة الترحيب: سطر واحد على الكمبيوتر فقط ===== */
+@media (min-width: 769px){
+  #home .abq-hero-welcome{
+    white-space:nowrap !important;
+    overflow:visible !important;
+    font-size:1.25rem !important;
+    line-height:1.7 !important;
+    text-align:center !important;
+  }
+  #home .abq-hero-welcome strong{
+    white-space:nowrap !important;
+    display:inline !important;
+    font-size:inherit !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 1100px){
+  #home .abq-hero-welcome{
+    font-size:1.08rem !important;
+  }
+}
+@media (max-width:768px){
+  #home .abq-hero-welcome,
+  #home .abq-hero-welcome strong{
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1990,7 +2020,7 @@ html { scroll-behavior: auto !important; }
         <span id="abq-visitor-count" class="abq-visitor-count">—</span>
     </div>
     <p class="abq-hero-welcome">
-        <strong>🌿أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"🌿</strong>
+        <strong>🌿 أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل" 🌿</strong>
     </p>
 </div>
 
