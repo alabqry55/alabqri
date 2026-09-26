@@ -2249,7 +2249,7 @@ html { scroll-behavior: auto !important; }
         <span id="abq-visitor-count" class="abq-visitor-count">—</span>
     </div>
     <p class="abq-hero-welcome">
-        <strong><span class="abq-welcome-line-1">🌿 أهلاً بأعضاء وزوار المنصة الكرام</span><span class="abq-welcome-line-2">"هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل" 🌿</span></strong>
+        <strong>🌿 أهلاً بأعضاء وزوار المنصة الكرام "هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل" 🌿</strong>
     </p>
 </div>
 
@@ -10362,6 +10362,23 @@ function toggleQualificationDocs() {
     max-width:calc(100% - 1rem) !important;
     padding:.75rem 1rem !important;
     margin-inline:auto !important;
+  }
+}
+</style>
+
+
+<style id="abq-welcome-text-size-unified-final">
+/* ===== توحيد نص الترحيب وتكبيره ===== */
+#home .abq-hero-welcome{text-align:center !important;}
+#home .abq-hero-welcome strong{
+  display:block !important;width:100% !important;
+  font-size:clamp(1.12rem,1.55vw,1.5rem) !important;
+  line-height:1.55 !important;text-align:center !important;white-space:nowrap !important;
+}
+@media (max-width:768px){
+  #home .abq-hero-welcome strong{
+    font-size:clamp(1.02rem,4.25vw,1.22rem) !important;
+    line-height:1.7 !important;white-space:normal !important;overflow-wrap:normal !important;
   }
 }
 </style>
