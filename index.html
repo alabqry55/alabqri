@@ -10232,7 +10232,37 @@ document.addEventListener('click',function(event){
     box-sizing:border-box !important;
   }
 }
-</style>
+<style id="abq-mobile-hero-edge-only">
+/* ===== الموبايل فقط: الصورة وحدها بدون أي حواف أو هوامش أو حشوات ===== */
+@media (max-width:768px){
+  .main-tabs-content{padding-inline:0 !important;}
+  .abq-home-live-hero{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    background:none !important;
+    overflow:visible !important;
+  }
+  .abq-home-live-hero .abq-main-hero-image{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    object-fit:contain !important;
+  }
+}
+</style>\n</style>
 </body>
 </html>
 
