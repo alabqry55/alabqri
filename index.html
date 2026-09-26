@@ -9030,3 +9030,31 @@ function toggleQualificationDocs() {
 </script>
 </body>
 </html>
+
+<style id="abq-visitor-counter-alignment">
+
+/* ===== محاذاة عداد الزوار يمين الصفحة على الكمبيوتر ===== */
+@media (min-width: 769px){
+    #home .abq-hero-visitor-welcome{
+        justify-content:flex-start !important;
+        align-items:center !important;
+        flex-wrap:nowrap !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-visitor-counter{
+        margin-right:0 !important;
+        margin-left:auto !important;
+    }
+}
+@media (max-width: 768px){
+    #home .abq-hero-visitor-welcome{
+        justify-content:center !important;
+        align-items:center !important;
+        flex-wrap:wrap !important;
+        gap:.45rem .75rem !important;
+    }
+    #home .abq-hero-visitor-welcome .abq-visitor-counter{
+        margin-right:auto !important;
+        margin-left:auto !important;
+    }
+}
+</style>
