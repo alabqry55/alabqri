@@ -64,5 +64,36 @@
  </div>
 </footer>
 <script src="/assets/js/alabqri.js"></script>
+
+<!-- =========================================================
+     ↔️ السابق واللاحق — صفحات مركز التوثيق
+     ========================================================= -->
+<div id="abq-doc-prev-next" aria-label="التنقل بين صفحات مركز التوثيق">
+  <a id="abq-doc-prev" href="#" aria-label="الصفحة السابقة">→ السابق</a>
+  <a id="abq-doc-next" href="#" aria-label="الصفحة التالية">اللاحق ←</a>
+</div>
+<script id="abq-doc-navigation">
+(function(){
+  var pages=[
+    ['/documentation.html','مركز التوثيق'],
+    ['/verification.html','التوثيق الرسمي'],
+    ['/certificate-policy.html','سياسة الشهادات'],
+    ['/verify-certificate.html','التحقق من الشهادة'],
+    ['/terms-of-use.html','شروط الاستخدام'],
+    ['/privacy-policy.html','سياسة الخصوصية'],
+    ['/disclaimer.html','إخلاء المسؤولية'],
+    ['/official-accounts.html','الحسابات الرسمية']
+  ];
+  var path=location.pathname.replace(/\\/$/,'')||'/documentation.html';
+  var i=pages.findIndex(function(p){return p[0]===path;});
+  if(i<0)i=0;
+  var prev=document.getElementById('abq-doc-prev'),next=document.getElementById('abq-doc-next');
+  if(prev){prev.href=pages[Math.max(0,i-1)][0];prev.innerHTML=i>0?'→ السابق':'→ البداية';prev.setAttribute('aria-label',i>0?'الانتقال إلى '+pages[i-1][1]:'أنت في بداية مركز التوثيق');}
+  if(next){next.href=pages[Math.min(pages.length-1,i+1)][0];next.innerHTML=i<pages.length-1?'اللاحق ←':'النهاية ✓';next.setAttribute('aria-label',i<pages.length-1?'الانتقال إلى '+pages[i+1][1]:'أنت في نهاية مركز التوثيق');}
+  if(i===0&&prev){prev.setAttribute('aria-disabled','true');}
+  if(i===pages.length-1&&next){next.setAttribute('aria-disabled','true');}
+})();
+</script>
+
 </body>
 </html>
