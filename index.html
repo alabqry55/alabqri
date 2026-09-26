@@ -10286,3 +10286,22 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-font-size-final-2">
+/* ===== زيادة طفيفة ومتوازنة لحجم رسالة الترحيب — PC + Mobile ===== */
+@media (min-width:769px){
+  #home .abq-hero-welcome{
+    font-size:clamp(.96rem,1.15vw,1.28rem) !important;
+    line-height:1.45 !important;
+  }
+  #home .abq-hero-welcome strong{font-size:inherit !important;}
+}
+@media (max-width:768px){
+  #home .abq-hero-welcome{
+    font-size:clamp(.98rem,4.05vw,1.14rem) !important;
+    line-height:1.65 !important;
+  }
+  #home .abq-hero-welcome strong{font-size:inherit !important;}
+}
+</style>
