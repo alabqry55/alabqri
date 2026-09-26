@@ -10112,3 +10112,66 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-fit-frame-final">
+/* ===== ضبط نهائي: رسالة الترحيب داخل الإطار بدون أي خروج — PC + Mobile ===== */
+#home .abq-hero-welcome{
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin-inline:auto !important;
+  padding-inline:clamp(.35rem,1.4vw,.9rem) !important;
+  overflow:hidden !important;
+  text-align:center !important;
+  font-size:clamp(.88rem,1.35vw,1.5rem) !important;
+  line-height:1.65 !important;
+  white-space:normal !important;
+}
+#home .abq-hero-welcome strong{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  white-space:normal !important;
+  overflow-wrap:break-word !important;
+  word-break:normal !important;
+}
+#home .abq-welcome-line-1,
+#home .abq-welcome-line-2{
+  white-space:normal !important;
+  overflow-wrap:break-word !important;
+  word-break:normal !important;
+}
+
+@media (min-width:769px){
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    display:inline !important;
+  }
+}
+
+@media (max-width:768px){
+  #home .abq-hero-welcome{
+    width:100% !important;
+    max-width:100% !important;
+    margin-inline:0 !important;
+    padding-inline:.35rem !important;
+    font-size:clamp(.82rem,3.55vw,1rem) !important;
+    line-height:1.7 !important;
+    overflow:hidden !important;
+  }
+  #home .abq-hero-welcome strong{
+    width:100% !important;
+  }
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:break-word !important;
+    word-break:normal !important;
+  }
+}
+</style>
