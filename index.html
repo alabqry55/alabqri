@@ -8480,6 +8480,35 @@ window.AbqToast = (function(){
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
         count.textContent=likes.toLocaleString('en-US');
     }
+
+    function abqSyncRatingCounts(counts){
+        if(!counts || typeof counts !== 'object') return;
+        ['excellent','good','average','suggestion'].forEach(function(key){
+            var btn=document.querySelector('.abq-rating-btn[data-rating="'+key+'"]');
+            var count=btn ? btn.querySelector('.abq-rating-count') : null;
+            var value=Math.max(0,parseInt(counts[key],10)||0);
+            if(count){ count.textContent=value.toLocaleString('en-US'); count.setAttribute('aria-label',value+' تقييمًا'); }
+        });
+    }
+    async function abqSendExperienceRating(key){
+        if(!key) return;
+        var storageKey='abq_experience_rated_'+key;
+        if(safeGet(storageKey,'0')==='1'){
+            notify('ℹ️ تم تسجيل تقييمك من قبل على هذا الجهاز.', 'info');
+            return;
+        }
+        var btn=document.querySelector('.abq-rating-btn[data-rating="'+key+'"]');
+        var count=btn ? btn.querySelector('.abq-rating-count') : null;
+        if(count){
+            var n=parseInt(count.textContent,10)||0;
+            count.textContent=(n+1).toLocaleString('en-US');
+        }
+        safeSet(storageKey,'1');
+        notify('⭐ شكرًا لك! تم تسجيل تقييمك بنجاح.', 'success');
+        var result=await apiRequest({action:'rating',rating:key});
+        if(result && result.ratingCounts) abqSyncRatingCounts(result.ratingCounts);
+    }
+
     function selectRating(btn, buttons){
         buttons.forEach(function(b){
             b.classList.toggle('abq-rating-selected', b === btn);
@@ -8512,6 +8541,7 @@ window.AbqToast = (function(){
                 safeSet(KEYS.comments,JSON.stringify(data.comments));
                 renderComments(data.comments);
             }
+            if(data && data.ratingCounts){ abqSyncRatingCounts(data.ratingCounts); }
             if(data && Number.isFinite(Number(data.likes))){
                 safeSet(KEYS.likes,String(Math.max(350,Number(data.likes))));
                 updateLikeUI();
@@ -8526,7 +8556,7 @@ window.AbqToast = (function(){
 
         var ratingButtons = Array.prototype.slice.call(document.querySelectorAll('.abq-rating-btn'));
         ratingButtons.forEach(function(btn){
-            btn.addEventListener('click', function(){ selectRating(btn, ratingButtons); });
+            btn.addEventListener('click', function(){ var key=btn.getAttribute('data-rating'); selectRating(btn, ratingButtons); abqSendExperienceRating(key); });
         });
 
         updateLikeUI();
