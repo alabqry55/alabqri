@@ -10197,14 +10197,12 @@ document.addEventListener('click',function(event){
 },true);
 })();
 </script>
-</body>
-</html>
-
-/* ===== تكبير صورة الهيرو على الموبايل داخل إطار الخلفية blue-600 ===== */
+<style id="abq-mobile-hero-edge-fix">
+/* ===== الموبايل: الصورة ملاصقة لحواف منطقة الهيرو بدون حشو ===== */
 @media (max-width:768px){
   .abq-home-live-hero{
     width:100% !important;
-    max-width:1200px !important;
+    max-width:100% !important;
     margin-inline:auto !important;
     padding:0 !important;
     box-sizing:border-box !important;
@@ -10214,7 +10212,14 @@ document.addEventListener('click',function(event){
   .abq-home-live-hero .abq-main-hero-image{
     display:block !important;
     width:100% !important;
-    max-width:100% !important;
+    max-width:none !important;
+    height:auto !important;
     margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
   }
 }
+</style>
+</body>
+</html>
+
