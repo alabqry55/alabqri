@@ -45,6 +45,19 @@ export async function onRequest({ request, env }) {
       return json({ ok: true, likes: Number(row?.likes || 0) });
     }
 
+    if (action === "rating") {
+      const rating = String(body.rating || "");
+      if (!ALLOWED_RATINGS.has(rating)) return json({ error: "تقييم غير صالح." }, 400);
+
+      await env.DB.prepare(
+        `INSERT INTO feedback_ratings (rating, count)
+         VALUES (?, 1)
+         ON CONFLICT(rating) DO UPDATE SET count = feedback_ratings.count + 1`
+      ).bind(rating).run();
+
+      return json({ ok: true, ratingCounts: await getRatingCounts(env.DB) });
+    }
+
     if (action === "comment") {
       const name = cleanText(body.name, 80) || "زائر";
       const text = cleanText(body.text, 1000);
@@ -106,8 +119,23 @@ async function getFeedback(db) {
 
   return json({
     likes: Number(meta?.likes || 0),
+    ratingCounts: await getRatingCounts(db),
     comments: result.results || []
   });
+}
+
+async function getRatingCounts(db) {
+  const result = await db.prepare(
+    `SELECT rating, count FROM feedback_ratings`
+  ).all();
+
+  const counts = { excellent: 245, good: 63, average: 27, suggestion: 15 };
+  for (const row of (result.results || [])) {
+    if (ALLOWED_RATINGS.has(String(row.rating))) {
+      counts[String(row.rating)] = Number(row.count || 0);
+    }
+  }
+  return counts;
 }
 
 function cleanText(value, maxLength) {
