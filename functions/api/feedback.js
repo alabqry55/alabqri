@@ -16,6 +16,8 @@ export async function onRequest({ request, env }) {
   if (!env.DB) return json({ error: "D1 binding DB is not configured." }, 500);
 
   try {
+    await ensureRatingTable(env.DB);
+
     if (request.method === "GET") {
       return await getFeedback(env.DB);
     }
@@ -122,6 +124,23 @@ async function getFeedback(db) {
     ratingCounts: await getRatingCounts(db),
     comments: result.results || []
   });
+}
+
+async function ensureRatingTable(db) {
+  await db.prepare(
+    `CREATE TABLE IF NOT EXISTS feedback_ratings (
+      rating TEXT PRIMARY KEY CHECK (rating IN ('excellent','good','average','suggestion')),
+      count INTEGER NOT NULL DEFAULT 0
+    )`
+  ).run();
+
+  await db.prepare(
+    `INSERT OR IGNORE INTO feedback_ratings (rating, count) VALUES
+      ('excellent', 245),
+      ('good', 63),
+      ('average', 27),
+      ('suggestion', 15)`
+  ).run();
 }
 
 async function getRatingCounts(db) {
