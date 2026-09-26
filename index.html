@@ -9577,3 +9577,48 @@ function toggleQualificationDocs() {
   }
 }
 </style>
+
+
+<style id="abq-welcome-3d-boost">
+/* ===== تضخيم البروز ثلاثي الأبعاد لرسالة الترحيب ===== */
+#home .abq-hero-welcome{
+  position:relative !important;
+  z-index:3 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.95),
+    0 2px 0 rgba(203,213,225,.95),
+    0 3px 0 rgba(148,163,184,.95),
+    0 4px 0 rgba(100,116,139,.9),
+    0 6px 2px rgba(15,23,42,.5),
+    0 9px 8px rgba(15,23,42,.32) !important;
+}
+#home .abq-hero-welcome strong{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.98),
+    0 2px 0 rgba(203,213,225,.98),
+    0 3px 0 rgba(148,163,184,.95),
+    0 4px 0 rgba(100,116,139,.9),
+    0 6px 2px rgba(15,23,42,.5),
+    0 9px 8px rgba(15,23,42,.32) !important;
+}
+@media(max-width:768px){
+  #home .abq-hero-welcome{
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.95),
+      0 2px 0 rgba(203,213,225,.95),
+      0 3px 0 rgba(148,163,184,.9),
+      0 4px 1px rgba(100,116,139,.85),
+      0 6px 5px rgba(15,23,42,.32) !important;
+  }
+  #home .abq-hero-welcome strong{
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.98),
+      0 2px 0 rgba(203,213,225,.98),
+      0 3px 0 rgba(148,163,184,.9),
+      0 4px 1px rgba(100,116,139,.85),
+      0 6px 5px rgba(15,23,42,.32) !important;
+  }
+}
+</style>
