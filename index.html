@@ -2306,6 +2306,44 @@ html,body{touch-action:pan-y!important}
 body{overflow-x:hidden!important}
 .main-tabs-content{touch-action:pan-y!important}
 </style>
+<style id="abq-mobile-native-vertical-scroll-final">
+/* ===== إصلاح نهائي للتمرير الرأسي الطبيعي على الموبايل ===== */
+html{
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  height:auto !important;
+  min-height:100% !important;
+  touch-action:pan-y !important;
+  scroll-behavior:auto !important;
+}
+body{
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  height:auto !important;
+  min-height:100vh !important;
+  touch-action:pan-y !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.main-tabs-content{
+  overflow:visible !important;
+  overflow-y:visible !important;
+  touch-action:pan-y !important;
+}
+@media(max-width:768px){
+  html,body{
+    overscroll-behavior-y:auto !important;
+    touch-action:pan-y !important;
+  }
+  .main-tabs-content{
+    min-height:1px !important;
+    overflow:visible !important;
+    touch-action:pan-y !important;
+  }
+  .main-tabs-content > section.tab-content.tab-active{
+    touch-action:pan-y !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -8666,63 +8704,6 @@ window.AbqToast = (function(){
 })();
 </script>
 
-<script id="abq-eight-main-tabs-final-controller">
-(function(){
-  'use strict';
-  const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-  const main=()=>document.querySelector('.main-tabs-content');
-  function normalize(){
-    const host=main(); if(!host) return false;
-    // Promote only the eight exact main sections to the main-tabs container.
-    IDS.forEach(function(id){
-      const el=document.getElementById(id);
-      if(el && el.parentElement!==host) host.appendChild(el);
-    });
-    return true;
-  }
-  function sections(){
-    const host=main(); if(!host) return [];
-    return IDS.map(id=>document.getElementById(id)).filter(function(el){return el && el.parentElement===host;});
-  }
-  function show(id){
-    if(!normalize()) return;
-    const host=main(), target=document.getElementById(id);
-    if(!target || target.parentElement!==host) return;
-    sections().forEach(function(sec){
-      const active=sec===target;
-      sec.classList.toggle('tab-active',active);
-      sec.style.setProperty('display',active?'block':'none','important');
-      sec.style.setProperty('visibility',active?'visible':'hidden','important');
-      sec.setAttribute('aria-hidden',active?'false':'true');
-    });
-    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
-      const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-      const active=!!m && m[1]===id;
-      btn.classList.toggle('active',active);
-      btn.setAttribute('aria-selected',active?'true':'false');
-    });
-  }
-  window.abqShowMainTab=show;
-  function hook(){
-    if(!normalize()) return;
-    const nav=document.querySelector('.main-tabs-nav');
-    if(nav && !nav.dataset.abqEightHooked){
-      nav.dataset.abqEightHooked='1';
-      nav.addEventListener('click',function(e){
-        const btn=e.target.closest('.nav-btn'); if(!btn) return;
-        const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-        if(m) setTimeout(function(){show(m[1]);},0);
-      },true);
-    }
-    const active=document.querySelector('.main-tabs-nav .nav-btn.active');
-    const m=active && (active.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-    show(m?m[1]:'home');
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',hook,{once:true}); else hook();
-})();
-</script>
-
-
 <!-- =========================================================
      ALABQARI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
      يحافظ على التمرير الطبيعي باللمس ويزيد استجابة عجلة الماوس
@@ -8787,38 +8768,85 @@ function toggleQualificationDocs() {
 
 <script id="abq-main-tabs-single-controller">
 (function(){
- 'use strict';
- const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
- function host(){return document.querySelector('.main-tabs-content');}
- function activate(id){
-   if(!IDS.includes(id)) return false;
-   const h=host(); if(!h)return false;
-   IDS.forEach(x=>{const el=document.getElementById(x); if(el&&el.parentElement===h){const on=x===id;el.classList.toggle('tab-active',on);el.style.setProperty('display',on?'block':'none','important');el.style.setProperty('visibility',on?'visible':'hidden','important');}});
-   document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(btn=>{
-     const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
-     const bid=String(raw).replace(/^#/,'');
-     btn.classList.toggle('active',bid===id);
-     btn.setAttribute('aria-selected',bid===id?'true':'false');
-   });
-   return true;
- }
- window.abqActivateMainTab=activate;
- document.addEventListener('click',function(e){
-   const btn=e.target.closest?.('.main-tabs-nav .nav-btn'); if(!btn)return;
-   const raw=btn.dataset.tab||btn.getAttribute('data-tab')||btn.dataset.target||btn.getAttribute('data-target')||'';
-   const id=String(raw).replace(/^#/,''); if(!IDS.includes(id))return;
-   e.preventDefault(); e.stopImmediatePropagation();
-   activate(id);
-   window.scrollTo(0,0);
- },true);
- function init(){
-   const active=IDS.find(id=>document.getElementById(id)?.classList.contains('tab-active'))||'home';
-   activate(active);
- }
- if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  'use strict';
+  const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+
+  function getId(btn){
+    if(!btn) return '';
+    const raw =
+      btn.getAttribute('data-tab') ||
+      btn.getAttribute('data-target') ||
+      btn.dataset.tab ||
+      btn.dataset.target ||
+      ((btn.getAttribute('onclick')||'').match(/switchTab\(\s*['"]([^'"]+)['"]/i)||[])[1] ||
+      '';
+    return String(raw).replace(/^#/,'').trim();
+  }
+
+  function normalize(){
+    const host=document.querySelector('.main-tabs-content');
+    if(!host) return false;
+    IDS.forEach(function(id){
+      const el=document.getElementById(id);
+      if(el && el.parentElement!==host) host.appendChild(el);
+    });
+    return true;
+  }
+
+  function activate(id){
+    if(!IDS.includes(id) || !normalize()) return false;
+    const host=document.querySelector('.main-tabs-content');
+    IDS.forEach(function(x){
+      const el=document.getElementById(x);
+      if(!el || el.parentElement!==host) return;
+      const on=x===id;
+      el.classList.toggle('tab-active',on);
+      el.style.setProperty('display',on?'block':'none','important');
+      el.style.setProperty('visibility',on?'visible':'hidden','important');
+      el.setAttribute('aria-hidden',String(!on));
+    });
+    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
+      const on=getId(btn)===id;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-selected',String(on));
+    });
+    return true;
+  }
+
+  function init(){
+    normalize();
+    const activeBtn=document.querySelector('.main-tabs-nav .nav-btn.active');
+    const initial=getId(activeBtn) || 'home';
+    activate(initial);
+  }
+
+  document.addEventListener('click',function(e){
+    const btn=e.target && e.target.closest ? e.target.closest('.main-tabs-nav .nav-btn') : null;
+    if(!btn) return;
+    const id=getId(btn);
+    if(!IDS.includes(id)) return;
+
+    /* تنفيذ نظام التبويبات الأساسي نفسه من أول ضغطة، ثم منع onclick القديم */
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    if(typeof window.switchTab==='function'){
+      window.switchTab(id);
+    }else{
+      activate(id);
+      window.scrollTo({top:0,left:0,behavior:'auto'});
+    }
+  },true);
+
+  window.abqActivateMainTab=activate;
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
 })();
 </script>
-
 <script id="abq-same-frame-link-policy">
 (function(){
     'use strict';
