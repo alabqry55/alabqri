@@ -10159,3 +10159,37 @@ body{overflow-x:hidden!important}
   }
 }
 </style>
+<!-- ALABQRI — FINAL MAIN TAB + NATIVE SCROLL STABILITY -->
+<style id="abq-final-tab-scroll-stability">
+html,body{width:100%!important;min-height:100%!important;height:auto!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;overscroll-behavior-x:none!important;scroll-behavior:auto!important}
+body{position:static!important;touch-action:pan-y!important}
+.main-tabs-content{width:100%!important;min-height:1px!important;height:auto!important;overflow:visible!important}
+.main-tabs-content>section.tab-content{height:auto!important;max-height:none!important;overflow:visible!important}
+.main-tabs-content>section.tab-content.tab-active{display:block!important;visibility:visible!important}
+@media(max-width:768px){html,body{touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important}}
+</style>
+<script id="abq-final-main-tab-click-controller">
+(function(){
+'use strict';
+var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+function getTabId(el){
+ if(!el)return '';
+ var raw=el.getAttribute('onclick')||'';
+ var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
+ return m?m[1]:'';
+}
+document.addEventListener('click',function(event){
+ var target=event.target;
+ if(!target||!target.closest)return;
+ var btn=target.closest('.main-tabs-nav .nav-btn');
+ if(!btn)return;
+ var id=getTabId(btn);
+ if(!IDS.includes(id)||typeof window.switchTab!=='function')return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ window.switchTab(id,false);
+},true);
+})();
+</script>
+</body>
+</html>
