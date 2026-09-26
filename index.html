@@ -1670,6 +1670,34 @@ html { scroll-behavior: auto !important; }
     }
 }
 </style>
+
+<style id="abq-home-actions-stats-frame-style">
+/* ===== إطار موحّد لمنطقة الأزرار + الزوار + الإحصائيات ===== */
+.abq-home-actions-stats-frame{
+    width:100%;
+    margin:0 auto 1rem;
+    box-sizing:border-box;
+}
+.abq-home-actions-stats-frame .abq-home-live-actions-below{
+    width:100%;
+    margin:.2rem auto .55rem;
+    border-color:rgba(37,99,235,.16);
+}
+.abq-home-actions-stats-frame .abq-hero-visitor-welcome{
+    width:100%;
+    margin:.35rem auto .6rem;
+    border-color:rgba(37,99,235,.16);
+}
+.abq-home-actions-stats-frame #stats-bar{
+    width:100%;
+    margin-bottom:.15rem !important;
+}
+@media(max-width:768px){
+    .abq-home-actions-stats-frame{padding:.55rem !important;}
+    .abq-home-actions-stats-frame #stats-bar{gap:.45rem !important;}
+    .abq-home-actions-stats-frame #stats-bar .glass-card{padding:.75rem .45rem !important;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -1849,6 +1877,8 @@ html { scroll-behavior: auto !important; }
     <div class="abq-home-live-overlay" aria-hidden="true"></div>
 </div>
 
+<!-- إطار أزرق موحّد للأزرار وعداد الزوار والإحصائيات -->
+<div class="abq-home-actions-stats-frame bg-blue-50/60 p-2 rounded-xl border border-blue-700">
 <!-- الأزرار الرئيسية أسفل صورة الهيرو -->
 <div class="abq-home-live-actions abq-home-live-actions-below" aria-label="روابط سريعة">
     <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
@@ -1877,6 +1907,7 @@ html { scroll-behavior: auto !important; }
     <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-sky-700"><span class="counter" data-target="3000">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">متدرب ومستفيد</p></div>
     <div class="glass-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-black text-amber-700"><span class="counter" data-target="20">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">شهادة معتمدة</p></div>
     <div class="glass-card rounded-2xl p-5 text-center col-span-2 md:col-span-1"><div class="text-2xl md:text-3xl font-black text-rose-700"><span class="counter" data-target="25">0</span>+</div><p class="text-xs font-bold text-slate-600 mt-1">سنوات خبرة وإستشارات</p></div>
+</div>
 </div>
 
 <!-- نبذة تعريفية -->
