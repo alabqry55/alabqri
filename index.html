@@ -1932,6 +1932,25 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 
+<style id="abq-welcome-remove-green-lines-final">
+/* ===== إزالة الخط الأخضر أعلى وأسفل نص الترحيب فقط ===== */
+#home .abq-hero-welcome,
+#home .abq-hero-welcome strong{
+  text-decoration:none !important;
+  text-decoration-line:none !important;
+  border-top:none !important;
+  border-bottom:none !important;
+}
+#home .abq-hero-welcome::before,
+#home .abq-hero-welcome::after,
+#home .abq-hero-welcome strong::before,
+#home .abq-hero-welcome strong::after{
+  display:none !important;
+  content:none !important;
+  border:none !important;
+  background:none !important;
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
