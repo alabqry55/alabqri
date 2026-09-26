@@ -2199,6 +2199,48 @@ html { scroll-behavior: auto !important; }
 }
 </style>
 
+
+<style id="abq-mobile-title-two-lines-only">
+/* ===== عنوان الهيدر بالموبايل: سطران فقط ===== */
+@media (max-width:768px){
+  header > .container > div:first-child{
+    align-items:center !important;
+  }
+  header > .container > div:first-child > div:last-child{
+    min-width:0 !important;
+    width:auto !important;
+    max-width:calc(100% - 3.5rem) !important;
+    flex:1 1 auto !important;
+  }
+  header h1{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    text-align:center !important;
+    line-height:1.25 !important;
+    font-size:.95rem !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+  }
+  header h1 > span{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    text-align:center !important;
+  }
+  header h1 span.text-lg.font-extrabold.text-green-600{
+    display:block !important;
+    width:100% !important;
+    margin-top:.05rem !important;
+    font-size:.95rem !important;
+    line-height:1.25 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
