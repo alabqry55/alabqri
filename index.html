@@ -2165,6 +2165,40 @@ html { scroll-behavior: auto !important; }
   }
 }
 </style>
+
+<style id="abq-mobile-title-second-line-size-center">
+/* ===== توحيد حجم سطر الطب التكميلي مع السطر الأول وتوسيط العنوان بالموبايل ===== */
+@media (max-width:768px){
+  header > .container > div:first-child{
+    justify-content:center !important;
+    text-align:center !important;
+  }
+  header > .container > div:first-child > div:last-child{
+    flex:0 1 auto !important;
+    width:auto !important;
+    max-width:calc(100% - 3.5rem) !important;
+    text-align:center !important;
+  }
+  header h1{
+    justify-content:center !important;
+    text-align:center !important;
+    align-items:center !important;
+    width:100% !important;
+    font-size:.95rem !important;
+    line-height:1.3 !important;
+  }
+  header h1 > span{
+    text-align:center !important;
+  }
+  header h1 span.text-lg.font-extrabold.text-green-600{
+    display:block !important;
+    font-size:.95rem !important;
+    line-height:1.3 !important;
+    margin-top:.08rem !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
