@@ -2300,6 +2300,12 @@ html { scroll-behavior: auto !important; }
   .main-tabs-nav .nav-btn{border-radius:.65rem !important;}
 }
 </style>
+<style id="abq-native-scroll-and-tabs-fix">
+html,body{overscroll-behavior-x:none!important}
+html,body{touch-action:pan-y!important}
+body{overflow-x:hidden!important}
+.main-tabs-content{touch-action:pan-y!important}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
