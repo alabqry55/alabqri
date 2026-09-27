@@ -55,7 +55,11 @@ export async function onRequest({ request, env }) {
         `SELECT likes FROM feedback_meta WHERE id = 1`
       ).first();
 
-      return json({ ok: true, likes: Number(row?.likes || 0) });
+      const likes = Number(row?.likes || 0);
+      const ratingCounts = await getRatingCounts(env.DB);
+      const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+
+      return json({ ok: true, likes, ratingCounts, totalInteractions });
     }
 
     if (action === "rating") {
@@ -68,7 +72,14 @@ export async function onRequest({ request, env }) {
          ON CONFLICT(rating) DO UPDATE SET count = feedback_ratings.count + 1`
       ).bind(rating).run();
 
-      return json({ ok: true, ratingCounts: await getRatingCounts(env.DB) });
+      const ratingCounts = await getRatingCounts(env.DB);
+      const meta = await env.DB.prepare(
+        `SELECT likes FROM feedback_meta WHERE id = 1`
+      ).first();
+      const likes = Number(meta?.likes || 0);
+      const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+
+      return json({ ok: true, ratingCounts, totalInteractions });
     }
 
     if (action === "comment") {
@@ -130,9 +141,14 @@ async function getFeedback(db) {
      LIMIT 100`
   ).all();
 
+  const likes = Number(meta?.likes || 0);
+  const ratingCounts = await getRatingCounts(db);
+  const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+
   return json({
-    likes: Number(meta?.likes || 0),
-    ratingCounts: await getRatingCounts(db),
+    likes,
+    ratingCounts,
+    totalInteractions,
     comments: result.results || []
   });
 }
