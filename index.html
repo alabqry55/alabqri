@@ -8569,16 +8569,18 @@ window.AbqToast = (function(){
                 notify('ℹ️ تم تسجيل إعجابك من قبل على هذا الجهاز.', 'info');
                 return;
             }
-            var likes=(parseInt(safeGet(KEYS.likes,'0'),10)||0)+1;
-            safeSet(KEYS.likes,String(likes));
-            safeSet(KEYS.liked,'1');
-            updateLikeUI();
-            notify('💚 شكرًا لك! تم تسجيل إعجابك بالمنصة.', 'success');
-
+            /* الإعجاب الحقيقي: لا نثبت الزيادة محليًا قبل تأكيدها من D1 */
+            likeBtn.disabled=true;
             var api=await apiRequest({action:'like'});
-            if(api && Number.isFinite(Number(api.likes))){
+            likeBtn.disabled=false;
+
+            if(api && api.ok && Number.isFinite(Number(api.likes))){
                 safeSet(KEYS.likes,String(api.likes));
+                safeSet(KEYS.liked,'1');
                 updateLikeUI();
+                notify('💚 شكرًا لك! تم تسجيل إعجابك بالمنصة.', 'success');
+            }else{
+                notify('⚠️ تعذر تسجيل الإعجاب على الخادم، حاول مرة أخرى.', 'error');
             }
         });
 
