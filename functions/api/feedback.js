@@ -35,6 +35,16 @@ export async function onRequest({ request, env }) {
 
     if (action === "like") {
       await env.DB.prepare(
+        `CREATE TABLE IF NOT EXISTS feedback_meta (
+          id INTEGER PRIMARY KEY CHECK (id = 1),
+          likes INTEGER NOT NULL DEFAULT 350
+        )`
+      ).run();
+      await env.DB.prepare(
+        `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 350)`
+      ).run();
+
+      await env.DB.prepare(
         `INSERT INTO feedback_meta (id, likes)
          VALUES (1, 1)
          ON CONFLICT(id) DO UPDATE SET likes = feedback_meta.likes + 1`
