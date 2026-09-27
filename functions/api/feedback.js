@@ -17,6 +17,7 @@ export async function onRequest({ request, env }) {
 
   try {
     await ensureRatingTable(env.DB);
+    await ensureFeedbackMeta(env.DB);
 
     if (request.method === "GET") {
       return await getFeedback(env.DB);
@@ -134,6 +135,19 @@ async function getFeedback(db) {
     ratingCounts: await getRatingCounts(db),
     comments: result.results || []
   });
+}
+
+async function ensureFeedbackMeta(db) {
+  await db.prepare(
+    `CREATE TABLE IF NOT EXISTS feedback_meta (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      likes INTEGER NOT NULL DEFAULT 350
+    )`
+  ).run();
+
+  await db.prepare(
+    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 350)`
+  ).run();
 }
 
 async function ensureRatingTable(db) {
