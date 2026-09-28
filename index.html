@@ -9352,10 +9352,24 @@ function toggleQualificationDocs() {
         navigator.geolocation.getCurrentPosition(function(pos){
             userCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};
             loadUserWeather(userCoords.lat,userCoords.lon);
-        },function(){
-            if(el('abq-user-weather')) el('abq-user-weather').textContent='اسمح بالموقع لعرض الطقس';
-            if(btn){btn.classList.remove('is-loading');btn.disabled=false;}
-        },{enableHighAccuracy:false,timeout:8000,maximumAge:10*60*1000});
+        },function(error){
+            // في حالة رفض إذن الموقع أو تعذر تحديده، استخدم الموقع التقريبي عبر IP بدل توقف الزر.
+            if(el('abq-user-weather')) el('abq-user-weather').textContent='جاري تحديد موقعك التقريبي...';
+            fetch('https://ipapi.co/json/',{cache:'no-store'})
+                .then(function(res){if(!res.ok) throw new Error('ip'); return res.json();})
+                .then(function(data){
+                    var lat=Number(data.latitude), lon=Number(data.longitude);
+                    if(!Number.isFinite(lat)||!Number.isFinite(lon)) throw new Error('coords');
+                    userCoords={lat:lat,lon:lon};
+                    loadUserWeather(lat,lon);
+                })
+                .catch(function(){
+                    var msg='تعذر تحديد موقعك — اسمح بالموقع من إعدادات المتصفح';
+                    if(error && error.code===1) msg='تم رفض إذن الموقع — اسمح بالموقع من إعدادات المتصفح';
+                    if(el('abq-user-weather')) el('abq-user-weather').textContent=msg;
+                    if(btn){btn.classList.remove('is-loading');btn.disabled=false;}
+                });
+        },{enableHighAccuracy:false,timeout:10000,maximumAge:10*60*1000});
     }
 
     function init(){
