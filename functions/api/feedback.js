@@ -36,13 +36,13 @@ export async function onRequest({ request, env }) {
 
     if (action === "like") {
       await env.DB.prepare(
-        \`INSERT INTO feedback_meta (id, likes)
+        `INSERT INTO feedback_meta (id, likes)
          VALUES (1, 1)
-         ON CONFLICT(id) DO UPDATE SET likes = feedback_meta.likes + 1\`
+         ON CONFLICT(id) DO UPDATE SET likes = feedback_meta.likes + 1`
       ).run();
 
       const row = await env.DB.prepare(
-        \`SELECT likes FROM feedback_meta WHERE id = 1\`
+        `SELECT likes FROM feedback_meta WHERE id = 1`
       ).first();
 
       const likes = Number(row?.likes || 0);
@@ -58,14 +58,14 @@ export async function onRequest({ request, env }) {
       if (!ALLOWED_RATINGS.has(rating)) return json({ error: "تقييم غير صالح." }, 400);
 
       await env.DB.prepare(
-        \`INSERT INTO feedback_ratings (rating, count)
+        `INSERT INTO feedback_ratings (rating, count)
          VALUES (?, 1)
-         ON CONFLICT(rating) DO UPDATE SET count = feedback_ratings.count + 1\`
+         ON CONFLICT(rating) DO UPDATE SET count = feedback_ratings.count + 1`
       ).bind(rating).run();
 
       const ratingCounts = await getRatingCounts(env.DB);
       const meta = await env.DB.prepare(
-        \`SELECT likes FROM feedback_meta WHERE id = 1\`
+        `SELECT likes FROM feedback_meta WHERE id = 1`
       ).first();
       const likes = Number(meta?.likes || 0);
       const totalRatings = getTotalRatings(ratingCounts);
@@ -86,13 +86,13 @@ export async function onRequest({ request, env }) {
       }
 
       const result = await env.DB.prepare(
-        \`INSERT INTO feedback (name, text, rating, created_at)
-         VALUES (?, ?, ?, CURRENT_TIMESTAMP)\`
+        `INSERT INTO feedback (name, text, rating, created_at)
+         VALUES (?, ?, ?, CURRENT_TIMESTAMP)`
       ).bind(name, text, rating).run();
 
       const comment = await env.DB.prepare(
-        \`SELECT id, name, text, rating, created_at
-         FROM feedback WHERE id = ?\`
+        `SELECT id, name, text, rating, created_at
+         FROM feedback WHERE id = ?`
       ).bind(result.meta.last_row_id).first();
 
       return json({ ok: true, comment });
@@ -111,7 +111,7 @@ export async function onRequest({ request, env }) {
         return json({ error: "Invalid comment id." }, 400);
       }
 
-      await env.DB.prepare(\`DELETE FROM feedback WHERE id = ?\`).bind(id).run();
+      await env.DB.prepare(`DELETE FROM feedback WHERE id = ?`).bind(id).run();
       return json({ ok: true, id });
     }
 
@@ -123,14 +123,14 @@ export async function onRequest({ request, env }) {
 
 async function getFeedback(db) {
   const meta = await db.prepare(
-    \`SELECT likes FROM feedback_meta WHERE id = 1\`
+    `SELECT likes FROM feedback_meta WHERE id = 1`
   ).first();
 
   const result = await db.prepare(
-    \`SELECT id, name, text, rating, created_at
+    `SELECT id, name, text, rating, created_at
      FROM feedback
      ORDER BY id DESC
-     LIMIT 100\`
+     LIMIT 100`
   ).all();
 
   const likes = Number(meta?.likes || 0);
@@ -149,41 +149,41 @@ async function getFeedback(db) {
 
 async function ensureFeedbackMeta(db) {
   await db.prepare(
-    \`CREATE TABLE IF NOT EXISTS feedback_meta (
+    `CREATE TABLE IF NOT EXISTS feedback_meta (
       id INTEGER PRIMARY KEY CHECK (id = 1),
       likes INTEGER NOT NULL DEFAULT 370
-    )\`
+    )`
   ).run();
 
   await db.prepare(
-    \`INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 370)\`
+    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 370)`
   ).run();
 
   await db.prepare(
-    \`UPDATE feedback_meta SET likes = 370 WHERE id = 1 AND (likes IS NULL OR likes < 370)\`
+    `UPDATE feedback_meta SET likes = 370 WHERE id = 1 AND (likes IS NULL OR likes < 370)`
   ).run();
 }
 
 async function ensureRatingTable(db) {
   await db.prepare(
-    \`CREATE TABLE IF NOT EXISTS feedback_ratings (
+    `CREATE TABLE IF NOT EXISTS feedback_ratings (
       rating TEXT PRIMARY KEY CHECK (rating IN ('excellent','good','average','suggestion')),
       count INTEGER NOT NULL DEFAULT 0
-    )\`
+    )`
   ).run();
 
   await db.prepare(
-    \`INSERT OR IGNORE INTO feedback_ratings (rating, count) VALUES
+    `INSERT OR IGNORE INTO feedback_ratings (rating, count) VALUES
       ('excellent', 245),
       ('good', 63),
       ('average', 27),
-      ('suggestion', 15)\`
+      ('suggestion', 15)`
   ).run();
 }
 
 async function getRatingCounts(db) {
   const result = await db.prepare(
-    \`SELECT rating, count FROM feedback_ratings\`
+    `SELECT rating, count FROM feedback_ratings`
   ).all();
 
   const counts = { excellent: 245, good: 63, average: 27, suggestion: 15 };
@@ -203,7 +203,7 @@ function getTotalRatings(ratingCounts) {
 
 function cleanText(value, maxLength) {
   return String(value ?? "")
-    .replace(/\\u0000/g, "")
+    .replace(/\u0000/g, "")
     .trim()
     .slice(0, maxLength);
 }
