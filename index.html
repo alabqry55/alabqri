@@ -2433,6 +2433,49 @@ body{
   }
 }
 </style>
+<style id="abq-top-live-bar-compact-final">
+/* ===== تقليل ارتفاع شريط اليوم والوقت والطقس والموقع ===== */
+.abq-top-live-bar{
+  padding:.22rem !important;
+  gap:.22rem !important;
+  margin:.3rem auto .4rem !important;
+}
+.abq-top-live-item{
+  min-height:42px !important;
+  padding:.22rem .38rem !important;
+  gap:.32rem !important;
+}
+.abq-top-icon{font-size:1rem !important;}
+.abq-top-values{gap:0 !important;}
+.abq-top-primary{
+  font-size:.72rem !important;
+  line-height:1.2 !important;
+}
+.abq-top-secondary{
+  font-size:.59rem !important;
+  line-height:1.15 !important;
+}
+@media(max-width:768px){
+  .abq-top-live-bar{
+    padding:.2rem !important;
+    gap:.2rem !important;
+    margin:.25rem auto .35rem !important;
+  }
+  .abq-top-live-item{
+    min-height:40px !important;
+    padding:.2rem .22rem !important;
+    gap:.25rem !important;
+  }
+  .abq-top-icon{font-size:.9rem !important;}
+  .abq-top-primary{font-size:.63rem !important;line-height:1.15 !important;}
+  .abq-top-secondary{font-size:.53rem !important;line-height:1.1 !important;}
+}
+@media(max-width:420px){
+  .abq-top-live-item{min-height:38px !important;}
+  .abq-top-primary{font-size:.59rem !important;}
+  .abq-top-secondary{font-size:.49rem !important;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
