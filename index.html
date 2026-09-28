@@ -2458,23 +2458,30 @@ body{
 @media(max-width:768px){
   .abq-top-live-bar{
     padding:0 !important;
-    gap:.2rem !important;
+    gap:.18rem !important;
     margin:0 auto !important;
   }
   .abq-top-live-item{
-    min-height:40px !important;
-    padding:.14rem .22rem !important;
-    gap:.25rem !important;
+    min-height:38px !important;
+    padding:.11rem .22rem !important;
+    gap:.22rem !important;
   }
-  .abq-top-icon{font-size:.9rem !important;}
-  .abq-top-values{gap:.08rem !important;}
-  .abq-top-primary{font-size:.63rem !important;line-height:1.18 !important;}
-  .abq-top-secondary{font-size:.53rem !important;line-height:1.12 !important;}
+  .abq-top-icon{font-size:.88rem !important;}
+  .abq-top-values{gap:.05rem !important;}
+  .abq-top-primary{font-size:.62rem !important;line-height:1.12 !important;}
+  .abq-top-secondary{font-size:.52rem !important;line-height:1.06 !important;}
 }
 @media(max-width:420px){
-  .abq-top-live-item{min-height:38px !important;}
-  .abq-top-primary{font-size:.59rem !important;}
-  .abq-top-secondary{font-size:.49rem !important;}
+  .abq-top-live-item{min-height:36px !important;}
+  .abq-top-primary{font-size:.58rem !important;}
+  .abq-top-secondary{font-size:.48rem !important;}
+}
+/* تصغير عبارة طقس موقعك على الكمبيوتر فقط */
+@media(min-width:769px){
+  .abq-top-location .abq-top-secondary{
+    font-size:.60rem !important;
+    line-height:1.2 !important;
+  }
 }
 </style>
 </head>
