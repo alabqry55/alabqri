@@ -57,9 +57,10 @@ export async function onRequest({ request, env }) {
 
       const likes = Number(row?.likes || 0);
       const ratingCounts = await getRatingCounts(env.DB);
-      const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+      const totalRatings = getTotalRatings(ratingCounts);
+      const totalInteractions = likes + totalRatings;
 
-      return json({ ok: true, likes, ratingCounts, totalInteractions });
+      return json({ ok: true, likes, ratingCounts, totalRatings, totalInteractions });
     }
 
     if (action === "rating") {
@@ -77,9 +78,10 @@ export async function onRequest({ request, env }) {
         `SELECT likes FROM feedback_meta WHERE id = 1`
       ).first();
       const likes = Number(meta?.likes || 0);
-      const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+      const totalRatings = getTotalRatings(ratingCounts);
+      const totalInteractions = likes + totalRatings;
 
-      return json({ ok: true, ratingCounts, totalInteractions });
+      return json({ ok: true, ratingCounts, totalRatings, totalInteractions });
     }
 
     if (action === "comment") {
@@ -143,11 +145,13 @@ async function getFeedback(db) {
 
   const likes = Number(meta?.likes || 0);
   const ratingCounts = await getRatingCounts(db);
-  const totalInteractions = likes + Object.values(ratingCounts).reduce((sum, value) => sum + Number(value || 0), 0);
+  const totalRatings = getTotalRatings(ratingCounts);
+  const totalInteractions = likes + totalRatings;
 
   return json({
     likes,
     ratingCounts,
+    totalRatings,
     totalInteractions,
     comments: result.results || []
   });
@@ -162,7 +166,11 @@ async function ensureFeedbackMeta(db) {
   ).run();
 
   await db.prepare(
-    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 350)`
+    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 358)`
+  ).run();
+
+  await db.prepare(
+    `UPDATE feedback_meta SET likes = 358 WHERE id = 1 AND likes = 350`
   ).run();
 }
 
@@ -195,6 +203,12 @@ async function getRatingCounts(db) {
     }
   }
   return counts;
+}
+
+function getTotalRatings(ratingCounts) {
+  return ['excellent','good','average','suggestion'].reduce((sum, key) => {
+    return sum + Math.max(0, Number(ratingCounts?.[key] || 0));
+  }, 0);
 }
 
 function cleanText(value, maxLength) {
