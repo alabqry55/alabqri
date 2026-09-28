@@ -1048,6 +1048,56 @@ img.abq-zoomable-image { cursor: zoom-in; }
     gap: 1rem;
     min-width: 0;
 }
+.abq-feedback-desktop-line{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    white-space:nowrap;
+    min-width:0;
+}
+.abq-feedback-desktop-line .abq-feedback-subtitle{
+    margin:0 !important;
+    font-size:.82rem !important;
+    line-height:1.4 !important;
+    font-weight:900 !important;
+    color:#1d4ed8 !important;
+}
+.abq-feedback-desktop-line .abq-like-btn{
+    min-height:36px;
+    padding:.42rem .75rem;
+    font-size:.74rem;
+}
+.abq-rating-total-inline{
+    color:#1e3a8a;
+    font-size:.78rem;
+    font-weight:900;
+    white-space:nowrap;
+}
+.abq-rating-total-inline span{
+    font-variant-numeric:tabular-nums;
+    direction:ltr;
+}
+.abq-feedback-mobile-content{display:none;}
+@media(max-width:768px){
+    .abq-feedback-desktop-line{display:none;}
+    .abq-feedback-mobile-content{
+        display:flex;
+        width:100%;
+        flex-direction:column;
+        align-items:center;
+        gap:.35rem;
+        text-align:center;
+    }
+    .abq-feedback-mobile-content .abq-feedback-subtitle{
+        margin:0 !important;
+        font-size:.8rem !important;
+        line-height:1.7 !important;
+        font-weight:900 !important;
+        color:#1d4ed8 !important;
+    }
+}
 
 
 
@@ -4818,30 +4868,32 @@ body{
 
     <div class="abq-feedback-head">
 
-        <h3 id="abq-feedback-title" class="abq-feedback-title">
-            💚 شاركنا رأيك
-        </h3>
+        <div class="abq-feedback-desktop-line">
+            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 شاركنا رأيك</h3>
+            <span aria-hidden="true">•</span>
+            <span class="abq-feedback-subtitle">ما مدى رضاك عن تجربتك في منصة العبقري؟</span>
+            <span aria-hidden="true">•</span>
+            <button type="button"
+                    id="abq-like-btn"
+                    class="abq-like-btn"
+                    aria-pressed="false">
+                <span aria-hidden="true">👍💚💚</span>
+                <span id="abq-like-label">شكرًا لإعجابك</span>
+                <span class="abq-like-count">(<span id="abq-like-count">—</span>)</span>
+            </button>
+            <span aria-hidden="true">•</span>
+            <span class="abq-rating-total-inline">📊 إجمالي التقييمات (<span id="abq-rating-total-count-inline">—</span>)</span>
+        </div>
 
-<p class="abq-feedback-subtitle m-0 text-lg md:text-xl font-black text-blue-700">
-        شاركنا إنطباعك عن منصة العبقري ، وساعدنا على تطوير تجربة الزائر والمنصة.
-    </p>
-
-        <button type="button"
-                id="abq-like-btn"
-                class="abq-like-btn"
-                aria-pressed="false">
-
-            <span aria-hidden="true">👍💚💚</span>
-
-            <span id="abq-like-label">
-                شكرًا لإعجابك
-            </span>
-
-            <span class="abq-like-count">
-                (<span id="abq-like-count">—</span>)
-            </span>
-
-        </button>
+        <div class="abq-feedback-mobile-content">
+            <h3 id="abq-feedback-title-mobile" class="abq-feedback-title">💚 شاركنا رأيك</h3>
+            <p class="abq-feedback-subtitle">ما مدى رضاك عن تجربتك في منصة العبقري؟</p>
+            <button type="button" class="abq-like-btn" id="abq-like-btn-mobile" aria-pressed="false">
+                <span aria-hidden="true">👍💚💚</span>
+                <span>شكرًا لإعجابك</span>
+                <span class="abq-like-count">(<span id="abq-like-count-mobile">—</span>)</span>
+            </button>
+        </div>
 
     </div>
 
@@ -8795,7 +8847,13 @@ window.AbqToast = (function(){
         }catch(e){}
     }
 
-    function init(){
+    function syncFeedbackDesktopTotal(){
+    var src=document.getElementById('abq-rating-total-count');
+    var dst=document.getElementById('abq-rating-total-count-inline');
+    if(src&&dst) dst.textContent=src.textContent;
+}
+
+        function init(){
         var likeBtn=document.getElementById('abq-like-btn');
         var form=document.getElementById('abq-feedback-form');
         if(!likeBtn||!form) return;
