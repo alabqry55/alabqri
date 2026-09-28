@@ -2685,7 +2685,7 @@ body{
         <span class="abq-top-icon" aria-hidden="true">📍</span>
         <div class="abq-top-values">
             <span class="abq-top-primary">القاهرة، مصر</span>
-            <button type="button" id="abq-user-weather-btn" class="abq-user-weather-btn" onclick="requestUserLocation()" aria-label="عرض طقس موقعك الحالي">
+            <button type="button" id="abq-user-weather-btn" class="abq-user-weather-btn" aria-label="عرض طقس موقعك الحالي">
                 طقس موقعك
             </button>
             <span id="abq-user-weather" class="abq-top-secondary" aria-live="polite">اضغط لعرض الطقس</span>
@@ -9359,6 +9359,10 @@ function toggleQualificationDocs() {
     }
 
     function init(){
+        var userWeatherBtn=el('abq-user-weather-btn');
+        if(userWeatherBtn){
+            userWeatherBtn.addEventListener('click',requestUserLocation);
+        }
         formatCairoDate();
         loadCairoWeather();
         setInterval(formatCairoDate,1000);
