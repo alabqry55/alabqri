@@ -9543,6 +9543,76 @@ body{overflow-x:hidden!important}
 </style>
 
 
+
+<!-- ALABQRI — ISOLATED FEEDBACK SUCCESS TOAST -->
+<style id="abq-feedback-success-toast">
+#abq-feedback-toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translate(-50%,20px);
+  z-index:100000;
+  display:none;
+  width:min(92vw,520px);
+  box-sizing:border-box;
+  padding:.85rem 1.15rem;
+  border:2px solid #16a34a;
+  border-radius:1rem;
+  background:rgba(240,253,244,.98);
+  color:#166534;
+  font-family:'Cairo',sans-serif;
+  font-size:clamp(.9rem,2.2vw,1.05rem);
+  font-weight:800;
+  line-height:1.5;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(22,101,52,.22);
+  opacity:0;
+  transition:opacity .2s ease,transform .2s ease;
+  pointer-events:none;
+}
+#abq-feedback-toast.show{
+  display:block;
+  opacity:1;
+  transform:translate(-50%,0);
+}
+#abq-feedback-toast.error{
+  border-color:#dc2626;
+  background:rgba(254,242,242,.98);
+  color:#991b1b;
+}
+#abq-feedback-toast.info{
+  border-color:#2563eb;
+  background:rgba(239,246,255,.98);
+  color:#1e40af;
+}
+@media(max-width:768px){
+  #abq-feedback-toast{
+    bottom:78px;
+    width:calc(100vw - 1.25rem);
+    padding:.75rem .9rem;
+    border-radius:.9rem;
+  }
+}
+</style>
+<div id="abq-feedback-toast" role="status" aria-live="polite"></div>
+<script id="abq-feedback-toast-controller">
+(function(){
+  'use strict';
+  window.AbqToast = window.AbqToast || {
+    show:function(message,type){
+      var el=document.getElementById('abq-feedback-toast');
+      if(!el) return;
+      el.textContent=message||'';
+      el.className='show '+(type||'');
+      clearTimeout(window.__abqFeedbackToastTimer);
+      window.__abqFeedbackToastTimer=setTimeout(function(){
+        el.className='';
+      },2800);
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
 
@@ -10759,3 +10829,4 @@ document.addEventListener('click',function(event){
 </body>
 </html>
 
+\n
