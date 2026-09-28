@@ -1090,7 +1090,11 @@ img.abq-zoomable-image { cursor: zoom-in; }
     align-items:center;
     justify-content:space-between;
     gap:1rem;
-    margin:.9rem 0 1.1rem;
+    margin:.9rem 0 .55rem;
+}
+.abq-rating-question-row .abq-rating-total{
+    transform:translateX(10px);
+    margin-top:2.7rem;
 }
 .abq-rating-total{
     margin:0;
@@ -1121,7 +1125,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
 @media (max-width:639px){
     .abq-rating-question-row{display:block}
     .abq-rating-question{margin-bottom:.6rem}
-    .abq-rating-total{display:block;width:100%;box-sizing:border-box}
+    .abq-rating-total{display:block;width:100%;box-sizing:border-box;transform:none;margin-top:0}
 }
 @media (min-width:640px){
     .abq-rating-options{grid-template-columns:repeat(4,1fr)}
