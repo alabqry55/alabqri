@@ -170,7 +170,7 @@ async function ensureFeedbackMeta(db) {
   ).run();
 
   await db.prepare(
-    `UPDATE feedback_meta SET likes = 365 WHERE id = 1 AND likes = 358`
+    `UPDATE feedback_meta SET likes = 365 WHERE id = 1 AND likes IN (350, 358)`
   ).run();
 }
 
