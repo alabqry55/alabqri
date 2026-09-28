@@ -2460,7 +2460,17 @@ body{
 }
 @media (min-width:769px){
   #home .abq-hero-visitor-welcome .abq-hero-welcome strong{
-    flex-direction:column !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.6rem !important;
+    white-space:nowrap !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-welcome-line-1,
+  #home .abq-hero-visitor-welcome .abq-welcome-line-2{
+    width:auto !important;
+    white-space:nowrap !important;
   }
 }
 @media (max-width:768px){
@@ -2476,10 +2486,12 @@ body{
   }
   #home .abq-hero-visitor-welcome .abq-welcome-line-1,
   #home .abq-hero-visitor-welcome .abq-welcome-line-2{
+    display:block !important;
     width:100% !important;
-    white-space:normal !important;
+    white-space:nowrap !important;
     overflow-wrap:normal !important;
     word-break:normal !important;
+    text-align:center !important;
   }
 }
 </style>
