@@ -2624,6 +2624,121 @@ body{
   }
 }
 </style>
+
+<style id="abq-welcome-professional-card-final">
+/* ===== رسالة الترحيب الاحترافية بجوار/بعد عداد الزوار — إضافة آمنة ===== */
+#home .abq-hero-welcome{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin-inline:auto !important;
+  padding:clamp(.7rem,1.15vw,1rem) clamp(1rem,2vw,1.6rem) !important;
+  border-top:2px solid rgba(21,128,61,.78) !important;
+  border-bottom:2px solid rgba(21,128,61,.78) !important;
+  border-radius:1rem !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(248,250,252,.78)) !important;
+  text-align:center !important;
+  text-shadow:none !important;
+  filter:none !important;
+  overflow:hidden !important;
+}
+#home .abq-hero-welcome::before,
+#home .abq-hero-welcome::after{
+  content:"" !important;
+  position:absolute !important;
+  top:50% !important;
+  width:clamp(2rem,6vw,5rem) !important;
+  height:1px !important;
+  background:linear-gradient(90deg,transparent,rgba(21,128,61,.48)) !important;
+  pointer-events:none !important;
+}
+#home .abq-hero-welcome::before{inset-inline-start:0 !important;}
+#home .abq-hero-welcome::after{
+  inset-inline-end:0 !important;
+  transform:scaleX(-1) !important;
+}
+#home .abq-hero-welcome strong{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  max-width:100% !important;
+  gap:.18rem !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:#0f172a !important;
+  font-size:clamp(1rem,1.25vw,1.3rem) !important;
+  font-weight:800 !important;
+  line-height:1.55 !important;
+  text-align:center !important;
+  text-shadow:none !important;
+  filter:none !important;
+  -webkit-text-stroke:0 !important;
+}
+#home .abq-welcome-line-1,
+#home .abq-welcome-line-2{
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+#home .abq-welcome-line-1{
+  color:#166534 !important;
+  font-weight:900 !important;
+}
+#home .abq-welcome-line-2{
+  color:#1e3a5f !important;
+  font-weight:700 !important;
+  letter-spacing:.01em !important;
+}
+@media (min-width:769px){
+  #home .abq-hero-welcome strong{
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    gap:.45rem !important;
+    white-space:nowrap !important;
+  }
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    width:auto !important;
+    white-space:nowrap !important;
+  }
+}
+@media (max-width:768px){
+  #home .abq-hero-welcome{
+    width:100% !important;
+    max-width:100% !important;
+    margin-inline:auto !important;
+    padding:.72rem .55rem !important;
+    border-top-width:1.5px !important;
+    border-bottom-width:1.5px !important;
+    border-radius:.85rem !important;
+  }
+  #home .abq-hero-welcome strong{
+    gap:.25rem !important;
+    font-size:clamp(.94rem,3.9vw,1.12rem) !important;
+    line-height:1.65 !important;
+    white-space:normal !important;
+  }
+  #home .abq-welcome-line-1,
+  #home .abq-welcome-line-2{
+    width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:normal !important;
+    word-break:normal !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
