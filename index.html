@@ -2390,6 +2390,49 @@ body{
   }
 }
 </style>
+<style id="abq-compass-matrix-nav-center">
+/* ===== توسيط وتجميع زري السابق والتالي في البوصلة والمصفوفة ===== */
+#compass-quiz-screen .border-t.border-slate-200:has(#compass-prev-btn),
+#matrix-quiz-screen .border-t.border-slate-200:has(#matrix-prev-btn){
+  justify-content:center !important;
+  align-items:center !important;
+  gap:.75rem !important;
+  flex-wrap:nowrap !important;
+}
+#compass-prev-btn,
+#compass-next-btn,
+#matrix-prev-btn,
+#matrix-next-btn{
+  flex:0 0 auto !important;
+  min-width:clamp(7rem,12vw,9rem) !important;
+  text-align:center !important;
+}
+@media(max-width:768px){
+  #compass-quiz-screen .border-t.border-slate-200:has(#compass-prev-btn),
+  #matrix-quiz-screen .border-t.border-slate-200:has(#matrix-prev-btn){
+    gap:.55rem !important;
+    padding-inline:.25rem !important;
+  }
+  #compass-prev-btn,
+  #compass-next-btn,
+  #matrix-prev-btn,
+  #matrix-next-btn{
+    min-width:clamp(6.5rem,38vw,8rem) !important;
+    padding-inline:.75rem !important;
+    white-space:nowrap !important;
+  }
+}
+@media(max-width:420px){
+  #compass-prev-btn,
+  #compass-next-btn,
+  #matrix-prev-btn,
+  #matrix-next-btn{
+    min-width:0 !important;
+    width:calc((100vw - 3rem)/2) !important;
+    max-width:8rem !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
