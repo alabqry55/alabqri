@@ -22,10 +22,10 @@ ON feedback(created_at DESC);
 
 CREATE TABLE IF NOT EXISTS feedback_meta (
   id INTEGER PRIMARY KEY CHECK (id = 1),
-  likes INTEGER NOT NULL DEFAULT 365
+  likes INTEGER NOT NULL DEFAULT 370
 );
 
-INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 365);
+INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 370);
 
 
 CREATE TABLE IF NOT EXISTS feedback_ratings (
