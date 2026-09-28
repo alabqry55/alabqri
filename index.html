@@ -8682,6 +8682,12 @@ window.AbqToast = (function(){
             var value=Math.max(0,parseInt(counts[key],10)||0);
             if(count){ count.textContent=value.toLocaleString('en-US'); count.setAttribute('aria-label',value+' تقييمًا'); }
         });
+        if(Number.isFinite(Number(totalRatings))){
+            var total=document.getElementById('abq-rating-total-count');
+            if(total) total.textContent=Math.max(0,Number(totalRatings)).toLocaleString('en-US');
+        }else{
+            updateRatingTotalCount(counts);
+        }
     }
     async function abqSendExperienceRating(key){
         if(!key) return;
@@ -8695,6 +8701,11 @@ window.AbqToast = (function(){
         if(count){
             var n=parseInt(count.textContent,10)||0;
             count.textContent=(n+1).toLocaleString('en-US');
+        }
+        var totalCount=document.getElementById('abq-rating-total-count');
+        if(totalCount){
+            var currentTotal=parseInt(totalCount.textContent,10);
+            totalCount.textContent=(Number.isFinite(currentTotal) ? currentTotal + 1 : 1).toLocaleString('en-US');
         }
         safeSet(storageKey,'1');
         notify('⭐ شكرًا لك! تم تسجيل تقييمك بنجاح.', 'success');
