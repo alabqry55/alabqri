@@ -2477,6 +2477,32 @@ body{
   .abq-top-secondary{font-size:.48rem !important;}
 }
 /* تصغير عبارة طقس موقعك على الكمبيوتر فقط */
+.abq-user-weather-btn{
+  appearance:none;
+  border:1px solid rgba(29,78,216,.32);
+  border-radius:.55rem;
+  background:linear-gradient(135deg,#eff6ff,#dbeafe);
+  color:#1d4ed8;
+  font-family:inherit;
+  font-size:.64rem;
+  font-weight:900;
+  line-height:1.1;
+  padding:.18rem .48rem;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow:0 2px 7px -4px rgba(15,23,42,.55);
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+}
+.abq-user-weather-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px -5px rgba(15,23,42,.6);
+}
+.abq-user-weather-btn:active{transform:translateY(0)}
+.abq-user-weather-btn:focus-visible{
+  outline:2px solid #2563eb;
+  outline-offset:2px;
+}
+.abq-user-weather-btn.is-loading{opacity:.7;cursor:wait}
 @media(min-width:769px){
   .abq-top-location .abq-top-secondary{
     font-size:.58rem !important;
@@ -2490,6 +2516,10 @@ body{
     white-space:nowrap !important;
     font-size:.49rem !important;
     line-height:1.05 !important;
+  }
+  .abq-user-weather-btn{
+    font-size:.57rem;
+    padding:.16rem .42rem;
   }
 }
 </style>
@@ -2655,7 +2685,10 @@ body{
         <span class="abq-top-icon" aria-hidden="true">📍</span>
         <div class="abq-top-values">
             <span class="abq-top-primary">القاهرة، مصر</span>
-            <span id="abq-user-weather" class="abq-top-secondary">طقس موقعك —</span>
+            <button type="button" id="abq-user-weather-btn" class="abq-user-weather-btn" onclick="requestUserLocation()" aria-label="عرض طقس موقعك الحالي">
+                طقس موقعك
+            </button>
+            <span id="abq-user-weather" class="abq-top-secondary" aria-live="polite">اضغط لعرض الطقس</span>
         </div>
     </div>
 </div>
@@ -9289,33 +9322,45 @@ function toggleQualificationDocs() {
     }
 
     function loadUserWeather(lat,lon){
+        var btn=el('abq-user-weather-btn');
+        if(btn){
+            btn.classList.remove('is-loading');
+            btn.disabled=false;
+        }
         fetch(weatherUrl(lat,lon,'auto'),{cache:'no-store'})
             .then(function(res){ if(!res.ok) throw new Error('weather'); return res.json(); })
             .then(function(data){
                 renderWeather('user',data,'طقس موقعك');
             })
             .catch(function(){
-                if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • غير متاح مؤقتًا';
+                if(el('abq-user-weather')) el('abq-user-weather').textContent='تعذر تحميل الطقس مؤقتًا';
             });
     }
 
     function requestUserLocation(){
+        var btn=el('abq-user-weather-btn');
+        if(btn){
+            btn.classList.add('is-loading');
+            btn.disabled=true;
+        }
         if(!navigator.geolocation){
-            if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • غير متاح';
+            if(el('abq-user-weather')) el('abq-user-weather').textContent='الموقع غير متاح في هذا المتصفح';
+            if(btn){btn.classList.remove('is-loading');btn.disabled=false;}
             return;
         }
+        if(el('abq-user-weather')) el('abq-user-weather').textContent='جاري تحديد موقعك...';
         navigator.geolocation.getCurrentPosition(function(pos){
             userCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};
             loadUserWeather(userCoords.lat,userCoords.lon);
         },function(){
-            if(el('abq-user-weather')) el('abq-user-weather').textContent='طقس موقعك • السماح بالموقع اختياري';
+            if(el('abq-user-weather')) el('abq-user-weather').textContent='اسمح بالموقع لعرض الطقس';
+            if(btn){btn.classList.remove('is-loading');btn.disabled=false;}
         },{enableHighAccuracy:false,timeout:8000,maximumAge:10*60*1000});
     }
 
     function init(){
         formatCairoDate();
         loadCairoWeather();
-        requestUserLocation();
         setInterval(formatCairoDate,1000);
         setInterval(loadCairoWeather,10*60*1000);
         setInterval(function(){
