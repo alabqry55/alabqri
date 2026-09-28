@@ -1085,8 +1085,15 @@ img.abq-zoomable-image { cursor: zoom-in; }
 .abq-like-btn.liked{background:#dcfce7;border-color:#86efac;color:#15803d}
 .abq-like-count{font-variant-numeric:tabular-nums;direction:ltr}
 .abq-rating-group{margin:.9rem 0 1.1rem}
+.abq-rating-question-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    margin:.9rem 0 1.1rem;
+}
 .abq-rating-total{
-    margin:.7rem 0 0;
+    margin:0;
     padding:.55rem .8rem;
     border:1px solid #93c5fd;
     border-radius:999px;
@@ -1097,7 +1104,7 @@ img.abq-zoomable-image { cursor: zoom-in; }
     font-size:.78rem;
 }
 .abq-rating-total span{font-variant-numeric:tabular-nums;direction:ltr}
-.abq-rating-question{font-weight:800;font-size:.85rem;color:#0f172a;margin-bottom:.6rem;text-align:right}
+.abq-rating-question{font-weight:800;font-size:.85rem;color:#0f172a;margin:0;text-align:right}
 .abq-rating-options{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
 .abq-rating-btn{
     display:flex;align-items:center;justify-content:center;gap:.4rem;
@@ -1111,6 +1118,11 @@ img.abq-zoomable-image { cursor: zoom-in; }
     box-shadow:0 6px 16px -10px rgba(37,99,235,.55);
 }
 .abq-rating-emoji{font-size:1.15rem}
+@media (max-width:639px){
+    .abq-rating-question-row{display:block}
+    .abq-rating-question{margin-bottom:.6rem}
+    .abq-rating-total{display:block;width:100%;box-sizing:border-box}
+}
 @media (min-width:640px){
     .abq-rating-options{grid-template-columns:repeat(4,1fr)}
 }
@@ -4813,9 +4825,14 @@ body{
          role="radiogroup"
          aria-label="تقييم تجربتك في منصة العبقري">
     </div>
-        <p class="abq-rating-question">
-            ما مدى رضاك عن تجربتك في منصة العبقري؟
-        </p>
+        <div class="abq-rating-question-row">
+            <p class="abq-rating-question">
+                ما مدى رضاك عن تجربتك في منصة العبقري؟
+            </p>
+            <div id="abq-rating-total" class="abq-rating-total" aria-live="polite">
+                إجمالي التقييمات: <span id="abq-rating-total-count">—</span>
+            </div>
+        </div>
 
 <div class="abq-rating-options grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 
@@ -4868,11 +4885,6 @@ body{
     </div>
 
 </div>
-
-        <div id="abq-rating-total" class="abq-rating-total" aria-live="polite">
-            إجمالي التقييمات: <span id="abq-rating-total-count">—</span>
-        </div>
-
 
         <form id="abq-feedback-form"
               class="abq-feedback-form"
