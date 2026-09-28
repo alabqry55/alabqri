@@ -9765,6 +9765,29 @@ document.addEventListener('click',function(event){
   }
 }
 </style>\n</style>
+
+<style id="abq-desktop-welcome-width-75-final">
+/* ===== الكمبيوتر فقط: توسيع منطقة رسالة الترحيب مع الحفاظ على عداد الزوار في سطر واحد ===== */
+@media (min-width:769px){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    width:75% !important;
+    max-width:75% !important;
+    flex:0 0 75% !important;
+    box-sizing:border-box !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    flex:0 0 auto !important;
+    flex-shrink:0 !important;
+    white-space:nowrap !important;
+    width:auto !important;
+    min-width:max-content !important;
+    font-size:clamp(1.05rem,1.35vw,1.35rem) !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter span{
+    white-space:nowrap !important;
+  }
+}
+</style>
 </body>
 </html>
 
