@@ -4879,7 +4879,7 @@ body{
                     aria-pressed="false">
                 <span aria-hidden="true">👍💚💚</span>
                 <span id="abq-like-label">شكرًا لإعجابك</span>
-                <span class="abq-like-count">(<span id="abq-like-count">—</span>)</span>
+                <span class="abq-like-count">(<span id="abq-like-count">370</span>)</span>
             </button>
             <span aria-hidden="true">•</span>
             <span class="abq-rating-total-inline">📊 إجمالي التقييمات (<span id="abq-rating-total-count-inline">—</span>)</span>
@@ -4891,7 +4891,7 @@ body{
             <button type="button" class="abq-like-btn" id="abq-like-btn-mobile" aria-pressed="false">
                 <span aria-hidden="true">👍💚💚</span>
                 <span>شكرًا لإعجابك</span>
-                <span class="abq-like-count">(<span id="abq-like-count-mobile">—</span>)</span>
+                <span class="abq-like-count">(<span id="abq-like-count-mobile">370</span>)</span>
             </button>
         </div>
 
@@ -8758,7 +8758,7 @@ window.AbqToast = (function(){
         var liked=safeGet(KEYS.liked,'0')==='1';
         var storedLikes=safeGet(KEYS.likes,'');
         var cloudLoaded=safeGet(KEYS.likesCloudLoaded,'0')==='1';
-        var likes=(!cloudLoaded || storedLikes === '') ? null : Math.max(0,parseInt(storedLikes,10)||0);
+        var likes=(storedLikes === '') ? 370 : Math.max(370,parseInt(storedLikes,10)||370);
         btn.classList.toggle('liked',liked);
         btn.setAttribute('aria-pressed',String(liked));
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
