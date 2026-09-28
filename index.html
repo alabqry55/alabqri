@@ -2479,8 +2479,17 @@ body{
 /* تصغير عبارة طقس موقعك على الكمبيوتر فقط */
 @media(min-width:769px){
   .abq-top-location .abq-top-secondary{
-    font-size:.60rem !important;
-    line-height:1.2 !important;
+    font-size:.58rem !important;
+    line-height:1.15 !important;
+    white-space:nowrap !important;
+    display:block !important;
+  }
+}
+@media(max-width:768px){
+  .abq-top-location .abq-top-secondary{
+    white-space:nowrap !important;
+    font-size:.49rem !important;
+    line-height:1.05 !important;
   }
 }
 </style>
