@@ -1113,6 +1113,24 @@ img.abq-zoomable-image { cursor: zoom-in; }
     font-size:.78rem;
 }
 .abq-rating-total span{font-variant-numeric:tabular-nums;direction:ltr}
+
+/* ضبط مسافات عداد إجمالي التقييمات لتطابق الإطار الرئيسي للتفاعل */
+.abq-rating-question-row .abq-rating-total{
+    position:static !important;
+    transform:none !important;
+    margin:0 !important;
+    padding:.65rem 1rem !important;
+}
+@media(min-width:640px){
+    .abq-rating-question-row{
+        padding:0 1.25rem !important;
+    }
+}
+@media(max-width:639px){
+    .abq-rating-question-row{
+        padding:0 1.25rem !important;
+    }
+}
 .abq-rating-question{font-weight:800;font-size:.85rem;color:#0f172a;margin:0 0 .7rem;text-align:right}
 .abq-rating-options{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
 .abq-rating-btn{
