@@ -2743,6 +2743,25 @@ body{
 }
 </style>
 
+<style id="abq-welcome-line-2-flat-final">
+/* ===== السطر الثاني فقط: إلغاء ظل/تكرار النص نهائيًا ===== */
+#home .abq-hero-visitor-welcome .abq-welcome-line-2{
+  text-shadow:none !important;
+  filter:none !important;
+  -webkit-filter:none !important;
+  -webkit-text-stroke:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+}
+#home .abq-hero-visitor-welcome .abq-welcome-line-2::before,
+#home .abq-hero-visitor-welcome .abq-welcome-line-2::after{
+  content:none !important;
+  display:none !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
