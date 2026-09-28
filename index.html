@@ -1094,7 +1094,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
 }
 .abq-rating-question-row .abq-rating-total{
     transform:translateX(10px);
-    margin-top:2.7rem;
+    margin-top:0;
+    margin-right:calc((100% - 20rem) / 8);
 }
 .abq-rating-total{
     margin:0;
@@ -1123,8 +1124,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
 }
 .abq-rating-emoji{font-size:1.15rem}
 @media (max-width:639px){
-    .abq-rating-question-row{display:block}
-    .abq-rating-question{margin-bottom:.6rem}
+    .abq-rating-question-row{display:block;margin-bottom:.25rem}
+    .abq-rating-question{margin-bottom:.15rem}
     .abq-rating-total{display:block;width:100%;box-sizing:border-box;transform:none;margin-top:0}
 }
 @media (min-width:640px){
