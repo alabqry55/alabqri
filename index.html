@@ -8763,7 +8763,15 @@ window.AbqToast = (function(){
         btn.setAttribute('aria-pressed',String(liked));
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
         var count=document.getElementById('abq-like-count');
-        if(count) count.textContent=likes === null ? '—' : likes.toLocaleString('en-US');
+        if(count) count.textContent=likes.toLocaleString('en-US');
+
+        var mobileBtn=document.getElementById('abq-like-btn-mobile');
+        var mobileCount=document.getElementById('abq-like-count-mobile');
+        if(mobileBtn){
+            mobileBtn.classList.toggle('liked',liked);
+            mobileBtn.setAttribute('aria-pressed',String(liked));
+        }
+        if(mobileCount) mobileCount.textContent=likes.toLocaleString('en-US');
     }
 
     function abqSyncRatingCounts(counts, totalRatings){
@@ -8888,6 +8896,14 @@ window.AbqToast = (function(){
             }else{
                 notify('⚠️ تعذر تسجيل الإعجاب على الخادم، حاول مرة أخرى.', 'error');
             }
+
+        /* نفس معالج الإعجاب للزر الظاهر على الموبايل — بدون تكرار تسجيل الإعجاب */
+        var mobileLikeBtn=document.getElementById('abq-like-btn-mobile');
+        if(mobileLikeBtn){
+            mobileLikeBtn.addEventListener('click',function(){
+                likeBtn.click();
+            });
+        }
         });
 
         document.getElementById('abq-feedback-list').addEventListener('click', async function(e){
