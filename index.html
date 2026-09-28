@@ -9811,6 +9811,23 @@ document.addEventListener('click',function(event){
   }
 }
 </style>
+
+<style id="abq-mobile-welcome-line2-fit-final">
+/* ===== الموبايل فقط: احتواء السطر الثاني بالكامل دون التفاف أو خروج عن الشاشة ===== */
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome .abq-welcome-line-2{
+    width:100% !important;
+    max-width:100% !important;
+    font-size:clamp(.58rem,2.65vw,.9rem) !important;
+    line-height:1.45 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    letter-spacing:-.02em !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
 </body>
 </html>
 
