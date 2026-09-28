@@ -166,11 +166,11 @@ async function ensureFeedbackMeta(db) {
   ).run();
 
   await db.prepare(
-    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 358)`
+    `INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 365)`
   ).run();
 
   await db.prepare(
-    `UPDATE feedback_meta SET likes = 358 WHERE id = 1 AND likes = 350`
+    `UPDATE feedback_meta SET likes = 365 WHERE id = 1 AND likes = 358`
   ).run();
 }
 
