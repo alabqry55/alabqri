@@ -8673,7 +8673,7 @@ window.AbqToast = (function(){
         if(count) count.textContent=likes === null ? '—' : likes.toLocaleString('en-US');
     }
 
-    function abqSyncRatingCounts(counts){
+    function abqSyncRatingCounts(counts, totalRatings){
         if(!counts || typeof counts !== 'object') return;
         safeSet(KEYS.ratingCounts,JSON.stringify(counts));
         ['excellent','good','average','suggestion'].forEach(function(key){
@@ -8699,7 +8699,7 @@ window.AbqToast = (function(){
         safeSet(storageKey,'1');
         notify('⭐ شكرًا لك! تم تسجيل تقييمك بنجاح.', 'success');
         var result=await apiRequest({action:'rating',rating:key});
-        if(result && result.ratingCounts) abqSyncRatingCounts(result.ratingCounts);
+        if(result && result.ratingCounts) abqSyncRatingCounts(result.ratingCounts,result.totalRatings);
     }
 
     function selectRating(btn, buttons){
@@ -8734,7 +8734,7 @@ window.AbqToast = (function(){
                 safeSet(KEYS.comments,JSON.stringify(data.comments));
                 renderComments(data.comments);
             }
-            if(data && data.ratingCounts){ abqSyncRatingCounts(data.ratingCounts); }
+            if(data && data.ratingCounts){ abqSyncRatingCounts(data.ratingCounts,data.totalRatings); }
             if(data && Number.isFinite(Number(data.likes))){
                 safeSet(KEYS.likes,String(Math.max(0,Number(data.likes))));
                 updateLikeUI();
