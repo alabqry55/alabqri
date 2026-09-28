@@ -1085,6 +1085,18 @@ img.abq-zoomable-image { cursor: zoom-in; }
 .abq-like-btn.liked{background:#dcfce7;border-color:#86efac;color:#15803d}
 .abq-like-count{font-variant-numeric:tabular-nums;direction:ltr}
 .abq-rating-group{margin:.9rem 0 1.1rem}
+.abq-rating-total{
+    margin:.7rem 0 0;
+    padding:.55rem .8rem;
+    border:1px solid #93c5fd;
+    border-radius:999px;
+    background:#fff;
+    color:#1e3a8a;
+    text-align:center;
+    font-weight:900;
+    font-size:.78rem;
+}
+.abq-rating-total span{font-variant-numeric:tabular-nums;direction:ltr}
 .abq-rating-question{font-weight:800;font-size:.85rem;color:#0f172a;margin-bottom:.6rem;text-align:right}
 .abq-rating-options{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
 .abq-rating-btn{
@@ -4787,7 +4799,7 @@ body{
             </span>
 
             <span class="abq-like-count">
-                (<span id="abq-like-count">350</span>)
+                (<span id="abq-like-count">—</span>)
             </span>
 
         </button>
@@ -4807,7 +4819,7 @@ body{
 
 <div class="abq-rating-options grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 
-    <!-- 😍 ممتازة — 245 تقييمًا -->
+    <!-- 😍 ممتازة -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
                 class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
@@ -4815,11 +4827,11 @@ body{
                 aria-checked="false">
             <span class="abq-rating-emoji">😍</span>
             <span class="abq-rating-text">ممتازة</span>
-            <span class="abq-rating-count" aria-label="245 تقييمًا">245</span>
+            <span class="abq-rating-count" aria-label="لم يتم تحميل العدد بعد">—</span>
         </button>
     </div>
 
-    <!-- 🙂 جيدة — 63 تقييمًا -->
+    <!-- 🙂 جيدة -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
                 class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
@@ -4827,11 +4839,11 @@ body{
                 aria-checked="false">
             <span class="abq-rating-emoji">🙂</span>
             <span class="abq-rating-text">جيدة</span>
-            <span class="abq-rating-count" aria-label="63 تقييمًا">63</span>
+            <span class="abq-rating-count" aria-label="لم يتم تحميل العدد بعد">—</span>
         </button>
     </div>
 
-    <!-- 😐 متوسطة — 27 تقييمًا -->
+    <!-- 😐 متوسطة -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
                 class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
@@ -4839,11 +4851,11 @@ body{
                 aria-checked="false">
             <span class="abq-rating-emoji">😐</span>
             <span class="abq-rating-text">متوسطة</span>
-            <span class="abq-rating-count" aria-label="27 تقييمًا">27</span>
+            <span class="abq-rating-count" aria-label="لم يتم تحميل العدد بعد">—</span>
         </button>
     </div>
 
-    <!-- 💡 لدي اقتراح — 15 تقييمًا -->
+    <!-- 💡 لدي اقتراح -->
     <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-2">
         <button type="button"
                 class="abq-rating-btn w-full h-full flex items-center justify-center text-center"
@@ -4851,11 +4863,15 @@ body{
                 aria-checked="false">
             <span class="abq-rating-emoji">💡</span>
             <span class="abq-rating-text">لدي اقتراح</span>
-            <span class="abq-rating-count" aria-label="15 تقييمًا">15</span>
+            <span class="abq-rating-count" aria-label="لم يتم تحميل العدد بعد">—</span>
         </button>
     </div>
 
 </div>
+
+        <div id="abq-rating-total" class="abq-rating-total" aria-live="polite">
+            إجمالي التقييمات: <span id="abq-rating-total-count">—</span>
+        </div>
 
 
         <form id="abq-feedback-form"
@@ -8628,20 +8644,19 @@ window.AbqToast = (function(){
     }
     function getStoredRatingCounts(){
         try{
-            var stored=JSON.parse(safeGet(KEYS.ratingCounts,'{"excellent":245,"good":63,"average":27,"suggestion":15}'));
+            var stored=JSON.parse(safeGet(KEYS.ratingCounts,'{}'));
             return stored && typeof stored === 'object' ? stored : {};
         }catch(e){ return {}; }
     }
 
-    function updateTotalInteractionCount(likes, ratingCounts){
-        var count=document.getElementById('abq-like-count');
+    function updateRatingTotalCount(ratingCounts){
+        var count=document.getElementById('abq-rating-total-count');
         if(!count) return;
-        var likeTotal=Math.max(0,parseInt(likes,10)||0);
         var ratings=ratingCounts || getStoredRatingCounts();
-        var ratingTotal=['excellent','good','average','suggestion'].reduce(function(sum,key){
+        var total=['excellent','good','average','suggestion'].reduce(function(sum,key){
             return sum + Math.max(0,parseInt(ratings[key],10)||0);
         },0);
-        count.textContent=(likeTotal + ratingTotal).toLocaleString('en-US');
+        count.textContent=total.toLocaleString('en-US');
     }
 
     function updateLikeUI(){
@@ -8649,12 +8664,13 @@ window.AbqToast = (function(){
         var label=document.getElementById('abq-like-label');
         if(!btn||!label) return;
         var liked=safeGet(KEYS.liked,'0')==='1';
-        var likes=Math.max(350,parseInt(safeGet(KEYS.likes,'350'),10)||350);
+        var storedLikes=safeGet(KEYS.likes,'');
+        var likes=storedLikes === '' ? null : Math.max(0,parseInt(storedLikes,10)||0);
         btn.classList.toggle('liked',liked);
         btn.setAttribute('aria-pressed',String(liked));
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
         var count=document.getElementById('abq-like-count');
-        if(count) count.textContent=likes.toLocaleString('en-US');
+        if(count) count.textContent=likes === null ? '—' : likes.toLocaleString('en-US');
     }
 
     function abqSyncRatingCounts(counts){
@@ -8720,7 +8736,7 @@ window.AbqToast = (function(){
             }
             if(data && data.ratingCounts){ abqSyncRatingCounts(data.ratingCounts); }
             if(data && Number.isFinite(Number(data.likes))){
-                safeSet(KEYS.likes,String(Math.max(350,Number(data.likes))));
+                safeSet(KEYS.likes,String(Math.max(0,Number(data.likes))));
                 updateLikeUI();
             }
         }catch(e){}
