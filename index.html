@@ -9788,6 +9788,29 @@ document.addEventListener('click',function(event){
   }
 }
 </style>
+
+<style id="abq-mobile-welcome-line-fit-final">
+/* ===== الموبايل فقط: احتواء سطر الترحيب الثاني داخل الشاشة دون تغيير النص ===== */
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-welcome-line-2{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+    text-align:center !important;
+    font-size:clamp(.72rem,3.25vw,1rem) !important;
+    line-height:1.55 !important;
+  }
+}
+</style>
 </body>
 </html>
 
