@@ -2779,6 +2779,33 @@ body{
 }
 </style>
 
+<style id="abq-welcome-lines-same-format-final">
+/* ===== السطران بنفس شكل النص الأول مع الحفاظ على حجم خط السطر الثاني ===== */
+#home .abq-hero-visitor-welcome .abq-welcome-line-1,
+#home .abq-hero-visitor-welcome .abq-welcome-line-2{
+  font-family:inherit !important;
+  font-weight:900 !important;
+  color:#166534 !important;
+  letter-spacing:normal !important;
+  text-align:center !important;
+  text-shadow:none !important;
+  filter:none !important;
+  -webkit-filter:none !important;
+  -webkit-text-stroke:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+}
+#home .abq-hero-visitor-welcome .abq-welcome-line-1::before,
+#home .abq-hero-visitor-welcome .abq-welcome-line-1::after,
+#home .abq-hero-visitor-welcome .abq-welcome-line-2::before,
+#home .abq-hero-visitor-welcome .abq-welcome-line-2::after{
+  content:none !important;
+  display:none !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
