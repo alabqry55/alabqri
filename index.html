@@ -8534,7 +8534,8 @@ window.AbqToast = (function(){
         liked: 'abq_feedback_liked_v1',
         comments: 'abq_feedback_comments_v1',
         lastSubmit: 'abq_feedback_last_submit_v1',
-        ratingCounts: 'abq_feedback_rating_counts_v1'
+        ratingCounts: 'abq_feedback_rating_counts_v1',
+    likesCloudLoaded: 'abq_feedback_likes_cloud_loaded_v1'
     };
     var API = '/api/feedback';
     var SUBMIT_COOLDOWN_MS = 5 * 60 * 1000; /* 5 دقائق بين كل تعليق وآخر لنفس الزائر */
@@ -8682,7 +8683,8 @@ window.AbqToast = (function(){
         if(!btn||!label) return;
         var liked=safeGet(KEYS.liked,'0')==='1';
         var storedLikes=safeGet(KEYS.likes,'');
-        var likes=storedLikes === '' ? null : Math.max(0,parseInt(storedLikes,10)||0);
+        var cloudLoaded=safeGet(KEYS.likesCloudLoaded,'0')==='1';
+        var likes=(!cloudLoaded || storedLikes === '') ? null : Math.max(0,parseInt(storedLikes,10)||0);
         btn.classList.toggle('liked',liked);
         btn.setAttribute('aria-pressed',String(liked));
         label.textContent=liked?'💚 شكرًا لإعجابك':'أعجبتني المنصة';
@@ -8765,6 +8767,7 @@ window.AbqToast = (function(){
             if(data && data.ratingCounts){ abqSyncRatingCounts(data.ratingCounts,data.totalRatings); }
             if(data && Number.isFinite(Number(data.likes))){
                 safeSet(KEYS.likes,String(Math.max(0,Number(data.likes))));
+                safeSet(KEYS.likesCloudLoaded,'1');
                 updateLikeUI();
             }
         }catch(e){}
@@ -8797,6 +8800,7 @@ window.AbqToast = (function(){
 
             if(api && api.ok && Number.isFinite(Number(api.likes))){
                 safeSet(KEYS.likes,String(api.likes));
+                safeSet(KEYS.likesCloudLoaded,'1');
                 safeSet(KEYS.liked,'1');
                 if(api.ratingCounts) abqSyncRatingCounts(api.ratingCounts);
                 else updateLikeUI();
