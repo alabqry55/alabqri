@@ -79,7 +79,7 @@
 - `package.json` موجود ويحتوي أوامر Pages/Wrangler.
 - `wrangler.toml` غير موجود.
 - `schema.sql` وFunctions موجودة.
-- لا يوجد JSON-LD حاليًا داخل `index.html`.
+- يوجد الآن Organization JSON-LD داخل `index.html`.
 - لا يظهر تركيب Google Analytics القياسي (gtag/Google Tag Manager) داخل `index.html`؛ يلزم التحقق من أي قياس يتم من Cloudflare أو أداة أخرى قبل إضافة كود.
 - لا يوجد Service Worker أو Web App Manifest ظاهر في `index.html`؛ هذا تحسين اختياري وليس شرطًا للنشر.
 
@@ -99,8 +99,11 @@
 ## 6) قاعدة الإصدارات
 لا يتم تعديل `index.html` لإغلاق هذه القائمة دفعة واحدة. كل تغيير يكون منفصلًا ومحدودًا، مع اختبار قبل الانتقال إلى البند التالي.
 
-
 ## SEO execution checkpoint — 2026-09-29
 - Live homepage canonical, robots, sitemap, Open Graph and Twitter metadata verified.
-- Homepage Organization/WebSite JSON-LD remains pending because the GitHub write action was blocked by the execution safety layer; no partial modification was made.
-- Google recommends Organization structured data on the homepage and sitemap submission through Search Console. See Google Search Central Organization documentation.
+- Added a minimal homepage Organization JSON-LD block to `index.html`.
+- GitHub commit: `eed515e85dd12ea9c58280f640310a36ab576cac`.
+- GitHub file fetch confirmed the JSON-LD is present in the current `index.html`.
+- Production homepage continues to respond with the expected title, description, canonical, robots, Open Graph and Twitter metadata.
+- Google Search Console verification and sitemap submission remain pending because no verified Search Console property/token is available in the repository or current tool context.
+- Google recommends Organization structured data on the homepage and using Search Console/URL Inspection plus sitemap submission to monitor indexing.
