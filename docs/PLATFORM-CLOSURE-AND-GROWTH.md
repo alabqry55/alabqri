@@ -98,3 +98,9 @@
 
 ## 6) قاعدة الإصدارات
 لا يتم تعديل `index.html` لإغلاق هذه القائمة دفعة واحدة. كل تغيير يكون منفصلًا ومحدودًا، مع اختبار قبل الانتقال إلى البند التالي.
+
+
+## SEO execution checkpoint — 2026-09-29
+- Live homepage canonical, robots, sitemap, Open Graph and Twitter metadata verified.
+- Homepage Organization/WebSite JSON-LD remains pending because the GitHub write action was blocked by the execution safety layer; no partial modification was made.
+- Google recommends Organization structured data on the homepage and sitemap submission through Search Console. See Google Search Central Organization documentation.
