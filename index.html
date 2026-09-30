@@ -2692,6 +2692,33 @@ body{
   }
 }
 </style>
+<style id="abq-main-tabs-single-row-desktop">
+/* ===== الكمبيوتر فقط: التبويبات الأساسية في صف واحد مع الحفاظ على تنسيقها الحالي ===== */
+@media (min-width:901px){
+  .main-tabs-nav{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    width:100% !important;
+    gap:.35rem !important;
+    padding:.28rem !important;
+    justify-content:center !important;
+    align-items:stretch !important;
+    overflow:visible !important;
+  }
+  .main-tabs-nav .nav-btn{
+    flex:1 1 0 !important;
+    min-width:0 !important;
+    width:auto !important;
+    min-height:50px !important;
+    padding:.58rem .22rem !important;
+    font-size:clamp(.60rem,.70vw,.76rem) !important;
+    line-height:1.25 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
