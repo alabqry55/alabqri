@@ -1092,35 +1092,61 @@ img.abq-zoomable-image { cursor: zoom-in; }
     font-size:.74rem;
     white-space:normal;
 }
-/* إطار واحد فقط: إزالة أي إطار داخلي من عداد الإعجاب والإجمالي */
-.abq-feedback-desktop-line .abq-like-btn,
-.abq-feedback-desktop-line #abq-rating-total{
-    border:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    border-radius:0 !important;
-}
+/* عدادات مستقلة داخل الإطار الرئيسي — بدون خروج عن حدود الشاشة */
 .abq-feedback-desktop-line .abq-like-btn{
-    padding:0 !important;
+    min-height:36px !important;
+    max-width:100%;
+    padding:.38rem .72rem !important;
+    border:1px solid #86efac !important;
+    background:rgba(240,253,244,.92) !important;
+    color:#166534 !important;
+    box-shadow:0 4px 12px -9px rgba(22,101,52,.45) !important;
+    border-radius:.75rem !important;
+    white-space:normal;
+    line-height:1.45;
 }
 .abq-feedback-desktop-line .abq-like-btn:hover,
 .abq-feedback-desktop-line .abq-like-btn.liked{
-    border:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    transform:none !important;
+    border-color:#4ade80 !important;
+    background:#f0fdf4 !important;
+    box-shadow:0 5px 14px -9px rgba(22,101,52,.55) !important;
+    transform:translateY(-1px) !important;
 }
 .abq-feedback-desktop-line #abq-rating-total{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.25rem;
     margin:0 !important;
-    padding:0 !important;
+    padding:.38rem .72rem !important;
     max-width:100%;
     min-width:0;
+    border:1px solid #93c5fd !important;
+    background:rgba(239,246,255,.94) !important;
     color:#1e3a8a;
+    box-shadow:0 4px 12px -9px rgba(30,64,175,.4) !important;
+    border-radius:.75rem !important;
     font-size:clamp(.72rem,1.2vw,.82rem);
     font-weight:900;
     white-space:normal;
     overflow-wrap:anywhere;
     text-align:center;
+    line-height:1.45;
+}
+.abq-feedback-desktop-line #abq-rating-total .abq-like-count{
+    white-space:nowrap;
+}
+@media(max-width:768px){
+    .abq-feedback-desktop-line .abq-like-btn,
+    .abq-feedback-desktop-line #abq-rating-total{
+        width:auto;
+        max-width:100%;
+        box-sizing:border-box;
+    }
+    .abq-feedback-desktop-line #abq-rating-total{
+        display:flex;
+        flex-wrap:wrap;
+    }
 }
 .abq-feedback-desktop-line #abq-rating-total .abq-like-count{
     white-space:nowrap;
