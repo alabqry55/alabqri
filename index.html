@@ -3119,6 +3119,102 @@ body{
   color:#eff6ff !important;
 }
 </style>
+<style id="abq-requested-sections-frames-and-order-final">
+/* ===== الأقسام المطلوبة فقط: إطار موحد خارجي + ترتيب داخلي منظم PC/Mobile ===== */
+.abq-requested-excellence-frame,
+.abq-requested-services-section > div,
+.abq-requested-balance-section > div,
+.abq-requested-courses-section > div{
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%)!important;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  box-sizing:border-box!important;
+}
+.abq-requested-excellence-frame .flex.flex-wrap{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:.7rem!important;
+}
+.abq-requested-excellence-frame .flex.flex-wrap > span{
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  background:#fff!important;
+  box-shadow:0 6px 14px -11px rgba(37,99,235,.7)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1.35!important;
+}
+.abq-requested-services-section .grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:1rem!important;
+}
+.abq-requested-services-section .service-card,
+.abq-requested-balance-section .abq-journey-card,
+.abq-requested-courses-section .abq-journey-card{
+  min-width:0!important;
+  box-sizing:border-box!important;
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  background:linear-gradient(180deg,#fff 0%,#eff6ff 100%)!important;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+.abq-requested-balance-section .grid,
+.abq-requested-courses-section .grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:.8rem!important;
+  align-items:stretch!important;
+}
+.abq-requested-balance-section .abq-journey-card,
+.abq-requested-courses-section .abq-journey-card{
+  display:flex!important;
+  flex-direction:column!important;
+  height:100%!important;
+  padding:1rem!important;
+}
+.abq-requested-balance-section .abq-journey-card h4,
+.abq-requested-courses-section .abq-journey-card h4{
+  min-height:2.8em!important;
+}
+.abq-requested-balance-section .abq-journey-card p,
+.abq-requested-courses-section .abq-journey-card p{
+  flex:1 1 auto!important;
+}
+.abq-requested-balance-section .abq-journey-btn,
+.abq-requested-courses-section .abq-journey-btn{
+  margin-top:auto!important;
+}
+@media (max-width:900px){
+  .abq-requested-excellence-frame .flex.flex-wrap{
+    grid-template-columns:1fr!important;
+    gap:.55rem!important;
+  }
+  .abq-requested-services-section .grid,
+  .abq-requested-balance-section .grid,
+  .abq-requested-courses-section .grid{
+    grid-template-columns:1fr!important;
+    gap:.7rem!important;
+  }
+  .abq-requested-excellence-frame,
+  .abq-requested-services-section > div,
+  .abq-requested-balance-section > div,
+  .abq-requested-courses-section > div{
+    border-radius:1rem!important;
+    padding:.65rem!important;
+  }
+  .abq-requested-services-section .service-card,
+  .abq-requested-balance-section .abq-journey-card,
+  .abq-requested-courses-section .abq-journey-card{
+    width:100%!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -3418,7 +3514,7 @@ body{
                     </div>
                 </div>
                 <!-- مجالات التميز -->
-                <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
+                <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700 abq-requested-excellence-frame">
 
                     <h4 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
                         <span>🎯</span> مجالات التميز
@@ -3471,7 +3567,7 @@ body{
 
 
             <!-- 3) بطاقات الخدمات -->
-            <div class="mb-14 reveal">
+            <div class="mb-14 reveal abq-requested-services-section">
                 <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
                 <h3 class="section-title">خدمات المركز الرئيسية</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -3486,7 +3582,7 @@ body{
 
 
             <!-- 5) منظومة العبقري للسكينة والإتزان الشامل -->
-            <div class="mb-14 reveal abq-home-balance-section">
+            <div class="mb-14 reveal abq-home-balance-section abq-requested-balance-section">
                 <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
                 <h3 class="section-title">🌿 منظومة العبقري للسكينة والإتزان الشامل</h3>
                 <p class="abq-home-section-intro">منظومة متكاملة تساعدك على فهم موقعك، تقييم أبعاد اتزانك، ومتابعة مسارك نحو مزيد من السكينة والتطور.</p>
@@ -3500,7 +3596,7 @@ body{
             </div>
 
             <!-- 6) العلوم والدورات -->
-            <div class="mb-14 reveal abq-home-courses-section">
+            <div class="mb-14 reveal abq-home-courses-section abq-requested-courses-section">
                 <div class="bg-blue-50/60 p-2 rounded-xl border border-blue-700">
                 <h3 class="section-title">📚 العلوم والدورات</h3>
                 <p class="abq-home-section-intro">مسارات معرفية وتدريبية متكاملة لبناء الإنسان وتطوير مهاراته وفق منهج العبقري.</p>
