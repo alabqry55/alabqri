@@ -9531,6 +9531,26 @@ body{overflow-x:hidden!important}
   #home .abq-hero-visitor-welcome .abq-visitor-counter span{
     white-space:nowrap !important;
   }
+  /* تثبيت العداد داخل الإطار نفسه ومنع أي امتداد أفقي */
+  #home .abq-hero-visitor-welcome{
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    box-sizing:border-box !important;
+    min-width:0 !important;
+    width:fit-content !important;
+    max-width:100% !important;
+    flex:0 1 auto !important;
+    overflow:hidden !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter span{
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+  
   /* مساحة رسالة الترحيب بجوار العداد — كما هي حاليًا */
   #home .abq-hero-visitor-welcome .abq-hero-welcome{
     width:75% !important;
