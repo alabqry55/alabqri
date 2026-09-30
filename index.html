@@ -2996,6 +2996,26 @@ body{
   }
 }
 </style>
+<style id="abq-main-tabs-pc-extra-fit-final">
+/* ===== PC فقط: تصغير إضافي لأسماء التبويبات الأساسية لمنع أي خروج عن الزر ===== */
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn{
+    min-width:0!important;
+    max-width:100%!important;
+    flex:1 1 0!important;
+    padding:.44rem .04rem!important;
+    font-size:clamp(.42rem,.46vw,.55rem)!important;
+    line-height:1.08!important;
+    letter-spacing:-.03em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
