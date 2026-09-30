@@ -1576,6 +1576,36 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
     box-sizing:border-box !important;
 }
 
+/* إطار موحد لكل عداد: نفس الشكل والحجم البصري داخل الإطار الرئيسي */
+.abq-feedback-desktop-line .abq-like-btn,
+.abq-feedback-desktop-line #abq-rating-total{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    min-height:36px !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    padding:.38rem .72rem !important;
+    border:1px solid #86efac !important;
+    border-radius:.75rem !important;
+    background:rgba(240,253,244,.94) !important;
+    color:#166534 !important;
+    box-shadow:0 4px 12px -9px rgba(22,101,52,.45) !important;
+    font-weight:900 !important;
+    line-height:1.45 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    text-align:center !important;
+}
+.abq-feedback-desktop-line .abq-like-btn:hover,
+.abq-feedback-desktop-line .abq-like-btn.liked,
+.abq-feedback-desktop-line #abq-rating-total:hover{
+    border-color:#4ade80 !important;
+    background:#f0fdf4 !important;
+    box-shadow:0 5px 14px -9px rgba(22,101,52,.55) !important;
+}
+
 /* عنوان الرسالة والعدادات يمكنها الانكماش والالتفاف بدل الخروج */
 .abq-feedback-desktop-line{
     display:flex !important;
