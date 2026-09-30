@@ -1644,15 +1644,29 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
 }
 
 @media (min-width:1024px){
+    /* الكمبيوتر: العنوان + عداد الإعجاب + إجمالي التقييمات في سطر واحد */
     .abq-feedback-desktop-line{
         flex-direction:row !important;
-        flex-wrap:wrap !important;
+        flex-wrap:nowrap !important;
+        align-items:center !important;
+        justify-content:center !important;
+        gap:.55rem !important;
     }
     .abq-feedback-desktop-line .abq-feedback-title{
-        flex:1 1 100% !important;
-    }
-    .abq-feedback-desktop-line #abq-rating-total{
         flex:0 1 auto !important;
+        width:auto !important;
+        max-width:none !important;
+        min-width:0 !important;
+        white-space:nowrap !important;
+        font-size:clamp(.72rem,1.15vw,.95rem) !important;
+        line-height:1.45 !important;
+    }
+    .abq-feedback-desktop-line .abq-like-btn,
+    .abq-feedback-desktop-line #abq-rating-total{
+        flex:0 0 auto !important;
+        width:auto !important;
+        max-width:none !important;
+        white-space:nowrap !important;
     }
 }
 
