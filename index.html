@@ -2578,7 +2578,27 @@ body{
   }
 }
 </style>
-</head>
+<style id="abq-mobile-tabs-welcome-final">
+/* ===== ضبط أزرار التبويبات + الترحيب للموبايل ===== */
+.abq-home-live-actions-below{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:.65rem !important;align-items:stretch !important}
+.abq-home-live-actions-below .abq-home-live-action{width:100% !important;min-width:0 !important;min-height:50px !important;box-sizing:border-box !important;border:2px solid #2563eb !important;border-radius:1rem !important;background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%) !important;color:#0f3b82 !important;box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95) !important;font-weight:900 !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;text-align:center !important;line-height:1.3 !important;white-space:normal !important;padding:.65rem .55rem !important}
+.abq-home-live-actions-below .abq-home-live-action:hover,.abq-home-live-actions-below .abq-home-live-action:focus-visible{border-color:#1d4ed8 !important;background:linear-gradient(180deg,#ffffff 0%,#dbeafe 100%) !important;color:#1e3a8a !important}
+@media (max-width:900px){.abq-home-live-actions-below{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media (max-width:768px){
+.abq-home-live-actions-below{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:.45rem !important}
+.abq-home-live-actions-below .abq-home-live-action{min-height:48px !important;padding:.5rem .3rem !important;font-size:clamp(.68rem,2.5vw,.86rem) !important}
+#home .abq-hero-visitor-welcome .abq-hero-welcome{width:100% !important;max-width:100% !important;min-width:0 !important;padding:.58rem .4rem !important;overflow:hidden !important}
+#home .abq-hero-visitor-welcome .abq-hero-welcome strong{width:100% !important;max-width:100% !important;min-width:0 !important;gap:.14rem !important}
+#home .abq-hero-visitor-welcome .abq-welcome-line-1{width:100% !important;max-width:100% !important;font-size:clamp(.9rem,4.25vw,1.18rem) !important;line-height:1.35 !important;white-space:nowrap !important;overflow:hidden !important;letter-spacing:-.025em !important}
+#home .abq-hero-visitor-welcome .abq-welcome-line-2{width:100% !important;max-width:100% !important;font-size:clamp(.68rem,3.15vw,.98rem) !important;line-height:1.4 !important;white-space:nowrap !important;overflow:hidden !important;letter-spacing:-.025em !important}
+}
+@media (max-width:420px){
+#home .abq-hero-visitor-welcome .abq-hero-welcome{padding:.52rem .28rem !important}
+#home .abq-hero-visitor-welcome .abq-welcome-line-1{font-size:clamp(.84rem,4.15vw,1.04rem) !important}
+#home .abq-hero-visitor-welcome .abq-welcome-line-2{font-size:clamp(.62rem,3vw,.88rem) !important}
+.abq-home-live-actions-below .abq-home-live-action{min-height:46px !important;padding:.48rem .24rem !important;font-size:clamp(.64rem,2.65vw,.8rem) !important}
+}
+</style></head>
 <body class="min-h-screen flex flex-col">
 
     <!-- حاوية تنبيهات Toast الموحّدة لكل المنصة -->
