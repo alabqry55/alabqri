@@ -2719,6 +2719,41 @@ body{
   }
 }
 </style>
+<style id="abq-mobile-azkar-contact-adjacent-final">
+/* ===== الموبايل: مجلس العبقري وتواصل معنا في خانة متجاورة فعلية ===== */
+@media (max-width:900px){
+  .abq-home-live-actions-below{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:.4rem !important;
+    align-items:stretch !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    grid-column:auto !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action[onclick*="switchTab('azkar')"],
+  .abq-home-live-actions-below .abq-home-live-action[onclick*="switchTab('contact')"]{
+    grid-column:auto !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+}
+@media (max-width:420px){
+  .abq-home-live-actions-below{
+    gap:.3rem !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    padding-inline:.04rem !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action[onclick*="switchTab('contact')"]{
+    padding-inline:0 !important;
+    font-size:clamp(.57rem,2.25vw,.69rem) !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
