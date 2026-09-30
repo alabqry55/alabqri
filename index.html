@@ -894,6 +894,14 @@ img.abq-zoomable-image { cursor: zoom-in; }
     #home .abq-hero-welcome{font-size:.88rem !important;line-height:1.7 !important;}
 }
 </style>
+<style id="abq-visitor-counter-three-stats">
+/* ===== نفس عداد المنصة الحالي مع ثلاث قيم حقيقية ===== */
+.abq-visitor-counter .abq-visitor-stat{display:inline-flex;align-items:center;justify-content:center;gap:.22rem;white-space:nowrap}
+.abq-visitor-counter .abq-visitor-label{color:#0f172a;font-weight:800}
+.abq-visitor-counter .abq-visitor-stat + .abq-visitor-stat{padding-inline-start:.7rem;border-inline-start:1px solid rgba(37,99,235,.22)}
+@media(max-width:768px){.abq-visitor-counter{flex-wrap:wrap;row-gap:.35rem}.abq-visitor-counter .abq-visitor-stat{font-size:.78rem}}
+@media(max-width:420px){.abq-visitor-counter .abq-visitor-stat{font-size:.68rem}.abq-visitor-counter .abq-visitor-stat + .abq-visitor-stat{padding-inline-start:.45rem}}
+</style>
 
 <style>.balance-window{width:100%;}.balance-window-btn{min-height:74px;}.balance-window-btn.active-window{box-shadow:0 10px 24px rgba(15,23,42,.16);}</style>
 <style id="abq-question-area-compact">
@@ -2680,10 +2688,11 @@ body{
 
 <!-- عداد الزوار ورسالة الترحيب في إطار واحد -->
 <div class="abq-hero-visitor-welcome" aria-live="polite">
-    <div class="abq-visitor-counter loading" aria-label="عداد زوار منصة العبقري">
+    <div class="abq-visitor-counter loading" aria-label="إحصائيات زوار منصة العبقري">
         <i class="fa-solid fa-eye" aria-hidden="true"></i>
-        <span>زوار المنصة</span>
-        <span id="abq-visitor-count" class="abq-visitor-count">—</span>
+        <span class="abq-visitor-stat"><span class="abq-visitor-label">إجمالي الزيارات</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
+        <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار اليوم</span> <span id="abq-visitor-today" class="abq-visitor-count">—</span></span>
+        <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار الآن</span> <span id="abq-visitor-now" class="abq-visitor-count">—</span></span>
     </div>
     <p class="abq-hero-welcome">
         <strong><span class="abq-welcome-line-1">🌿 أهلاً بأعضاء وزوار المنصة الكرام 🌿</span><span class="abq-welcome-line-2">"هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"</span></strong>
@@ -7497,46 +7506,33 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-real-visitor-counter">
-/* =========================================================
-   ALABQARI 1.3 PRO — VISITOR COUNTER
-   ========================================================= */
-/* ===== عدّاد الزوار الحقيقي V2.2 =====
-   المصدر: Cloudflare Worker + D1 عبر /api/visitors.
-   لا يتم تخزين عنوان IP. */
+/* ===== عداد زوار حقيقي: إجمالي الزيارات + زوار اليوم + زوار الآن ===== */
 (function(){
   'use strict';
   function initVisitorCounter(){
-    var el=document.getElementById('abq-visitor-count');
-    var box=el && el.closest('.abq-visitor-counter');
-    if(!el) return;
-    fetch('/api/visitors', {
-      method:'GET',
-      cache:'no-store',
-      credentials:'same-origin'
-    })
-    .then(function(res){
-      if(!res.ok) throw new Error('visitors api '+res.status);
-      return res.json();
-    })
-    .then(function(data){
-      if(data && Number.isFinite(Number(data.total))){
-        var ABQ_VISITOR_BASE_OFFSET = 2343; /* 190 سابقًا + أول زيارة = 191؛ 2290 + 191 = 2481 */
-        var displayCount = ABQ_VISITOR_BASE_OFFSET + Number(data.total);
-        el.textContent=displayCount.toLocaleString('en-US');
+    var totalEl=document.getElementById('abq-visitor-count');
+    var todayEl=document.getElementById('abq-visitor-today');
+    var nowEl=document.getElementById('abq-visitor-now');
+    var box=totalEl && totalEl.closest('.abq-visitor-counter');
+    if(!totalEl) return;
+    fetch('/api/visitors',{method:'GET',cache:'no-store',credentials:'same-origin'})
+      .then(function(res){if(!res.ok) throw new Error('visitors api '+res.status);return res.json();})
+      .then(function(data){
+        function fmt(v){return Number.isFinite(Number(v))?Number(v).toLocaleString('en-US'):'—';}
+        totalEl.textContent=fmt(data&&data.total);
+        if(todayEl) todayEl.textContent=fmt(data&&data.today);
+        if(nowEl) nowEl.textContent=fmt(data&&data.now);
         if(box) box.classList.remove('loading');
-      }
-    })
-    .catch(function(){
-      /* لا نعرض رقمًا وهميًا عند غياب الـAPI؛ نُظهر حالة عدم التوفر بوضوح. */
-      el.textContent='—';
-      if(box) box.classList.remove('loading');
-    });
+      })
+      .catch(function(){
+        totalEl.textContent='—';
+        if(todayEl) todayEl.textContent='—';
+        if(nowEl) nowEl.textContent='—';
+        if(box) box.classList.remove('loading');
+      });
   }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',initVisitorCounter);
-  }else{
-    initVisitorCounter();
-  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initVisitorCounter);
+  else initVisitorCounter();
 })();
 </script>
 
