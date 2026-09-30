@@ -1497,18 +1497,23 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
 @media (min-width:1024px){
 
     .abq-feedback-head{
-        flex-wrap:nowrap;
+        flex-wrap:wrap;
+        width:100%;
+        max-width:100%;
+        min-width:0;
     }
 
     .abq-feedback-head .abq-feedback-title,
     .abq-feedback-head .abq-feedback-subtitle,
     .abq-feedback-head .abq-like-btn{
-        white-space:nowrap;
-        flex-shrink:0;
+        white-space:normal;
+        flex-shrink:1;
+        min-width:0;
+        max-width:100%;
     }
 
     .abq-feedback-head .abq-feedback-subtitle{
-        flex:1;
+        flex:1 1 auto;
         min-width:0;
         text-align:center;
     }
@@ -1556,6 +1561,95 @@ body.abq-manager-mode .abq-feedback-delete-btn{ display:inline-flex; }
 
     .abq-feedback-head .abq-like-btn{
         justify-content:center;
+    }
+}
+</style>
+
+<!-- ALABQRI — FEEDBACK FRAME OVERFLOW FINAL FIX -->
+<style id="abq-feedback-frame-final-fix">
+/* الإطار الرئيسي: يمنع أي عنصر من تجاوز حدود العرض */
+.abq-feedback-head,
+.abq-feedback-desktop-line{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+}
+
+/* عنوان الرسالة والعدادات يمكنها الانكماش والالتفاف بدل الخروج */
+.abq-feedback-desktop-line{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.55rem !important;
+    flex-wrap:wrap !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-align:center !important;
+}
+
+.abq-feedback-desktop-line .abq-feedback-title{
+    min-width:0 !important;
+    max-width:100% !important;
+    flex:1 1 auto !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+}
+
+.abq-feedback-desktop-line #abq-rating-total{
+    min-width:0 !important;
+    max-width:100% !important;
+    flex:0 1 auto !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+}
+
+.abq-feedback-desktop-line .abq-like-btn{
+    min-width:0 !important;
+    max-width:100% !important;
+    flex:0 1 auto !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+}
+
+@media (min-width:1024px){
+    .abq-feedback-desktop-line{
+        flex-direction:row !important;
+        flex-wrap:wrap !important;
+    }
+    .abq-feedback-desktop-line .abq-feedback-title{
+        flex:1 1 100% !important;
+    }
+    .abq-feedback-desktop-line #abq-rating-total{
+        flex:0 1 auto !important;
+    }
+}
+
+@media (max-width:767px){
+    .abq-feedback-head{
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:.35rem !important;
+    }
+    .abq-feedback-desktop-line{
+        flex-direction:column !important;
+        align-items:center !important;
+        flex-wrap:nowrap !important;
+        gap:.3rem !important;
+    }
+    .abq-feedback-desktop-line .abq-feedback-title{
+        width:100% !important;
+        flex:0 1 auto !important;
+        font-size:clamp(.82rem,3.8vw,.98rem) !important;
+        line-height:1.6 !important;
+    }
+    .abq-feedback-desktop-line .abq-like-btn,
+    .abq-feedback-desktop-line #abq-rating-total{
+        width:auto !important;
+        max-width:100% !important;
+        flex:0 1 auto !important;
+        box-sizing:border-box !important;
     }
 }
 </style>
