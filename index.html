@@ -3074,6 +3074,89 @@ body{
   }
 }
 </style>
+<style id="abq-all-content-frames-unified-pc-mobile-final">
+/* ===== الإطار الموحد النهائي: جميع إطارات ومربعات محتوى المنصة PC + Mobile ===== */
+:root{
+  --abq-unified-border:#2563eb;
+  --abq-unified-radius:1rem;
+  --abq-unified-bg:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%);
+  --abq-unified-text:#0f3b82;
+  --abq-unified-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+/* كل حاويات المحتوى التي تحمل إطارًا/زوايا مستديرة */
+.main-tabs-content :where(
+  div[class*="border"][class*="rounded"],
+  section[class*="border"][class*="rounded"],
+  article[class*="border"][class*="rounded"],
+  aside[class*="border"][class*="rounded"],
+  li[class*="border"][class*="rounded"],
+  form[class*="border"][class*="rounded"]
+):not(.main-tabs-nav):not(.main-tabs-nav *):not(.nav-btn):not(button):not(a):not(input):not(select):not(textarea){
+  box-sizing:border-box!important;
+  border:2px solid var(--abq-unified-border)!important;
+  border-radius:var(--abq-unified-radius)!important;
+  box-shadow:var(--abq-unified-shadow)!important;
+}
+
+/* المربعات الداخلية ذات الإطار حتى لو كان تعريف الحدود منفصلًا */
+.main-tabs-content :where(
+  div[class*="border-"],
+  section[class*="border-"],
+  article[class*="border-"],
+  aside[class*="border-"],
+  li[class*="border-"],
+  form[class*="border-"]
+):not([class*="border-t"]):not([class*="border-b"]):not([class*="border-l"]):not([class*="border-r"]):not(.main-tabs-nav):not(.main-tabs-nav *):not(.nav-btn):not(button):not(a):not(input):not(select):not(textarea){
+  border-color:var(--abq-unified-border)!important;
+  border-width:2px!important;
+  border-radius:var(--abq-unified-radius)!important;
+  box-shadow:var(--abq-unified-shadow)!important;
+}
+
+/* توحيد الخلفية للمربعات ذات الإطار مع الحفاظ على الإطارات الجزئية */
+.main-tabs-content :where(
+  div[class*="border"][class*="rounded"],
+  section[class*="border"][class*="rounded"],
+  article[class*="border"][class*="rounded"],
+  aside[class*="border"][class*="rounded"],
+  li[class*="border"][class*="rounded"],
+  form[class*="border"][class*="rounded"]
+):not(.main-tabs-nav):not(.main-tabs-nav *):not(.nav-btn):not(button):not(a):not(input):not(select):not(textarea){
+  background:var(--abq-unified-bg)!important;
+  color:var(--abq-unified-text);
+}
+
+/* الإطارات المخصصة للمنصة والتي قد لا تعتمد على Tailwind */
+.main-tabs-content :where(
+  .abq-unified-frame,
+  .abq-home-actions-stats-frame,
+  .abq-hero-visitor-welcome,
+  .abq-visitor-counter,
+  .abq-hero-welcome,
+  [class*="frame"],
+  [class*="card"],
+  [class*="panel"]
+):not(.main-tabs-nav):not(.nav-btn):not(button):not(a):not(input):not(select):not(textarea){
+  box-sizing:border-box!important;
+}
+
+/* نفس المقاس البصري على الهاتف */
+@media (max-width:900px){
+  .main-tabs-content :where(
+    div[class*="border"][class*="rounded"],
+    section[class*="border"][class*="rounded"],
+    article[class*="border"][class*="rounded"],
+    aside[class*="border"][class*="rounded"],
+    li[class*="border"][class*="rounded"],
+    form[class*="border"][class*="rounded"]
+  ):not(.main-tabs-nav):not(.main-tabs-nav *):not(.nav-btn):not(button):not(a):not(input):not(select):not(textarea){
+    border-width:2px!important;
+    border-radius:1rem!important;
+    box-shadow:0 7px 16px -12px rgba(37,99,235,.78),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
