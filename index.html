@@ -5998,8 +5998,20 @@ body{
             transition-all duration-300">
 
     <div class="abq-feedback-head">
-        <div class="abq-feedback-desktop-line">
-            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 شاركنا رأيك</h3>
+        <div class="abq-feedback-desktop-line flex items-center justify-center gap-2 whitespace-nowrap">
+            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 شاركنا رأيك حول مدى رضاك عن تجربتك في منصة العبقري</h3>
+            <span id="abq-rating-total" class="abq-rating-total" aria-live="polite">
+                <button type="button"
+                        id="abq-like-btn"
+                        class="abq-like-btn"
+                        aria-pressed="false">
+                    <span aria-hidden="true">💚</span>
+                    <span id="abq-like-label">شكرًا لإعجابك</span>
+                    <span class="abq-like-count">(<span id="abq-like-count">370</span>)</span>
+                </button>
+                <span aria-hidden="true">•</span>
+                📊 إجمالي التقييمات: <span id="abq-rating-total-count">359</span>
+            </span>
         </div>
     </div>
 
@@ -6010,23 +6022,6 @@ body{
          role="radiogroup"
          aria-label="تقييم تجربتك في منصة العبقري">
     </div>
-        <div class="abq-rating-question-row">
-            <p class="abq-rating-question">
-                ما مدى رضاك عن تجربتك في منصة العبقري؟
-            </p>
-            <div id="abq-rating-total" class="abq-rating-total" aria-live="polite">
-                <button type="button"
-                        id="abq-like-btn"
-                        class="abq-like-btn"
-                        aria-pressed="false">
-                    <span aria-hidden="true">👍💚💚</span>
-                    <span id="abq-like-label">شكرًا لإعجابك</span>
-                    <span class="abq-like-count">(<span id="abq-like-count">370</span>)</span>
-                </button>
-                <span aria-hidden="true">•</span>
-                📊 إجمالي التقييمات: <span id="abq-rating-total-count">359</span>
-            </div>
-        </div>
 
 <div class="abq-rating-options grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 
