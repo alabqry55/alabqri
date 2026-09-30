@@ -411,6 +411,27 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
         min-height: 230px;
     }
 }
+.abq-feedback-counters-frame{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.45rem;
+    max-width:100%;
+    min-width:0;
+    padding:.22rem;
+    border:1px solid #86efac;
+    background:rgba(240,253,244,.42);
+    border-radius:.85rem;
+    box-sizing:border-box;
+    flex:0 1 auto;
+}
+@media(max-width:768px){
+    .abq-feedback-counters-frame{
+        width:auto;
+        max-width:100%;
+        flex-wrap:wrap;
+    }
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6222,22 +6243,25 @@ body{
 
     <div class="abq-feedback-head">
         <div class="abq-feedback-desktop-line flex items-center justify-center gap-2 whitespace-nowrap">
-            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 شاركنا رأيك حول مدى رضاك عن تجربتك في منصة العبقري</h3>
+            <h3 id="abq-feedback-title" class="abq-feedback-title">💚 كيف كانت تجربتك في منصة العبقري؟ شاركنا رأيك</h3>
 
-            <!-- عداد الإعجاب: إطار مستقل -->
-            <button type="button"
-                    id="abq-like-btn"
-                    class="abq-like-btn"
-                    aria-pressed="false">
-                <span aria-hidden="true">💚</span>
-                <span id="abq-like-label">شكرًا لإعجابك</span>
-                <span class="abq-like-count">(<span id="abq-like-count">370</span>)</span>
-            </button>
+            <!-- إطار موحد للعدادات — يحافظ على تصميم كل عداد كما هو -->
+            <div class="abq-feedback-counters-frame">
+                <!-- عداد الإعجاب: تصميمه الحالي محفوظ -->
+                <button type="button"
+                        id="abq-like-btn"
+                        class="abq-like-btn"
+                        aria-pressed="false">
+                    <span aria-hidden="true">💚</span>
+                    <span id="abq-like-label">شكرًا لإعجابك</span>
+                    <span class="abq-like-count">(<span id="abq-like-count">370</span>)</span>
+                </button>
 
-            <!-- إجمالي التقييمات: إطار مستقل -->
-            <span id="abq-rating-total" class="abq-rating-total" aria-live="polite">
-                📊 إجمالي التقييمات: <span id="abq-rating-total-count">359</span>
-            </span>
+                <!-- إجمالي التقييمات: تصميمه الحالي محفوظ -->
+                <span id="abq-rating-total" class="abq-rating-total" aria-live="polite">
+                    📊 إجمالي التقييمات: <span id="abq-rating-total-count">359</span>
+                </span>
+            </div>
         </div>
     </div>
 
