@@ -3441,6 +3441,74 @@ body{
   color:#fff!important;
 }
 </style>
+<style id="abq-restore-original-text-colors-final">
+/* ===== استرجاع ألوان النصوص الأصلية — بدون تغيير الخلفيات أو الإطارات — PC + Mobile ===== */
+
+/* إلغاء لون النص الموروث من تنسيق الإطارات الموحد، مع إعادة التحكم إلى الألوان الأصلية لكل عنصر */
+.main-tabs-content :where(
+  .abq-unified-frame,
+  .abq-home-actions-stats-frame,
+  .abq-hero-visitor-welcome,
+  .abq-visitor-counter,
+  [class*="frame"],
+  [class*="card"],
+  [class*="panel"]
+){
+  color:revert!important;
+}
+
+/* الأزرار والعناصر العائمة */
+#abq-fixed-whatsapp a,
+#abq-quran-radio button,
+#abq-safe-history-nav button,
+#scrollTopBtn{color:#fff!important}
+
+/* التبويبات الرئيسية */
+.main-tabs-nav .nav-btn{color:#334155!important}
+.main-tabs-nav .nav-btn:hover,
+.main-tabs-nav .nav-btn:focus-visible{color:#1d4ed8!important}
+.main-tabs-nav .nav-btn.active{color:#fff!important}
+
+/* شريط المعلومات العلوي */
+.abq-top-primary{color:#0f3b82!important}
+.abq-top-secondary{color:#475569!important}
+.abq-top-weather .abq-top-primary{color:#0f766e!important}
+.abq-top-location .abq-top-primary{color:#1d4ed8!important}
+
+/* الهيرو الرئيسي وهيرو التبويبات: النص الأبيض الأصلي فوق الخلفيات */
+#home .abq-home-live-hero,
+#home .abq-home-live-hero .text-white,
+#qualifications .hero-bg,
+#doors .hero-bg,
+#courses .hero-bg,
+#articles .hero-bg,
+#matrix .hero-bg{color:#fff!important}
+
+#qualifications .hero-bg h1,
+#qualifications .hero-bg h2,
+#qualifications .hero-bg h3,
+#qualifications .hero-bg p,
+#doors .hero-bg h1,
+#doors .hero-bg h2,
+#doors .hero-bg h3,
+#doors .hero-bg p,
+#courses .hero-bg h1,
+#courses .hero-bg h2,
+#courses .hero-bg h3,
+#courses .hero-bg p,
+#articles .hero-bg h1,
+#articles .hero-bg h2,
+#articles .hero-bg h3,
+#articles .hero-bg p,
+#matrix .hero-bg h1,
+#matrix .hero-bg h2,
+#matrix .hero-bg h3,
+#matrix .hero-bg p{color:#fff!important}
+
+/* أزرار مرصد العبقري */
+.balance-window-btn.active-window{color:#fff!important}
+.balance-window-btn:not(.active-window){color:#1e293b!important}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
