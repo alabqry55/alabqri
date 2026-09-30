@@ -2654,7 +2654,45 @@ body{
     font-size:clamp(.58rem,2.3vw,.7rem) !important;
   }
 }
-</style></head>
+</style>
+<style id="abq-main-tabs-match-home-actions-desktop">
+/* ===== الكمبيوتر فقط: التبويبات الأساسية بنفس تنسيق أزرار الرئيسية أسفل العداد ===== */
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn{
+    min-height:50px !important;
+    padding:.62rem .5rem !important;
+    border:2px solid #2563eb !important;
+    border-radius:1rem !important;
+    background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%) !important;
+    color:#0f3b82 !important;
+    box-shadow:0 8px 18px -12px rgba(37,99,235,.8), inset 0 1px 0 rgba(255,255,255,.95) !important;
+    font-weight:900 !important;
+    font-size:.82rem !important;
+    line-height:1.35 !important;
+    white-space:nowrap !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+    transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease !important;
+  }
+  .main-tabs-nav .nav-btn:hover,
+  .main-tabs-nav .nav-btn:focus-visible{
+    background:linear-gradient(180deg,#eff6ff 0%,#dbeafe 100%) !important;
+    border-color:#1d4ed8 !important;
+    color:#0f3b82 !important;
+    box-shadow:0 11px 22px -12px rgba(37,99,235,.9) !important;
+    transform:translateY(-2px) !important;
+  }
+  .main-tabs-nav .nav-btn.active{
+    background:linear-gradient(180deg,#2563eb 0%,#1d4ed8 100%) !important;
+    border-color:#2563eb !important;
+    color:#fff !important;
+    box-shadow:0 11px 22px -12px rgba(37,99,235,.9) !important;
+  }
+}
+</style>
+</head>
 <body class="min-h-screen flex flex-col">
 
     <!-- حاوية تنبيهات Toast الموحّدة لكل المنصة -->
