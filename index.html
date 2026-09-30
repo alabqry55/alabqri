@@ -2504,6 +2504,79 @@ body{
   }
 }
 </style>
+<style id="abq-visitor-welcome-stack-final">
+/* ===== عداد الزوار فوق الترحيب داخل نفس الإطار — PC + Mobile ===== */
+#home .abq-hero-visitor-welcome{
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:.65rem !important;
+  overflow:hidden !important;
+}
+
+/* العداد: سطر مستقل بعرض الإطار، مع ترتيب أفقي للإحصائيات */
+#home .abq-hero-visitor-welcome .abq-visitor-counter{
+  order:1 !important;
+  display:flex !important;
+  flex:0 0 auto !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  overflow:hidden !important;
+}
+
+/* عبارة الترحيب: سطر مستقل أسفل العداد بعرض الإطار */
+#home .abq-hero-visitor-welcome .abq-hero-welcome{
+  order:2 !important;
+  width:100% !important;
+  max-width:100% !important;
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  align-self:stretch !important;
+  text-align:center !important;
+}
+
+/* الكمبيوتر: العبارة نفسها أفقية داخل سطرها */
+@media (min-width:769px){
+  #home .abq-hero-visitor-welcome .abq-hero-welcome strong{
+    width:100% !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.6rem !important;
+  }
+}
+
+/* الموبايل: نفس الترتيب الرأسي، مع بقاء إحصائيات العداد أفقية */
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome{
+    gap:.45rem !important;
+    padding:.7rem .55rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    width:100% !important;
+    max-width:100% !important;
+    padding-inline:.2rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    width:100% !important;
+    max-width:100% !important;
+    padding:.75rem .55rem !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
