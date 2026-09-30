@@ -3250,6 +3250,121 @@ body{
   box-shadow:0 18px 30px -18px rgba(37,99,235,.35)!important;
 }
 </style>
+<style id="abq-requested-content-organization-final">
+/* ===== تنظيم المناطق المطلوبة فقط: PC + Mobile ===== */
+#home .abq-requested-excellence-frame,
+#home .abq-requested-services-section > div,
+#home .abq-requested-balance-section > div,
+#home .abq-requested-courses-section > div,
+#home-restored-sections > section{
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  background:linear-gradient(180deg,#fff 0%,#eff6ff 100%)!important;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  box-sizing:border-box!important;
+}
+#home .abq-requested-excellence-frame .flex.flex-wrap{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:.75rem!important;
+}
+#home .abq-requested-services-section .grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:1rem!important;
+}
+#home .abq-requested-balance-section .grid,
+#home .abq-requested-courses-section .grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:.8rem!important;
+}
+#home .abq-requested-services-section .service-card,
+#home .abq-requested-balance-section .abq-journey-card,
+#home .abq-requested-courses-section .abq-journey-card{
+  min-width:0!important;
+  width:100%!important;
+}
+#home .abq-qualification-timeline > div p{
+  white-space:nowrap!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scrollbar-width:thin!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  line-height:1.9!important;
+}
+#home-restored-sections .abq-video-slot{
+  display:flex!important;
+  min-width:0!important;
+}
+#home-restored-sections .abq-video-slot-inner{
+  width:100%!important;
+  min-width:0!important;
+}
+#home-restored-sections .abq-tiktok-watch,
+#home-restored-sections .abq-social-tree{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#home-restored-sections #home-latest-articles{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+#home-restored-sections #home-latest-articles .abq-article-card{
+  min-width:0!important;
+  height:100%!important;
+  box-sizing:border-box!important;
+}
+#home-restored-sections section:nth-of-type(3) > div{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+#home-restored-sections .abq-download-item{
+  min-width:0!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+@media (max-width:900px){
+  #home .abq-requested-excellence-frame .flex.flex-wrap,
+  #home .abq-requested-services-section .grid,
+  #home .abq-requested-balance-section .grid,
+  #home .abq-requested-courses-section .grid{
+    grid-template-columns:1fr!important;
+    gap:.65rem!important;
+  }
+  #home-restored-sections #home-latest-articles{
+    grid-template-columns:1fr!important;
+  }
+  #home-restored-sections section:nth-of-type(3) > div{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  #home-restored-sections .abq-tiktok-watch,
+  #home-restored-sections .abq-social-tree{
+    font-size:.78rem!important;
+    padding:.65rem .7rem!important;
+  }
+  #home .abq-qualification-timeline > div p{
+    font-size:clamp(.58rem,2.2vw,.82rem)!important;
+    padding-bottom:.12rem!important;
+  }
+}
+@media (max-width:420px){
+  #home-restored-sections section:nth-of-type(3) > div{
+    grid-template-columns:1fr!important;
+  }
+  #home-restored-sections .abq-tiktok-watch,
+  #home-restored-sections .abq-social-tree{
+    font-size:.72rem!important;
+    padding:.55rem .5rem!important;
+  }
+  #home .abq-qualification-timeline > div p{
+    font-size:clamp(.54rem,2.15vw,.72rem)!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -3556,14 +3671,13 @@ body{
                     </h4>
                     <div class="flex flex-wrap gap-2">
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🧠 التطوير البشري</span>
-                        <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">👑 القيادة والإدارة</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🧩 علم النفس والإرشاد</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🏡 التنمية الشخصية والأسرية</span>
+                        <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">👑 القيادة والإدارة</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🌿 الطب التكميلي</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🩸 الحجامة</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🕌 الرقية الشرعية</span>
-                        <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">⚡ الطاقة الحيوية (منظور علمي منضبط بالقيم الإسلامية)
-</span>
+                        <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">⚡ الطاقة الحيوية (منظور علمي منضبط بالقيم الإسلامية)</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🎓 إعداد المدربين والاستشاريين</span>
                         <span class="bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">🔬 البحث العلمي والتأليف والنشر</span>
                     </div>
@@ -3663,7 +3777,7 @@ body{
           <div class="text-5xl mb-3">♪</div>
           <h4 class="text-lg font-black text-blue-900 mb-2">مكتبة فيديوهات TikTok</h4>
           <p class="text-sm text-slate-600 leading-7 mb-4">تابع أحدث فيديوهات د/ أحمد السيد رسّه على TikTok من خلال الحساب الرسمي.</p>
-          <a href="https://www.tiktok.com/@alzmhry" class="inline-flex items-center justify-center rounded-xl bg-black text-white font-black text-sm px-5 py-3">▶ مشاهدة على TikTok</a>
+          <a href="https://www.tiktok.com/@alzmhry" target="_blank" rel="noopener noreferrer" class="abq-tiktok-watch inline-flex items-center justify-center rounded-xl bg-black text-white font-black text-sm px-5 py-3">▶ مشاهدة على TikTok</a>
         </div>
       </article>
 
@@ -3672,7 +3786,7 @@ body{
           <div class="text-5xl mb-3">🔗</div>
           <h4 class="text-lg font-black text-blue-900 mb-2">شجرة حسابات السوشيال ميديا</h4>
           <p class="text-sm text-slate-600 leading-7 mb-4">د/ أحمد رسّه — جميع حسابات التواصل في رابط واحد</p>
-          <a href="https://linktr.ee/ahmedrassah" class="inline-flex items-center justify-center rounded-xl bg-blue-700 text-white font-black text-sm px-5 py-3">🔗 فتح شجرة الحسابات</a>
+          <a href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer" class="abq-social-tree inline-flex items-center justify-center rounded-xl bg-blue-700 text-white font-black text-sm px-5 py-3">🔗 فتح شجرة الحسابات</a>
         </div>
       </article>
     </div>
@@ -3696,6 +3810,10 @@ body{
       <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%83%D8%AA%D8%A8" class="rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">الكتب والمراجع</a>
       <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A3%D8%AF%D9%84%D8%A9" class="rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">الأدلة التدريبية</a>
       <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%84%D9%88%D8%A7%D8%A6%D8%AD" class="rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">اللوائح والأنظمة</a>
+      <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D9%88%D8%A7%D8%AF%20%D8%A7%D9%84%D8%AA%D8%AF%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9" class="abq-download-item rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">المواد التدريبية</a>
+      <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%86%D9%85%D8%A7%D8%B0%D8%AC%20%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%85%D8%A7%D8%B1%D8%A7%D8%AA" class="abq-download-item rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">النماذج والاستمارات</a>
+      <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D9%85%D9%84%D9%81%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B4%D9%87%D8%A7%D8%AF%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%AA%D8%AD%D9%82%D9%82" class="abq-download-item rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">الشهادات والتحقق</a>
+      <a href="https://wa.me/201120909856?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A3%D8%A8%D8%AD%D8%A7%D8%AB" class="abq-download-item rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-black text-blue-800 shadow-sm hover:bg-blue-50">المقالات والأبحاث</a>
     </div>
   </section>
 
@@ -3769,7 +3887,7 @@ body{
   <div class="mt-4 bg-blue-50/60 p-3 md:p-4 rounded-xl border border-blue-700">
     <h3 class="section-title text-center">🏆 السيرة الذاتية والخبرات والاعتمادات</h3>
 
-    <div class="space-y-2">
+    <div class="space-y-2 abq-qualification-timeline">
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">🕯️ <span class="text-blue-700 font-black">[2018]</span> — عضو رابطة الروحانيين العرب | معالج روحاني معتمد من أكاديمية الجعفري للعلوم الروحانية والطب التكميلي (برقم: 65).</p></div>
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">📜 <span class="text-blue-700 font-black">[2019]</span> — أستاذ معلم / مدرب مدربين (TOT) | معتمد من الإتحاد العربي للتدريب والإستشارات | لتأهيل وقيادة الكوادر التدريبية المتميزة.</p></div>
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right whitespace-normal md:whitespace-nowrap">🔬 <span class="text-blue-700 font-black">[2020]</span> — دكتور بعلوم الطاقة الحيوية والباراسيكولوجي | معتمد من الإتحاد العربي برقم (3349) ونادي أصدقاء الطاقة الدولي بكامبريدج London برقم (UN12389010).</p></div>
@@ -3778,7 +3896,7 @@ body{
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">⚖️ <span class="text-blue-700 font-black">[2023]</span> — مستشار حقوق الإنسان (لجنة تقصي الحقائق) | المنظمة الدولية للتنمية البشرية وحقوق الإنسان (برقم: 200000910).</p></div>
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">🩺 <span class="text-blue-700 font-black">[2024]</span> — أستاذ معالج ومدرب محترف | العالمية أكاديمي للتدريب والتأهيل الشامل (الحجامة، الإبر الصينية، التدليك، الطب التكميلي).</p></div>
       <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">📖 <span class="text-blue-700 font-black">[2025]</span> — عضو جمعية الإعجاز العلمي المتجدد في القرآن والسنة | (برقم: 1127).</p></div>
-      <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">📖 <span class="text-blue-700 font-black">[2026]</span> — المؤسس والمدير العام | لمنصة العبقري للتدريب والإستشارات (الطب التكميلي والتنمية البشرية🌿) الذي تشرفونا به الآن — <a href="https://alabqri.pages.dev/" target="_blank" rel="noopener noreferrer" class="text-blue-700 underline font-black">https://alabqri.pages.dev/</a></p></div>
+      <div class="bg-white/80 rounded-xl border border-blue-700 p-3"><p class="text-green-800 font-bold leading-8 text-right">📖 <span class="text-blue-700 font-black">[2026]</span> — المؤسس والمدير العام لمنصة العبقري للتدريب والاستشارات (الطب التكميلي والتنمية البشرية🌿) الذي تشرفونا به الآن</p></div>
     </div>
   </div>
 </section>
