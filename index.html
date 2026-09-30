@@ -2907,60 +2907,6 @@ body{
   }
 }
 </style>
-<style id="abq-inner-content-frames-unified-final">
-/* ===== PC + MOB: توحيد الإطارات الداخلية لكل محتويات المنصة ===== */
-:where(
-  .main-tabs-content .border,
-  .main-tabs-content [class*="border-"],
-  .main-tabs-content [class*="border "],
-  .main-tabs-content [class*="rounded-"]
-):not(.main-tabs-nav):not(.main-tabs-nav *):not(.abq-home-live-action):not(.abq-hero-welcome):not(.abq-visitor-counter){
-  box-sizing:border-box!important;
-}
-/* الإطارات الداخلية الفعلية: نفس الهوية البصرية المعتمدة */
-:where(
-  .main-tabs-content .border,
-  .main-tabs-content [class*="border-"],
-  .main-tabs-content [class*="border "]
-):not(.main-tabs-nav):not(.main-tabs-nav *):not(button):not(input):not(select):not(textarea):not(.abq-home-live-action){
-  border-color:#2563eb!important;
-  border-width:2px!important;
-  border-radius:1rem!important;
-  box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95)!important;
-}
-/* مربعات المحتوى الداخلية البيضاء/الفاتحة */
-:where(
-  .main-tabs-content .border,
-  .main-tabs-content [class*="border-"],
-  .main-tabs-content [class*="border "]
-):not(.main-tabs-nav):not(.main-tabs-nav *):not(button):not(input):not(select):not(textarea):not(.abq-home-live-action):not([class*="border-b"]):not([class*="border-t"]){
-  background:linear-gradient(180deg,#fff 0%,#eff6ff 100%)!important;
-}
-/* ===== PC: أسماء التبويبات الأساسية كاملة داخل أزرارها ===== */
-@media (min-width:901px){
-  .main-tabs-nav .nav-btn{
-    min-width:0!important;
-    max-width:100%!important;
-    width:auto!important;
-    flex:1 1 0!important;
-    padding:.48rem .08rem!important;
-    font-size:clamp(.46rem,.52vw,.60rem)!important;
-    line-height:1.12!important;
-    letter-spacing:-.025em!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:clip!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
-    box-sizing:border-box!important;
-  }
-}
-@media (max-width:900px){
-  .main-tabs-content :where(.border,.border-2,.border-blue-700,[class*="border-"]):not(.main-tabs-nav):not(.main-tabs-nav *){
-    box-sizing:border-box!important;
-  }
-}
-</style>
 <style id="abq-main-tabs-pc-extra-fit-final">
 /* ===== PC فقط: تصغير إضافي لأسماء التبويبات الأساسية لمنع أي خروج عن الزر ===== */
 @media (min-width:901px){
