@@ -2598,6 +2598,62 @@ body{
 #home .abq-hero-visitor-welcome .abq-welcome-line-2{font-size:clamp(.62rem,3vw,.88rem) !important}
 .abq-home-live-actions-below .abq-home-live-action{min-height:46px !important;padding:.48rem .24rem !important;font-size:clamp(.64rem,2.65vw,.8rem) !important}
 }
+</style><style id="abq-tabs-desktop-mobile-final">
+/* ===== التبويبات الثمانية: صفّان × 4 على الكمبيوتر + ضبط الموبايل ===== */
+@media (min-width:901px){
+  .abq-home-live-actions-below{
+    width:min(100%,1100px) !important;
+    margin-inline:auto !important;
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:.65rem !important;
+    justify-content:center !important;
+    align-items:stretch !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    width:100% !important;
+    min-width:0 !important;
+    min-height:50px !important;
+    padding:.62rem .5rem !important;
+    box-sizing:border-box !important;
+  }
+}
+@media (max-width:768px){
+  .abq-home-live-actions-below{
+    width:100% !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:.4rem !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    min-width:0 !important;
+    width:100% !important;
+    min-height:46px !important;
+    padding:.42rem .12rem !important;
+    font-size:clamp(.62rem,2.45vw,.78rem) !important;
+    letter-spacing:-.015em !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+  }
+  /* زر تواصل معنا تحديداً: تقليل الحشو والمسافة الداخلية حتى يستقر بجانب مجلس العبقري */
+  .abq-home-live-actions-below .abq-home-live-action[onclick*="switchTab('contact')"]{
+    padding-inline:.06rem !important;
+    margin:0 !important;
+    min-width:0 !important;
+  }
+}
+@media (max-width:420px){
+  .abq-home-live-actions-below{
+    gap:.32rem !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    padding-inline:.06rem !important;
+    font-size:clamp(.59rem,2.35vw,.72rem) !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action[onclick*="switchTab('contact')"]{
+    padding-inline:0 !important;
+    font-size:clamp(.58rem,2.3vw,.7rem) !important;
+  }
+}
 </style></head>
 <body class="min-h-screen flex flex-col">
 
