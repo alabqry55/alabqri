@@ -1059,12 +1059,24 @@ img.abq-zoomable-image { cursor: zoom-in; }
 }
 .abq-feedback-desktop-line{
     width:100%;
+    max-width:100%;
+    box-sizing:border-box;
     display:flex;
     align-items:center;
     justify-content:center;
     gap:.7rem;
-    white-space:nowrap;
+    flex-wrap:wrap;
     min-width:0;
+    white-space:normal;
+    text-align:center;
+    overflow-wrap:anywhere;
+}
+.abq-feedback-desktop-line .abq-feedback-title{
+    flex:0 1 auto;
+    max-width:100%;
+    min-width:0;
+    overflow-wrap:anywhere;
+    word-break:normal;
 }
 .abq-feedback-desktop-line .abq-feedback-subtitle{
     margin:0 !important;
@@ -1074,18 +1086,22 @@ img.abq-zoomable-image { cursor: zoom-in; }
     color:#1d4ed8 !important;
 }
 .abq-feedback-desktop-line .abq-like-btn{
-    min-height:36px;
-    padding:.42rem .75rem;
+    min-height:0;
+    max-width:100%;
+    padding:0 !important;
     font-size:.74rem;
+    white-space:normal;
 }
-/* توحيد عداد الإعجاب وإجمالي التقييمات داخل إطار واحد */
-.abq-feedback-desktop-line .abq-like-btn{
+/* إطار واحد فقط: إزالة أي إطار داخلي من عداد الإعجاب والإجمالي */
+.abq-feedback-desktop-line .abq-like-btn,
+.abq-feedback-desktop-line #abq-rating-total{
     border:0 !important;
     background:transparent !important;
     box-shadow:none !important;
     border-radius:0 !important;
+}
+.abq-feedback-desktop-line .abq-like-btn{
     padding:0 !important;
-    min-height:0 !important;
 }
 .abq-feedback-desktop-line .abq-like-btn:hover,
 .abq-feedback-desktop-line .abq-like-btn.liked{
@@ -1094,11 +1110,26 @@ img.abq-zoomable-image { cursor: zoom-in; }
     box-shadow:none !important;
     transform:none !important;
 }
+.abq-feedback-desktop-line #abq-rating-total{
+    margin:0 !important;
+    padding:0 !important;
+    max-width:100%;
+    min-width:0;
+    color:#1e3a8a;
+    font-size:clamp(.72rem,1.2vw,.82rem);
+    font-weight:900;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    text-align:center;
+}
+.abq-feedback-desktop-line #abq-rating-total .abq-like-count{
+    white-space:nowrap;
+}
 .abq-rating-total-inline{
     color:#1e3a8a;
     font-size:.78rem;
     font-weight:900;
-    white-space:nowrap;
+    white-space:normal;
 }
 .abq-rating-total-inline span{
     font-variant-numeric:tabular-nums;
@@ -1106,22 +1137,34 @@ img.abq-zoomable-image { cursor: zoom-in; }
 }
 .abq-feedback-mobile-content{display:none;}
 @media(max-width:768px){
-    .abq-feedback-desktop-line{display:none;}
-    .abq-feedback-mobile-content{
+    .abq-feedback-desktop-line{
         display:flex;
         width:100%;
         flex-direction:column;
         align-items:center;
-        gap:.35rem;
+        justify-content:center;
+        gap:.3rem;
+        flex-wrap:nowrap;
+        white-space:normal;
         text-align:center;
     }
-    .abq-feedback-mobile-content .abq-feedback-subtitle{
-        margin:0 !important;
-        font-size:.8rem !important;
-        line-height:1.7 !important;
-        font-weight:900 !important;
-        color:#1d4ed8 !important;
+    .abq-feedback-desktop-line .abq-feedback-title{
+        width:100%;
+        max-width:100%;
+        font-size:clamp(.86rem,4vw,1rem);
+        line-height:1.65;
+        overflow-wrap:anywhere;
     }
+    .abq-feedback-desktop-line #abq-rating-total{
+        width:100%;
+        max-width:100%;
+        line-height:1.7;
+    }
+    .abq-feedback-desktop-line .abq-like-btn{
+        max-width:100%;
+        line-height:1.6;
+    }
+    .abq-feedback-mobile-content{display:none !important;}
 }
 
 
