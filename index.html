@@ -2868,6 +2868,45 @@ body{
   }
 }
 </style>
+<style id="abq-platform-unified-frame-final">
+/* ===== الإطار البصري الموحد لجميع مكونات المنصة ===== */
+:root{
+  --abq-frame-border:#2563eb;
+  --abq-frame-radius:1rem;
+  --abq-frame-bg:linear-gradient(180deg,#fff 0%,#eff6ff 100%);
+  --abq-frame-text:#0f3b82;
+  --abq-frame-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95);
+}
+.abq-unified-frame,
+.abq-home-actions-stats-frame,
+.abq-hero-welcome,
+.abq-visitor-counter,
+.main-tabs-nav .nav-btn,
+.abq-home-live-actions-below .abq-home-live-action{
+  border:2px solid var(--abq-frame-border)!important;
+  border-radius:var(--abq-frame-radius)!important;
+  background:var(--abq-frame-bg)!important;
+  color:var(--abq-frame-text)!important;
+  box-shadow:var(--abq-frame-shadow)!important;
+  box-sizing:border-box!important;
+}
+.main-tabs-nav .nav-btn.active{
+  background:linear-gradient(180deg,#2563eb 0%,#1d4ed8 100%)!important;
+  border-color:#2563eb!important;
+  color:#fff!important;
+}
+@media (max-width:900px){
+  .abq-unified-frame,
+  .abq-home-actions-stats-frame,
+  .abq-hero-welcome,
+  .abq-visitor-counter,
+  .main-tabs-nav .nav-btn,
+  .abq-home-live-actions-below .abq-home-live-action{
+    border-width:2px!important;
+    border-radius:1rem!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
