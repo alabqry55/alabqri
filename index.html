@@ -2775,12 +2775,15 @@ body{
 <!-- إطار أزرق موحّد للأزرار وعداد الزوار والإحصائيات -->
 <div class="abq-home-actions-stats-frame bg-blue-50/60 p-2 rounded-xl border border-blue-700">
 <!-- الأزرار الرئيسية أسفل صورة الهيرو -->
-<div class="abq-home-live-actions abq-home-live-actions-below" aria-label="روابط سريعة">
-    <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-green"><i class="fas fa-graduation-cap ml-1"></i> حول المركز</button>
-    <button onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-cyan"><i class="fas fa-graduation-cap ml-1"></i> إبدأ التعلم</button>
-    <button onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-gold"><i class="fas fa-certificate ml-1"></i> الدبلومات الرسمية</button>
-    <button onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-green2"><i class="fas fa-mosque ml-1"></i> بوابة الأذكار</button>
-    <button onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue"><i class="fas fa-phone ml-1"></i> تواصل معنا</button>
+<div class="abq-home-live-actions abq-home-live-actions-below" aria-label="تبويبات المنصة الرئيسية">
+    <button type="button" onclick="switchTab('home')" class="abq-home-live-action abq-home-live-action-blue">الرئيسية</button>
+    <button type="button" onclick="switchTab('qualifications')" class="abq-home-live-action abq-home-live-action-blue">المؤهلات والإعتمادات</button>
+    <button type="button" onclick="switchTab('doors')" class="abq-home-live-action abq-home-live-action-blue">الدبلومات الرسمية المعتمدة</button>
+    <button type="button" onclick="switchTab('courses')" class="abq-home-live-action abq-home-live-action-blue">العلوم والدورات المساعدة</button>
+    <button type="button" onclick="switchTab('articles')" class="abq-home-live-action abq-home-live-action-blue">📰 أحدث المقالات والأبحاث</button>
+    <button type="button" onclick="switchTab('matrix')" class="abq-home-live-action abq-home-live-action-blue">مرصد العبقري للإتزان الشامل</button>
+    <button type="button" onclick="switchTab('azkar')" class="abq-home-live-action abq-home-live-action-blue">مجلس العبقري للذكر والتسبيح</button>
+    <button type="button" onclick="switchTab('contact')" class="abq-home-live-action abq-home-live-action-blue">تواصل معنا📞</button>
 </div>
 
 <!-- 2) شريط الإحصائيات -->
@@ -10121,6 +10124,87 @@ document.addEventListener('click',function(event){
   }
   #home .abq-hero-visitor-welcome .abq-visitor-count{
     font-size:.66rem !important;
+  }
+}
+</style>
+
+<style id="abq-visitor-counter-tab-style-final">
+/* ===== عداد الزوار: نفس الهوية البصرية لشريط أزرار التبويبات ===== */
+#home .abq-hero-visitor-welcome .abq-visitor-counter{
+  border:2px solid #2563eb !important;
+  border-radius:1rem !important;
+  background:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%) !important;
+  color:#0f3b82 !important;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.8), inset 0 1px 0 rgba(255,255,255,.95) !important;
+  font-weight:900 !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-stat{
+  min-height:2.45rem !important;
+  display:inline-flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:.22rem .65rem !important;
+  box-sizing:border-box !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-stat + .abq-visitor-stat{
+  border-inline-start:1px solid #bfdbfe !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-label{
+  color:#1e40af !important;
+  font-weight:900 !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-count{
+  color:#0f3b82 !important;
+  font-weight:900 !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-counter > i{
+  color:#2563eb !important;
+}
+@media (max-width:768px){
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    width:100% !important;
+    max-width:100% !important;
+    min-height:0 !important;
+    padding:.12rem .18rem !important;
+    border-radius:.85rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-stat{
+    min-height:2rem !important;
+    padding:.12rem .28rem !important;
+  }
+}
+</style>
+
+<style id="abq-home-live-tabs-eight-layout-final">
+/* ===== الأزرار السريعة = نفس أسماء وترتيب التبويبات الرئيسية ===== */
+.abq-home-live-actions-below{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:.65rem !important;
+  align-items:stretch !important;
+}
+.abq-home-live-actions-below .abq-home-live-action{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:50px !important;
+  box-sizing:border-box !important;
+  white-space:normal !important;
+}
+@media (max-width:900px){
+  .abq-home-live-actions-below{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:420px){
+  .abq-home-live-actions-below{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:.45rem !important;
+  }
+  .abq-home-live-actions-below .abq-home-live-action{
+    min-height:46px !important;
+    padding:.5rem .3rem !important;
+    font-size:.64rem !important;
   }
 }
 </style>
