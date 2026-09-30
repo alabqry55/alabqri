@@ -2907,6 +2907,41 @@ body{
   }
 }
 </style>
+<style id="abq-all-platform-frames-unified-final">
+/* ===== الكمبيوتر + الهاتف: الإطار الموحد لكل إطارات ومربعات محتوى المنصة ===== */
+:where(
+  div[class*="border"][class*="rounded"],
+  section[class*="border"][class*="rounded"],
+  article[class*="border"][class*="rounded"],
+  aside[class*="border"][class*="rounded"]
+):not(.main-tabs-nav .nav-btn):not(.abq-home-live-action):not(.abq-hero-welcome):not(.abq-visitor-counter){
+  border-color:#2563eb!important;
+  border-width:2px!important;
+  border-radius:1rem!important;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  box-sizing:border-box!important;
+}
+/* البطاقات البيضاء/الزرقاء المحتوية على محتوى تصبح بنفس هوية الإطار */
+:where(
+  div[class*="border"][class*="rounded"],
+  section[class*="border"][class*="rounded"],
+  article[class*="border"][class*="rounded"],
+  aside[class*="border"][class*="rounded"]
+):not([class*="border-b"]):not([class*="border-t"]):not(.main-tabs-nav .nav-btn):not(.abq-home-live-action):not(.abq-hero-welcome):not(.abq-visitor-counter){
+  background:linear-gradient(180deg,#fff 0%,#eff6ff 100%)!important;
+}
+@media (max-width:900px){
+  :where(
+    div[class*="border"][class*="rounded"],
+    section[class*="border"][class*="rounded"],
+    article[class*="border"][class*="rounded"],
+    aside[class*="border"][class*="rounded"]
+  ):not(.main-tabs-nav .nav-btn):not(.abq-home-live-action):not(.abq-hero-welcome):not(.abq-visitor-counter){
+    border-width:2px!important;
+    border-radius:1rem!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
