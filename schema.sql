@@ -1,13 +1,24 @@
 -- منصة العبقري — D1 schema
--- نفّذ هذا الملف مرة واحدة على قاعدة D1: alabqri-db
+-- قاعدة D1: alabqri-db
 
 CREATE TABLE IF NOT EXISTS visitors (
   id INTEGER PRIMARY KEY CHECK (id = 1),
   total INTEGER NOT NULL DEFAULT 0,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+INSERT OR IGNORE INTO visitors (id,total) VALUES (1,2481);
 
-INSERT OR IGNORE INTO visitors (id, total) VALUES (1, 2481);
+CREATE TABLE IF NOT EXISTS visitor_sessions (
+  session_id TEXT PRIMARY KEY,
+  first_seen TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_seen TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_visit_date TEXT
+);
+
+CREATE TABLE IF NOT EXISTS visitor_daily (
+  visit_date TEXT PRIMARY KEY,
+  unique_visitors INTEGER NOT NULL DEFAULT 0
+);
 
 CREATE TABLE IF NOT EXISTS feedback (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,25 +27,17 @@ CREATE TABLE IF NOT EXISTS feedback (
   rating TEXT NOT NULL CHECK (rating IN ('excellent','good','average','suggestion')),
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE INDEX IF NOT EXISTS idx_feedback_created_at
-ON feedback(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_feedback_created_at ON feedback(created_at DESC);
 
 CREATE TABLE IF NOT EXISTS feedback_meta (
   id INTEGER PRIMARY KEY CHECK (id = 1),
   likes INTEGER NOT NULL DEFAULT 370
 );
-
-INSERT OR IGNORE INTO feedback_meta (id, likes) VALUES (1, 370);
-
+INSERT OR IGNORE INTO feedback_meta (id,likes) VALUES (1,370);
 
 CREATE TABLE IF NOT EXISTS feedback_ratings (
   rating TEXT PRIMARY KEY CHECK (rating IN ('excellent','good','average','suggestion')),
   count INTEGER NOT NULL DEFAULT 0
 );
-
-INSERT OR IGNORE INTO feedback_ratings (rating, count) VALUES
-  ('excellent', 245),
-  ('good', 63),
-  ('average', 27),
-  ('suggestion', 15);
+INSERT OR IGNORE INTO feedback_ratings (rating,count) VALUES
+  ('excellent',245),('good',63),('average',27),('suggestion',15);
