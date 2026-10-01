@@ -4008,6 +4008,69 @@ body{
   color:#000000!important;
 }
 </style>
+
+<style id="abq-professional-counters-glow">
+/* ===== إضاءة وتوهج احترافي موحّد لجميع العدادات الظاهرة بالمنصة ===== */
+@keyframes abqCounterGlow{
+    0%,100%{filter:brightness(1);}
+    50%{filter:brightness(1.08);}
+}
+
+/* العدادات ذات الإطار/الحاوية */
+#home .abq-visitor-counter,
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn,
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-rating-total,
+#counter{
+    animation:abqCounterGlow 3.2s ease-in-out infinite;
+    box-shadow:0 0 0 1px rgba(37,99,235,.10),0 0 14px rgba(37,99,235,.22),0 6px 18px -10px rgba(37,99,235,.40) !important;
+}
+
+/* العدادات الرقمية الصغيرة */
+.abq-visitor-count,
+.counter,
+.abq-like-count,
+.abq-rating-count,
+[id^="count-hasanat-"],
+[id^="count-tahseen-"],
+[id^="count-dyn-"],
+#subha-val,
+#fav-count{
+    animation:abqCounterGlow 3.2s ease-in-out infinite;
+    text-shadow:0 0 5px rgba(37,99,235,.32),0 0 10px rgba(96,165,250,.22);
+}
+
+/* إبراز الرقم داخل عدادات الإعجاب والتقييم دون تغيير محتواها */
+.abq-feedback-desktop-line .abq-like-count,
+.abq-feedback-desktop-line #abq-rating-total-count,
+.abq-feedback-desktop-line .abq-rating-count{
+    text-shadow:0 0 5px rgba(37,99,235,.38),0 0 11px rgba(96,165,250,.24);
+}
+
+/* التوهج عند التفاعل */
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn:hover,
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn.liked,
+.abq-rating-btn:hover .abq-rating-count,
+.abq-rating-btn.abq-rating-selected .abq-rating-count{
+    box-shadow:0 0 16px rgba(37,99,235,.38),0 0 28px rgba(96,165,250,.22) !important;
+    text-shadow:0 0 6px rgba(255,255,255,.28);
+}
+
+@media(prefers-reduced-motion:reduce){
+    #home .abq-visitor-counter,
+    .abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn,
+    .abq-feedback-desktop-line .abq-feedback-counters-frame #abq-rating-total,
+    #counter,
+    .abq-visitor-count,
+    .counter,
+    .abq-like-count,
+    .abq-rating-count,
+    [id^="count-hasanat-"],
+    [id^="count-tahseen-"],
+    [id^="count-dyn-"],
+    #subha-val,
+    #fav-count{animation:none;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
