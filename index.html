@@ -4141,6 +4141,56 @@ body{
     animation:abqCounterGlow 3.2s ease-in-out infinite;
 }
 </style>
+<style id="abq-scroll-final-responsive-tuning">
+/* ===== ضبط نهائي لحركة التمرير: PC بالماوس + Mobile باللمس =====
+   يعتمد على محرك المتصفح الأصلي، بدون wheel/touch hijacking. */
+html{
+    width:100% !important;
+    min-height:100% !important;
+    height:auto !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    scroll-behavior:auto !important;
+    overscroll-behavior-x:none !important;
+    overscroll-behavior-y:none !important;
+}
+body{
+    width:100% !important;
+    min-height:100vh !important;
+    height:auto !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    position:static !important;
+    overscroll-behavior-x:none !important;
+    overscroll-behavior-y:none !important;
+}
+.main-tabs-content,
+.main-tabs-content > section.tab-content{
+    width:100% !important;
+    height:auto !important;
+    min-height:1px !important;
+    max-height:none !important;
+    overflow:visible !important;
+    scroll-snap-type:none !important;
+}
+@media (pointer:fine){
+    html,body{
+        scrollbar-gutter:stable;
+    }
+}
+@media (max-width:768px){
+    html,body{
+        touch-action:pan-y pinch-zoom !important;
+        -webkit-overflow-scrolling:touch !important;
+        -webkit-tap-highlight-color:transparent !important;
+    }
+    .main-tabs-content,
+    .main-tabs-content > section.tab-content,
+    .main-tabs-content > section.tab-content.tab-active{
+        touch-action:pan-y pinch-zoom !important;
+    }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
