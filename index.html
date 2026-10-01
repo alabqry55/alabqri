@@ -4071,6 +4071,76 @@ body{
     #fav-count{animation:none;}
 }
 </style>
+<style id="abq-multicolor-counter-glow">
+/* ===== توزيع ألوان التوهج حسب نوع العداد — دون تغيير الإطار أو الوظائف ===== */
+
+/* 💚 الإعجابات — أخضر */
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn{
+    box-shadow:0 0 0 1px rgba(34,197,94,.10),0 0 14px rgba(34,197,94,.25),0 6px 18px -10px rgba(22,163,74,.42) !important;
+}
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn .abq-like-count{
+    text-shadow:0 0 5px rgba(34,197,94,.42),0 0 11px rgba(134,239,172,.26);
+}
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn:hover,
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-like-btn.liked{
+    box-shadow:0 0 16px rgba(34,197,94,.42),0 0 28px rgba(134,239,172,.24) !important;
+}
+
+/* 📊 التقييمات — أزرق */
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-rating-total{
+    box-shadow:0 0 0 1px rgba(37,99,235,.10),0 0 14px rgba(37,99,235,.25),0 6px 18px -10px rgba(37,99,235,.40) !important;
+}
+.abq-feedback-desktop-line .abq-feedback-counters-frame #abq-rating-total-count{
+    text-shadow:0 0 5px rgba(37,99,235,.40),0 0 11px rgba(147,197,253,.25);
+}
+
+/* 👥 زوار المنصة — سماوي */
+#home .abq-visitor-counter{
+    box-shadow:0 0 0 1px rgba(14,165,233,.10),0 0 15px rgba(14,165,233,.24),0 7px 20px -11px rgba(14,116,144,.40) !important;
+}
+#home .abq-visitor-counter .abq-visitor-count{
+    text-shadow:0 0 5px rgba(14,165,233,.38),0 0 11px rgba(125,211,252,.24);
+}
+
+/* 📿 الأذكار والأوراد — ذهبي */
+#hasanat-container [id^="count-hasanat-"],
+#hasanat-container [id^="count-dyn-"],
+#awraad-general-container [id^="count-dyn-"]{
+    text-shadow:0 0 5px rgba(212,175,55,.46),0 0 11px rgba(243,214,117,.28);
+}
+#hasanat-container .glow-btn,
+#awraad-general-container .glow-btn{
+    box-shadow:0 0 12px rgba(212,175,55,.20),0 4px 14px -9px rgba(146,102,10,.35) !important;
+}
+
+/* 🛡️ التحصينات — نيلي */
+#tahseen-container [id^="count-tahseen-"],
+#tahseen-container [id^="count-dyn-"]{
+    text-shadow:0 0 5px rgba(99,102,241,.42),0 0 11px rgba(165,180,252,.28);
+}
+#tahseen-container .glow-btn{
+    box-shadow:0 0 12px rgba(99,102,241,.20),0 4px 14px -9px rgba(55,48,163,.35) !important;
+}
+
+/* ✨ التسبيح — زمردي */
+#counter,
+#subha-val{
+    box-shadow:0 0 0 1px rgba(5,150,105,.10),0 0 15px rgba(5,150,105,.25),0 6px 18px -10px rgba(6,95,70,.42) !important;
+    text-shadow:0 0 5px rgba(5,150,105,.38),0 0 11px rgba(110,231,183,.24);
+}
+
+/* ✨ العدادات الموجودة داخل قسم العلاجات — زمردي هادئ */
+#treatment-container [id^="count-dyn-"]{
+    text-shadow:0 0 5px rgba(5,150,105,.38),0 0 11px rgba(110,231,183,.24);
+}
+
+/* 🧭 أي عدادات ديناميكية داخل قسم الأذكار العامة/التحصينات تتبع لون القسم تلقائيًا */
+#hasanat-container [id^="count-hasanat-"],
+#tahseen-container [id^="count-tahseen-"],
+#treatment-container [id^="count-dyn-"]{
+    animation:abqCounterGlow 3.2s ease-in-out infinite;
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
