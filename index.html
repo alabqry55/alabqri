@@ -3886,11 +3886,14 @@ body{
 }
 </style>
 <style id="abq-external-frames-all-tabs-final">
-/* ===== الإطارات الخارجية فقط: توحيد الحواف دون تغيير ألوان المحتوى الداخلية ===== */
+/* ===== الإطارات الخارجية الرئيسية: نفس عرض منطقة النبذة التعريفية ===== */
 :where(.main-tabs-content > .tab-content > div > div[class*="border"][class*="rounded"],
        .main-tabs-content > .tab-content > div > section[class*="border"][class*="rounded"],
        .main-tabs-content > .tab-content > div > article[class*="border"][class*="rounded"],
        .main-tabs-content > .tab-content > div > header[class*="border"][class*="rounded"]){
+  width:100%!important;
+  max-width:100%!important;
+  margin-inline:auto!important;
   border-width:2px!important;
   border-color:#2563eb!important;
   border-radius:1rem!important;
@@ -3900,6 +3903,9 @@ body{
 #matrix > div > section.relative.overflow-hidden.rounded-3xl,
 #azkar-app > header,
 #azkar-app > .relative.overflow-hidden.rounded-3xl{
+  width:100%!important;
+  max-width:100%!important;
+  margin-inline:auto!important;
   box-sizing:border-box!important;
 }
 @media(max-width:900px){
@@ -3907,6 +3913,9 @@ body{
          .main-tabs-content > .tab-content > div > section[class*="border"][class*="rounded"],
          .main-tabs-content > .tab-content > div > article[class*="border"][class*="rounded"],
          .main-tabs-content > .tab-content > div > header[class*="border"][class*="rounded"]){
+    width:100%!important;
+    max-width:100%!important;
+    margin-inline:auto!important;
     border-width:2px!important;
     border-radius:1rem!important;
   }
