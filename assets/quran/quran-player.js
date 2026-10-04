@@ -68,7 +68,7 @@ function populateReads(){
  const name=$("abq-qp-reciter").value;
  const reads=state.reciters.filter(x=>x.name===name);
  const merged=[];
- reads.forEach(r=>merged.push({value:r.id,label:(r.readName? r.readName+" — ":"")+r.source+(r.exactAyah?" • آية دقيقة":" • سورة فقط")}));
+ reads.forEach(r=>merged.push({value:r.id,label:(r.readName? r.readName+" — ":"")+r.source+(r.exactAyah?" • آية دقيقة":" • تحقق الآية عند التشغيل")}));
  fill($("abq-qp-read"),merged,"اختر الرواية");
  $("abq-qp-read").value=merged[0]?.value||"";
  updateAyahs(); loadText(); setStatus("تم اختيار الرواية.");
