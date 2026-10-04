@@ -53,7 +53,8 @@ async function cachedFetch(url, ttl) {
   if(!res.ok) throw new Error("upstream");
   return res.json();
 }
-function norm(s){return String(s||"").toLowerCase().replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[^\u0600-\u06FFa-z0-9]+/g,"").trim();}\nfunction json(data,status=200){
+function norm(s){return String(s||"").toLowerCase().replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[^\u0600-\u06FFa-z0-9]+/g,"").trim();}
+function json(data,status=200){
   return new Response(JSON.stringify(data),{status,headers:{
     "content-type":"application/json; charset=UTF-8",
     "cache-control":status===200?"public, max-age=900, s-maxage=21600":"no-store"
