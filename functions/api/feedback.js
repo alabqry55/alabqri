@@ -34,6 +34,16 @@ export async function onRequest({ request, env }) {
 
     const action = String(body.action || "");
 
+    const limits = {
+      like: { max: 8, windowMs: 60 * 1000 },
+      rating: { max: 5, windowMs: 60 * 1000 },
+      comment: { max: 3, windowMs: 10 * 60 * 1000 }
+    };
+    if (limits[action]) {
+      const limited = await enforceRateLimit(env.DB, request, "feedback:" + action, limits[action].max, limits[action].windowMs);
+      if (limited) return limited;
+    }
+
     if (action === "like") {
       await env.DB.prepare(
         `INSERT INTO feedback_meta (id, likes)
@@ -222,4 +232,43 @@ function json(data, status = 200, extraHeaders = {}) {
       ...extraHeaders
     }
   });
+}
+
+
+async function enforceRateLimit(db, request, action, max, windowMs) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS api_rate_limits (
+    bucket_key TEXT PRIMARY KEY,
+    window_start INTEGER NOT NULL,
+    hits INTEGER NOT NULL DEFAULT 0
+  )`).run();
+
+  const ip = request.headers.get("CF-Connecting-IP") ||
+             request.headers.get("X-Forwarded-For") ||
+             "unknown";
+  const normalizedIp = String(ip).split(",")[0].trim().slice(0, 128);
+  const hashBuffer = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode("alabqri-rate-limit-v1:" + normalizedIp)
+  );
+  const hash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+  const now = Date.now();
+  const key = action + ":" + hash;
+  const row = await db.prepare("SELECT window_start, hits FROM api_rate_limits WHERE bucket_key=?1").bind(key).first();
+
+  if (!row || now - Number(row.window_start) >= windowMs) {
+    await db.prepare(`INSERT INTO api_rate_limits (bucket_key, window_start, hits)
+      VALUES (?1, ?2, 1)
+      ON CONFLICT(bucket_key) DO UPDATE SET window_start=?2, hits=1`)
+      .bind(key, now).run();
+    return null;
+  }
+
+  const hits = Number(row.hits || 0);
+  if (hits >= max) {
+    const retryAfter = Math.max(1, Math.ceil((windowMs - (now - Number(row.window_start))) / 1000));
+    return json({ error: "طلبات كثيرة. حاول مرة أخرى لاحقًا." }, 429, { "retry-after": String(retryAfter) });
+  }
+
+  await db.prepare("UPDATE api_rate_limits SET hits=hits+1 WHERE bucket_key=?1").bind(key).run();
+  return null;
 }
