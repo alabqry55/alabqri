@@ -4241,7 +4241,7 @@ body{
 /* ===== مقاس الهيرو الاحترافي: 16:9 على الشاشات الكبيرة، مع الحفاظ على الصورة كاملة على الموبايل ===== */
 @media (min-width:769px){
   .abq-home-live-hero{
-    aspect-ratio:16 / 9 !important;
+    aspect-ratio:auto !important;
     height:auto !important;
     min-height:0 !important;
     max-height:none !important;
@@ -4250,9 +4250,9 @@ body{
   }
   .abq-home-live-hero .abq-main-hero-image{
     width:100% !important;
-    height:100% !important;
-    max-width:none !important;
-    object-fit:cover !important;
+    height:auto !important;
+    max-width:100% !important;
+    object-fit:contain !important;
     object-position:center center !important;
     display:block !important;
   }
