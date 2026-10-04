@@ -39,7 +39,7 @@ export async function onRequestGet({request}){
       if(!m||!timing) return json({ok:false,error:"timing_unavailable"},404);
 
       const server=String(m.server||"");
-      if(!/^https:\/\/server\d+\.mp3quran\.net\//i.test(server)){
+      if(!/^https:\/\/(?:server\d+\.mp3quran\.net|cdn\.mp3quran\.net)\//i.test(server)){
         return json({ok:false,error:"audio_source_not_allowed"},400);
       }
       return json({
