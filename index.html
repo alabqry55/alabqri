@@ -4236,6 +4236,43 @@ body{
 .abq-center-v2>div:nth-child(3)>div:last-child a{background:linear-gradient(135deg,#e11d48,#be123c)!important;color:#fff!important;border:1px solid rgba(255,255,255,.35)!important;box-shadow:0 7px 16px -11px rgba(190,18,60,.7)!important;font-weight:900!important}.abq-center-v2>div:nth-child(3)>div:last-child a:hover{background:linear-gradient(135deg,#be123c,#9f1239)!important;transform:translateY(-1px)}.abq-center-v2>div:nth-child(3)>div:last-child a i,.abq-center-v2>div:nth-child(3)>div:last-child a span{color:#fff!important}.abq-center-v2>div:nth-child(3)>div:last-child a span span{color:#ffe4e6!important}
 @media(max-width:640px){.abq-center-v2{padding:.35rem;border-radius:1rem}.abq-center-v2>div:first-child,.abq-center-v2>div:nth-child(2),.abq-center-v2>div:nth-child(3)>div:first-child,.abq-center-v2>div:nth-child(3)>div:last-child{border-radius:.9rem!important}.abq-center-v2>div:first-child{padding:.85rem .7rem!important}.abq-center-v2>div:nth-child(2),.abq-center-v2>div:nth-child(3)>div:first-child,.abq-center-v2>div:nth-child(3)>div:last-child{padding:.85rem!important}.abq-center-v2>div:nth-child(2) a{max-width:100%}}
 </style>
+
+<style id="abq-hero-16x9-final">
+/* ===== مقاس الهيرو الاحترافي: 16:9 على الشاشات الكبيرة، مع الحفاظ على الصورة كاملة على الموبايل ===== */
+@media (min-width:769px){
+  .abq-home-live-hero{
+    aspect-ratio:16 / 9 !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+  .abq-home-live-hero .abq-main-hero-image{
+    width:100% !important;
+    height:100% !important;
+    max-width:none !important;
+    object-fit:cover !important;
+    object-position:center center !important;
+    display:block !important;
+  }
+}
+@media (max-width:768px){
+  .abq-home-live-hero{
+    aspect-ratio:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    padding:0 !important;
+  }
+  .abq-home-live-hero .abq-main-hero-image{
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
