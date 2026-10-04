@@ -112,7 +112,18 @@ async function loadCurrent(autoplay){
   audio.onloadedmetadata=()=>{if(start>0)audio.currentTime=Math.min(start,Math.max(0,audio.duration-.05));if(autoplay)audio.play().catch(()=>{});};
   if(!autoplay) setStatus("جاهز للتشغيل — الآية "+ayah);
  }catch(e){
-  setStatus(read.source==="mp3quran"?"هذه الرواية لا توفر توقيتًا لهذه الآية؛ اختر رواية أخرى أو مصدرًا آخر.":"تعذر تحميل التلاوة مؤقتًا.");
+  if(read.source==="mp3quran" && read.fallbackEdition){
+   try{
+    const fp=new URLSearchParams({source:"alqurancloud",edition:read.fallbackEdition,surah:String(surah),ayah:String(ayah)});
+    const fb=await getJSON(API+"/audio?"+fp.toString());
+    const a=$("abq-qp-audio"); state.sourceMeta=fb; a.src=fb.audioUrl; a.load(); state.segmentEnd=null;
+    a.onloadedmetadata=()=>{if(autoplay)a.play().catch(()=>{});};
+    $("abq-qp-meta").textContent="القارئ: "+(read.name||"")+" • المصدر الاحتياطي: Al Quran Cloud";
+    setStatus("تم الانتقال تلقائيًا إلى المصدر الاحتياطي."); return;
+   }catch(ignore){}
+  }
+  setStatus(read.source==="mp3quran"?"تعذر تحديد الآية في هذه الرواية؛ اختر رواية تدعم توقيت الآيات.":"تعذر تحميل التلاوة مؤقتًا.");
+ }
  }
 }
 function setStatus(t){$("abq-qp-status").textContent=t;}
