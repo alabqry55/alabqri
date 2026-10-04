@@ -1,4 +1,4 @@
-const MP3 = "https://mp3quran.net/api/v3";
+const MP3 = "https://www.mp3quran.net/api/v3";
 const AQC = "https://api.alquran.cloud/v1";
 
 export async function onRequestGet({ request }) {
