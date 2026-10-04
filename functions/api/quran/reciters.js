@@ -6,13 +6,11 @@ export async function onRequestGet({ request }) {
   const lang = url.searchParams.get("language") || "ar";
   if (lang !== "ar") return json({ok:false,error:"language_not_supported"},400);
   try {
-    const [mp3, timing, aqc] = await Promise.all([
+    const [mp3, aqc] = await Promise.all([
       cachedFetch(MP3 + "/reciters?language=ar", 21600),
-      cachedFetch(MP3 + "/ayat_timing/reads", 21600),
       cachedFetch(AQC + "/edition/format/audio", 21600)
     ]);
     const mp3Reciters = Array.isArray(mp3?.reciters) ? mp3.reciters : [];
-    const timed = new Set((Array.isArray(timing)?timing:[]).map(x=>String(x.id)));
     const list = [];
     for (const r of mp3Reciters) {
       for (const m of (Array.isArray(r.moshaf)?r.moshaf:[])) {
@@ -22,7 +20,7 @@ export async function onRequestGet({ request }) {
           readId:id, name:String(r.name||"قارئ"), readName:String(m.name||""),
           server:String(m.server||""), surahTotal:Number(m.surah_total||0),
           surahs:String(m.surah_list||"").split(",").filter(Boolean).map(Number),
-          exactAyah:timed.has(id), fallbackEdition:aqcByName.get(norm(r.name||""))||null, license:"provider_terms"
+          exactAyah:false, fallbackEdition:aqcByName.get(norm(r.name||""))||null, license:"provider_terms"
         });
       }
     }
