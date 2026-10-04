@@ -71,7 +71,7 @@ function populateReads(){
  reads.forEach(r=>merged.push({value:r.id,label:(r.readName? r.readName+" — ":"")+r.source+(r.exactAyah?" • آية دقيقة":" • سورة فقط")}));
  fill($("abq-qp-read"),merged,"اختر الرواية");
  $("abq-qp-read").value=merged[0]?.value||"";
- updateAyahs(); loadText(); updateStatus();
+ updateAyahs(); loadText(); setStatus("تم اختيار الرواية.");
 }
 function populateSurahs(){
  fill($("abq-qp-surah"),state.surahs.map(s=>({value:s.id,label:s.id+" — "+s.name+" ("+s.ayahs+")"})));
@@ -123,7 +123,6 @@ async function loadCurrent(autoplay){
    }catch(ignore){}
   }
   setStatus(read.source==="mp3quran"?"تعذر تحديد الآية في هذه الرواية؛ اختر رواية تدعم توقيت الآيات.":"تعذر تحميل التلاوة مؤقتًا.");
- }
  }
 }
 function setStatus(t){$("abq-qp-status").textContent=t;}
