@@ -11331,6 +11331,33 @@ window.switchContactInnerTab = function(tabId) {
     });
 };
 </script>
+<style id="abq-hero-pc-tablet-16x9-full">
+/* ===== PC + Tablet: إطار 16:9 بعرض المساحة كاملة مع إظهار الصورة الأصلية كاملة دون قص ===== */
+@media (min-width:641px){
+  .abq-home-live-hero{
+    width:100vw !important;
+    max-width:100vw !important;
+    margin-inline-start:calc(50% - 50vw) !important;
+    margin-inline-end:calc(50% - 50vw) !important;
+    aspect-ratio:16 / 9 !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+  .abq-home-live-hero .abq-main-hero-image{
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    max-width:none !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+    margin:0 !important;
+  }
+}
+</style>
 </body>
 </html>
 
