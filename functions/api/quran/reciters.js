@@ -22,11 +22,12 @@ export async function onRequestGet({ request }) {
           readId:id, name:String(r.name||"قارئ"), readName:String(m.name||""),
           server:String(m.server||""), surahTotal:Number(m.surah_total||0),
           surahs:String(m.surah_list||"").split(",").filter(Boolean).map(Number),
-          exactAyah:timed.has(id), license:"provider_terms"
+          exactAyah:timed.has(id), fallbackEdition:aqcByName.get(norm(r.name||""))||null, license:"provider_terms"
         });
       }
     }
     const aqcEditions = Array.isArray(aqc?.data)?aqc.data:[];
+    const aqcByName = new Map(aqcEditions.filter(e=>e && e.language==="ar" && e.format==="audio").map(e=>[norm(e.name||""),String(e.identifier||"")]));
     for (const e of aqcEditions) {
       if (e && e.format==="audio" && e.language==="ar") {
         list.push({
@@ -52,7 +53,7 @@ async function cachedFetch(url, ttl) {
   if(!res.ok) throw new Error("upstream");
   return res.json();
 }
-function json(data,status=200){
+function norm(s){return String(s||"").toLowerCase().replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[^\u0600-\u06FFa-z0-9]+/g,"").trim();}\nfunction json(data,status=200){
   return new Response(JSON.stringify(data),{status,headers:{
     "content-type":"application/json; charset=UTF-8",
     "cache-control":status===200?"public, max-age=900, s-maxage=21600":"no-store"
