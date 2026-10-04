@@ -30,15 +30,15 @@ export async function onRequestGet({request}){
         return json({ok:false,error:"invalid_read"},400);
       }
 
-      const [r,t]=await Promise.all([
-        upstream(MP3+"/reciters?language=ar&reciter="+reciter,21600),
+      const [reads,t]=await Promise.all([
+        upstream(MP3+"/ayat_timing/reads",21600),
         upstream(MP3+"/ayat_timing?surah="+surah+"&read="+read,86400)
       ]);
-      const m=(r.reciters?.[0]?.moshaf||[]).find(x=>Number(x.id)===read);
+      const m=(Array.isArray(reads)?reads:[]).find(x=>Number(x.id)===read);
       const timing=Array.isArray(t)?t.find(x=>Number(x.ayah)===ayah):null;
       if(!m||!timing) return json({ok:false,error:"timing_unavailable"},404);
 
-      const server=String(m.server||"");
+      const server=String(m.folder_url||"");
       if(!/^https:\/\/(?:server\d+\.mp3quran\.net|cdn\.mp3quran\.net)\//i.test(server)){
         return json({ok:false,error:"audio_source_not_allowed"},400);
       }
