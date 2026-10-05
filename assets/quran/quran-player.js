@@ -62,12 +62,13 @@ async function getJSON(url){const r=await fetch(url,{headers:{accept:"applicatio
 function fill(el,items,placeholder){el.innerHTML=""; if(placeholder){const o=document.createElement("option");o.value="";o.textContent=placeholder;el.appendChild(o)} items.forEach(x=>{const o=document.createElement("option");o.value=x.value;o.textContent=x.label;el.appendChild(o)});}
 function selectedReciter(){return state.reciters.find(x=>x.id===$("abq-qp-reciter").value);}
 function selectedRead(){const r=selectedReciter(); if(!r)return null; return r.reads?.find(x=>x.id===$("abq-qp-read").value)||r;}
-function populateReciters(){
+function populateReciters(filterText=""){ 
  const groups={};
- state.reciters.forEach(r=>{const key=r.name||"قارئ";(groups[key]||(groups[key]=[])).push(r)});
+ const q=String(filterText||"").trim().toLocaleLowerCase("ar");
+ state.reciters.forEach(r=>{const key=r.name||"قارئ";if(!q||key.toLocaleLowerCase("ar").includes(q))(groups[key]||(groups[key]=[])).push(r)});
  const items=Object.keys(groups).sort((a,b)=>a.localeCompare(b,"ar")).map(name=>({value:groups[name][0].name,label:name}));
  fill($("abq-qp-reciter"),items,"اختر القارئ");
- $("abq-qp-reciter").addEventListener("change",populateReads);
+ $("abq-qp-reciter").onchange=populateReads;
 }
 function populateReads(){
  const name=$("abq-qp-reciter").value;
@@ -137,7 +138,9 @@ function bind(){
  const audio=$("abq-qp-audio");
  $("abq-qp-play").onclick=async()=>{if(!state.queue.length)queueBuild(); if(audio.src && !audio.paused){audio.pause();state.playing=false;setStatus("تم الإيقاف المؤقت.");}else{state.playing=true;await loadCurrent(true);}};
  $("abq-qp-prev").onclick=prev; $("abq-qp-next").onclick=next;
- $("abq-qp-repeat").onclick=()=>{state.repeat=!state.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";};
+ $("abq-qp-repeat").onclick=()=>{state.repeat=!state.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";savePrefs();};
+ $("abq-qp-favorite").onclick=()=>{const r=selectedRead();if(!r)return;const i=state.favorites.indexOf(r.id);if(i>=0)state.favorites.splice(i,1);else state.favorites.push(r.id);updateFavoriteButton();savePrefs();};
+ $("abq-qp-reciter-search").oninput=e=>{const current=$("abq-qp-reciter").value;populateReciters(e.target.value);const exists=[...$("abq-qp-reciter").options].some(o=>o.value===current);if(exists){$("abq-qp-reciter").value=current;populateReads();}};
  $("abq-qp-from").onchange=queueBuild; $("abq-qp-to").onchange=queueBuild;
  audio.ontimeupdate=()=>{if(state.segmentEnd!==null && audio.currentTime>=state.segmentEnd-.08){if(state.repeat){loadCurrent(true)}else next()} if(audio.duration) $("abq-qp-progress").value=(audio.currentTime/audio.duration)*100;};
  $("abq-qp-progress").oninput=()=>{if(audio.duration)audio.currentTime=(Number($("abq-qp-progress").value)/100)*audio.duration;};
@@ -146,13 +149,18 @@ function bind(){
 }
 async function init(){
  if(!inject())return;
+ const prefs=loadPrefs();
  bind();
  try{
   const [r,s]=await Promise.all([getJSON(API+"/reciters"),getJSON(API+"/surahs")]);
   state.reciters=r.reciters||[]; state.surahs=s.surahs||[];
   populateReciters();populateSurahs();
-  if(state.reciters.length){$("abq-qp-reciter").value=state.reciters[0].name;populateReads();}
-  $("abq-qp-surah").value="1";updateAyahs();loadText();queueBuild();
+  if(state.reciters.length){$("abq-qp-reciter").value=prefs.reciter&&[...$("abq-qp-reciter").options].some(o=>o.value===prefs.reciter)?prefs.reciter:state.reciters[0].name;populateReads();}
+  if(prefs.read&&[...$("abq-qp-read").options].some(o=>o.value===prefs.read))$("abq-qp-read").value=prefs.read;
+  $("abq-qp-surah").value=prefs.surah&&state.surahs.some(s=>String(s.id)===String(prefs.surah))?String(prefs.surah):"1";updateAyahs();
+  if(prefs.from)$("abq-qp-from").value=prefs.from;if(prefs.to)$("abq-qp-to").value=prefs.to;
+  if(Number($("abq-qp-from").value)>Number($("abq-qp-to").value))$("abq-qp-to").value=$("abq-qp-from").value;
+  state.repeat=!!prefs.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";updateFavoriteButton();loadText();queueBuild();
   setStatus("اختر القارئ والسورة ثم حدّد الآيات واضغط تشغيل.");
  }catch(e){setStatus("تعذر تحميل بيانات القراء حاليًا؛ حاول تحديث الصفحة.");}
 }
