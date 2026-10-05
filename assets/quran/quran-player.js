@@ -36,12 +36,12 @@ function inject(){
  @media(max-width:640px){.abq-qp-grid{grid-template-columns:1fr}.abq-qp-card{padding:12px}.abq-qp-verse{font-size:1.3rem;line-height:2}.abq-qp-title{font-size:1rem}}
  </style>
  <div class="abq-qp-card">
-  <h3 class="abq-qp-title">🎧 اختر القارئ والسورة والآية</h3>
+  <h3 class="abq-qp-title">🎧 اختر القارئ والسورة — والآية تُعرض تلقائيًا</h3>
   <div class="abq-qp-grid">
    <div class="abq-qp-field"><label for="abq-qp-reciter-search">🔎 بحث عن قارئ</label><input id="abq-qp-reciter-search" type="search" placeholder="اكتب اسم القارئ..." autocomplete="off" style="width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:.65rem .7rem;background:#fff;color:#0f172a;font-family:inherit;font-weight:700;margin-bottom:6px"><label for="abq-qp-reciter">🎙 القارئ</label><select id="abq-qp-reciter"></select></div>
    <div class="abq-qp-field"><label for="abq-qp-surah">📖 السورة</label><select id="abq-qp-surah"></select></div>
    <div class="abq-qp-field"><label for="abq-qp-read">📜 الرواية / المصحف</label><select id="abq-qp-read"></select></div>
-   <div class="abq-qp-field"><label>🔢 نطاق الآيات</label><div class="abq-qp-ayahs"><select id="abq-qp-from" aria-label="من الآية"></select><select id="abq-qp-to" aria-label="إلى الآية"></select></div></div>
+   <div class="abq-qp-field"><label>🔢 نطاق الآيات <span style="font-weight:700;color:#64748b"> (اختياري)</span></label><div class="abq-qp-ayahs"><select id="abq-qp-from" aria-label="من الآية — اختياري"></select><select id="abq-qp-to" aria-label="إلى الآية — اختياري"></select></div></div>
   </div>
   <div class="abq-qp-controls">
    <button class="abq-qp-btn primary" id="abq-qp-play">▶ تشغيل</button>
@@ -51,7 +51,7 @@ function inject(){
   </div>
   <input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="موضع التلاوة">
   <div id="abq-qp-status" class="abq-qp-status">جاري تحميل القراء والسور…</div>
-  <div id="abq-qp-verse-head" class="abq-qp-verse-head">الآية المقروءة الآن</div><div id="abq-qp-verse" class="abq-qp-verse">اختر القارئ والسورة والآية لعرض الآية المقروءة.</div>
+  <div id="abq-qp-verse-head" class="abq-qp-verse-head">الآية المقروءة الآن</div><div id="abq-qp-verse" class="abq-qp-verse">اختر القارئ والسورة لعرض الآية المقروءة تلقائيًا.</div>
   <div id="abq-qp-meta" class="abq-qp-meta">المشغل يستخدم مصادر خارجية موثوقة ولا يخزن ملفات التلاوة داخل المنصة.</div>
   <audio id="abq-qp-audio" preload="metadata"></audio>
  </div>`;
@@ -87,7 +87,7 @@ function updateAyahs(){
  const s=state.surahs.find(x=>x.id==Number($("abq-qp-surah").value)); if(!s)return;
  const items=Array.from({length:s.ayahs},(_,i)=>({value:i+1,label:"الآية "+(i+1)}));
  fill($("abq-qp-from"),items); fill($("abq-qp-to"),items);
- $("abq-qp-from").value="1"; $("abq-qp-to").value=String(Math.min(s.ayahs,1));
+ $("abq-qp-from").value="1"; $("abq-qp-to").value=String(s.ayahs);
 }
 async function loadText(){
  const surah=Number($("abq-qp-surah").value); if(!surah)return;
@@ -165,7 +165,7 @@ async function init(){
   if(prefs.from)$("abq-qp-from").value=prefs.from;if(prefs.to)$("abq-qp-to").value=prefs.to;
   if(Number($("abq-qp-from").value)>Number($("abq-qp-to").value))$("abq-qp-to").value=$("abq-qp-from").value;
   state.repeat=!!prefs.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";updateFavoriteButton();loadText();queueBuild();
-  setStatus("اختر القارئ والسورة ثم حدّد الآيات واضغط تشغيل.");
+  setStatus("اختر القارئ والسورة ثم اضغط تشغيل — ستُعرض الآية تلقائيًا ويستمر التشغيل حسب النطاق الاختياري.");
  }catch(e){setStatus("تعذر تحميل بيانات القراء حاليًا؛ حاول تحديث الصفحة.");}
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
