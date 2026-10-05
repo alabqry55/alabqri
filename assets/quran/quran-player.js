@@ -60,7 +60,7 @@ function inject(){
 }
 async function getJSON(url){const r=await fetch(url,{headers:{accept:"application/json"}});if(!r.ok)throw new Error("HTTP");return r.json();}
 function fill(el,items,placeholder){el.innerHTML=""; if(placeholder){const o=document.createElement("option");o.value="";o.textContent=placeholder;el.appendChild(o)} items.forEach(x=>{const o=document.createElement("option");o.value=x.value;o.textContent=x.label;el.appendChild(o)});}
-function selectedReciter(){return state.reciters.find(x=>x.id===$("abq-qp-reciter").value);}
+function selectedReciter(){const v=$("abq-qp-reciter").value;return state.reciters.find(x=>x.name===v)||state.reciters.find(x=>String(x.id)===String(v));}
 function selectedRead(){const r=selectedReciter(); if(!r)return null; return r.reads?.find(x=>x.id===$("abq-qp-read").value)||r;}
 function populateReciters(filterText=""){ 
  const groups={};
