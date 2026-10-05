@@ -26,7 +26,7 @@ function inject(){
  .abq-qp-ayahs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
  .abq-qp-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:14px 0 10px}
  .abq-qp-btn{border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:999px;padding:.55rem .8rem;font-family:inherit;font-weight:900;cursor:pointer}
- .abq-qp-btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-color:#2563eb}
+ .abq-qp-btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-color:#2563eb}.abq-qp-btn.primary.waiting{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#172554;border-color:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.14),0 5px 16px -8px rgba(245,158,11,.8);animation:abqQuranWaiting 1.4s ease-in-out infinite}@keyframes abqQuranWaiting{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.025);opacity:.82}}
  .abq-qp-btn:disabled{opacity:.45;cursor:not-allowed}
  .abq-qp-progress{width:100%;accent-color:#2563eb}
  .abq-qp-status{text-align:center;font-size:.78rem;color:#475569;min-height:1.3rem}
@@ -133,12 +133,12 @@ async function loadCurrent(autoplay){
   setStatus(read.source==="mp3quran"?"تعذر تحديد الآية في هذه الرواية؛ اختر رواية تدعم توقيت الآيات.":"تعذر تحميل التلاوة مؤقتًا.");
  }
 }
-function setStatus(t){$("abq-qp-status").textContent=t;}
-function next(){if(state.current<state.queue.length-1){state.current++;loadCurrent(true)}else{state.playing=false;setStatus("انتهى المقطع المحدد.");}}
+function setStatus(t){$("abq-qp-status").textContent=t;}\nfunction setPlayButton(mode){const b=$("abq-qp-play");if(!b)return;b.classList.toggle("waiting",mode==="waiting");if(mode==="playing"){b.textContent="⏸ إيقاف الاستماع";b.setAttribute("aria-label","إيقاف الاستماع مؤقتًا");b.title="إيقاف الاستماع مؤقتًا";}else if(mode==="waiting"){b.textContent="⏳ استئناف الاستماع";b.setAttribute("aria-label","استئناف الاستماع");b.title="استئناف الاستماع من موضع التوقف";}else{b.textContent="▶ تشغيل";b.setAttribute("aria-label","تشغيل التلاوة");b.title="تشغيل التلاوة";}}
+function next(){if(state.current<state.queue.length-1){state.current++;loadCurrent(true)}else{state.playing=false;setPlayButton("idle");setStatus("انتهى المقطع المحدد.");}}
 function prev(){state.current=Math.max(0,state.current-1);loadCurrent(state.playing);}
 function bind(){
  const audio=$("abq-qp-audio");
- $("abq-qp-play").onclick=async()=>{if(!state.queue.length)queueBuild(); if(audio.src && !audio.paused){audio.pause();state.playing=false;setStatus("تم الإيقاف المؤقت.");}else{state.playing=true;await loadCurrent(true);}};
+ $("abq-qp-play").onclick=async()=>{if(!state.queue.length)queueBuild(); if(audio.src && !audio.paused){audio.pause();state.playing=false;setPlayButton("waiting");setStatus("⏳ في انتظار استئناف الاستماع من موضع التوقف.");}else if(audio.src && audio.paused && audio.currentTime>0 && state.sourceMeta){state.playing=true;setPlayButton("playing");setStatus("جاري استئناف الاستماع من موضع التوقف…");try{await audio.play();}catch(e){state.playing=false;setPlayButton("waiting");setStatus("تعذر استئناف الاستماع؛ اضغط مرة أخرى.");}}else{state.playing=true;setPlayButton("playing");await loadCurrent(true);}};
  $("abq-qp-prev").onclick=prev; $("abq-qp-next").onclick=next;
  $("abq-qp-repeat").onclick=()=>{state.repeat=!state.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";savePrefs();};
  $("abq-qp-favorite").onclick=()=>{const r=selectedRead();if(!r)return;const i=state.favorites.indexOf(r.id);if(i>=0)state.favorites.splice(i,1);else state.favorites.push(r.id);updateFavoriteButton();savePrefs();};
