@@ -30,7 +30,7 @@ function inject(){
  .abq-qp-btn:disabled{opacity:.45;cursor:not-allowed}
  .abq-qp-progress{width:100%;accent-color:#2563eb}
  .abq-qp-status{text-align:center;font-size:.78rem;color:#475569;min-height:1.3rem}
- .abq-qp-verse{margin-top:12px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:15px;min-height:90px;text-align:center;font-family:Amiri,serif;font-size:1.45rem;line-height:2.15;color:#1e293b}
+ .abq-qp-verse-head{text-align:center;font-size:.75rem;font-weight:900;color:#1d4ed8;margin-top:12px;margin-bottom:6px}.abq-qp-verse{margin-top:0;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:15px;min-height:90px;text-align:center;font-family:Amiri,serif;font-size:1.45rem;line-height:2.15;color:#1e293b}
  .abq-qp-verse.active{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
  .abq-qp-meta{text-align:center;margin-top:8px;font-size:.72rem;color:#64748b}
  @media(max-width:640px){.abq-qp-grid{grid-template-columns:1fr}.abq-qp-card{padding:12px}.abq-qp-verse{font-size:1.3rem;line-height:2}.abq-qp-title{font-size:1rem}}
@@ -51,7 +51,7 @@ function inject(){
   </div>
   <input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="موضع التلاوة">
   <div id="abq-qp-status" class="abq-qp-status">جاري تحميل القراء والسور…</div>
-  <div id="abq-qp-verse" class="abq-qp-verse">اختر القارئ والسورة لعرض الآيات.</div>
+  <div id="abq-qp-verse-head" class="abq-qp-verse-head">الآية المقروءة الآن</div><div id="abq-qp-verse" class="abq-qp-verse">اختر القارئ والسورة والآية لعرض الآية المقروءة.</div>
   <div id="abq-qp-meta" class="abq-qp-meta">المشغل يستخدم مصادر خارجية موثوقة ولا يخزن ملفات التلاوة داخل المنصة.</div>
   <audio id="abq-qp-audio" preload="metadata"></audio>
  </div>`;
@@ -81,7 +81,7 @@ function populateReads(){
 }
 function populateSurahs(){
  fill($("abq-qp-surah"),state.surahs.map(s=>({value:s.id,label:s.id+" — "+s.name+" ("+s.ayahs+")"})));
- $("abq-qp-surah").addEventListener("change",()=>{updateAyahs();loadText();savePrefs();});
+ $("abq-qp-surah").addEventListener("change",()=>{updateAyahs();loadText();renderVerse(1);savePrefs();});
 }
 function updateAyahs(){
  const s=state.surahs.find(x=>x.id==Number($("abq-qp-surah").value)); if(!s)return;
@@ -95,7 +95,9 @@ async function loadText(){
  catch(e){$("abq-qp-verse").textContent="تعذر تحميل نص الآيات مؤقتًا.";}
 }
 function renderVerse(n){
- const a=(state.texts||[]).find(x=>x.number===n); $("abq-qp-verse").textContent=a?("﴿"+a.text+"﴾"):"";
+ const a=(state.texts||[]).find(x=>x.number===n); const r=selectedRead(); const s=state.surahs.find(x=>x.id==Number($("abq-qp-surah").value));
+ $("abq-qp-verse-head").textContent=(a?"الآية "+n+" من "+(s?.name||"السورة"):"الآية المقروءة الآن")+((r?.name)?" • "+r.name:"");
+ $("abq-qp-verse").textContent=a?("﴿"+a.text+"﴾"):"اختر القارئ والسورة والآية لعرض الآية المقروءة.";
  $("abq-qp-verse").classList.add("active");
 }
 function queueBuild(){
@@ -140,8 +142,10 @@ function bind(){
  $("abq-qp-prev").onclick=prev; $("abq-qp-next").onclick=next;
  $("abq-qp-repeat").onclick=()=>{state.repeat=!state.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";savePrefs();};
  $("abq-qp-favorite").onclick=()=>{const r=selectedRead();if(!r)return;const i=state.favorites.indexOf(r.id);if(i>=0)state.favorites.splice(i,1);else state.favorites.push(r.id);updateFavoriteButton();savePrefs();};
+ $("abq-qp-reciter").addEventListener("change",()=>{renderVerse(Number($("abq-qp-from").value)||1);});
+ $("abq-qp-read").addEventListener("change",()=>{renderVerse(Number($("abq-qp-from").value)||1);});
  $("abq-qp-reciter-search").oninput=e=>{const current=$("abq-qp-reciter").value;populateReciters(e.target.value);const exists=[...$("abq-qp-reciter").options].some(o=>o.value===current);if(exists){$("abq-qp-reciter").value=current;populateReads();}};
- $("abq-qp-from").onchange=queueBuild; $("abq-qp-to").onchange=queueBuild;
+ $("abq-qp-from").onchange=()=>{queueBuild();renderVerse(Number($("abq-qp-from").value)||1);savePrefs();}; $("abq-qp-to").onchange=()=>{queueBuild();renderVerse(Number($("abq-qp-from").value)||1);savePrefs();};
  audio.ontimeupdate=()=>{if(state.segmentEnd!==null && audio.currentTime>=state.segmentEnd-.08){if(state.repeat){loadCurrent(true)}else next()} if(audio.duration) $("abq-qp-progress").value=(audio.currentTime/audio.duration)*100;};
  $("abq-qp-progress").oninput=()=>{if(audio.duration)audio.currentTime=(Number($("abq-qp-progress").value)/100)*audio.duration;};
  audio.onplay=()=>{state.playing=true;setStatus("جاري تشغيل الآية "+state.queue[state.current]);};
