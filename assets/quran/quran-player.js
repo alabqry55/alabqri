@@ -3,7 +3,12 @@
 if(window.__ABQ_QURAN_PLAYER__) return; window.__ABQ_QURAN_PLAYER__=true;
 const API="/api/quran";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const state={reciters:[],surahs:[],texts:null,current:0,queue:[],playing:false,segmentEnd:null,sourceMeta:null};
+const state={reciters:[],surahs:[],texts:null,current:0,queue:[],playing:false,segmentEnd:null,sourceMeta:null,repeat:false,favorites:[]};
+const PREF_KEY="abq_quran_player_v1";
+function loadPrefs(){try{const p=JSON.parse(localStorage.getItem(PREF_KEY)||"{}");state.favorites=Array.isArray(p.favorites)?p.favorites:[];return p}catch(e){return {}}}
+function savePrefs(){try{localStorage.setItem(PREF_KEY,JSON.stringify({reciter:$("abq-qp-reciter")?.value||"",read:$("abq-qp-read")?.value||"",surah:$("abq-qp-surah")?.value||"",from:$("abq-qp-from")?.value||"1",to:$("abq-qp-to")?.value||"1",repeat:!!state.repeat,favorites:state.favorites}))}catch(e){}}
+function isFavorite(id){return state.favorites.includes(id)}
+function updateFavoriteButton(){const b=$("abq-qp-favorite"),r=selectedRead();if(!b||!r)return;b.textContent=isFavorite(r.id)?"★ في المفضلة":"☆ مفضلة";b.setAttribute("aria-pressed",String(isFavorite(r.id)))}
 const $=id=>document.getElementById(id);
 function inject(){
  const target=$("azkar"); if(!target) return false;
@@ -33,7 +38,7 @@ function inject(){
  <div class="abq-qp-card">
   <h3 class="abq-qp-title">🎧 اختر القارئ والسورة والآية</h3>
   <div class="abq-qp-grid">
-   <div class="abq-qp-field"><label for="abq-qp-reciter">🎙 القارئ</label><select id="abq-qp-reciter"></select></div>
+   <div class="abq-qp-field"><label for="abq-qp-reciter-search">🔎 بحث عن قارئ</label><input id="abq-qp-reciter-search" type="search" placeholder="اكتب اسم القارئ..." autocomplete="off" style="width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:.65rem .7rem;background:#fff;color:#0f172a;font-family:inherit;font-weight:700;margin-bottom:6px"><label for="abq-qp-reciter">🎙 القارئ</label><select id="abq-qp-reciter"></select></div>
    <div class="abq-qp-field"><label for="abq-qp-surah">📖 السورة</label><select id="abq-qp-surah"></select></div>
    <div class="abq-qp-field"><label for="abq-qp-read">📜 الرواية / المصحف</label><select id="abq-qp-read"></select></div>
    <div class="abq-qp-field"><label>🔢 نطاق الآيات</label><div class="abq-qp-ayahs"><select id="abq-qp-from" aria-label="من الآية"></select><select id="abq-qp-to" aria-label="إلى الآية"></select></div></div>
@@ -42,7 +47,7 @@ function inject(){
    <button class="abq-qp-btn primary" id="abq-qp-play">▶ تشغيل</button>
    <button class="abq-qp-btn" id="abq-qp-prev">⏮ السابقة</button>
    <button class="abq-qp-btn" id="abq-qp-next">التالية ⏭</button>
-   <button class="abq-qp-btn" id="abq-qp-repeat">🔁 تكرار</button>
+   <button class="abq-qp-btn" id="abq-qp-repeat">🔁 تكرار</button><button class="abq-qp-btn" id="abq-qp-favorite">☆ مفضلة</button>
   </div>
   <input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="موضع التلاوة">
   <div id="abq-qp-status" class="abq-qp-status">جاري تحميل القراء والسور…</div>
@@ -71,11 +76,11 @@ function populateReads(){
  reads.forEach(r=>merged.push({value:r.id,label:(r.readName? r.readName+" — ":"")+r.source+(r.exactAyah?" • آية دقيقة":" • تحقق الآية عند التشغيل")}));
  fill($("abq-qp-read"),merged,"اختر الرواية");
  $("abq-qp-read").value=merged[0]?.value||"";
- updateAyahs(); loadText(); setStatus("تم اختيار الرواية.");
+ updateAyahs(); loadText(); updateFavoriteButton(); savePrefs(); setStatus("تم اختيار الرواية.");
 }
 function populateSurahs(){
  fill($("abq-qp-surah"),state.surahs.map(s=>({value:s.id,label:s.id+" — "+s.name+" ("+s.ayahs+")"})));
- $("abq-qp-surah").addEventListener("change",()=>{updateAyahs();loadText();});
+ $("abq-qp-surah").addEventListener("change",()=>{updateAyahs();loadText();savePrefs();});
 }
 function updateAyahs(){
  const s=state.surahs.find(x=>x.id==Number($("abq-qp-surah").value)); if(!s)return;
