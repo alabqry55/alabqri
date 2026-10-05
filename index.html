@@ -11436,7 +11436,26 @@ window.switchContactInnerTab = function(tabId) {
 </style>
 
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
-<script src="/assets/quran/quran-player.js" defer></script>
+<script src="/assets/quran/quran-player.js?v=20261006-01" defer></script>
+<style id="abq-final-visual-stability-20261006">
+/* طبقة أمان بصرية نهائية: تمنع تجاوز العناصر عرض الشاشة دون تغيير الهوية أو التخطيط الأساسي */
+html,body{max-width:100%;overflow-x:hidden!important}
+*,*::before,*::after{box-sizing:border-box}
+img,video,canvas,svg,iframe{max-width:100%}
+img,video,canvas{height:auto}
+iframe{display:block}
+input,select,textarea,button{max-width:100%;box-sizing:border-box}
+pre{max-width:100%;overflow:auto}
+table{max-width:100%;display:block;overflow-x:auto}
+.tab-content,.main-tabs-content{max-width:100%;overflow-wrap:anywhere}
+#abq-quran-player{width:min(980px,100%);max-width:100%;margin-inline:auto}
+@media(max-width:640px){
+  #abq-quran-player{margin-inline:0}
+  #abq-quran-player .abq-qp-card{width:100%;max-width:100%;overflow:hidden}
+  #abq-quran-player .abq-qp-controls{gap:6px}
+  #abq-quran-player .abq-qp-btn{min-height:42px}
+}
+</style>
 </body>
 </html>
 
