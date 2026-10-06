@@ -11834,6 +11834,50 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Mobile contact tab centered group final 20261006 -->
+<style id="abq-mobile-contact-center-group-final-20261006">
+/* الموبايل: النص + السماعة + الموجات مجموعة واحدة في منتصف الزر أفقيًا ورأسيًا */
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn.abq-contact-tab,
+  .main-tabs-nav .nav-btn.abq-contact-tab.active,
+  .main-tabs-nav .nav-btn.abq-contact-tab:hover{
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    width:100% !important;
+    min-height:48px !important;
+    padding:.55rem .7rem !important;
+    box-sizing:border-box !important;
+    gap:.58em !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+  .main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label,
+  .main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label{
+    display:inline-block !important;
+    width:auto !important;
+    margin:0 !important;
+    text-align:center !important;
+    line-height:1.25 !important;
+    color:#1e3a8a !important;
+    flex:0 0 auto !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    margin:0 !important;
+    flex:0 0 auto !important;
+    align-self:center !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    min-height:52px !important;
+    padding:.62rem .75rem !important;
+    gap:.62em !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Main tabs center + home font match 20261006 -->
 <style id="abq-main-tabs-contact-center-final-20261006">
 /* تواصل معنا: النص والأيقونة في المنتصف مثل الرئيسية */
