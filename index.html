@@ -7636,7 +7636,7 @@ body{
     <div class="abq-contact-license">✓ ترخيص رسمي وموثق — س.ت. 92527</div>
   </div>
   <div class="abq-contact-doctor-card">
-    <p class="abq-contact-doctor-name">الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)</p>
+    <p class="abq-contact-doctor-name">تواصل مع الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)</p>
     <div class="abq-contact-doctor-actions">
       <a href="https://wa.me/201120909856?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%20%D9%88%D8%B1%D8%AD%D9%85%D8%A9%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%B1%D9%83%D8%A7%D8%AA%D9%87%20%D9%8A%D8%A7%20%D8%AF%D9%83%D8%AA%D9%88%D8%B1%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D8%AC%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D9%8A%D8%A9." target="_blank" rel="noopener noreferrer">🟢 واتساب مباشر</a>
       <a href="tel:+201120909856">📞 اتصال مباشر</a>
@@ -13330,6 +13330,103 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
   #contact .abq-contact-linktree-card .abq-social-mobile-lines{
     font-size:clamp(.66rem,3.3vw,.82rem)!important;
+  }
+}
+</style>
+<style id="abq-contact-doctor-mobile-pc-layout-final-20261006">
+/* سطر الطبيب: PC متجانس — Mobile سطر الاسم ثم سطر الأزرار */
+@media (min-width:769px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:.45rem!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:.65rem!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    flex:0 0 auto!important;
+    margin:0!important;
+    white-space:nowrap!important;
+    font-size:clamp(.7rem,1.15vw,.88rem)!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    flex:0 0 auto!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:.3rem!important;
+    margin:0!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    flex:0 0 auto!important;
+    min-width:auto!important;
+    width:auto!important;
+    padding:.38rem .55rem!important;
+    white-space:nowrap!important;
+    font-size:clamp(.58rem,.82vw,.68rem)!important;
+  }
+}
+@media (max-width:768px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:.42rem!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:.55rem .25rem!important;
+    overflow:hidden!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    flex:0 0 auto!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    font-size:clamp(.66rem,3vw,.82rem)!important;
+    line-height:1.35!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    flex:0 0 auto!important;
+    width:100%!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:.3rem!important;
+    margin:0!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    flex:0 1 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    padding:.32rem .45rem!important;
+    white-space:nowrap!important;
+    font-size:clamp(.54rem,2.35vw,.68rem)!important;
+  }
+}
+@media (max-width:420px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    gap:.32rem!important;
+    padding:.48rem .12rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    font-size:clamp(.59rem,3vw,.74rem)!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    gap:.2rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    padding:.28rem .32rem!important;
+    font-size:clamp(.5rem,2.3vw,.62rem)!important;
   }
 }
 </style>
