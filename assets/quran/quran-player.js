@@ -152,40 +152,42 @@ async function loadCurrent(autoplay){
  try{
   const d=await sourceFor(r,surah,ayah);
   state.source=d;state.segmentEnd=d.end==null?null:Number(d.end);
-  audio.src=d.audioUrl;audio.load();
   renderVerse(ayah);
   let mediaReady=false;
   const startReady=()=>{
-    if(mediaReady)return; mediaReady=true;
-    if(d.start>0&&Number.isFinite(audio.duration))audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
-    if(autoplay){state.playing=true;setPlayButton("playing");audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")})}
-    else {setPlayButton("idle");setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah)}
+   if(mediaReady)return;
+   mediaReady=true;
+   if(d.start>0&&Number.isFinite(audio.duration))audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
+   if(autoplay){
+    state.playing=true;setPlayButton("playing");
+    audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")});
+   }else{
+    setPlayButton("idle");
+    setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah);
+   }
   };
   audio.onloadedmetadata=startReady;
   audio.oncanplay=startReady;
   audio.onloadeddata=startReady;
-  setTimeout(()=>{if(!mediaReady&&autoplay&&audio.readyState>=2)startReady()},2500);
-  /* legacy handler intentionally replaced by the robust media-ready handlers above */
-  audio.__abqStartReady=startReady;
-  /* keep a no-op compatibility handler for browsers that only emit loadedmetadata */
-  audio.onloadedmetadata=()=>startReady();
-  
-    if(d.start>0)audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
-    if(autoplay){state.playing=true;setPlayButton("playing");audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")})}
-    else {setPlayButton("idle");setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah)}
+  audio.src=d.audioUrl;
+  audio.load();
+  setTimeout(()=>{if(!mediaReady&&audio.readyState>=2)startReady()},2500);
   audio.onerror=async()=>{
-    if(r.source==="mp3quran"&&r.fallbackEdition){
-      try{
-        const fb={...r,source:"alqurancloud",edition:r.fallbackEdition};
-        const d2=await sourceFor(fb,surah,ayah);state.source=d2;state.segmentEnd=null;audio.src=d2.audioUrl;audio.load();
-        setStatus("تم التحويل تلقائيًا لمصدر احتياطي موثوق • الآية "+ayah);
-        if(autoplay){state.playing=true;setPlayButton("playing");await audio.play().catch(()=>{})}
-        return;
-      }catch{}
-    }
-    state.playing=false;setPlayButton("waiting");setStatus("تعذر تشغيل هذه التلاوة مؤقتًا — جرّب قارئًا آخر");
+   if(r.source==="mp3quran"&&r.fallbackEdition){
+    try{
+     const fb={...r,source:"alqurancloud",edition:r.fallbackEdition};
+     const d2=await sourceFor(fb,surah,ayah);
+     state.source=d2;state.segmentEnd=null;
+     audio.src=d2.audioUrl;audio.load();
+     setStatus("تم التحويل تلقائيًا لمصدر احتياطي موثوق • الآية "+ayah);
+     return;
+    }catch{}
+   }
+   state.playing=false;setPlayButton("waiting");setStatus("تعذر تشغيل هذه التلاوة مؤقتًا — جرّب قارئًا آخر");
   };
- }catch(e){state.playing=false;setPlayButton("waiting");setStatus("تعذر تجهيز التلاوة — جرّب القارئ أو المصدر الآخر")}
+ }catch(e){
+  state.playing=false;setPlayButton("waiting");setStatus("تعذر تجهيز التلاوة — جرّب القارئ أو المصدر الآخر");
+ }
 }
 function next(){
  if(state.current<state.queue.length-1){state.current++;loadCurrent(true)}
