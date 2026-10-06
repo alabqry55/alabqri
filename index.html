@@ -4834,7 +4834,7 @@ body{
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">اتصل بنا</span><span class="abq-contact-icon" aria-hidden="true"><svg viewBox="0 0 64 48" focusable="false"><path d="M52 8c2 0 4 2 4 4v7c0 14-11 25-25 25h-7c-2 0-4-2-4-4v-6c0-2 1-3 3-4l7-3c2-1 4 0 5 2l2 3c6-2 10-6 12-12l-3-2c-2-1-3-3-2-5l3-7c1-2 3-3 5-3z"></path><path d="M18 9c-4 3-6 6-7 10"></path><path d="M14 4C8 8 5 13 4 19"></path><path d="M24 15c-3 2-4 4-5 7"></path></svg></span></button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">تواصل معنا</span><span class="abq-contact-icon" aria-hidden="true"><svg viewBox="0 0 64 48" focusable="false"><path d="M52 8c2 0 4 2 4 4v7c0 14-11 25-25 25h-7c-2 0-4-2-4-4v-6c0-2 1-3 3-4l7-3c2-1 4 0 5 2l2 3c6-2 10-6 12-12l-3-2c-2-1-3-3-2-5l3-7c1-2 3-3 5-3z"></path><path d="M18 9c-4 3-6 6-7 10"></path><path d="M14 4C8 8 5 13 4 19"></path><path d="M24 15c-3 2-4 4-5 7"></path></svg></span></button>
         </nav>
     </header>
 
@@ -11834,12 +11834,27 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Contact tab alignment/color final 20261006 -->
+<style id="abq-contact-tab-alignment-final-20261006">
+/* تواصل معنا: محاذاة يمين ولون مطابق لعنوان مركز التحميلات — تعديل معزول */
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
+  color:#1e3a8a !important;
+  text-align:right !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab{
+  text-align:right !important;
+  justify-content:flex-start !important;
+}
+</style>
+
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
 <style id="abq-contact-tab-right-black-20261006">
 /* ===== زر الاتصال: نص مختصر + سماعة مرسومة بثلاث موجات — معزول ===== */
 .main-tabs-nav .nav-btn.abq-contact-tab{
-  color:#000 !important;
+  color:#1e3a8a !important;
+  text-align:right !important;
+  justify-content:flex-start !important;
 }
 .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
   display:inline-block;
