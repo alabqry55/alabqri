@@ -4834,7 +4834,7 @@ body{
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn">تواصل معنا📞</button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">اتصل بنا</span><span class="abq-contact-icon" aria-hidden="true"><svg viewBox="0 0 64 48" focusable="false"><path d="M12 8c-2 0-4 2-4 4v7c0 14 11 25 25 25h7c2 0 4-2 4-4v-6c0-2-1-3-3-4l-7-3c-2-1-4 0-5 2l-2 3c-6-2-10-6-12-12l3-2c2-1 3-3 2-5l-3-7c-1-2-3-3-5-3z"></path><path d="M46 9c4 3 6 6 7 10"></path><path d="M50 4c6 4 9 9 10 15"></path><path d="M40 15c3 2 4 4 5 7"></path></svg></span></button>
         </nav>
     </header>
 
@@ -11837,12 +11837,37 @@ window.switchContactInnerTab = function(tabId) {
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
 <style id="abq-contact-tab-right-black-20261006">
-/* ===== تواصل معنا: ترتيب ومقاس معزول فقط ===== */
-.main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
+/* ===== زر الاتصال: نص مختصر + أيقونة سماعة مرسومة بثلاث موجات — معزول ===== */
+.main-tabs-nav .nav-btn.abq-contact-tab{
   color:#000 !important;
 }
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
+  display:inline-block;
+  white-space:nowrap;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:1.55em;
+  height:1.35em;
+  margin-inline-start:.48em;
+  flex:0 0 auto;
+  vertical-align:middle;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon svg{
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:3.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 
-/* الكمبيوتر: الثمانية تبويبات في صف واحد، وتواصل معنا أقصى اليمين */
+/* الكمبيوتر: الثمانية تبويبات في صف واحد، واتصل بنا أقصى اليسار بصريًا */
 @media (min-width:901px){
   .main-tabs-nav{
     direction:rtl !important;
@@ -11851,20 +11876,20 @@ window.switchContactInnerTab = function(tabId) {
     grid-template-rows:1fr !important;
     flex-wrap:nowrap !important;
   }
-  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
-    grid-column:1 !important;
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    grid-column:8 !important;
     grid-row:1 !important;
     width:100% !important;
     max-width:100% !important;
   }
 }
 
-/* الموبايل: تواصل معنا بنفس عرض زر الرئيسية = عرض الحاوية بالكامل */
+/* الموبايل: اتصل بنا بنفس عرض زر الرئيسية = عرض الحاوية بالكامل */
 @media (max-width:900px){
   .main-tabs-nav{
     direction:rtl !important;
   }
-  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
+  .main-tabs-nav .nav-btn.abq-contact-tab{
     grid-column:1 / -1 !important;
     width:100% !important;
     max-width:100% !important;
