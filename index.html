@@ -11837,41 +11837,37 @@ window.switchContactInnerTab = function(tabId) {
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
 <style id="abq-contact-tab-right-black-20261006">
-/* ===== تواصل معنا: أقصى اليمين بصريًا + أسود — معزول ===== */
+/* ===== تواصل معنا: يمين فعليًا + أبعاد موحدة على الكمبيوتر + عرض كامل على الموبايل ===== */
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
   color:#000 !important;
 }
-.main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]:hover,
-.main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]:focus-visible{
-  color:#000 !important;
-}
-.main-tabs-nav .nav-btn[onclick*="switchTab('contact')"].active{
-  color:#fff !important;
-}
 
-/* RTL + Grid: العمود الأول هو أقصى اليمين بصريًا */
-@media (max-width:900px){
+/* الكمبيوتر: نفس أبعاد بقية التبويبات، مع وضعه في أقصى اليمين */
+@media (min-width:901px){
+  .main-tabs-nav{
+    direction:rtl !important;
+    display:grid !important;
+    grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+  }
   .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
     grid-column:1 !important;
-    grid-row:auto !important;
-    justify-self:stretch !important;
+    grid-row:1 !important;
     width:100% !important;
     max-width:100% !important;
   }
 }
 
-/* RTL + Flex: اجعل تواصل معنا أول عنصر بصريًا */
-@media (min-width:769px) and (max-width:900px){
-  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
-    order:-1 !important;
+/* الموبايل: زر كامل العرض مثل زر الرئيسية، ومثبت في أقصى اليمين بصريًا */
+@media (max-width:900px){
+  .main-tabs-nav{
+    direction:rtl !important;
   }
-}
-
-/* RTL + Grid من 8 أعمدة: العمود الأول هو اليمين */
-@media (min-width:901px){
   .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
-    grid-column:1 !important;
+    grid-column:1 / -1 !important;
     grid-row:auto !important;
+    justify-self:stretch !important;
+    width:100% !important;
+    max-width:100% !important;
   }
 }
 </style>
