@@ -13508,6 +13508,68 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
 }
 </style>
+
+<style id="abq-contact-doctor-inline-order-20261006">
+/* ترتيب سطر التواصل: اسم الدكتور ثم واتساب ثم الاتصال مباشرة — PC + Mobile */
+#contact .abq-contact-premium-card > .abq-contact-doctor-card{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  flex-wrap:nowrap!important;
+  gap:.45rem!important;
+  direction:rtl!important;
+  text-align:right!important;
+  overflow:visible!important;
+}
+#contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+  order:1!important;
+  flex:0 1 auto!important;
+  width:auto!important;
+  margin:0!important;
+  text-align:right!important;
+  justify-content:flex-start!important;
+  white-space:nowrap!important;
+}
+#contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+  order:2!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  margin:0!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:.3rem!important;
+}
+#contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+  width:auto!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+}
+@media(max-width:768px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:nowrap!important;
+    gap:.3rem!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card::-webkit-scrollbar{display:none!important}
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    width:auto!important;
+    flex:0 0 auto!important;
+    text-align:right!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    width:auto!important;
+    flex:0 0 auto!important;
+  }
+}
+</style>
 </body>
 </html>
 
