@@ -4688,6 +4688,126 @@ body{
   #home-restored-sections > section.abq-center-v2 > div:first-child{border-right-width:4px !important;}
 }
 </style>
+<style id="abq-contact-and-toast-final-20261006">
+/* ===== تحسين منطقة التواصل + احتواء Toast على الشاشات الصغيرة ===== */
+.abq-contact-region-shell{
+  margin-top:1rem!important;
+  padding:0!important;
+  border:1px solid rgba(37,99,235,.24)!important;
+  border-radius:1.5rem!important;
+  overflow:hidden!important;
+  background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 46%,#e0f2fe 100%)!important;
+  box-shadow:0 18px 38px -26px rgba(30,64,175,.38)!important;
+}
+.abq-contact-region-shell > .abq-contact-section-heading{
+  margin:0!important;
+  padding:1rem 1.15rem .75rem!important;
+  background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 52%,#e0f2fe 100%)!important;
+  text-align:right!important;
+}
+.abq-contact-region-shell > .abq-contact-section-heading h2{
+  margin:0!important;
+  color:#1d4ed8!important;
+  text-align:right!important;
+  text-shadow:0 1px 2px rgba(30,64,175,.12)!important;
+}
+.abq-contact-region-shell > section.abq-center-v2{
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 48%,#e0f2fe 100%)!important;
+  box-shadow:none!important;
+}
+.abq-contact-region-shell > section.abq-center-v2::before{
+  background:linear-gradient(90deg,#2563eb 0%,#3b82f6 52%,#60a5fa 100%)!important;
+}
+.abq-contact-region-shell .abq-contact-doctor-name{
+  line-height:1.8!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+.abq-contact-region-shell .abq-doctor-prefix{color:#0f172a!important;}
+.abq-contact-region-shell .abq-doctor-name-main{color:#1d4ed8!important;}
+.abq-contact-region-shell .abq-doctor-alias{color:#16a34a!important;font-weight:900!important;}
+.abq-contact-region-shell .grid.grid-cols-2.gap-2{
+  gap:.65rem!important;
+}
+.abq-contact-region-shell .grid.grid-cols-2.gap-2 > a{
+  min-height:46px!important;
+  padding:.75rem 1rem!important;
+  border-radius:.85rem!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:.82rem!important;
+  font-weight:900!important;
+  border:1px solid rgba(255,255,255,.38)!important;
+  box-shadow:0 8px 18px -12px rgba(15,23,42,.55)!important;
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease!important;
+}
+.abq-contact-region-shell .grid.grid-cols-2.gap-2 > a:first-child{
+  background:linear-gradient(135deg,#1d4ed8,#2563eb)!important;
+  color:#fff!important;
+}
+.abq-contact-region-shell .grid.grid-cols-2.gap-2 > a:last-child{
+  background:linear-gradient(135deg,#15803d,#16a34a)!important;
+  color:#fff!important;
+}
+.abq-contact-region-shell .grid.grid-cols-2.gap-2 > a:hover{
+  transform:translateY(-2px)!important;
+  box-shadow:0 12px 22px -12px rgba(30,64,175,.55)!important;
+  filter:saturate(1.06)!important;
+}
+#abq-toast-container{
+  width:calc(100% - 24px)!important;
+  max-width:420px!important;
+  box-sizing:border-box!important;
+}
+.abq-toast{
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  white-space:normal!important;
+  line-height:1.55!important;
+}
+.abq-toast > *{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+@media(max-width:768px){
+  .abq-contact-region-shell{margin-top:.75rem!important;border-radius:1.15rem!important;}
+  .abq-contact-region-shell > .abq-contact-section-heading{
+    padding:.8rem .9rem .6rem!important;
+  }
+  .abq-contact-region-shell > .abq-contact-section-heading h2{
+    font-size:1.15rem!important;
+  }
+  .abq-contact-region-shell .abq-contact-doctor-name{
+    white-space:normal!important;
+  }
+  .abq-contact-region-shell .abq-doctor-alias{
+    display:block!important;
+    margin-top:.05rem!important;
+  }
+  #abq-toast-container{
+    top:12px!important;
+    width:calc(100% - 20px)!important;
+    max-width:none!important;
+    padding:0!important;
+  }
+  .abq-toast{
+    width:100%!important;
+    font-size:.8rem!important;
+    padding:.7rem .85rem!important;
+    border-radius:13px!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -5140,7 +5260,8 @@ body{
     </div>
   </section>
 
-<div class="abq-contact-section-heading mb-4 text-right"><h2 class="text-2xl md:text-3xl font-black text-blue-900">تواصل معنا</h2></div>
+<div class="abq-contact-region-shell">
+<div class="abq-contact-section-heading text-right"><h2 class="text-2xl md:text-3xl font-black">تواصل معنا</h2></div>
 <section class="space-y-0 abq-center-v2">
             <div class="abq-center-brand-card abq-center-brand-card-master">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والاستشارات</span></h2>
@@ -5157,7 +5278,7 @@ body{
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="bg-white border-r-4 border-amber-400 rounded-xl p-4 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="font-black text-sm text-slate-800">الدكتور / <span class="text-blue-800">أحمد السيد رَسَّه ( أحمد الزمخشري )</span></h4>
+                        <h4 class="abq-contact-doctor-name font-black text-sm text-slate-800"><span class="abq-doctor-prefix">الدكتور /</span> <span class="abq-doctor-name-main text-blue-800">أحمد السيد رَسَّه</span> <span class="abq-doctor-alias text-green-600">( أحمد الزمخشري )</span></h4>
                     </div>
                     <div class="grid grid-cols-2 gap-2 mt-4 text-xs font-bold text-center">
                         <a href="tel:+201120909856" class="py-2 bg-amber-500 text-stone-950 font-black rounded-lg shadow-sm">اتصال مباشر</a>
@@ -5181,7 +5302,7 @@ body{
             </div>
             </div>
         </section>
-</section>
+</div>
 </div>
 
         </section>
