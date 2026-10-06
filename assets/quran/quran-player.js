@@ -114,11 +114,11 @@ function updateAyahs(){
 }
 async function loadText(){
  const surah=Number($("abq-qp-surah").value);if(!surah)return;
- try{const d=await getJSON(API+"/text?surah="+surah);state.texts=d.surah?.ayahs||d.data?.ayahs||d.surah?.ayahs||d.data?.ayahs||[];renderVerse(1)}
+ try{const d=await getJSON(API+"/text?surah="+surah);state.texts=(d.surah?.ayahs||d.data?.ayahs||[]).map(a=>({numberInSurah:Number(a.numberInSurah??a.number),text:String(a.text||"")}));renderVerse(1)}
  catch{state.texts=[];renderVerse(1)}
 }
 function renderVerse(n){
- const a=(state.texts||[]).find(x=>Number(x.numberInSurah)===Number(n));
+ const a=(state.texts||[]).find(x=>Number(x.numberInSurah??x.number)===Number(n));
  const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));
  const r=selectedReciter();
  $("abq-qp-verse-head").textContent=a?(s?.name||"")+" — الآية "+n:"";
@@ -154,11 +154,25 @@ async function loadCurrent(autoplay){
   state.source=d;state.segmentEnd=d.end==null?null:Number(d.end);
   audio.src=d.audioUrl;audio.load();
   renderVerse(ayah);
-  audio.onloadedmetadata=()=>{
-    if(d.start>0)audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
+  let mediaReady=false;
+  const startReady=()=>{
+    if(mediaReady)return; mediaReady=true;
+    if(d.start>0&&Number.isFinite(audio.duration))audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
     if(autoplay){state.playing=true;setPlayButton("playing");audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")})}
     else {setPlayButton("idle");setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah)}
   };
+  audio.onloadedmetadata=startReady;
+  audio.oncanplay=startReady;
+  audio.onloadeddata=startReady;
+  setTimeout(()=>{if(!mediaReady&&autoplay&&audio.readyState>=2)startReady()},2500);
+  /* legacy handler intentionally replaced by the robust media-ready handlers above */
+  audio.__abqStartReady=startReady;
+  /* keep a no-op compatibility handler for browsers that only emit loadedmetadata */
+  audio.onloadedmetadata=()=>startReady();
+  
+    if(d.start>0)audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
+    if(autoplay){state.playing=true;setPlayButton("playing");audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")})}
+    else {setPlayButton("idle");setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah)}
   audio.onerror=async()=>{
     if(r.source==="mp3quran"&&r.fallbackEdition){
       try{
