@@ -11834,6 +11834,41 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Contact speaker restored + rotation final 20261006 -->
+<style id="abq-contact-speaker-restore-rotation-final-20261006">
+/* الكمبيوتر والموبايل: السماعة ظاهرة، ومقلوبة أفقيًا وعموديًا كما طلب د. أحمد */
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon svg{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  transform:scaleX(-1) scaleY(-1) !important;
+  transform-origin:center center !important;
+}
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    display:inline-flex !important;
+    width:3.05em !important;
+    height:2.55em !important;
+    margin:0 !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
+    display:inline-block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Mobile contact tab centered group final 20261006 -->
 <style id="abq-mobile-contact-center-group-final-20261006">
 /* الموبايل: النص + السماعة + الموجات مجموعة واحدة في منتصف الزر أفقيًا ورأسيًا */
