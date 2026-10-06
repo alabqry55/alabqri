@@ -1,0 +1,78 @@
+/* ALABQRI — center identity + contact alignment, additive isolated layer */
+.abq-center-brand-card{
+  position:relative !important;
+  isolation:isolate !important;
+  overflow:hidden !important;
+  background:linear-gradient(135deg,#0f3b82 0%,#1d4ed8 55%,#0f766e 100%) !important;
+  border:1px solid #2563eb !important;
+  border-right:5px solid #d4af37 !important;
+  color:#fff !important;
+  box-shadow:0 10px 24px -18px rgba(15,59,130,.75) !important;
+  z-index:1 !important;
+}
+.abq-center-brand-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 0 auto 0 !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#1d4ed8,#38bdf8,#d4af37) !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+.abq-center-brand-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:linear-gradient(135deg,#0f3b82 0%,#1d4ed8 55%,#0f766e 100%) !important;
+  z-index:-1 !important;
+  pointer-events:none !important;
+}
+.abq-center-brand-card > *{position:relative !important;z-index:2 !important;}
+.abq-center-brand-card h2,.abq-center-brand-card p{color:#fff !important;text-shadow:0 2px 4px rgba(0,0,0,.35) !important;}
+.abq-center-brand-card p span{color:#fde68a !important;}
+.abq-center-brand-card h2,.abq-center-brand-card p{position:relative !important;z-index:2 !important;}
+@media (max-width:768px){
+  .abq-center-brand-card{padding:.78rem .85rem !important;border-right-width:4px !important;border-radius:.9rem !important;min-height:0 !important;}
+  .abq-center-brand-card h2{font-size:.96rem !important;line-height:1.55 !important;white-space:normal !important;}
+  .abq-center-brand-card p{font-size:.72rem !important;line-height:1.6 !important;}
+}
+@media (max-width:420px){
+  .abq-center-brand-card{padding:.7rem !important;}
+  .abq-center-brand-card h2{font-size:.9rem !important;}
+  .abq-center-brand-card p{font-size:.68rem !important;}
+}
+@media (min-width:769px){
+  /* PC only: doctor identity on one centered line */
+  .abq-center-v2:has(a[href^="tel:+201120909856"]) h4,
+  #contact:has(a[href^="tel:+201120909856"]) h4,
+  #tab-center:has(a[href^="tel:+201120909856"]) h4{
+    white-space:nowrap !important;
+    text-align:center !important;
+    width:100% !important;
+    margin-inline:auto !important;
+    line-height:1.5 !important;
+  }
+  /* PC only: direct call + WhatsApp centered together in their existing frame */
+  .abq-center-v2:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  .abq-center-v2:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #contact:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #contact:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #tab-center:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #tab-center:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"]{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    vertical-align:middle !important;
+    margin-inline:.25rem !important;
+    margin-block:.2rem !important;
+    float:none !important;
+  }
+  .abq-center-v2:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  .abq-center-v2:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #contact:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #contact:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #tab-center:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #tab-center:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"]{
+    text-align:center !important;
+  }
+}
