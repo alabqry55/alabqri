@@ -11834,6 +11834,79 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Contact tab unified final visual 20261006 -->
+<style id="abq-contact-unified-final-20261006">
+/* توحيد زر تواصل معنا: مجموعة واحدة في المنتصف + سماعة موحدة */
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab.active,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  gap:.55em !important;
+  color:#1e3a8a !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
+  display:inline-block !important;
+  width:auto !important;
+  margin:0 !important;
+  color:#1e3a8a !important;
+  text-align:center !important;
+  line-height:1.25 !important;
+  flex:0 0 auto !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+  display:inline-flex !important;
+  width:2.35em !important;
+  height:2.05em !important;
+  margin:0 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon svg{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  transform:none !important;
+  transform-origin:center !important;
+  overflow:visible !important;
+  fill:none !important;
+  stroke:#16a34a !important;
+  stroke-width:3.7 !important;
+  stroke-linecap:round !important;
+  stroke-linejoin:round !important;
+  filter:drop-shadow(0 0 2px rgba(22,163,74,.28)) !important;
+}
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    font-size:.74rem !important;
+  }
+}
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    min-height:52px !important;
+    padding:.62rem .75rem !important;
+    font-size:.98rem !important;
+    font-weight:800 !important;
+    gap:.62em !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    width:2.7em !important;
+    height:2.25em !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    font-size:1rem !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Contact speaker restored + rotation final 20261006 -->
 <style id="abq-contact-speaker-restore-rotation-final-20261006">
 /* الكمبيوتر والموبايل: السماعة ظاهرة، ومقلوبة أفقيًا وعموديًا كما طلب د. أحمد */
