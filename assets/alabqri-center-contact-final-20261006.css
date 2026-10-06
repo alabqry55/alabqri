@@ -8,11 +8,31 @@
 @media (max-width:768px){.abq-center-brand-card{padding:.78rem .85rem !important;border-right-width:4px !important;border-radius:.9rem !important;min-height:0 !important;background:linear-gradient(135deg,#0f3b82 0%,#1d4ed8 55%,#0f766e 100%) !important;}.abq-center-brand-card h2{font-size:.96rem !important;line-height:1.55 !important;white-space:normal !important;}.abq-center-brand-card p{font-size:.72rem !important;line-height:1.6 !important;}}
 @media (max-width:420px){.abq-center-brand-card{padding:.7rem !important;}.abq-center-brand-card h2{font-size:.9rem !important;}.abq-center-brand-card p{font-size:.68rem !important;}}
 
-/* PC ONLY — force the doctor's name and its two contact actions into one exact centered stack. */
 @media (min-width:769px){
-.abq-center-v2:has(a[href^="tel:+201120909856"]) h4,#contact:has(a[href^="tel:+201120909856"]) h4,#tab-center:has(a[href^="tel:+201120909856"]) h4{white-space:nowrap !important;text-align:center !important;width:100% !important;margin-inline:auto !important;line-height:1.5 !important;}
-.abq-center-v2:has(a[href^="tel:+201120909856"]) h4 + div,#contact:has(a[href^="tel:+201120909856"]) h4 + div,#tab-center:has(a[href^="tel:+201120909856"]) h4 + div{display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:center !important;align-self:center !important;width:fit-content !important;min-width:270px !important;max-width:100% !important;margin:1rem auto 0 !important;gap:.5rem !important;}
-.abq-center-v2:has(a[href^="tel:+201120909856"]) h4 + div > a,#contact:has(a[href^="tel:+201120909856"]) h4 + div > a,#tab-center:has(a[href^="tel:+201120909856"]) h4 + div > a{display:inline-flex !important;align-items:center !important;justify-content:center !important;vertical-align:middle !important;margin:0 !important;float:none !important;text-align:center !important;flex:0 0 auto !important;width:auto !important;min-width:120px !important;}
-.abq-center-v2:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]),#contact:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]),#tab-center:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]){display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:center !important;width:fit-content !important;min-width:270px !important;max-width:100% !important;margin:1rem auto 0 !important;gap:.5rem !important;text-align:center !important;float:none !important;}
-.abq-center-v2:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]) > a,#contact:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]) > a,#tab-center:has(a[href^="tel:+201120909856"]) div:has(> a[href^="tel:+201120909856"]):has(> a[href*="wa.me/201120909856"]) > a{display:inline-flex !important;align-items:center !important;justify-content:center !important;flex:0 0 120px !important;width:120px !important;min-width:120px !important;margin:0 !important;float:none !important;text-align:center !important;}
+  /* PC only: doctor identity on one centered line */
+  .abq-center-v2:has(a[href^="tel:+201120909856"]) h4,
+  #contact:has(a[href^="tel:+201120909856"]) h4,
+  #tab-center:has(a[href^="tel:+201120909856"]) h4{
+    white-space:nowrap !important;
+    text-align:center !important;
+    width:100% !important;
+    margin-inline:auto !important;
+    line-height:1.5 !important;
+  }
+  /* PC only: restore the exact horizontal + vertical centering behavior from commit 2deb1329 */
+  .abq-center-v2:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  .abq-center-v2:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #contact:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #contact:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"],
+  #tab-center:has(a[href^="tel:+201120909856"]) a[href^="tel:+201120909856"],
+  #tab-center:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"]{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    vertical-align:middle !important;
+    margin-inline:.25rem !important;
+    margin-block:.2rem !important;
+    float:none !important;
+    text-align:center !important;
+  }
 }
