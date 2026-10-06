@@ -13120,7 +13120,7 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 <style id="abq-contact-doctor-final-20261006">
-/* قفل بصري نهائي لسطر الطبيب: يبدأ من الحافة اليمنى الداخلية لإطار البطاقة */
+/* ضبط نهائي: اسم الطبيب وأزرار واتساب/الاتصال في سطر واحد داخل عرض الشاشة دون خروج */
 #contact .abq-contact-premium-card > .abq-contact-doctor-card{
   width:100%!important;
   max-width:none!important;
@@ -13135,11 +13135,11 @@ table{max-width:100%;display:block;overflow-x:auto}
   direction:rtl!important;
   text-align:right!important;
   flex-wrap:nowrap!important;
-  gap:.75rem!important;
+  gap:.45rem!important;
   overflow:hidden!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-  flex:0 0 auto!important;
+  flex:1 1 auto!important;
   min-width:0!important;
   margin:0!important;
   padding:0!important;
@@ -13148,12 +13148,14 @@ table{max-width:100%;display:block;overflow-x:auto}
   justify-content:flex-start!important;
   text-align:right!important;
   white-space:nowrap!important;
+  overflow:hidden!important;
   float:none!important;
   position:static!important;
   transform:none!important;
+  font-size:clamp(.56rem,1.05vw,.95rem)!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
-  flex:0 0 auto!important;
+  flex:0 1 auto!important;
   min-width:0!important;
   margin:0!important;
   padding:0!important;
@@ -13161,52 +13163,56 @@ table{max-width:100%;display:block;overflow-x:auto}
   align-items:center!important;
   justify-content:flex-start!important;
   flex-wrap:nowrap!important;
-  gap:.45rem!important;
+  gap:.3rem!important;
   float:none!important;
   position:static!important;
   transform:none!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
-  flex:0 0 auto!important;
+  flex:0 1 auto!important;
   min-width:0!important;
   width:auto!important;
   margin:0!important;
+  padding:.42rem .5rem!important;
   white-space:nowrap!important;
+  font-size:clamp(.5rem,.8vw,.72rem)!important;
+  line-height:1.25!important;
   float:none!important;
   position:static!important;
   transform:none!important;
 }
 @media(max-width:768px){
   #contact .abq-contact-premium-card > .abq-contact-doctor-card{
-    padding:.65rem .4rem!important;
-    gap:.35rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
-    gap:.25rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
-    min-height:38px!important;
-    padding:.38rem .42rem!important;
-    font-size:.64rem!important;
+    padding:.5rem .25rem!important;
+    gap:.22rem!important;
   }
   #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-    font-size:.68rem!important;
+    font-size:clamp(.52rem,2.1vw,.66rem)!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    gap:.18rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    min-height:34px!important;
+    padding:.3rem .28rem!important;
+    font-size:clamp(.47rem,1.75vw,.58rem)!important;
   }
 }
 @media(max-width:420px){
   #contact .abq-contact-premium-card > .abq-contact-doctor-card{
-    padding:.55rem .2rem!important;
-    gap:.2rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
-    gap:.2rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
-    padding:.32rem .28rem!important;
-    font-size:.58rem!important;
+    padding:.42rem .12rem!important;
+    gap:.12rem!important;
   }
   #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-    font-size:.58rem!important;
+    font-size:clamp(.46rem,2.05vw,.56rem)!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    gap:.1rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    min-height:31px!important;
+    padding:.25rem .2rem!important;
+    font-size:clamp(.42rem,1.7vw,.52rem)!important;
   }
 }
 </style>
