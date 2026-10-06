@@ -11837,17 +11837,19 @@ window.switchContactInnerTab = function(tabId) {
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
 <style id="abq-contact-tab-right-black-20261006">
-/* ===== تواصل معنا: يمين فعليًا + أبعاد موحدة على الكمبيوتر + عرض كامل على الموبايل ===== */
+/* ===== تواصل معنا: ترتيب ومقاس معزول فقط ===== */
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
   color:#000 !important;
 }
 
-/* الكمبيوتر: نفس أبعاد بقية التبويبات، مع وضعه في أقصى اليمين */
+/* الكمبيوتر: الثمانية تبويبات في صف واحد، وتواصل معنا أقصى اليمين */
 @media (min-width:901px){
   .main-tabs-nav{
     direction:rtl !important;
     display:grid !important;
     grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+    grid-template-rows:1fr !important;
+    flex-wrap:nowrap !important;
   }
   .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
     grid-column:1 !important;
@@ -11857,17 +11859,16 @@ window.switchContactInnerTab = function(tabId) {
   }
 }
 
-/* الموبايل: زر كامل العرض مثل زر الرئيسية، ومثبت في أقصى اليمين بصريًا */
+/* الموبايل: تواصل معنا بنفس عرض زر الرئيسية = عرض الحاوية بالكامل */
 @media (max-width:900px){
   .main-tabs-nav{
     direction:rtl !important;
   }
   .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
     grid-column:1 / -1 !important;
-    grid-row:auto !important;
-    justify-self:stretch !important;
     width:100% !important;
     max-width:100% !important;
+    justify-self:stretch !important;
   }
 }
 </style>
