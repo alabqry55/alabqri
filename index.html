@@ -11836,25 +11836,43 @@ window.switchContactInnerTab = function(tabId) {
 
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
-<style id="abq-contact-tab-right-navy-20261006">
-/* ===== تواصل معنا: يمين الموبايل + كحلي مطابق للون مركز التحميلات ===== */
-@media (max-width:768px){
-  .main-tabs-nav .nav-btn:last-child{
-    grid-column:2 !important;
-    justify-self:stretch !important;
-    width:100% !important;
-    max-width:none !important;
-  }
-}
+<style id="abq-contact-tab-right-black-20261006">
+/* ===== تواصل معنا: أقصى اليمين بصريًا + أسود — معزول ===== */
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
-  color:#1e3a8a !important;
+  color:#000 !important;
 }
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]:hover,
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]:focus-visible{
-  color:#1e3a8a !important;
+  color:#000 !important;
 }
 .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"].active{
   color:#fff !important;
+}
+
+/* RTL + Grid: العمود الأول هو أقصى اليمين بصريًا */
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
+    grid-column:1 !important;
+    grid-row:auto !important;
+    justify-self:stretch !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+}
+
+/* RTL + Flex: اجعل تواصل معنا أول عنصر بصريًا */
+@media (min-width:769px) and (max-width:900px){
+  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
+    order:-1 !important;
+  }
+}
+
+/* RTL + Grid من 8 أعمدة: العمود الأول هو اليمين */
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn[onclick*="switchTab('contact')"]{
+    grid-column:1 !important;
+    grid-row:auto !important;
+  }
 }
 </style>
 <style id="abq-final-visual-stability-20261006">
