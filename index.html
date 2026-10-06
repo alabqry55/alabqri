@@ -11834,6 +11834,33 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Main tabs center + home font match 20261006 -->
+<style id="abq-main-tabs-contact-center-final-20261006">
+/* تواصل معنا: النص والأيقونة في المنتصف مثل الرئيسية */
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab.active,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover{
+  justify-content:center !important;
+  text-align:center !important;
+  align-items:center !important;
+  font-size:.74rem !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label{
+  width:auto !important;
+  margin-inline:0 !important;
+  text-align:center !important;
+  color:#1e3a8a !important;
+}
+/* الرئيسية بنفس حجم خط تواصل معنا على الكمبيوتر */
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"]{
+    font-size:.74rem !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Contact tab visual alignment hard-fix 20261006 -->
 <style id="abq-contact-tab-visual-hard-fix-20261006">
 /* إصلاح نهائي معزول: نفس محاذاة ولون عنوان مركز التحميلات */
