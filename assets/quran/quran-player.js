@@ -114,7 +114,7 @@ function updateAyahs(){
 }
 async function loadText(){
  const surah=Number($("abq-qp-surah").value);if(!surah)return;
- try{const d=await getJSON(API+"/surah/"+surah);state.texts=d.surah?.ayahs||d.data?.ayahs||d.surah?.ayahs||d.data?.ayahs||[];renderVerse(1)}
+ try{const d=await getJSON(API+"/text?surah="+surah);state.texts=d.surah?.ayahs||d.data?.ayahs||d.surah?.ayahs||d.data?.ayahs||[];renderVerse(1)}
  catch{state.texts=[];renderVerse(1)}
 }
 function renderVerse(n){
