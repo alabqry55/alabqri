@@ -11834,6 +11834,40 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Contact tab visual alignment hard-fix 20261006 -->
+<style id="abq-contact-tab-visual-hard-fix-20261006">
+/* إصلاح نهائي معزول: نفس محاذاة ولون عنوان مركز التحميلات */
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab.active,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover{
+  color:#1e3a8a !important;
+  text-align:right !important;
+  justify-content:flex-start !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label{
+  color:#1e3a8a !important;
+  display:block !important;
+  width:100% !important;
+  text-align:right !important;
+  margin-inline-start:0 !important;
+  margin-inline-end:auto !important;
+}
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    align-items:center !important;
+    justify-content:flex-start !important;
+    text-align:right !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
+    width:auto !important;
+    margin-inline-start:0 !important;
+    margin-inline-end:0 !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Contact tab alignment/color final 20261006 -->
 <style id="abq-contact-tab-alignment-final-20261006">
 /* تواصل معنا: محاذاة يمين ولون مطابق لعنوان مركز التحميلات — تعديل معزول */
