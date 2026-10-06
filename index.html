@@ -13696,7 +13696,54 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 
+
+<style id="abq-contact-inner-blue-frames-buttons-mobile-20261006">
+/* توحيد الإطارات الداخلية لقسم التواصل مع الدكتور — أزرق المنصة */
+#contact .abq-contact-premium-card > .abq-contact-doctor-card,
+#contact .abq-contact-premium-card > .abq-contact-linktree-card,
+#contact .abq-contact-premium-card > .abq-contact-info-grid > .abq-contact-info-card{
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  box-sizing:border-box!important;
+}
+
+/* إطار الطبيب: الحفاظ على الترتيب الحالي دون تغيير الوظيفة */
+#contact .abq-contact-premium-card > .abq-contact-doctor-card{
+  background:rgba(255,255,255,.96)!important;
+}
+
+/* إطار الحسابات والمنصات */
+#contact .abq-contact-premium-card > .abq-contact-linktree-card{
+  background:rgba(255,255,255,.96)!important;
+}
+
+/* إطارا البريد والمقر */
+#contact .abq-contact-premium-card > .abq-contact-info-grid > .abq-contact-info-card{
+  background:rgba(255,255,255,.96)!important;
+}
+
+/* الموبايل فقط: تكبير زري واتساب والاتصال */
+@media(max-width:768px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    min-height:42px!important;
+    padding:.52rem .72rem!important;
+    font-size:clamp(.68rem,3.2vw,.86rem)!important;
+    line-height:1.25!important;
+    font-weight:800!important;
+    border-radius:.75rem!important;
+  }
+}
+
+@media(max-width:420px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    min-height:40px!important;
+    padding:.48rem .62rem!important;
+    font-size:clamp(.64rem,3.25vw,.8rem)!important;
+  }
+}
+</style>
+
 </body>
 </html>
 
-<!-- deploy verification 2026-10-06: contact center title corrected -->
+<!-- deploy verification 2026-10-06: contact inner blue frames + mobile buttons -->
