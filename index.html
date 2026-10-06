@@ -4834,7 +4834,7 @@ body{
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">تواصل معنا</span><span class="abq-contact-icon" aria-hidden="true"><svg viewBox="0 0 64 48" focusable="false"><path d="M52 8c2 0 4 2 4 4v7c0 14-11 25-25 25h-7c-2 0-4-2-4-4v-6c0-2 1-3 3-4l7-3c2-1 4 0 5 2l2 3c6-2 10-6 12-12l-3-2c-2-1-3-3-2-5l3-7c1-2 3-3 5-3z"></path><path d="M18 9c-4 3-6 6-7 10"></path><path d="M14 4C8 8 5 13 4 19"></path><path d="M24 15c-3 2-4 4-5 7"></path></svg></span></button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">تواصل معنا</span><span class="abq-contact-icon" aria-hidden="true"><span class="abq-red-phone">☎</span></span></button>
         </nav>
     </header>
 
@@ -11909,6 +11909,96 @@ window.switchContactInnerTab = function(tabId) {
   }
   .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
     left:.55rem !important;
+  }
+}
+</style>
+
+<!-- ALABQRI — Contact red phone + immutable center final 20261006 -->
+<style id="abq-contact-red-phone-immutable-center-20261006">
+/* التبويب: النص في المركز الحقيقي دائمًا، بدون اعتماد على hover/focus، وسماعة هاتف حمراء بسيطة ثابتة */
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus,
+.main-tabs-nav .nav-btn.abq-contact-tab:active,
+.main-tabs-nav .nav-btn.abq-contact-tab.active{
+  position:relative !important;
+  display:block !important;
+  box-sizing:border-box !important;
+  transform:none !important;
+  transition:none !important;
+  animation:none !important;
+  text-align:center !important;
+  overflow:hidden !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:auto !important;
+  max-width:calc(100% - 3.8em) !important;
+  margin:0 !important;
+  padding:0 !important;
+  transform:translate(-50%,-50%) !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  line-height:1.25 !important;
+  color:#1e3a8a !important;
+  pointer-events:none !important;
+  z-index:3 !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-icon{
+  position:absolute !important;
+  left:.55rem !important;
+  right:auto !important;
+  top:50% !important;
+  bottom:auto !important;
+  width:1.8em !important;
+  height:1.8em !important;
+  margin:0 !important;
+  padding:0 !important;
+  transform:translateY(-50%) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  transition:none !important;
+  animation:none !important;
+  pointer-events:none !important;
+  z-index:2 !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-red-phone{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  font-family:"Arial","Segoe UI Symbol",sans-serif !important;
+  font-size:1.45em !important;
+  line-height:1 !important;
+  color:#dc2626 !important;
+  transform:none !important;
+  filter:none !important;
+}
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    min-height:52px !important;
+    padding:.45rem .6rem !important;
+    font-size:.98rem !important;
+    font-weight:800 !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    left:.5rem !important;
+    width:1.9em !important;
+    height:1.9em !important;
   }
 }
 </style>
