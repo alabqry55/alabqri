@@ -11920,32 +11920,36 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 <style id="abq-mobile-touch-stability-20261006">
-/* ===== استقرار اللمس والتمرير على الموبايل — طبقة معزولة ===== */
+/* ===== تمرير موبايل أصلي وسريع — بدون اعتراض لحركة الإصبع ===== */
 html,body{
   -webkit-overflow-scrolling:touch !important;
-  touch-action:pan-y !important;
-  overscroll-behavior-y:contain !important;
+  touch-action:pan-y pinch-zoom !important;
+  overscroll-behavior-y:auto !important;
+  overscroll-behavior-x:none !important;
 }
 @media (max-width:900px){
   .main-tabs-nav,
   .main-tabs-nav .nav-btn,
   .tab-content,
   .hero-anim{
-    touch-action:pan-y !important;
+    touch-action:pan-y pinch-zoom !important;
   }
   .main-tabs-nav .nav-btn.abq-contact-tab{
     -webkit-tap-highlight-color:rgba(22,163,74,.12);
-    touch-action:manipulation !important;
+    touch-action:pan-y pinch-zoom !important;
   }
 }
 </style>
+<style id="abq-contact-icon-direction-20261006">
+/* الموجات ناحية النص: انعكاس أفقي للأيقونة فقط */
 @media (max-width:900px){
   .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon svg{
-    transform:rotate(180deg) !important;
+    transform:scaleX(-1) !important;
     transform-origin:center !important;
     stroke-width:4.1 !important;
   }
 }
+</style>
 <style id="abq-final-visual-stability-20261006">
 /* طبقة أمان بصرية نهائية: تمنع تجاوز العناصر عرض الشاشة دون تغيير الهوية أو التخطيط الأساسي */
 html,body{max-width:100%;overflow-x:hidden!important}
