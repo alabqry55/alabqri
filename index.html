@@ -11837,7 +11837,7 @@ window.switchContactInnerTab = function(tabId) {
 <!-- ALABQRI — Isolated Quran Player (additive only) -->
 <script src="/assets/quran/quran-player.js?v=20261006-19" defer></script>
 <style id="abq-contact-tab-right-black-20261006">
-/* ===== زر الاتصال: نص مختصر + أيقونة سماعة مرسومة بثلاث موجات — معزول ===== */
+/* ===== زر الاتصال: نص مختصر + سماعة مرسومة بثلاث موجات — معزول ===== */
 .main-tabs-nav .nav-btn.abq-contact-tab{
   color:#000 !important;
 }
@@ -11849,9 +11849,9 @@ window.switchContactInnerTab = function(tabId) {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:2.15em;
-  height:1.85em;
-  margin-inline-start:.48em;
+  width:2.45em;
+  height:2.05em;
+  margin-inline-start:.58em;
   flex:0 0 auto;
   vertical-align:middle;
 }
@@ -11861,10 +11861,11 @@ window.switchContactInnerTab = function(tabId) {
   display:block;
   overflow:visible;
   fill:none;
-  stroke:currentColor;
-  stroke-width:3.2;
+  stroke:#16a34a;
+  stroke-width:3.7;
   stroke-linecap:round;
   stroke-linejoin:round;
+  filter:drop-shadow(0 0 2px rgba(22,163,74,.28));
 }
 
 /* الكمبيوتر: الثمانية تبويبات في صف واحد، واتصل بنا أقصى اليسار بصريًا */
@@ -11881,10 +11882,11 @@ window.switchContactInnerTab = function(tabId) {
     grid-row:1 !important;
     width:100% !important;
     max-width:100% !important;
+    font-size:.74rem !important;
   }
 }
 
-/* الموبايل: اتصل بنا بنفس عرض زر الرئيسية = عرض الحاوية بالكامل */
+/* الموبايل: زر اتصل بنا كامل العرض، أكبر وأوضح من النسخة السابقة */
 @media (max-width:900px){
   .main-tabs-nav{
     direction:rtl !important;
@@ -11894,6 +11896,26 @@ window.switchContactInnerTab = function(tabId) {
     width:100% !important;
     max-width:100% !important;
     justify-self:stretch !important;
+    min-height:48px !important;
+    padding:.55rem .7rem !important;
+    font-size:.86rem !important;
+    font-weight:800 !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    width:3.05em !important;
+    height:2.55em !important;
+    margin-inline-start:.72em !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    min-height:52px !important;
+    padding:.62rem .75rem !important;
+    font-size:.92rem !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    width:3.35em !important;
+    height:2.8em !important;
   }
 }
 </style>
