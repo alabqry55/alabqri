@@ -478,6 +478,80 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     color:#1e3a8a !important;
     box-shadow:0 5px 14px -9px rgba(30,64,175,.5) !important;
 }
+<style id="abq-contact-brand-pc-mobile-20261006">
+/* شعار المركز بجوار 🌿 — PC + Mobile، وتوحيد سطر العنوان على PC فقط */
+.abq-contact-brand-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+}
+.abq-contact-logo-wrap{
+  width:3.15rem;
+  height:3.15rem;
+  flex:0 0 3.15rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:.7rem;
+}
+.abq-contact-logo{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+.abq-contact-title-line{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+}
+.abq-contact-title-line h3,
+.abq-contact-title-line p{
+  margin:0;
+}
+.abq-social-tree-inline{
+  display:inline;
+  font-weight:900;
+  margin-inline-start:.35rem;
+}
+@media (min-width:901px){
+  .abq-contact-brand-row{
+    flex-wrap:nowrap;
+  }
+  .abq-contact-title-line{
+    flex-wrap:nowrap;
+    white-space:nowrap;
+  }
+  #contact .abq-contact-linktree-card h4{
+    white-space:nowrap;
+  }
+}
+@media (max-width:768px){
+  .abq-contact-brand-row{
+    gap:.4rem;
+  }
+  .abq-contact-logo-wrap{
+    width:2.8rem;
+    height:2.8rem;
+    flex-basis:2.8rem;
+  }
+  .abq-contact-title-line{
+    width:100%;
+    flex-direction:column;
+    gap:.15rem;
+  }
+  .abq-social-tree-inline{
+    display:block;
+    margin-inline-start:0;
+    margin-top:.15rem;
+  }
+}
+</style>
 </style>
 <style id="abq-contact-inner-center-tab">.contact-inner-tab-btn{transition:background-color .15s ease,color .15s ease,box-shadow .15s ease,transform .15s ease}.contact-inner-tab-btn.active{box-shadow:0 8px 18px -12px rgba(37,99,235,.8)}.contact-inner-tab-btn:hover{transform:translateY(-1px)}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7369,9 +7443,16 @@ body{
 
 <div class="abq-contact-premium-card pulse-card">
   <div class="abq-contact-premium-head">
+    <div class="abq-contact-brand-row" aria-label="مركز العبقري">
     <div class="abq-contact-premium-icon" aria-hidden="true">🌿</div>
-    <h3>مركز العبقري</h3>
-    <p>للتدريب والاستشارات والطب التكميلي والتنمية البشرية</p>
+    <div class="abq-contact-logo-wrap" aria-hidden="true">
+      <img src="https://img2link.online/api/file/1784959287743-580091929.png" alt="" class="abq-contact-logo">
+    </div>
+    <div class="abq-contact-title-line">
+      <h3>مركز العبقري</h3>
+      <p>للتدريب والاستشارات والطب التكميلي والتنمية البشرية</p>
+    </div>
+  </div>
     <div class="abq-contact-license">✓ ترخيص رسمي وموثق — س.ت. 92527</div>
   </div>
   <div class="abq-contact-doctor-card">
@@ -7382,8 +7463,7 @@ body{
     </div>
   </div>
   <div class="abq-contact-linktree-card">
-    <h4>🔗 الحسابات والمنصات الرسمية</h4>
-    <p>منصة شجرة الحسابات الرقمية الرسمية<br>للدكتور أحمد رسّه</p>
+    <h4>🔗 الحسابات والمنصات الرسمية <span class="abq-social-tree-inline">منصة شجرة الحسابات الرقمية الرسمية للدكتور أحمد رسّه</span></h4>
     <a href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer">🔗 منصة الحسابات الرسمية ↗</a>
   </div>
   <div class="abq-contact-info-grid">
