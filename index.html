@@ -479,13 +479,16 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     box-shadow:0 5px 14px -9px rgba(30,64,175,.5) !important;
 }
 <style id="abq-contact-brand-pc-mobile-20261006">
-/* شعار المركز بجوار 🌿 — PC + Mobile، وتوحيد سطر العنوان على PC فقط */
+/* شعار المركز → 🌿 → اسم المركز: سطر واحد، تمركز أفقي ورأسي داخل الإطار */
 .abq-contact-brand-row{
+  width:100%;
   display:flex;
   align-items:center;
   justify-content:center;
+  flex-wrap:nowrap !important;
   gap:.55rem;
-  flex-wrap:wrap;
+  min-width:0;
+  text-align:center;
 }
 .abq-contact-logo-wrap{
   width:3.15rem;
@@ -503,52 +506,79 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
   object-fit:contain;
   display:block;
 }
+.abq-contact-premium-icon{
+  flex:0 0 auto;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
 .abq-contact-title-line{
+  min-width:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:.45rem;
-  flex-wrap:wrap;
+  flex:0 1 auto;
 }
-.abq-contact-title-line h3,
-.abq-contact-title-line p{
+.abq-contact-title-line h3{
   margin:0;
+  white-space:nowrap;
+  line-height:1.45;
 }
-.abq-social-tree-inline{
+.abq-social-single-line{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:nowrap !important;
+  gap:.45rem;
+  min-width:0;
+  white-space:nowrap;
+  text-align:center;
+  line-height:1.8;
+}
+.abq-social-single-line .abq-social-tree-inline{
   display:inline;
+  margin:0;
   font-weight:900;
-  margin-inline-start:.35rem;
 }
-@media (min-width:901px){
-  .abq-contact-brand-row{
-    flex-wrap:nowrap;
-  }
-  .abq-contact-title-line{
-    flex-wrap:nowrap;
-    white-space:nowrap;
-  }
-  #contact .abq-contact-linktree-card h4{
-    white-space:nowrap;
-  }
+.abq-social-single-line a{
+  flex:0 0 auto;
+  white-space:nowrap;
 }
 @media (max-width:768px){
   .abq-contact-brand-row{
-    gap:.4rem;
+    gap:.35rem;
   }
   .abq-contact-logo-wrap{
-    width:2.8rem;
-    height:2.8rem;
-    flex-basis:2.8rem;
+    width:2.55rem;
+    height:2.55rem;
+    flex-basis:2.55rem;
   }
-  .abq-contact-title-line{
-    width:100%;
-    flex-direction:column;
-    gap:.15rem;
+  .abq-contact-title-line h3{
+    font-size:clamp(.78rem,3.1vw,1rem);
+    white-space:nowrap;
   }
-  .abq-social-tree-inline{
-    display:block;
-    margin-inline-start:0;
-    margin-top:.15rem;
+  .abq-social-single-line{
+    gap:.25rem;
+    font-size:clamp(.62rem,2.7vw,.85rem);
+  }
+}
+@media (max-width:420px){
+  .abq-contact-brand-row{
+    gap:.25rem;
+  }
+  .abq-contact-logo-wrap{
+    width:2.2rem;
+    height:2.2rem;
+    flex-basis:2.2rem;
+  }
+  .abq-contact-title-line h3{
+    font-size:clamp(.68rem,2.9vw,.9rem);
+  }
+  .abq-social-single-line{
+    font-size:clamp(.56rem,2.45vw,.78rem);
+    gap:.18rem;
   }
 }
 </style>
@@ -7444,13 +7474,12 @@ body{
 <div class="abq-contact-premium-card pulse-card">
   <div class="abq-contact-premium-head">
     <div class="abq-contact-brand-row" aria-label="مركز العبقري">
-    <div class="abq-contact-premium-icon" aria-hidden="true">🌿</div>
     <div class="abq-contact-logo-wrap" aria-hidden="true">
       <img src="https://img2link.online/api/file/1784959287743-580091929.png" alt="" class="abq-contact-logo">
     </div>
+    <div class="abq-contact-premium-icon" aria-hidden="true">🌿</div>
     <div class="abq-contact-title-line">
-      <h3>مركز العبقري</h3>
-      <p>للتدريب والاستشارات والطب التكميلي والتنمية البشرية</p>
+      <h3>مركز العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشرية</h3>
     </div>
   </div>
     <div class="abq-contact-license">✓ ترخيص رسمي وموثق — س.ت. 92527</div>
@@ -7463,8 +7492,11 @@ body{
     </div>
   </div>
   <div class="abq-contact-linktree-card">
-    <h4>🔗 الحسابات والمنصات الرسمية <span class="abq-social-tree-inline">منصة شجرة الحسابات الرقمية الرسمية للدكتور أحمد رسّه</span></h4>
-    <a href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer">🔗 منصة الحسابات الرسمية ↗</a>
+    <div class="abq-social-single-line">
+      <span>🔗 الحسابات والمنصات الرسمية</span>
+      <span class="abq-social-tree-inline">منصة شجرة الحسابات الرقمية الرسمية للدكتور أحمد رسّه</span>
+      <a href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer">🔗 منصة الحسابات الرسمية ↗</a>
+    </div>
   </div>
   <div class="abq-contact-info-grid">
     <div class="abq-contact-info-card">
