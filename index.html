@@ -4612,6 +4612,69 @@ body{
   }
 }
 </style>
+<style id="abq-center-brand-card-master-final-20261006">
+/* مصدر بصري واحد لعبارة هوية المركز — مطابق للرئيسية على PC وMobile */
+.abq-center-brand-card-master{
+  position:relative!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:1rem 1.2rem!important;
+  text-align:center!important;
+  overflow:hidden!important;
+  border:1px solid #2563eb!important;
+  border-right:5px solid #d4af37!important;
+  border-radius:1rem!important;
+  background:linear-gradient(135deg,#0f3b82 0%,#1d4ed8 55%,#0f766e 100%)!important;
+  box-shadow:0 10px 24px -18px rgba(15,59,130,.75)!important;
+}
+.abq-center-brand-card-master::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 auto 0!important;
+  height:3px!important;
+  background:linear-gradient(90deg,#1d4ed8,#38bdf8,#d4af37)!important;
+}
+.abq-center-brand-card-master h2{
+  position:relative!important;
+  z-index:1!important;
+  margin:0!important;
+  color:#fff!important;
+  font-size:clamp(1rem,1.65vw,1.35rem)!important;
+  line-height:1.45!important;
+  font-weight:900!important;
+  letter-spacing:-.01em!important;
+  text-shadow:0 2px 4px rgba(0,0,0,.35)!important;
+  white-space:normal!important;
+}
+.abq-center-brand-card-master h2 span{font-weight:900!important;}
+.abq-center-brand-card-master p{
+  position:relative!important;
+  z-index:1!important;
+  margin:.25rem 0 0!important;
+  color:#fff!important;
+  font-size:clamp(.72rem,1.15vw,.9rem)!important;
+  line-height:1.6!important;
+  font-weight:900!important;
+  text-shadow:0 2px 4px rgba(0,0,0,.35)!important;
+}
+.abq-center-brand-card-master p span{color:#fde68a!important;font-weight:900!important;}
+@media(max-width:768px){
+  .abq-center-brand-card-master{
+    padding:.78rem .85rem!important;
+    border-right-width:4px!important;
+    border-radius:.9rem!important;
+    box-shadow:0 8px 20px -16px rgba(15,59,130,.7)!important;
+  }
+  .abq-center-brand-card-master h2{font-size:.96rem!important;line-height:1.55!important;}
+  .abq-center-brand-card-master p{margin-top:.15rem!important;font-size:.72rem!important;line-height:1.6!important;}
+}
+@media(max-width:420px){
+  .abq-center-brand-card-master{padding:.7rem!important;}
+  .abq-center-brand-card-master h2{font-size:.9rem!important;}
+  .abq-center-brand-card-master p{font-size:.68rem!important;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -5065,7 +5128,7 @@ body{
   </section>
 
 <section class="space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card abq-center-brand-card-master">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والاستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت. 92527)</span></p>
             </div>
@@ -6743,7 +6806,7 @@ body{
 <section id="contact" class="tab-content">
     <div class="w-full max-w-7xl mx-auto">
 <section class="space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card abq-center-brand-card-master">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والاستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت. 92527)</span></p>
             </div>
@@ -7595,7 +7658,7 @@ body{
 
         <!-- التبويب الخامس: قنوات التواصل والمركز -->
         <section id="tab-center" class="tab-content azkar-inner-tab hidden space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card abq-center-brand-card-master">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والاستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت. 92527)</span></p>
             </div>
