@@ -4476,6 +4476,77 @@ body{
 }
 </style>
 
+
+<style id="abq-center-brand-card-responsive-20261006">
+/* ===== بطاقة هوية مركز العبقري — نفس المعالجة البصرية الحديثة في الرئيسية، PC + Mobile ===== */
+.abq-center-brand-card{
+  position:relative !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  padding:1rem 1.2rem !important;
+  margin:0 !important;
+  border:1px solid #2563eb !important;
+  border-right:5px solid #d4af37 !important;
+  border-radius:1rem !important;
+  background:linear-gradient(135deg,#0f3b82 0%,#1d4ed8 55%,#0f766e 100%) !important;
+  box-shadow:0 10px 24px -18px rgba(15,59,130,.75) !important;
+  text-align:center !important;
+  overflow:hidden !important;
+}
+.abq-center-brand-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 0 auto 0 !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#1d4ed8,#38bdf8,#d4af37) !important;
+}
+.abq-center-brand-card h2{
+  position:relative !important;
+  z-index:1 !important;
+  margin:0 !important;
+  font-size:clamp(1rem,1.65vw,1.35rem) !important;
+  line-height:1.45 !important;
+  font-weight:900 !important;
+  color:#fff !important;
+  letter-spacing:-.01em !important;
+  text-shadow:0 2px 4px rgba(0,0,0,.35) !important;
+}
+.abq-center-brand-card h2 span{font-weight:900 !important;}
+.abq-center-brand-card p{
+  position:relative !important;
+  z-index:1 !important;
+  margin:.25rem 0 0 !important;
+  font-size:clamp(.72rem,1.15vw,.9rem) !important;
+  line-height:1.6 !important;
+  font-weight:900 !important;
+  color:#fff !important;
+  text-shadow:0 2px 4px rgba(0,0,0,.35) !important;
+}
+.abq-center-brand-card p span{color:#fde68a !important;font-weight:900 !important;}
+@media(max-width:768px){
+  .abq-center-brand-card{
+    padding:.78rem .85rem !important;
+    border-right-width:4px !important;
+    border-radius:.9rem !important;
+    box-shadow:0 8px 20px -16px rgba(15,59,130,.7) !important;
+  }
+  .abq-center-brand-card h2{
+    font-size:.96rem !important;
+    line-height:1.55 !important;
+    white-space:normal !important;
+  }
+  .abq-center-brand-card p{
+    margin-top:.15rem !important;
+    font-size:.72rem !important;
+    line-height:1.6 !important;
+  }
+}
+@media(max-width:420px){
+  .abq-center-brand-card{padding:.7rem .7rem !important;}
+  .abq-center-brand-card h2{font-size:.9rem !important;}
+  .abq-center-brand-card p{font-size:.68rem !important;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -4929,7 +5000,7 @@ body{
   </section>
 
 <section class="space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والإستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت.92527)</span></p>
             </div>
@@ -6608,7 +6679,7 @@ body{
 <section id="contact" class="tab-content">
     <div class="w-full max-w-7xl mx-auto">
 <section class="space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والإستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت.92527)</span></p>
             </div>
@@ -7461,7 +7532,7 @@ body{
 
         <!-- التبويب الخامس: قنوات التواصل والمركز -->
         <section id="tab-center" class="tab-content azkar-inner-tab hidden space-y-0 abq-center-v2">
-            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md">
+            <div class="bg-gradient-to-b from-[#0f3b2e] via-[#14532d] to-[#166534] text-white p-5 rounded-2xl border border-emerald-400/50 text-center shadow-md abq-center-brand-card">
                 <h2 class="text-base md:text-lg font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,.9)] tracking-tight">مركز <span class="text-amber-200">العبقري</span> للتدريب <span class="text-emerald-200">والإستشارات</span></h2>
                 <p class="text-xs md:text-sm text-white font-black mt-1 drop-shadow-[0_2px_3px_rgba(0,0,0,.9)]">ترخيص رسمي وموثق <span class="text-amber-200 font-black">(س.ت.92527)</span></p>
             </div>
