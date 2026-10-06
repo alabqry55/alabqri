@@ -1,7 +1,218 @@
 (function(){
 "use strict";
-if(window.__ABQ_QURAN_PLAYER_BUNDLED__)return;window.__ABQ_QURAN_PLAYER_BUNDLED__=true;
-var b64="KGZ1bmN0aW9uKCl7CiJ1c2Ugc3RyaWN0IjsKaWYod2luZG93Ll9fQUJRX1FVUkFOX1BMQVlFUl9fKSByZXR1cm47IHdpbmRvdy5fX0FCUV9RVVJBTl9QTEFZRVJfXz10cnVlOwpjb25zdCBBUEk9Ii9hcGkvcXVyYW4iOwpjb25zdCBlc2M9cz0+U3RyaW5nKHM/PyIiKS5yZXBsYWNlKC9bJjw+IiddL2csYz0+KHsiJiI6IiZhbXA7IiwiPCI6IiZsdDsiLCI+IjoiJmd0OyIsJyInOiImcXVvdDsiLCInIjoiJiMwMzk7In1bY10pKTsKY29uc3Qgc3RhdGU9e3JlY2l0ZXJzOltdLHN1cmFoczpbXSx0ZXh0czpudWxsLGN1cnJlbnQ6MCxxdWV1ZTpbXSxwbGF5aW5nOmZhbHNlLHNlZ21lbnRFbmQ6bnVsbCxzb3VyY2VNZXRhOm51bGwscmVwZWF0OmZhbHNlLGZhdm9yaXRlczpbXX07CmNvbnN0IFBSRUZfS0VZPSJhYnFfcXVyYW5fcGxheWVyX3YxIjsKZnVuY3Rpb24gbG9hZFByZWZzKCl7dHJ5e2NvbnN0IHA9SlNPTi5wYXJzZShsb2NhbFN0b3JhZ2UuZ2V0SXRlbShQUkVGX0tFWSl8fCJ7fSIpO3N0YXRlLmZhdm9yaXRlcz1BcnJheS5pc0FycmF5KHAuZmF2b3JpdGVzKT9wLmZhdm9yaXRlczpbXTtyZXR1cm4gcH1jYXRjaChlKXtyZXR1cm4ge319fQpmdW5jdGlvbiBzYXZlUHJlZnMoKXt0cnl7bG9jYWxTdG9yYWdlLnNldEl0ZW0oUFJFRl9LRVksSlNPTi5zdHJpbmdpZnkoe3JlY2l0ZXI6JCgiYWJxLXFwLXJlY2l0ZXIiKT8udmFsdWV8fCIiLHJlYWQ6JCgiYWJxLXFwLXJlYWQiKT8udmFsdWV8fCIiLHN1cmFoOiQoImFicS1xcC1zdXJhaCIpPy52YWx1ZXx8IiIsZnJvbTokKCJhYnEtcXAtZnJvbSIpPy52YWx1ZXx8IjEiLHRvOiQoImFicS1xcC10byIpPy52YWx1ZXx8IjEiLHJlcGVhdDohIXN0YXRlLnJlcGVhdCxmYXZvcml0ZXM6c3RhdGUuZmF2b3JpdGVzfSkpfWNhdGNoKGUpe319CmZ1bmN0aW9uIGlzRmF2b3JpdGUoaWQpe3JldHVybiBzdGF0ZS5mYXZvcml0ZXMuaW5jbHVkZXMoaWQpfQpmdW5jdGlvbiB1cGRhdGVGYXZvcml0ZUJ1dHRvbigpe2NvbnN0IGI9JCgiYWJxLXFwLWZhdm9yaXRlIikscj1zZWxlY3RlZFJlYWQoKTtpZighYnx8IXIpcmV0dXJuO2IudGV4dENvbnRlbnQ9aXNGYXZvcml0ZShyLmlkKT8i4piFINmB2Yog2KfZhNmF2YHYttmE2KkiOiLimIYg2YXZgdi22YTYqSI7Yi5zZXRBdHRyaWJ1dGUoImFyaWEtcHJlc3NlZCIsU3RyaW5nKGlzRmF2b3JpdGUoci5pZCkpKX0KY29uc3QgJD1pZD0+ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoaWQpOwpmdW5jdGlvbiBpbmplY3QoKXsKIGNvbnN0IHRhcmdldD0kKCJhemthciIpfHwkKCJhemthci1hcHAiKTsgaWYoIXRhcmdldCl7c2V0VGltZW91dChpbmplY3QsMzAwKTtyZXR1cm4gZmFsc2U7fQogaWYoJCgiYWJxLXF1cmFuLXBsYXllciIpKSByZXR1cm4gdHJ1ZTsKIGNvbnN0IHdyYXA9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgiZGl2Iik7IHdyYXAuaWQ9ImFicS1xdXJhbi1wbGF5ZXIiOyB3cmFwLmRpcj0icnRsIjsKIHdyYXAuaW5uZXJIVE1MPWAKIDxzdHlsZSBpZD0iYWJxLXF1cmFuLXBsYXllci1zdHlsZSI+CiAjYWJxLXF1cmFuLXBsYXllcntmb250LWZhbWlseTpDYWlybyxzYW5zLXNlcmlmO21hcmdpbjoxcmVtIGF1dG87bWF4LXdpZHRoOjk4MHB4fQogI2FicS1xdXJhbi1wbGF5ZXIgKntib3gtc2l6aW5nOmJvcmRlci1ib3h9CiAuYWJxLXFwLWNhcmR7YmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoMTQ1ZGVnLCNmZmZkZjcsI2Y4ZmFmYyk7Ym9yZGVyOjJweCBzb2xpZCAjYmZkYmZlO2JvcmRlci1yYWRpdXM6MThweDtwYWRkaW5nOjE4cHg7Ym94LXNoYWRvdzowIDE0cHggMzRweCAtMjRweCByZ2JhKDE1LDIzLDQyLC40NSl9CiAuYWJxLXFwLXRpdGxle3RleHQtYWxpZ246Y2VudGVyO2ZvbnQtc2l6ZToxLjE1cmVtO2ZvbnQtd2VpZ2h0OjkwMDtjb2xvcjojMWUzYThhO21hcmdpbjowIDAgMTRweH0KIC5hYnEtcXAtZ3JpZHtkaXNwbGF5OmdyaWQ7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOnJlcGVhdCgyLG1pbm1heCgwLDFmcikpO2dhcDoxMHB4fQogLmFicS1xcC1maWVsZCBsYWJlbHtkaXNwbGF5OmJsb2NrO2ZvbnQtc2l6ZTouNzhyZW07Zm9udC13ZWlnaHQ6ODAwO2NvbG9yOiMzMzQxNTU7bWFyZ2luOjAgMCA1cHh9CiAuYWJxLXFwLWZpZWxkIHNlbGVjdHt3aWR0aDoxMDAlO2JvcmRlcjoxcHggc29saWQgI2NiZDVlMTtib3JkZXItcmFkaXVzOjEwcHg7cGFkZGluZzouNjVyZW0gLjdyZW07YmFja2dyb3VuZDojZmZmO2NvbG9yOiMwZjE3MmE7Zm9udC1mYW1pbHk6aW5oZXJpdDtmb250LXdlaWdodDo3MDB9CiAuYWJxLXFwLWF5YWhze2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyIDFmcjtnYXA6OHB4fQogLmFicS1xcC1jb250cm9sc3tkaXNwbGF5OmZsZXg7ZmxleC13cmFwOndyYXA7anVzdGlmeS1jb250ZW50OmNlbnRlcjtnYXA6N3B4O21hcmdpbjoxNHB4IDAgMTBweH0KIC5hYnEtcXAtYnRue2JvcmRlcjoxcHggc29saWQgIzkzYzVmZDtiYWNrZ3JvdW5kOiNlZmY2ZmY7Y29sb3I6IzFlM2E4YTtib3JkZXItcmFkaXVzOjk5OXB4O3BhZGRpbmc6LjU1cmVtIC44cmVtO2ZvbnQtZmFtaWx5OmluaGVyaXQ7Zm9udC13ZWlnaHQ6OTAwO2N1cnNvcjpwb2ludGVyfQogLmFicS1xcC1idG4ucHJpbWFyeXtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMzVkZWcsIzI1NjNlYiwjMGVhNWU5KTtjb2xvcjojZmZmO2JvcmRlci1jb2xvcjojMjU2M2VifS5hYnEtcXAtYnRuLnByaW1hcnkud2FpdGluZ3tiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMzVkZWcsI2Y1OWUwYiwjZmJiZjI0KTtjb2xvcjojMTcyNTU0O2JvcmRlci1jb2xvcjojZjU5ZTBiO2JveC1zaGFkb3c6MCAwIDAgM3B4IHJnYmEoMjQ1LDE1OCwxMSwuMTQpLDAgNXB4IDE2cHggLThweCByZ2JhKDI0NSwxNTgsMTEsLjgpO2FuaW1hdGlvbjphYnFRdXJhbldhaXRpbmcgMS40cyBlYXNlLWluLW91dCBpbmZpbml0ZX1Aa2V5ZnJhbWVzIGFicVF1cmFuV2FpdGluZ3swJSwxMDAle3RyYW5zZm9ybTpzY2FsZSgxKTtvcGFjaXR5OjF9NTAle3RyYW5zZm9ybTpzY2FsZSgxLjAyNSk7b3BhY2l0eTouODJ9fQogLmFicS1xcC1idG46ZGlzYWJsZWR7b3BhY2l0eTouNDU7Y3Vyc29yOm5vdC1hbGxvd2VkfQogLmFicS1xcC1wcm9ncmVzc3t3aWR0aDoxMDAlO2FjY2VudC1jb2xvcjojMjU2M2VifQogLmFicS1xcC1zdGF0dXN7dGV4dC1hbGlnbjpjZW50ZXI7Zm9udC1zaXplOi43OHJlbTtjb2xvcjojNDc1NTY5O21pbi1oZWlnaHQ6MS4zcmVtfQogLmFicS1xcC12ZXJzZS1oZWFke3RleHQtYWxpZ246Y2VudGVyO2ZvbnQtc2l6ZTouNzVyZW07Zm9udC13ZWlnaHQ6OTAwO2NvbG9yOiMxZDRlZDg7bWFyZ2luLXRvcDoxMnB4O21hcmdpbi1ib3R0b206NnB4fS5hYnEtcXAtdmVyc2V7bWFyZ2luLXRvcDowO2JhY2tncm91bmQ6I2ZmZjtib3JkZXI6MXB4IHNvbGlkICNlMmU4ZjA7Ym9yZGVyLXJhZGl1czoxNHB4O3BhZGRpbmc6MTVweDttaW4taGVpZ2h0OjkwcHg7dGV4dC1hbGlnbjpjZW50ZXI7Zm9udC1mYW1pbHk6QW1pcmksc2VyaWY7Zm9udC1zaXplOjEuNDVyZW07bGluZS1oZWlnaHQ6Mi4xNTtjb2xvcjojMWUyOTNifQogLmFicS1xcC12ZXJzZS5hY3RpdmV7Ym9yZGVyLWNvbG9yOiMyNTYzZWI7Ym94LXNoYWRvdzowIDAgMCAzcHggcmdiYSgzNyw5OSwyMzUsLjEpfQogLmFicS1xcC1tZXRhe3RleHQtYWxpZ246Y2VudGVyO21hcmdpbi10b3A6OHB4O2ZvbnQtc2l6ZTouNzJyZW07Y29sb3I6IzY0NzQ4Yn0KIEBtZWRpYShtYXgtd2lkdGg6NjQwcHgpey5hYnEtcXAtZ3JpZHtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyfS5hYnEtcXAtY2FyZHtwYWRkaW5nOjEycHh9LmFicS1xcC12ZXJzZXtmb250LXNpemU6MS4zcmVtO2xpbmUtaGVpZ2h0OjJ9LmFicS1xcC10aXRsZXtmb250LXNpemU6MXJlbX19CiA8L3N0eWxlPgogPGRpdiBjbGFzcz0iYWJxLXFwLWNhcmQiPgogIDxoMyBjbGFzcz0iYWJxLXFwLXRpdGxlIj7wn46nINin2K7YqtixINin2YTZgtin2LHYpiDZiNin2YTYs9mI2LHYqSDigJQg2YjYp9mE2KLZitipINiq2Y/Yudix2LYg2KrZhNmC2KfYptmK2YvYpzwvaDM+CiAgPGRpdiBjbGFzcz0iYWJxLXFwLWdyaWQiPgogICA8ZGl2IGNsYXNzPSJhYnEtcXAtZmllbGQiPjxsYWJlbCBmb3I9ImFicS1xcC1yZWNpdGVyLXNlYXJjaCI+8J+UjiDYqNit2Ksg2LnZhiDZgtin2LHYpjwvbGFiZWw+PGlucHV0IGlkPSJhYnEtcXAtcmVjaXRlci1zZWFyY2giIHR5cGU9InNlYXJjaCIgcGxhY2Vob2xkZXI9Itin2YPYqtioINin2LPZhSDYp9mE2YLYp9ix2KYuLi4iIGF1dG9jb21wbGV0ZT0ib2ZmIiBzdHlsZT0id2lkdGg6MTAwJTtib3JkZXI6MXB4IHNvbGlkICNjYmQ1ZTE7Ym9yZGVyLXJhZGl1czoxMHB4O3BhZGRpbmc6LjY1cmVtIC43cmVtO2JhY2tncm91bmQ6I2ZmZjtjb2xvcjojMGYxNzJhO2ZvbnQtZmFtaWx5OmluaGVyaXQ7Zm9udC13ZWlnaHQ6NzAwO21hcmdpbi1ib3R0b206NnB4Ij48bGFiZWwgZm9yPSJhYnEtcXAtcmVjaXRlciI+8J+OmSDYp9mE2YLYp9ix2KY8L2xhYmVsPjxzZWxlY3QgaWQ9ImFicS1xcC1yZWNpdGVyIj48L3NlbGVjdD48L2Rpdj4KICAgPGRpdiBjbGFzcz0iYWJxLXFwLWZpZWxkIj48bGFiZWwgZm9yPSJhYnEtcXAtc3VyYWgiPvCfk5Yg2KfZhNiz2YjYsdipPC9sYWJlbD48c2VsZWN0IGlkPSJhYnEtcXAtc3VyYWgiPjwvc2VsZWN0PjwvZGl2PgogICA8ZGl2IGNsYXNzPSJhYnEtcXAtZmllbGQiPjxsYWJlbCBmb3I9ImFicS1xcC1yZWFkIj7wn5OcINin2YTYsdmI2KfZitipIC8g2KfZhNmF2LXYrdmBPC9sYWJlbD48c2VsZWN0IGlkPSJhYnEtcXAtcmVhZCI+PC9zZWxlY3Q+PC9kaXY+CiAgIDxkaXYgY2xhc3M9ImFicS1xcC1maWVsZCI+PGxhYmVsPvCflKIg2YbYt9in2YIg2KfZhNii2YrYp9iqIDxzcGFuIHN0eWxlPSJmb250LXdlaWdodDo3MDA7Y29sb3I6IzY0NzQ4YiI+ICjYp9iu2KrZitin2LHZiik8L3NwYW4+PC9sYWJlbD48ZGl2IGNsYXNzPSJhYnEtcXAtYXlhaHMiPjxzZWxlY3QgaWQ9ImFicS1xcC1mcm9tIiBhcmlhLWxhYmVsPSLZhdmGINin2YTYotmK2Kkg4oCUINin2K7YqtmK2KfYsdmKIj48L3NlbGVjdD48c2VsZWN0IGlkPSJhYnEtcXAtdG8iIGFyaWEtbGFiZWw9Itil2YTZiSDYp9mE2KLZitipIOKAlCDYp9iu2KrZitin2LHZiiI+PC9zZWxlY3Q+PC9kaXY+PC9kaXY+CiAgPC9kaXY+CiAgPGRpdiBjbGFzcz0iYWJxLXFwLWNvbnRyb2xzIj4KICAgPGJ1dHRvbiBjbGFzcz0iYWJxLXFwLWJ0biBwcmltYXJ5IiBpZD0iYWJxLXFwLXBsYXkiPuKWtiDYqti02LrZitmEPC9idXR0b24+CiAgIDxidXR0b24gY2xhc3M9ImFicS1xcC1idG4iIGlkPSJhYnEtcXAtcHJldiI+4o+uINin2YTYs9in2KjZgtipPC9idXR0b24+CiAgIDxidXR0b24gY2xhc3M9ImFicS1xcC1idG4iIGlkPSJhYnEtcXAtbmV4dCI+2KfZhNiq2KfZhNmK2Kkg4o+tPC9idXR0b24+CiAgIDxidXR0b24gY2xhc3M9ImFicS1xcC1idG4iIGlkPSJhYnEtcXAtcmVwZWF0Ij7wn5SBINiq2YPYsdin2LE8L2J1dHRvbj48YnV0dG9uIGNsYXNzPSJhYnEtcXAtYnRuIiBpZD0iYWJxLXFwLWZhdm9yaXRlIj7imIYg2YXZgdi22YTYqTwvYnV0dG9uPgogIDwvZGl2PgogIDxpbnB1dCBpZD0iYWJxLXFwLXByb2dyZXNzIiBjbGFzcz0iYWJxLXFwLXByb2dyZXNzIiB0eXBlPSJyYW5nZSIgbWluPSIwIiBtYXg9IjEwMCIgdmFsdWU9IjAiIHN0ZXA9Ii4xIiBhcmlhLWxhYmVsPSLZhdmI2LbYuSDYp9mE2KrZhNin2YjYqSI+CiAgPGRpdiBpZD0iYWJxLXFwLXN0YXR1cyIgY2xhc3M9ImFicS1xcC1zdGF0dXMiPtis2KfYsdmKINiq2K3ZhdmK2YQg2KfZhNmC2LHYp9ihINmI2KfZhNiz2YjYseKApjwvZGl2PgogIDxkaXYgaWQ9ImFicS1xcC12ZXJzZS1oZWFkIiBjbGFzcz0iYWJxLXFwLXZlcnNlLWhlYWQiPtin2YTYotmK2Kkg2KfZhNmF2YLYsdmI2KHYqSDYp9mE2KLZhjwvZGl2PjxkaXYgaWQ9ImFicS1xcC12ZXJzZSIgY2xhc3M9ImFicS1xcC12ZXJzZSI+2KfYrtiq2LEg2KfZhNmC2KfYsdimINmI2KfZhNiz2YjYsdipINmE2LnYsdi2INin2YTYotmK2Kkg2KfZhNmF2YLYsdmI2KHYqSDYqtmE2YLYp9im2YrZi9inLjwvZGl2PgogIDxkaXYgaWQ9ImFicS1xcC1tZXRhIiBjbGFzcz0iYWJxLXFwLW1ldGEiPtin2YTZhdi02LrZhCDZitiz2KrYrtiv2YUg2YXYtdin2K/YsSDYrtin2LHYrNmK2Kkg2YXZiNir2YjZgtipINmI2YTYpyDZitiu2LLZhiDZhdmE2YHYp9iqINin2YTYqtmE2KfZiNipINiv2KfYrtmEINin2YTZhdmG2LXYqS48L2Rpdj4KICA8YXVkaW8gaWQ9ImFicS1xcC1hdWRpbyIgcHJlbG9hZD0ibWV0YWRhdGEiPjwvYXVkaW8+CiA8L2Rpdj5gOwogdGFyZ2V0Lmluc2VydEJlZm9yZSh3cmFwLHRhcmdldC5maXJzdENoaWxkKTsKIHJldHVybiB0cnVlOwp9CmFzeW5jIGZ1bmN0aW9uIGdldEpTT04odXJsKXtjb25zdCByPWF3YWl0IGZldGNoKHVybCx7aGVhZGVyczp7YWNjZXB0OiJhcHBsaWNhdGlvbi9qc29uIn19KTtpZighci5vayl0aHJvdyBuZXcgRXJyb3IoIkhUVFAiKTtyZXR1cm4gci5qc29uKCk7fQpmdW5jdGlvbiBmaWxsKGVsLGl0ZW1zLHBsYWNlaG9sZGVyKXtlbC5pbm5lckhUTUw9IiI7IGlmKHBsYWNlaG9sZGVyKXtjb25zdCBvPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoIm9wdGlvbiIpO28udmFsdWU9IiI7by50ZXh0Q29udGVudD1wbGFjZWhvbGRlcjtlbC5hcHBlbmRDaGlsZChvKX0gaXRlbXMuZm9yRWFjaCh4PT57Y29uc3Qgbz1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJvcHRpb24iKTtvLnZhbHVlPXgudmFsdWU7by50ZXh0Q29udGVudD14LmxhYmVsO2VsLmFwcGVuZENoaWxkKG8pfSk7fQpmdW5jdGlvbiBzZWxlY3RlZFJlY2l0ZXIoKXtjb25zdCB2PSQoImFicS1xcC1yZWNpdGVyIikudmFsdWU7cmV0dXJuIHN0YXRlLnJlY2l0ZXJzLmZpbmQoeD0+eC5uYW1lPT09dil8fHN0YXRlLnJlY2l0ZXJzLmZpbmQoeD0+U3RyaW5nKHguaWQpPT09U3RyaW5nKHYpKTt9CmZ1bmN0aW9uIHNlbGVjdGVkUmVhZCgpe2NvbnN0IHI9c2VsZWN0ZWRSZWNpdGVyKCk7IGlmKCFyKXJldHVybiBudWxsOyByZXR1cm4gci5yZWFkcz8uZmluZCh4PT54LmlkPT09JCgiYWJxLXFwLXJlYWQiKS52YWx1ZSl8fHI7fQpmdW5jdGlvbiBwb3B1bGF0ZVJlY2l0ZXJzKGZpbHRlclRleHQ9IiIpeyAKIGNvbnN0IGdyb3Vwcz17fTsKIGNvbnN0IHE9U3RyaW5nKGZpbHRlclRleHR8fCIiKS50cmltKCkudG9Mb2NhbGVMb3dlckNhc2UoImFyIik7CiBzdGF0ZS5yZWNpdGVycy5mb3JFYWNoKHI9Pntjb25zdCBrZXk9ci5uYW1lfHwi2YLYp9ix2KYiO2lmKCFxfHxrZXkudG9Mb2NhbGVMb3dlckNhc2UoImFyIikuaW5jbHVkZXMocSkpKGdyb3Vwc1trZXldfHwoZ3JvdXBzW2tleV09W10pKS5wdXNoKHIpfSk7CiBjb25zdCBpdGVtcz1PYmplY3Qua2V5cyhncm91cHMpLnNvcnQoKGEsYik9PmEubG9jYWxlQ29tcGFyZShiLCJhciIpKS5tYXAobmFtZT0+KHt2YWx1ZTpncm91cHNbbmFtZV1bMF0ubmFtZSxsYWJlbDpuYW1lfSkpOwogZmlsbCgkKCJhYnEtcXAtcmVjaXRlciIpLGl0ZW1zLCLYp9iu2KrYsSDYp9mE2YLYp9ix2KYiKTsKICQoImFicS1xcC1yZWNpdGVyIikub25jaGFuZ2U9cG9wdWxhdGVSZWFkczsKfQpmdW5jdGlvbiBwb3B1bGF0ZVJlYWRzKCl7CiBjb25zdCBuYW1lPSQoImFicS1xcC1yZWNpdGVyIikudmFsdWU7CiBjb25zdCByZWFkcz1zdGF0ZS5yZWNpdGVycy5maWx0ZXIoeD0+eC5uYW1lPT09bmFtZSk7CiBjb25zdCBtZXJnZWQ9W107CiByZWFkcy5mb3JFYWNoKHI9Pm1lcmdlZC5wdXNoKHt2YWx1ZTpyLmlkLGxhYmVsOihyLnJlYWROYW1lPyByLnJlYWROYW1lKyIg4oCUICI6IiIpK3Iuc291cmNlKyhyLmV4YWN0QXlhaD8iIOKAoiDYotmK2Kkg2K/ZgtmK2YLYqSI6IiDigKIg2KrYrdmC2YIg2KfZhNii2YrYqSDYudmG2K8g2KfZhNiq2LTYutmK2YQiKX0pKTsKIGZpbGwoJCgiYWJxLXFwLXJlYWQiKSxtZXJnZWQsItin2K7YqtixINin2YTYsdmI2KfZitipIik7CiAkKCJhYnEtcXAtcmVhZCIpLnZhbHVlPW1lcmdlZFswXT8udmFsdWV8fCIiOwogdXBkYXRlQXlhaHMoKTsgbG9hZFRleHQoKTsgdXBkYXRlRmF2b3JpdGVCdXR0b24oKTsgc2F2ZVByZWZzKCk7IHNldFN0YXR1cygi2KrZhSDYp9iu2KrZitin2LEg2KfZhNix2YjYp9mK2KkuIik7Cn0KZnVuY3Rpb24gcG9wdWxhdGVTdXJhaHMoKXsKIGZpbGwoJCgiYWJxLXFwLXN1cmFoIiksc3RhdGUuc3VyYWhzLm1hcChzPT4oe3ZhbHVlOnMuaWQsbGFiZWw6cy5pZCsiIOKAlCAiK3MubmFtZSsiICgiK3MuYXlhaHMrIikifSkpKTsKICQoImFicS1xcC1zdXJhaCIpLmFkZEV2ZW50TGlzdGVuZXIoImNoYW5nZSIsKCk9Pnt1cGRhdGVBeWFocygpO2xvYWRUZXh0KCk7cmVuZGVyVmVyc2UoMSk7c2F2ZVByZWZzKCk7fSk7Cn0KZnVuY3Rpb24gdXBkYXRlQXlhaHMoKXsKIGNvbnN0IHM9c3RhdGUuc3VyYWhzLmZpbmQoeD0+eC5pZD09TnVtYmVyKCQoImFicS1xcC1zdXJhaCIpLnZhbHVlKSk7IGlmKCFzKXJldHVybjsKIGNvbnN0IGl0ZW1zPUFycmF5LmZyb20oe2xlbmd0aDpzLmF5YWhzfSwoXyxpKT0+KHt2YWx1ZTppKzEsbGFiZWw6Itin2YTYotmK2KkgIisoaSsxKX0pKTsKIGZpbGwoJCgiYWJxLXFwLWZyb20iKSxpdGVtcyk7IGZpbGwoJCgiYWJxLXFwLXRvIiksaXRlbXMpOwogJCgiYWJxLXFwLWZyb20iKS52YWx1ZT0iMSI7ICQoImFicS1xcC10byIpLnZhbHVlPVN0cmluZyhzLmF5YWhzKTsKfQphc3luYyBmdW5jdGlvbiBsb2FkVGV4dCgpewogY29uc3Qgc3VyYWg9TnVtYmVyKCQoImFicS1xcC1zdXJhaCIpLnZhbHVlKTsgaWYoIXN1cmFoKXJldHVybjsKIHRyeXtjb25zdCBkYXRhPWF3YWl0IGdldEpTT04oQVBJKyIvdGV4dD9zdXJhaD0iK3N1cmFoKTtzdGF0ZS50ZXh0cz1kYXRhLnN1cmFoLmF5YWhzO3JlbmRlclZlcnNlKDEpO30KIGNhdGNoKGUpeyQoImFicS1xcC12ZXJzZSIpLnRleHRDb250ZW50PSLYqti52LDYsSDYqtit2YXZitmEINmG2LUg2KfZhNii2YrYp9iqINmF2KTZgtiq2YvYpy4iO30KfQpmdW5jdGlvbiByZW5kZXJWZXJzZShuKXsKIGNvbnN0IGE9KHN0YXRlLnRleHRzfHxbXSkuZmluZCh4PT54Lm51bWJlcj09PW4pOyBjb25zdCByPXNlbGVjdGVkUmVhZCgpOyBjb25zdCBzPXN0YXRlLnN1cmFocy5maW5kKHg9PnguaWQ9PU51bWJlcigkKCJhYnEtcXAtc3VyYWgiKS52YWx1ZSkpOwogJCgiYWJxLXFwLXZlcnNlLWhlYWQiKS50ZXh0Q29udGVudD0oYT8i2KfZhNii2YrYqSAiK24rIiDZhdmGICIrKHM/Lm5hbWV8fCLYp9mE2LPZiNix2KkiKToi2KfZhNii2YrYqSDYp9mE2YXZgtix2YjYodipINin2YTYotmGIikrKChyPy5uYW1lKT8iIOKAoiAiK3IubmFtZToiIik7CiAkKCJhYnEtcXAtdmVyc2UiKS50ZXh0Q29udGVudD1hPygi77S/IithLnRleHQrIu+0viIpOiLYp9iu2KrYsSDYp9mE2YLYp9ix2KYg2YjYp9mE2LPZiNix2Kkg2YjYp9mE2KLZitipINmE2LnYsdi2INin2YTYotmK2Kkg2KfZhNmF2YLYsdmI2KHYqS4iOwogJCgiYWJxLXFwLXZlcnNlIikuY2xhc3NMaXN0LmFkZCgiYWN0aXZlIik7Cn0KZnVuY3Rpb24gcXVldWVCdWlsZCgpewogY29uc3QgZnJvbT1OdW1iZXIoJCgiYWJxLXFwLWZyb20iKS52YWx1ZSksdG89TnVtYmVyKCQoImFicS1xcC10byIpLnZhbHVlKTsKIGlmKGZyb20+dG8peyQoImFicS1xcC10byIpLnZhbHVlPVN0cmluZyhmcm9tKTtyZXR1cm4gcXVldWVCdWlsZCgpO30KIHN0YXRlLnF1ZXVlPVtdO2ZvcihsZXQgbj1mcm9tO248PXRvO24rKylzdGF0ZS5xdWV1ZS5wdXNoKG4pO3N0YXRlLmN1cnJlbnQ9MDsKfQphc3luYyBmdW5jdGlvbiBsb2FkQ3VycmVudChhdXRvcGxheSl7CiBjb25zdCByZWFkPXNlbGVjdGVkUmVhZCgpLCBzdXJhaD1OdW1iZXIoJCgiYWJxLXFwLXN1cmFoIikudmFsdWUpLCBheWFoPXN0YXRlLnF1ZXVlW3N0YXRlLmN1cnJlbnRdOwogaWYoIXJlYWR8fCFzdXJhaHx8IWF5YWgpcmV0dXJuOwogY29uc3QgcD1uZXcgVVJMU2VhcmNoUGFyYW1zKHtzb3VyY2U6cmVhZC5zb3VyY2Usc3VyYWg6U3RyaW5nKHN1cmFoKSxheWFoOlN0cmluZyhheWFoKX0pOwogaWYocmVhZC5zb3VyY2U9PT0iYWxxdXJhbmNsb3VkIilwLnNldCgiZWRpdGlvbiIscmVhZC5lZGl0aW9uKTsKIGVsc2Uge3Auc2V0KCJyZWFkIixyZWFkLnJlYWRJZCk7cC5zZXQoInJlY2l0ZXIiLHJlYWQucmVjaXRlcklkKTt9CiBzZXRTdGF0dXMoItis2KfYsdmKINiq2KzZh9mK2LIg2KfZhNii2YrYqSAiK2F5YWgrIuKApiIpOwogdHJ5ewogIGNvbnN0IGRhdGE9YXdhaXQgZ2V0SlNPTihBUEkrIi9hdWRpbz8iK3AudG9TdHJpbmcoKSk7CiAgY29uc3QgYXVkaW89JCgiYWJxLXFwLWF1ZGlvIik7IHN0YXRlLnNvdXJjZU1ldGE9ZGF0YTsgYXVkaW8uc3JjPWRhdGEuYXVkaW9Vcmw7IGF1ZGlvLmxvYWQoKTsKICBjb25zdCBzdGFydD1OdW1iZXIoZGF0YS5zdGFydHx8MCksIGVuZD1kYXRhLmVuZD09bnVsbD9udWxsOk51bWJlcihkYXRhLmVuZCk7CiAgc3RhdGUuc2VnbWVudEVuZD1lbmQ7IHJlbmRlclZlcnNlKGF5YWgpOyAkKCJhYnEtcXAtbWV0YSIpLnRleHRDb250ZW50PSLYp9mE2YLYp9ix2KY6ICIrKHJlYWQubmFtZXx8IiIpKyIg4oCiINin2YTZhdi12K/YsTogIisoZGF0YS5hdHRyaWJ1dGlvbnx8cmVhZC5zb3VyY2UpOwogIGF1ZGlvLm9ubG9hZGVkbWV0YWRhdGE9KCk9PntpZihzdGFydD4wKWF1ZGlvLmN1cnJlbnRUaW1lPU1hdGgubWluKHN0YXJ0LE1hdGgubWF4KDAsYXVkaW8uZHVyYXRpb24tLjA1KSk7aWYoYXV0b3BsYXkpYXVkaW8ucGxheSgpLmNhdGNoKCgpPT57fSk7fTsKICBpZighYXV0b3BsYXkpIHNldFN0YXR1cygi2KzYp9mH2LIg2YTZhNiq2LTYutmK2YQg4oCUINin2YTYotmK2KkgIitheWFoKTsKIH1jYXRjaChlKXsKICBpZihyZWFkLnNvdXJjZT09PSJtcDNxdXJhbiIgJiYgcmVhZC5mYWxsYmFja0VkaXRpb24pewogICB0cnl7CiAgICBjb25zdCBmcD1uZXcgVVJMU2VhcmNoUGFyYW1zKHtzb3VyY2U6ImFscXVyYW5jbG91ZCIsZWRpdGlvbjpyZWFkLmZhbGxiYWNrRWRpdGlvbixzdXJhaDpTdHJpbmcoc3VyYWgpLGF5YWg6U3RyaW5nKGF5YWgpfSk7CiAgICBjb25zdCBmYj1hd2FpdCBnZXRKU09OKEFQSSsiL2F1ZGlvPyIrZnAudG9TdHJpbmcoKSk7CiAgICBjb25zdCBhPSQoImFicS1xcC1hdWRpbyIpOyBzdGF0ZS5zb3VyY2VNZXRhPWZiOyBhLnNyYz1mYi5hdWRpb1VybDsgYS5sb2FkKCk7IHN0YXRlLnNlZ21lbnRFbmQ9bnVsbDsKICAgIGEub25sb2FkZWRtZXRhZGF0YT0oKT0+e2lmKGF1dG9wbGF5KWEucGxheSgpLmNhdGNoKCgpPT57fSk7fTsKICAgICQoImFicS1xcC1tZXRhIikudGV4dENvbnRlbnQ9Itin2YTZgtin2LHYpjogIisocmVhZC5uYW1lfHwiIikrIiDigKIg2KfZhNmF2LXYr9ixINin2YTYp9it2KrZitin2LfZijogQWwgUXVyYW4gQ2xvdWQiOwogICAgc2V0U3RhdHVzKCLYqtmFINin2YTYp9mG2KrZgtin2YQg2KrZhNmC2KfYptmK2YvYpyDYpdmE2Ykg2KfZhNmF2LXYr9ixINin2YTYp9it2KrZitin2LfZii4iKTsgcmV0dXJuOwogICB9Y2F0Y2goaWdub3JlKXt9CiAgfQogIHNldFN0YXR1cyhyZWFkLnNvdXJjZT09PSJtcDNxdXJhbiI/Itiq2LnYsNixINiq2K3Yr9mK2K8g2KfZhNii2YrYqSDZgdmKINmH2LDZhyDYp9mE2LHZiNin2YrYqdibINin2K7YqtixINix2YjYp9mK2Kkg2KrYr9i52YUg2KrZiNmC2YrYqiDYp9mE2KLZitin2KouIjoi2KrYudiw2LEg2KrYrdmF2YrZhCDYp9mE2KrZhNin2YjYqSDZhdik2YLYqtmL2KcuIik7CiB9Cn0KZnVuY3Rpb24gc2V0U3RhdHVzKHQpeyQoImFicS1xcC1zdGF0dXMiKS50ZXh0Q29udGVudD10O30KZnVuY3Rpb24gc2V0UGxheUJ1dHRvbihtb2RlKXtjb25zdCBiPSQoImFicS1xcC1wbGF5Iik7aWYoIWIpcmV0dXJuO2IuY2xhc3NMaXN0LnRvZ2dsZSgid2FpdGluZyIsbW9kZT09PSJ3YWl0aW5nIik7aWYobW9kZT09PSJwbGF5aW5nIil7Yi50ZXh0Q29udGVudD0i4o+4INil2YrZgtin2YEg2KfZhNin2LPYqtmF2KfYuSI7Yi5zZXRBdHRyaWJ1dGUoImFyaWEtbGFiZWwiLCLYpdmK2YLYp9mBINin2YTYp9iz2KrZhdin2Lkg2YXYpNmC2KrZi9inIik7Yi50aXRsZT0i2KXZitmC2KfZgSDYp9mE2KfYs9iq2YXYp9i5INmF2KTZgtiq2YvYpyI7fWVsc2UgaWYobW9kZT09PSJ3YWl0aW5nIil7Yi50ZXh0Q29udGVudD0i4o+zINin2LPYqtim2YbYp9mBINin2YTYp9iz2KrZhdin2LkiO2Iuc2V0QXR0cmlidXRlKCJhcmlhLWxhYmVsIiwi2KfYs9iq2KbZhtin2YEg2KfZhNin2LPYqtmF2KfYuSIpO2IudGl0bGU9Itin2LPYqtim2YbYp9mBINin2YTYp9iz2KrZhdin2Lkg2YXZhiDZhdmI2LbYuSDYp9mE2KrZiNmC2YEiO31lbHNle2IudGV4dENvbnRlbnQ9IuKWtiDYqti02LrZitmEIjtiLnNldEF0dHJpYnV0ZSgiYXJpYS1sYWJlbCIsItiq2LTYutmK2YQg2KfZhNiq2YTYp9mI2KkiKTtiLnRpdGxlPSLYqti02LrZitmEINin2YTYqtmE2KfZiNipIjt9fQpmdW5jdGlvbiBuZXh0KCl7aWYoc3RhdGUuY3VycmVudDxzdGF0ZS5xdWV1ZS5sZW5ndGgtMSl7c3RhdGUuY3VycmVudCsrO2xvYWRDdXJyZW50KHRydWUpfWVsc2V7c3RhdGUucGxheWluZz1mYWxzZTtzZXRQbGF5QnV0dG9uKCJpZGxlIik7c2V0U3RhdHVzKCLYp9mG2KrZh9mJINin2YTZhdmC2LfYuSDYp9mE2YXYrdiv2K8uIik7fX0KZnVuY3Rpb24gcHJldigpe3N0YXRlLmN1cnJlbnQ9TWF0aC5tYXgoMCxzdGF0ZS5jdXJyZW50LTEpO2xvYWRDdXJyZW50KHN0YXRlLnBsYXlpbmcpO30KZnVuY3Rpb24gYmluZCgpewogY29uc3QgYXVkaW89JCgiYWJxLXFwLWF1ZGlvIik7CiAkKCJhYnEtcXAtcGxheSIpLm9uY2xpY2s9YXN5bmMoKT0+e2lmKCFzdGF0ZS5xdWV1ZS5sZW5ndGgpcXVldWVCdWlsZCgpOyBpZihhdWRpby5zcmMgJiYgIWF1ZGlvLnBhdXNlZCl7YXVkaW8ucGF1c2UoKTtzdGF0ZS5wbGF5aW5nPWZhbHNlO3NldFBsYXlCdXR0b24oIndhaXRpbmciKTtzZXRTdGF0dXMoIuKPsyDZgdmKINin2YbYqti42KfYsSDYp9iz2KrYptmG2KfZgSDYp9mE2KfYs9iq2YXYp9i5INmF2YYg2YXZiNi22Lkg2KfZhNiq2YjZgtmBLiIpO31lbHNlIGlmKGF1ZGlvLnNyYyAmJiBhdWRpby5wYXVzZWQgJiYgYXVkaW8uY3VycmVudFRpbWU+MCAmJiBzdGF0ZS5zb3VyY2VNZXRhKXtzdGF0ZS5wbGF5aW5nPXRydWU7c2V0UGxheUJ1dHRvbigicGxheWluZyIpO3NldFN0YXR1cygi2KzYp9ix2Yog2KfYs9iq2KbZhtin2YEg2KfZhNin2LPYqtmF2KfYuSDZhdmGINmF2YjYtti5INin2YTYqtmI2YLZgeKApiIpO3RyeXthd2FpdCBhdWRpby5wbGF5KCk7fWNhdGNoKGUpe3N0YXRlLnBsYXlpbmc9ZmFsc2U7c2V0UGxheUJ1dHRvbigid2FpdGluZyIpO3NldFN0YXR1cygi2KrYudiw2LEg2KfYs9iq2KbZhtin2YEg2KfZhNin2LPYqtmF2KfYudibINin2LbYuti3INmF2LHYqSDYo9iu2LHZiS4iKTt9fWVsc2V7c3RhdGUucGxheWluZz10cnVlO3NldFBsYXlCdXR0b24oInBsYXlpbmciKTthd2FpdCBsb2FkQ3VycmVudCh0cnVlKTt9fTsKICQoImFicS1xcC1wcmV2Iikub25jbGljaz1wcmV2OyAkKCJhYnEtcXAtbmV4dCIpLm9uY2xpY2s9bmV4dDsKICQoImFicS1xcC1yZXBlYXQiKS5vbmNsaWNrPSgpPT57c3RhdGUucmVwZWF0PSFzdGF0ZS5yZXBlYXQ7JCgiYWJxLXFwLXJlcGVhdCIpLnRleHRDb250ZW50PXN0YXRlLnJlcGVhdD8i8J+UgSDYp9mE2KrZg9ix2KfYsTog2YXZgdi52ZHZhCI6IvCflIEg2KrZg9ix2KfYsSI7c2F2ZVByZWZzKCk7fTsKICQoImFicS1xcC1mYXZvcml0ZSIpLm9uY2xpY2s9KCk9Pntjb25zdCByPXNlbGVjdGVkUmVhZCgpO2lmKCFyKXJldHVybjtjb25zdCBpPXN0YXRlLmZhdm9yaXRlcy5pbmRleE9mKHIuaWQpO2lmKGk+PTApc3RhdGUuZmF2b3JpdGVzLnNwbGljZShpLDEpO2Vsc2Ugc3RhdGUuZmF2b3JpdGVzLnB1c2goci5pZCk7dXBkYXRlRmF2b3JpdGVCdXR0b24oKTtzYXZlUHJlZnMoKTt9OwogJCgiYWJxLXFwLXJlY2l0ZXIiKS5hZGRFdmVudExpc3RlbmVyKCJjaGFuZ2UiLCgpPT57cmVuZGVyVmVyc2UoTnVtYmVyKCQoImFicS1xcC1mcm9tIikudmFsdWUpfHwxKTt9KTsKICQoImFicS1xcC1yZWFkIikuYWRkRXZlbnRMaXN0ZW5lcigiY2hhbmdlIiwoKT0+e3JlbmRlclZlcnNlKE51bWJlcigkKCJhYnEtcXAtZnJvbSIpLnZhbHVlKXx8MSk7fSk7CiAkKCJhYnEtcXAtcmVjaXRlci1zZWFyY2giKS5vbmlucHV0PWU9Pntjb25zdCBjdXJyZW50PSQoImFicS1xcC1yZWNpdGVyIikudmFsdWU7cG9wdWxhdGVSZWNpdGVycyhlLnRhcmdldC52YWx1ZSk7Y29uc3QgZXhpc3RzPVsuLi4kKCJhYnEtcXAtcmVjaXRlciIpLm9wdGlvbnNdLnNvbWUobz0+by52YWx1ZT09PWN1cnJlbnQpO2lmKGV4aXN0cyl7JCgiYWJxLXFwLXJlY2l0ZXIiKS52YWx1ZT1jdXJyZW50O3BvcHVsYXRlUmVhZHMoKTt9fTsKICQoImFicS1xcC1mcm9tIikub25jaGFuZ2U9KCk9PntxdWV1ZUJ1aWxkKCk7cmVuZGVyVmVyc2UoTnVtYmVyKCQoImFicS1xcC1mcm9tIikudmFsdWUpfHwxKTtzYXZlUHJlZnMoKTt9OyAkKCJhYnEtcXAtdG8iKS5vbmNoYW5nZT0oKT0+e3F1ZXVlQnVpbGQoKTtyZW5kZXJWZXJzZShOdW1iZXIoJCgiYWJxLXFwLWZyb20iKS52YWx1ZSl8fDEpO3NhdmVQcmVmcygpO307CiBhdWRpby5vbnRpbWV1cGRhdGU9KCk9PntpZihzdGF0ZS5zZWdtZW50RW5kIT09bnVsbCAmJiBhdWRpby5jdXJyZW50VGltZT49c3RhdGUuc2VnbWVudEVuZC0uMDgpe2lmKHN0YXRlLnJlcGVhdCl7bG9hZEN1cnJlbnQodHJ1ZSl9ZWxzZSBuZXh0KCl9IGlmKGF1ZGlvLmR1cmF0aW9uKSAkKCJhYnEtcXAtcHJvZ3Jlc3MiKS52YWx1ZT0oYXVkaW8uY3VycmVudFRpbWUvYXVkaW8uZHVyYXRpb24pKjEwMDt9OwogJCgiYWJxLXFwLXByb2dyZXNzIikub25pbnB1dD0oKT0+e2lmKGF1ZGlvLmR1cmF0aW9uKWF1ZGlvLmN1cnJlbnRUaW1lPShOdW1iZXIoJCgiYWJxLXFwLXByb2dyZXNzIikudmFsdWUpLzEwMCkqYXVkaW8uZHVyYXRpb247fTsKIGF1ZGlvLm9ucGxheT0oKT0+e3N0YXRlLnBsYXlpbmc9dHJ1ZTtzZXRTdGF0dXMoItis2KfYsdmKINiq2LTYutmK2YQg2KfZhNii2YrYqSAiK3N0YXRlLnF1ZXVlW3N0YXRlLmN1cnJlbnRdKTt9OwogYXVkaW8ub25wYXVzZT0oKT0+e2lmKHN0YXRlLnBsYXlpbmcpc3RhdGUucGxheWluZz1mYWxzZTt9Owp9CmFzeW5jIGZ1bmN0aW9uIGluaXQoKXsKIGlmKCFpbmplY3QoKSlyZXR1cm47CiBjb25zdCBwcmVmcz1sb2FkUHJlZnMoKTsKIGJpbmQoKTsKIHRyeXsKICBjb25zdCBbcixzXT1hd2FpdCBQcm9taXNlLmFsbChbZ2V0SlNPTihBUEkrIi9yZWNpdGVycyIpLGdldEpTT04oQVBJKyIvc3VyYWhzIildKTsKICBzdGF0ZS5yZWNpdGVycz1yLnJlY2l0ZXJzfHxbXTsgc3RhdGUuc3VyYWhzPXMuc3VyYWhzfHxbXTsKICBwb3B1bGF0ZVJlY2l0ZXJzKCk7cG9wdWxhdGVTdXJhaHMoKTsKICBpZihzdGF0ZS5yZWNpdGVycy5sZW5ndGgpeyQoImFicS1xcC1yZWNpdGVyIikudmFsdWU9cHJlZnMucmVjaXRlciYmWy4uLiQoImFicS1xcC1yZWNpdGVyIikub3B0aW9uc10uc29tZShvPT5vLnZhbHVlPT09cHJlZnMucmVjaXRlcik/cHJlZnMucmVjaXRlcjpzdGF0ZS5yZWNpdGVyc1swXS5uYW1lO3BvcHVsYXRlUmVhZHMoKTt9CiAgaWYocHJlZnMucmVhZCYmWy4uLiQoImFicS1xcC1yZWFkIikub3B0aW9uc10uc29tZShvPT5vLnZhbHVlPT09cHJlZnMucmVhZCkpJCgiYWJxLXFwLXJlYWQiKS52YWx1ZT1wcmVmcy5yZWFkOwogICQoImFicS1xcC1zdXJhaCIpLnZhbHVlPXByZWZzLnN1cmFoJiZzdGF0ZS5zdXJhaHMuc29tZShzPT5TdHJpbmcocy5pZCk9PT1TdHJpbmcocHJlZnMuc3VyYWgpKT9TdHJpbmcocHJlZnMuc3VyYWgpOiIxIjt1cGRhdGVBeWFocygpOwogIGlmKHByZWZzLmZyb20pJCgiYWJxLXFwLWZyb20iKS52YWx1ZT1wcmVmcy5mcm9tO2lmKHByZWZzLnRvKSQoImFicS1xcC10byIpLnZhbHVlPXByZWZzLnRvOwogIGlmKE51bWJlcigkKCJhYnEtcXAtZnJvbSIpLnZhbHVlKT5OdW1iZXIoJCgiYWJxLXFwLXRvIikudmFsdWUpKSQoImFicS1xcC10byIpLnZhbHVlPSQoImFicS1xcC1mcm9tIikudmFsdWU7CiAgc3RhdGUucmVwZWF0PSEhcHJlZnMucmVwZWF0OyQoImFicS1xcC1yZXBlYXQiKS50ZXh0Q29udGVudD1zdGF0ZS5yZXBlYXQ/IvCflIEg2KfZhNiq2YPYsdin2LE6INmF2YHYudmR2YQiOiLwn5SBINiq2YPYsdin2LEiO3VwZGF0ZUZhdm9yaXRlQnV0dG9uKCk7bG9hZFRleHQoKTtxdWV1ZUJ1aWxkKCk7CiAgc2V0U3RhdHVzKCLYp9iu2KrYsSDYp9mE2YLYp9ix2KYg2YjYp9mE2LPZiNix2Kkg2KvZhSDYp9i22LrYtyDYqti02LrZitmEIOKAlCDYs9iq2Y/Yudix2LYg2KfZhNii2YrYqSDYqtmE2YLYp9im2YrZi9inINmI2YrYs9iq2YXYsSDYp9mE2KrYtNi62YrZhCDYrdiz2Kgg2KfZhNmG2LfYp9mCINin2YTYp9iu2KrZitin2LHZii4iKTsKIH1jYXRjaChlKXtzZXRTdGF0dXMoItiq2LnYsNixINiq2K3ZhdmK2YQg2KjZitin2YbYp9iqINin2YTZgtix2KfYoSDYrdin2YTZitmL2KfYmyDYrdin2YjZhCDYqtit2K/ZitirINin2YTYtdmB2K3YqS4iKTt9Cn0KaWYoZG9jdW1lbnQucmVhZHlTdGF0ZT09PSJsb2FkaW5nIilkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCJET01Db250ZW50TG9hZGVkIixpbml0LHtvbmNlOnRydWV9KTtlbHNlIGluaXQoKTsKfSkoKTs=";
-var bin=atob(b64),bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-var code=new TextDecoder("utf-8").decode(bytes);window.eval(code);
+if(window.__ABQ_QURAN_PLAYER__)return;
+window.__ABQ_QURAN_PLAYER__=true;
+
+const API="/api/quran";
+const $=id=>document.getElementById(id);
+const state={reciters:[],surahs:[],texts:null,current:0,queue:[],playing:false,repeat:false,source:null,segmentEnd:null,favorites:[]};
+const PREF="abq_quran_player_v2";
+
+function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[c]));}
+function loadPrefs(){try{return JSON.parse(localStorage.getItem(PREF)||"{}")}catch{return {}}}
+function savePrefs(){try{localStorage.setItem(PREF,JSON.stringify({
+ reciter:$("abq-qp-reciter")?.value||"",read:$("abq-qp-read")?.value||"",surah:$("abq-qp-surah")?.value||"",
+ from:$("abq-qp-from")?.value||"1",to:$("abq-qp-to")?.value||"1",repeat:!!state.repeat,favorites:state.favorites
+}))}catch{}}
+function isFav(id){return state.favorites.includes(id)}
+function selectedReciter(){const v=$("abq-qp-reciter")?.value;return state.reciters.find(x=>x.name===v||String(x.id)===String(v))}
+function selectedRead(){const r=selectedReciter();if(!r)return null;return r.source==="alqurancloud"?r:r}
+function fill(el,items,placeholder){
+ if(!el)return;el.innerHTML="";
+ if(placeholder){const o=document.createElement("option");o.value="";o.textContent=placeholder;el.appendChild(o)}
+ items.forEach(x=>{const o=document.createElement("option");o.value=x.value;o.textContent=x.label;el.appendChild(o)})
+}
+function inject(){
+ const target=$("azkar")||$("azkar-app"); if(!target)return false;
+ if($("abq-quran-player"))return true;
+ const wrap=document.createElement("div");wrap.id="abq-quran-player";wrap.dir="rtl";
+ wrap.innerHTML=`
+<style id="abq-qp-style">
+#abq-quran-player{font-family:Cairo,sans-serif;margin:1rem auto;max-width:980px}
+#abq-quran-player .abq-qp-card{background:linear-gradient(145deg,#fffdf7,#f8fafc);border:2px solid #bfdbfe;border-radius:18px;padding:18px;box-shadow:0 14px 34px -24px rgba(15,23,42,.45)}
+#abq-quran-player .abq-qp-title{text-align:center;font-size:1.15rem;font-weight:900;color:#1e3a8a;margin:0 0 14px}
+#abq-quran-player .abq-qp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#abq-quran-player label{display:block;font-size:.78rem;font-weight:800;color:#334155;margin:0 0 5px}
+#abq-quran-player select,#abq-quran-player input[type=search]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:.65rem .7rem;background:#fff;color:#0f172a;font:inherit;font-weight:700}
+#abq-quran-player .abq-qp-ayahs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#abq-quran-player .abq-qp-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:14px 0 10px}
+#abq-quran-player .abq-qp-btn{border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:999px;padding:.55rem .8rem;font:inherit;font-weight:900;cursor:pointer}
+#abq-quran-player .abq-qp-btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-color:#2563eb}
+#abq-quran-player .abq-qp-btn.waiting{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#172554;border-color:#f59e0b;animation:abqQpWait 1.4s ease-in-out infinite}
+@keyframes abqQpWait{50%{transform:scale(1.025);opacity:.82}}
+#abq-quran-player .abq-qp-btn:disabled{opacity:.45;cursor:not-allowed}
+#abq-quran-player .abq-qp-status{text-align:center;color:#475569;min-height:1.4rem;font-size:.78rem}
+#abq-quran-player .abq-qp-verse-head{text-align:center;color:#1d4ed8;font-size:.75rem;font-weight:900;margin-top:12px}
+#abq-quran-player .abq-qp-verse{margin-top:6px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:15px;min-height:90px;text-align:center;font-family:Amiri,serif;font-size:1.45rem;line-height:2.15;color:#1e293b}
+#abq-quran-player .abq-qp-meta{text-align:center;color:#64748b;font-size:.72rem;margin-top:8px}
+#abq-quran-player .abq-qp-progress{width:100%;accent-color:#2563eb}
+@media(max-width:640px){#abq-quran-player .abq-qp-grid{grid-template-columns:1fr}#abq-quran-player .abq-qp-card{padding:12px}#abq-quran-player .abq-qp-verse{font-size:1.3rem;line-height:2}}
+</style>
+<div class="abq-qp-card">
+<h3 class="abq-qp-title">🎧 مشغل القرآن الكريم — التلاوة آيةً بآية</h3>
+<div class="abq-qp-grid">
+<div><label for="abq-qp-reciter-search">🔎 بحث في القراء</label><input id="abq-qp-reciter-search" type="search" placeholder="اكتب اسم القارئ..." autocomplete="off"></div>
+<div><label for="abq-qp-reciter">🎙️ القارئ</label><select id="abq-qp-reciter"></select></div>
+<div><label for="abq-qp-surah">📖 السورة</label><select id="abq-qp-surah"></select></div>
+<div><label for="abq-qp-read">📚 الرواية / المصدر</label><select id="abq-qp-read"></select></div>
+<div><label>🎯 نطاق الآيات</label><div class="abq-qp-ayahs"><select id="abq-qp-from" aria-label="من الآية"></select><select id="abq-qp-to" aria-label="إلى الآية"></select></div></div>
+</div>
+<div class="abq-qp-controls">
+<button class="abq-qp-btn primary" id="abq-qp-play">▶️ تشغيل</button>
+<button class="abq-qp-btn" id="abq-qp-prev">⏮️ السابقة</button>
+<button class="abq-qp-btn" id="abq-qp-next">⏭️ التالية</button>
+<button class="abq-qp-btn" id="abq-qp-repeat">🔁 تكرار</button>
+<button class="abq-qp-btn" id="abq-qp-favorite">☆ المفضلة</button>
+</div>
+<input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="تقدم التلاوة">
+<div id="abq-qp-status" class="abq-qp-status">جاري تجهيز القراء والسور...</div>
+<div id="abq-qp-verse-head" class="abq-qp-verse-head">—</div>
+<div id="abq-qp-verse">—</div>
+<div id="abq-qp-meta" class="abq-qp-meta">—</div>
+<audio id="abq-qp-audio" preload="metadata"></audio>
+</div>`;
+ target.insertBefore(wrap,target.firstChild);
+ return true;
+}
+async function getJSON(url){
+ const r=await fetch(url,{headers:{accept:"application/json"}});
+ if(!r.ok)throw new Error("HTTP "+r.status);
+ return r.json();
+}
+function populateReciters(filter=""){
+ const q=String(filter||"").trim().toLocaleLowerCase("ar");
+ const groups={};
+ state.reciters.forEach(r=>{const n=r.name||"قارئ";if(!q||n.toLocaleLowerCase("ar").includes(q))(groups[n]??=[]).push(r)});
+ const items=Object.keys(groups).sort((a,b)=>a.localeCompare(b,"ar")).map(name=>({value:groups[name][0].id,label:name}));
+ const el=$("abq-qp-reciter"),prev=el?.value;
+ fill(el,items,"اختر القارئ");
+ if(prev&&[...el.options].some(o=>o.value===prev))el.value=prev;
+ el.onchange=()=>{populateReads();savePrefs()};
+}
+function populateReads(){
+ const name=$("abq-qp-reciter")?.value;
+ const rs=state.reciters.filter(r=>String(r.id)===String(name)||r.name===name);
+ const merged=[];
+ rs.forEach(r=>merged.push({value:r.id,label:(r.readName?r.readName+" — ":"")+(r.source==="alqurancloud"?"Al Quran Cloud":"MP3Quran")}));
+ fill($("abq-qp-read"),merged,"اختر الرواية / المصدر");
+ const p=loadPrefs();if(p.read&&[...$("abq-qp-read").options].some(o=>o.value===p.read))$("abq-qp-read").value=p.read;
+ updateAyahs();savePrefs();
+}
+function populateSurahs(){
+ fill($("abq-qp-surah"),state.surahs.map(s=>({value:s.id,label:s.id+" — "+s.name+" ("+s.ayahs+")"})));
+ const p=loadPrefs();$("abq-qp-surah").value=p.surah&&[...$("abq-qp-surah").options].some(o=>o.value===p.surah)?p.surah:"1";
+ $("abq-qp-surah").onchange=()=>{updateAyahs();savePrefs()};
+}
+function updateAyahs(){
+ const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));if(!s)return;
+ const items=Array.from({length:s.ayahs},(_,i)=>({value:i+1,label:"الآية "+(i+1)}));
+ fill($("abq-qp-from"),items);fill($("abq-qp-to"),items);
+ const p=loadPrefs();$("abq-qp-from").value=Math.min(Number(p.from)||1,s.ayahs);$("abq-qp-to").value=Math.min(Number(p.to)||s.ayahs,s.ayahs);
+ if(Number($("abq-qp-from").value)>Number($("abq-qp-to").value))$("abq-qp-to").value=$("abq-qp-from").value;
+ $("abq-qp-from").onchange=()=>{if(Number($("abq-qp-from").value)>Number($("abq-qp-to").value))$("abq-qp-to").value=$("abq-qp-from").value;queueBuild();savePrefs()};
+ $("abq-qp-to").onchange=()=>{if(Number($("abq-qp-to").value)<Number($("abq-qp-from").value))$("abq-qp-to").value=$("abq-qp-from").value;queueBuild();savePrefs()};
+}
+async function loadText(){
+ const surah=Number($("abq-qp-surah").value);if(!surah)return;
+ try{const d=await getJSON(API+"/surah/"+surah);state.texts=d.surah?.ayahs||d.data?.ayahs||d.surah?.ayahs||d.data?.ayahs||[];renderVerse(1)}
+ catch{state.texts=[];renderVerse(1)}
+}
+function renderVerse(n){
+ const a=(state.texts||[]).find(x=>Number(x.numberInSurah)===Number(n));
+ const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));
+ const r=selectedReciter();
+ $("abq-qp-verse-head").textContent=a?(s?.name||"")+" — الآية "+n:"";
+ $("abq-qp-verse").textContent=a?(a.text||""):"";
+ $("abq-qp-meta").textContent=r?(r.name+" • "+(r.readName||"تلاوة آية بآية")):"";
+}
+function queueBuild(){
+ const f=Number($("abq-qp-from").value),t=Number($("abq-qp-to").value);
+ state.queue=[];for(let n=f;n<=t;n++)state.queue.push(n);state.current=0;
+ renderVerse(state.queue[0]||1);
+}
+function setStatus(t){$("abq-qp-status").textContent=t}
+function setPlayButton(mode){
+ const b=$("abq-qp-play");if(!b)return;
+ b.classList.toggle("waiting",mode==="waiting");
+ if(mode==="playing"){b.textContent="⏸️ إيقاف";b.title="إيقاف الاستماع مؤقتًا"}
+ else if(mode==="waiting"){b.textContent="⏳ جاري تجهيز التلاوة...";b.title="جاري تجهيز التلاوة"}
+ else {b.textContent="▶️ تشغيل";b.title="تشغيل التلاوة"}
+}
+async function sourceFor(r,surah,ayah){
+ const p=new URLSearchParams({source:r.source,surah:String(surah),ayah:String(ayah)});
+ if(r.source==="alqurancloud")p.set("edition",r.edition);
+ else {p.set("read",String(r.readId||r.reciterId));p.set("reciter",String(r.reciterId||r.readId));if(r.fallbackEdition)p.set("fallbackEdition",r.fallbackEdition)}
+ return getJSON(API+"/audio?"+p.toString());
+}
+async function loadCurrent(autoplay){
+ const r=selectedRead(),surah=Number($("abq-qp-surah").value),ayah=state.queue[state.current];
+ if(!r||!surah||!ayah)return;
+ const audio=$("abq-qp-audio");state.source=null;state.segmentEnd=null;
+ setPlayButton("waiting");setStatus("جاري تجهيز الآية "+ayah+"...");
+ try{
+  const d=await sourceFor(r,surah,ayah);
+  state.source=d;state.segmentEnd=d.end==null?null:Number(d.end);
+  audio.src=d.audioUrl;audio.load();
+  renderVerse(ayah);
+  audio.onloadedmetadata=()=>{
+    if(d.start>0)audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
+    if(autoplay){state.playing=true;setPlayButton("playing");audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")})}
+    else {setPlayButton("idle");setStatus((d.fallback?"تم استخدام مصدر احتياطي موثوق":"جاهز للتشغيل")+" • الآية "+ayah)}
+  };
+  audio.onerror=async()=>{
+    if(r.source==="mp3quran"&&r.fallbackEdition){
+      try{
+        const fb={...r,source:"alqurancloud",edition:r.fallbackEdition};
+        const d2=await sourceFor(fb,surah,ayah);state.source=d2;state.segmentEnd=null;audio.src=d2.audioUrl;audio.load();
+        setStatus("تم التحويل تلقائيًا لمصدر احتياطي موثوق • الآية "+ayah);
+        if(autoplay){state.playing=true;setPlayButton("playing");await audio.play().catch(()=>{})}
+        return;
+      }catch{}
+    }
+    state.playing=false;setPlayButton("waiting");setStatus("تعذر تشغيل هذه التلاوة مؤقتًا — جرّب قارئًا آخر");
+  };
+ }catch(e){state.playing=false;setPlayButton("waiting");setStatus("تعذر تجهيز التلاوة — جرّب القارئ أو المصدر الآخر")}
+}
+function next(){
+ if(state.current<state.queue.length-1){state.current++;loadCurrent(true)}
+ else if(state.repeat){state.current=0;loadCurrent(true)}
+ else {state.playing=false;setPlayButton("idle");setStatus("انتهى نطاق الاستماع المحدد")}
+}
+function prev(){state.current=Math.max(0,state.current-1);loadCurrent(state.playing)}
+function bind(){
+ const audio=$("abq-qp-audio");
+ $("abq-qp-play").onclick=async()=>{
+  if(!state.queue.length)queueBuild();
+  if(audio.src&&!audio.paused){
+   audio.pause();state.playing=false;setPlayButton("waiting");setStatus("تم إيقاف الاستماع مؤقتًا — اضغط تشغيل للمتابعة");return;
+  }
+  if(audio.src&&audio.paused&&state.source){state.playing=true;setPlayButton("playing");try{await audio.play()}catch{state.playing=false;setPlayButton("waiting")}}
+  else {state.playing=true;await loadCurrent(true)}
+ };
+ $("abq-qp-prev").onclick=prev;$("abq-qp-next").onclick=next;
+ $("abq-qp-repeat").onclick=()=>{state.repeat=!state.repeat;$("abq-qp-repeat").textContent=state.repeat?"🔁 التكرار: مفعّل":"🔁 تكرار";savePrefs()};
+ $("abq-qp-favorite").onclick=()=>{const r=selectedReciter();if(!r)return;const i=state.favorites.indexOf(r.id);if(i>=0)state.favorites.splice(i,1);else state.favorites.push(r.id);updateFavorite();savePrefs()};
+ $("abq-qp-reciter-search").oninput=e=>populateReciters(e.target.value);
+ $("abq-qp-read").onchange=()=>{queueBuild();savePrefs()};
+ $("abq-qp-progress").oninput=()=>{if(audio.duration)audio.currentTime=Number($("abq-qp-progress").value)/100*audio.duration};
+ audio.ontimeupdate=()=>{if(audio.duration)$("abq-qp-progress").value=audio.currentTime/audio.duration*100;if(state.segmentEnd!=null&&audio.currentTime>=state.segmentEnd-.08){audio.pause();next()}};
+ audio.onplay=()=>{state.playing=true;setPlayButton("playing")};audio.onpause=()=>{if(state.playing===false)return;state.playing=false;setPlayButton("waiting")};
+}
+function updateFavorite(){const r=selectedReciter();const b=$("abq-qp-favorite");if(!b||!r)return;b.textContent=isFav(r.id)?"★ المفضلة":"☆ المفضلة"}
+async function init(){
+ if(!inject())return setTimeout(init,300);
+ const p=loadPrefs();state.favorites=Array.isArray(p.favorites)?p.favorites:[];
+ bind();
+ try{
+  const [r,s]=await Promise.all([getJSON(API+"/reciters?language=ar"),getJSON(API+"/surahs")]);
+  state.reciters=r.reciters||[];state.surahs=s.surahs||[];
+  populateReciters();populateSurahs();
+  if(p.reciter&&[...$("abq-qp-reciter").options].some(o=>o.value===p.reciter))$("abq-qp-reciter").value=p.reciter;
+  populateReads();
+  if(p.surah)$("abq-qp-surah").value=p.surah;
+  updateAyahs();queueBuild();await loadText();updateFavorite();
+  setStatus("تم تجهيز جميع القراء المتاحين للتشغيل");
+ }catch(e){setStatus("تعذر تحميل قائمة القراء مؤقتًا — أعد المحاولة")}
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
