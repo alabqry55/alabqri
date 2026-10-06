@@ -4706,6 +4706,45 @@ body{
 #home-restored-sections > section.abq-center-v2 .bg-amber-500{background:#2563eb!important;color:#fff!important}
 #home-restored-sections > section.abq-center-v2 .hover\:bg-amber-400:hover{background:#1d4ed8!important}
 </style>
+
+<!-- ALABQRI — Contact hover visual-only lock 20261006 -->
+<style id="abq-contact-hover-visual-only-20261006">
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus,
+.main-tabs-nav .nav-btn.abq-contact-tab:active,
+.main-tabs-nav .nav-btn.abq-contact-tab.active {
+  transform: none !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-red-phone,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-red-phone,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-red-phone,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-red-phone,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-red-phone {
+  transition: none !important;
+  animation: none !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label {
+  transform: translate(-50%,-50%) !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon {
+  transform: translateY(-50%) !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-red-phone {
+  transform: none !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -4834,7 +4873,7 @@ body{
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">تواصل معنا</span><span class="abq-contact-icon" aria-hidden="true"><span class="abq-red-phone">☎</span></span></button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">اتصل بنا</span><span class="abq-contact-icon" aria-hidden="true"><span class="abq-red-phone">☎</span></span></button>
         </nav>
     </header>
 
