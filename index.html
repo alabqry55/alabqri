@@ -5383,6 +5383,78 @@ body{
 }
 </style>
 
+
+<style id="abq-contact-brand-rtl-order-pc-mobile-20261006">
+/* تواصل معنا — الترتيب المطلوب بصريًا من اليمين إلى اليسار: الشعار ← اسم المركز ← 🌿 */
+.abq-contact-brand-row{
+  direction:rtl !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:.55rem !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+}
+.abq-contact-brand-row .abq-contact-logo-wrap{
+  order:1 !important;
+  flex:0 0 auto !important;
+}
+.abq-contact-brand-row .abq-contact-title-line{
+  order:2 !important;
+  min-width:0 !important;
+  flex:0 1 auto !important;
+  text-align:center !important;
+}
+.abq-contact-brand-row .abq-contact-premium-icon{
+  order:3 !important;
+  flex:0 0 auto !important;
+}
+.abq-contact-brand-row .abq-contact-title-line h3{
+  direction:rtl !important;
+  text-align:center !important;
+  margin:0 !important;
+}
+/* PC فقط: الشعار + الاسم + 🌿 في سطر واحد دون التفاف */
+@media (min-width:901px){
+  .abq-contact-brand-row{
+    flex-wrap:nowrap !important;
+    white-space:nowrap !important;
+  }
+  .abq-contact-brand-row .abq-contact-title-line h3{
+    white-space:nowrap !important;
+  }
+}
+/* الموبايل والأحجام الأصغر: يسمح للنص بالالتفاف طبيعيًا داخل الإطار */
+@media (max-width:900px){
+  .abq-contact-brand-row{
+    flex-wrap:wrap !important;
+    row-gap:.35rem !important;
+    column-gap:.5rem !important;
+    white-space:normal !important;
+  }
+  .abq-contact-brand-row .abq-contact-title-line{
+    flex:1 1 auto !important;
+    max-width:calc(100% - 4.2rem) !important;
+  }
+  .abq-contact-brand-row .abq-contact-title-line h3{
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    line-height:1.6 !important;
+  }
+}
+@media (max-width:420px){
+  .abq-contact-brand-row{
+    column-gap:.35rem !important;
+    row-gap:.25rem !important;
+  }
+  .abq-contact-brand-row .abq-contact-title-line{
+    max-width:calc(100% - 3.7rem) !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
