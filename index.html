@@ -11834,6 +11834,85 @@ window.switchContactInnerTab = function(tabId) {
 }
 </style>
 
+<!-- ALABQRI — Contact text true-center + static speaker final 20261006 -->
+<style id="abq-contact-text-true-center-static-speaker-20261006">
+/* النص هو العنصر المركزي الحقيقي مثل بقية التبويبات؛ السماعة ثابتة ولا تستجيب للحركة */
+.main-tabs-nav .nav-btn.abq-contact-tab,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus,
+.main-tabs-nav .nav-btn.abq-contact-tab:active,
+.main-tabs-nav .nav-btn.abq-contact-tab.active{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  transform:none !important;
+  transition:none !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
+/* تثبيت النص في مركز الزر نفسه أفقيًا ورأسيًا، مستقلًا عن مكان السماعة */
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-label,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-label{
+  position:absolute !important;
+  inset:50% auto auto 50% !important;
+  transform:translate(-50%,-50%) !important;
+  width:max-content !important;
+  max-width:calc(100% - 4.2em) !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  line-height:1.25 !important;
+  color:#1e3a8a !important;
+  pointer-events:none !important;
+}
+/* السماعة داخل إطارها فقط: ثابتة، بلا تحريك أو قلب إضافي أو hover/focus animation */
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-icon,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-icon{
+  position:absolute !important;
+  left:.55rem !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  transition:none !important;
+  animation:none !important;
+  pointer-events:none !important;
+  margin:0 !important;
+  z-index:2 !important;
+}
+.main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon svg,
+.main-tabs-nav .nav-btn.abq-contact-tab:hover .abq-contact-icon svg,
+.main-tabs-nav .nav-btn.abq-contact-tab:focus .abq-contact-icon svg,
+.main-tabs-nav .nav-btn.abq-contact-tab:active .abq-contact-icon svg,
+.main-tabs-nav .nav-btn.abq-contact-tab.active .abq-contact-icon svg{
+  transform:none !important;
+  transition:none !important;
+  animation:none !important;
+  position:static !important;
+}
+@media (min-width:901px){
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{font-size:.74rem !important;}
+}
+@media (max-width:900px){
+  .main-tabs-nav .nav-btn.abq-contact-tab{
+    min-height:52px !important;
+    font-size:.98rem !important;
+    font-weight:800 !important;
+    padding:.45rem .6rem !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-icon{
+    left:.55rem !important;
+  }
+}
+</style>
+
 <!-- ALABQRI — Contact tab final contained icon/text lock 20261006 -->
 <style id="abq-contact-contained-final-20261006">
 /* النسخة النهائية: النص في المنتصف الحقيقي، والسماعة داخل حدود الزر بالكامل */
