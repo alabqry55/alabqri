@@ -4745,6 +4745,17 @@ body{
 }
 </style>
 
+
+<!-- ALABQRI — Contact unified with standard main tabs 20261006 -->
+<style id="abq-contact-unified-standard-tab-20261006">
+/* زر بوابة التواصل يستخدم تنسيق nav-btn القياسي فقط؛ لا حركة أو تموضع خاص. */
+.main-tabs-nav .nav-btn { transform:none; }
+.main-tabs-nav .nav-btn:hover,
+.main-tabs-nav .nav-btn:focus,
+.main-tabs-nav .nav-btn:active,
+.main-tabs-nav .nav-btn.active { transform:none !important; }
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -4873,7 +4884,7 @@ body{
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
             <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
             <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn abq-contact-tab"><span class="abq-contact-label">اتصل بنا</span><span class="abq-contact-icon" aria-hidden="true"><span class="abq-red-phone">☎</span></span></button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn">📞 بوابة التواصل</button>
         </nav>
     </header>
 
