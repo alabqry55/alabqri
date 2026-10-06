@@ -7643,11 +7643,9 @@ body{
     </div>
   </div>
   <div class="abq-contact-linktree-card">
-    <div class="abq-social-single-line">
-      <span>🔗 الحسابات والمنصات الرسمية</span>
-      <span class="abq-social-tree-inline">منصة شجرة الحسابات الرقمية الرسمية للدكتور أحمد رسّه</span>
-      <a href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer">🔗 منصة الحسابات الرسمية ↗</a>
-    </div>
+    <a class="abq-social-single-line abq-social-whole-link" href="https://linktr.ee/ahmedrassah" target="_blank" rel="noopener noreferrer" aria-label="منصة الحسابات والمنصات الرسمية للدكتور أحمد رسّه">
+      <span>منصة 🔗 الحسابات والمنصات الرسمية، منصة شجرة الحسابات الرقمية الرسمية للدكتور أحمد رسّه، 🔗 منصة الحسابات الرسمية ↗.</span>
+    </a>
   </div>
   <div class="abq-contact-info-grid">
     <div class="abq-contact-info-card">
@@ -13120,39 +13118,37 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 <style id="abq-contact-doctor-final-20261006">
-/* ضبط نهائي: اسم الطبيب وأزرار واتساب/الاتصال في سطر واحد داخل عرض الشاشة دون خروج */
+/* ضبط نهائي: سطر الطبيب كاملًا ووسط الإطار على PC والموبايل */
 #contact .abq-contact-premium-card > .abq-contact-doctor-card{
   width:100%!important;
   max-width:none!important;
   min-width:0!important;
   margin:0 0 1rem 0!important;
-  padding:1rem!important;
+  padding:.65rem!important;
   box-sizing:border-box!important;
   display:flex!important;
   flex-direction:row!important;
   align-items:center!important;
-  justify-content:flex-start!important;
+  justify-content:center!important;
   direction:rtl!important;
-  text-align:right!important;
+  text-align:center!important;
   flex-wrap:nowrap!important;
-  gap:.45rem!important;
-  overflow:hidden!important;
+  gap:.35rem!important;
+  overflow:visible!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-  flex:1 1 auto!important;
+  flex:0 1 auto!important;
   min-width:0!important;
   margin:0!important;
   padding:0!important;
   display:flex!important;
   align-items:center!important;
-  justify-content:flex-start!important;
-  text-align:right!important;
+  justify-content:center!important;
+  text-align:center!important;
   white-space:nowrap!important;
-  overflow:hidden!important;
-  float:none!important;
-  position:static!important;
-  transform:none!important;
-  font-size:clamp(.56rem,1.05vw,.95rem)!important;
+  overflow:visible!important;
+  font-size:clamp(.46rem,1.35vw,.88rem)!important;
+  line-height:1.25!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
   flex:0 1 auto!important;
@@ -13161,58 +13157,86 @@ table{max-width:100%;display:block;overflow-x:auto}
   padding:0!important;
   display:flex!important;
   align-items:center!important;
-  justify-content:flex-start!important;
+  justify-content:center!important;
   flex-wrap:nowrap!important;
-  gap:.3rem!important;
-  float:none!important;
-  position:static!important;
-  transform:none!important;
+  gap:.22rem!important;
 }
 #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
   flex:0 1 auto!important;
   min-width:0!important;
   width:auto!important;
   margin:0!important;
-  padding:.42rem .5rem!important;
+  padding:.32rem .4rem!important;
   white-space:nowrap!important;
-  font-size:clamp(.5rem,.8vw,.72rem)!important;
-  line-height:1.25!important;
-  float:none!important;
-  position:static!important;
-  transform:none!important;
+  font-size:clamp(.42rem,1.05vw,.68rem)!important;
+  line-height:1.2!important;
 }
 @media(max-width:768px){
   #contact .abq-contact-premium-card > .abq-contact-doctor-card{
-    padding:.5rem .25rem!important;
-    gap:.22rem!important;
+    padding:.48rem .18rem!important;
+    gap:.16rem!important;
   }
   #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-    font-size:clamp(.52rem,2.1vw,.66rem)!important;
+    font-size:clamp(.43rem,1.95vw,.62rem)!important;
   }
   #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
-    gap:.18rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
-    min-height:34px!important;
-    padding:.3rem .28rem!important;
-    font-size:clamp(.47rem,1.75vw,.58rem)!important;
-  }
-}
-@media(max-width:420px){
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
-    padding:.42rem .12rem!important;
     gap:.12rem!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
-    font-size:clamp(.46rem,2.05vw,.56rem)!important;
-  }
-  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
-    gap:.1rem!important;
   }
   #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
     min-height:31px!important;
     padding:.25rem .2rem!important;
-    font-size:clamp(.42rem,1.7vw,.52rem)!important;
+    font-size:clamp(.39rem,1.65vw,.53rem)!important;
+  }
+}
+@media(max-width:420px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    padding:.4rem .08rem!important;
+    gap:.08rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    font-size:clamp(.4rem,2.05vw,.54rem)!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    gap:.06rem!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    min-height:29px!important;
+    padding:.22rem .14rem!important;
+    font-size:clamp(.36rem,1.7vw,.49rem)!important;
+  }
+}
+/* كامل سطر الحسابات والمنصات رابط واحد */
+#contact .abq-contact-linktree-card{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+#contact .abq-contact-linktree-card .abq-social-whole-link{
+  display:flex!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-decoration:none!important;
+}
+#contact .abq-contact-linktree-card .abq-social-whole-link > span{
+  display:block!important;
+  max-width:100%!important;
+}
+@media(max-width:768px){
+  #contact .abq-contact-brand-row .abq-contact-title-line h3{
+    font-size:.78rem!important;
+    line-height:1.35!important;
+    white-space:nowrap!important;
+  }
+}
+@media(max-width:420px){
+  #contact .abq-contact-brand-row .abq-contact-title-line h3{
+    font-size:.78rem!important;
+    line-height:1.3!important;
   }
 }
 </style>
