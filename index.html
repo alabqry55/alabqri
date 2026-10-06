@@ -5008,6 +5008,82 @@ body{
 .abq-contact-single-frame .abq-center-v2,.abq-contact-single-frame-tab .abq-center-v2{width:100%!important;max-width:100%!important;margin:0!important}
 }
 </style>
+
+<style id="abq-contact-one-frame-content-only-20261006">
+/* إطار واحد فقط لمنطقة تواصل معنا — إزالة جميع الإطارات الداخلية دون المساس بالوظائف */
+#contact .abq-contact-single-frame-tab{
+  border:3px solid #2563eb !important;
+  border-radius:1.35rem !important;
+  background:linear-gradient(135deg,#eff6ff 0%,#ffffff 52%,#f8fafc 100%) !important;
+  box-shadow:0 14px 32px -22px rgba(30,64,175,.38) !important;
+}
+/* كل الحاويات الداخلية تصبح جزءًا من إطار المحتوى الواحد */
+#contact .abq-contact-single-frame-tab .abq-center-brand-card,
+#contact .abq-contact-single-frame-tab .abq-center-brand-card-master,
+#contact .abq-contact-single-frame-tab .pulse-card,
+#contact .abq-contact-single-frame-tab .grid > div,
+#contact .abq-contact-single-frame-tab .grid > div > div,
+#contact .abq-contact-single-frame-tab .bg-emerald-50,
+#contact .abq-contact-single-frame-tab .bg-emerald-950\\/20,
+#contact .abq-contact-single-frame-tab [class*="border-"]{
+  border:0 !important;
+  border-right:0 !important;
+  border-left:0 !important;
+  border-top:0 !important;
+  border-bottom:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+#contact .abq-contact-single-frame-tab .abq-center-brand-card,
+#contact .abq-contact-single-frame-tab .abq-center-brand-card-master,
+#contact .abq-contact-single-frame-tab .pulse-card,
+#contact .abq-contact-single-frame-tab .grid > div{
+  background:transparent !important;
+}
+#contact .abq-contact-single-frame-tab .abq-center-brand-card,
+#contact .abq-contact-single-frame-tab .pulse-card,
+#contact .abq-contact-single-frame-tab .grid > div{
+  padding:0 !important;
+}
+#contact .abq-contact-single-frame-tab .abq-center-brand-card{
+  margin-bottom:.75rem !important;
+}
+#contact .abq-contact-single-frame-tab .pulse-card{
+  margin-bottom:.9rem !important;
+}
+#contact .abq-contact-single-frame-tab .grid{
+  gap:.75rem !important;
+}
+#contact .abq-contact-single-frame-tab .grid > div{
+  min-width:0 !important;
+}
+/* إرجاع وإبقاء زري الاتصال المباشر والواتساب كأزرار فعلية */
+#contact .abq-contact-single-frame-tab .abq-contact-doctor-name + div.grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:.65rem !important;
+  margin-top:.75rem !important;
+}
+#contact .abq-contact-single-frame-tab .abq-contact-doctor-name + div.grid a{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:46px !important;
+  border:0 !important;
+  border-radius:.75rem !important;
+  box-shadow:0 8px 18px -13px rgba(15,23,42,.55) !important;
+}
+/* البريد والموقع: محتوى مباشر داخل الإطار الواحد */
+#contact .abq-contact-single-frame-tab .grid > div > div{
+  background:transparent !important;
+  padding:0 !important;
+}
+@media(max-width:640px){
+  #contact .abq-contact-single-frame-tab{border-width:2px !important;border-radius:1.1rem !important;padding:.75rem !important;}
+  #contact .abq-contact-single-frame-tab .grid{grid-template-columns:1fr !important;}
+  #contact .abq-contact-single-frame-tab .abq-contact-doctor-name + div.grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
