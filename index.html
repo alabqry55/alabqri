@@ -5686,6 +5686,52 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+<style id="abq-main-tabs-unified-icons-sizing-20261007">
+/* توحيد أيقونات وأبعاد التبويبات الثمانية — بدون تغيير الوظائف أو الترتيب */
+.main-tabs-nav .nav-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:.22rem !important;
+  min-height:32px !important;
+  padding:.26rem .48rem !important;
+  font-size:.68rem !important;
+  line-height:1.2 !important;
+  box-sizing:border-box !important;
+}
+.main-tabs-nav .nav-btn .abq-tab-icon{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:1.05em !important;
+  min-width:1.05em !important;
+  height:1.05em !important;
+  font-size:1em !important;
+  line-height:1 !important;
+  flex:0 0 1.05em !important;
+}
+.main-tabs-nav .nav-btn .abq-tab-label{
+  display:inline-block !important;
+  min-width:0 !important;
+  line-height:1.2 !important;
+}
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn{
+    min-height:34px !important;
+    padding:.28rem .28rem !important;
+    font-size:.62rem !important;
+    gap:.20rem !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn{
+    min-height:34px !important;
+    padding:.28rem .24rem !important;
+    font-size:.61rem !important;
+    gap:.18rem !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -5807,14 +5853,14 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
             <p class="text-xs md:text-sm font-semibold tracking-wide text-blue-700 bg-sky-50 px-3 py-1.5 rounded-lg border border-blue-700">د/أحمد السيد رَسَّه | س.ت.92527</div>
 </div>
         <nav class="main-tabs-nav top-0 z-50" aria-label="التبويبات الرئيسية للمنصة">
-            <button type="button" onclick="switchTab('home')" class="nav-btn active">🏠 الرئيسية</button>
-            <button type="button" onclick="switchTab('qualifications')" class="nav-btn">🎓 المؤهلات والإعتمادات</button>
-            <button type="button" onclick="switchTab('doors')" class="nav-btn">📜 الدبلومات الرسمية المعتمدة</button>
-            <button type="button" onclick="switchTab('courses')" class="nav-btn">📚 العلوم والدورات المساعدة</button>
-            <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
-            <button type="button" onclick="switchTab('matrix')" class="nav-btn">🌿 مرصد العبقري للإتزان الشامل</button>
-            <button type="button" onclick="switchTab('azkar')" class="nav-btn">📿 مجلس العبقري للذكر والتسبيح</button>
-            <button type="button" onclick="switchTab('contact')" class="nav-btn">التواصل والخدمات 📞</button>
+            <button type="button" onclick="switchTab('home')" class="nav-btn active"><span class="abq-tab-icon" aria-hidden="true">🏠</span><span class="abq-tab-label">الرئيسية</span></button>
+            <button type="button" onclick="switchTab('qualifications')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">🎓</span><span class="abq-tab-label">المؤهلات والإعتمادات</span></button>
+            <button type="button" onclick="switchTab('doors')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">📜</span><span class="abq-tab-label">الدبلومات الرسمية المعتمدة</span></button>
+            <button type="button" onclick="switchTab('courses')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">📚</span><span class="abq-tab-label">العلوم والدورات المساعدة</span></button>
+            <button type="button" onclick="switchTab('articles')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">📰</span><span class="abq-tab-label">أحدث المقالات والأبحاث</span></button>
+            <button type="button" onclick="switchTab('matrix')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">🌿</span><span class="abq-tab-label">مرصد العبقري للإتزان الشامل</span></button>
+            <button type="button" onclick="switchTab('azkar')" class="nav-btn"><span class="abq-tab-icon" aria-hidden="true">📿</span><span class="abq-tab-label">مجلس العبقري للذكر والتسبيح</span></button>
+            <button type="button" onclick="switchTab('contact')" class="nav-btn"><span class="abq-tab-label">التواصل والخدمات</span><span class="abq-tab-icon" aria-hidden="true">📞</span></button>
         </nav>
     </header>
 
