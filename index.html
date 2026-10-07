@@ -9763,96 +9763,6 @@ window.showFavorites = function showFavorites(){
 
 </script>
 
-<!-- زر العودة إلى أعلى الصفحة -->
-<button id="scrollTopBtn" title="العودة إلى أعلى الصفحة" aria-label="العودة إلى أعلى الصفحة">
-    <i class="fas fa-chevron-up" aria-hidden="true"></i>
-</button>
-<button id="scrollBottomBtn" title="الانتقال إلى أسفل الصفحة" aria-label="الانتقال إلى أسفل الصفحة">
-    <i class="fas fa-chevron-down" aria-hidden="true"></i>
-</button>
-<script>
-/* =========================================================
-   ALABQARI 1.3 PRO — SCROLL TOP
-   ========================================================= */
-// زر العودة إلى أعلى الصفحة
-const scrollTopBtn = document.getElementById("scrollTopBtn");
-
-window.addEventListener("scroll", function () {
-    if (window.pageYOffset > 300) {
-        scrollTopBtn.classList.add("show");
-    } else {
-        scrollTopBtn.classList.remove("show");
-    }
-});
-
-scrollTopBtn.addEventListener("click", function () {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-});
-
-const scrollBottomBtn = document.getElementById("scrollBottomBtn");
-if (scrollBottomBtn) {
-    function updateScrollBottomButton() {
-        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        const remaining = maxScroll - (window.pageYOffset || window.scrollY || 0);
-        scrollBottomBtn.classList.toggle("show", maxScroll > 300 && remaining > 300);
-    }
-
-    window.addEventListener("scroll", updateScrollBottomButton, {passive:true});
-    window.addEventListener("resize", updateScrollBottomButton);
-    window.addEventListener("load", updateScrollBottomButton);
-
-    scrollBottomBtn.addEventListener("click", function () {
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth"
-        });
-    });
-
-    updateScrollBottomButton();
-}
-</script>
-    <!-- ===== أزرار الرجوع والتقدم الآمنة ===== -->
-    <div id="abq-safe-history-nav" aria-label="التنقل بين تبويبات المشروع">
-        <button id="abq-history-back" type="button" title="رجوع" aria-label="رجوع إلى التبويب السابق" disabled>
-            <i class="fas fa-arrow-right" aria-hidden="true"></i>
-        </button>
-        <button id="abq-history-forward" type="button" title="تقدم" aria-label="التقدم إلى التبويب التالي" disabled>
-            <i class="fas fa-arrow-left" aria-hidden="true"></i>
-        </button>
-    </div>
-
-    <script>
-/* =========================================================
-   ALABQARI 1.3 PRO — HISTORY NAVIGATION
-   ========================================================= */
-    (function () {
-        'use strict';
-        function initABQHistoryButtons() {
-            var backBtn = document.getElementById('abq-history-back');
-            var forwardBtn = document.getElementById('abq-history-forward');
-            if (!backBtn || !forwardBtn) return;
-            backBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (typeof abqGoBack === 'function') abqGoBack();
-            });
-            forwardBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (typeof abqGoForward === 'function') abqGoForward();
-            });
-            if (typeof abqUpdateHistoryButtons === 'function') abqUpdateHistoryButtons();
-        }
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initABQHistoryButtons);
-        } else {
-            initABQHistoryButtons();
-        }
-    })();
-    </script>
 <script>
 /* =========================================================
    ALABQARI 1.3 PRO — ABQ CORE SYSTEM
@@ -13980,276 +13890,228 @@ table{max-width:100%;display:block;overflow-x:auto}
 </style>
 
 
-<style id="abq-mobile-4way-smart-navigation-20261007">
+
+
+<style id="abq-unified-4way-navigation-20261007">
 /* =========================================================
-   لوحة العبقري الرباعية 4-Way Smart Navigation — موبايل فقط
-   PC يظل على نظام التنقل الحالي دون تغيير.
+   لوحة العبقري الرباعية — 4-Way Unified Navigation
+   لوحة واحدة ثابتة ومختصرة — PC + Mobile
    ========================================================= */
-@media (max-width:768px){
-  #abq-safe-history-nav{
-    display:none!important;
-  }
-
-  #abq-mobile-4way-nav{
-    position:fixed!important;
-    right:16px!important;
-    bottom:16px!important;
-    width:58px!important;
-    height:58px!important;
-    z-index:100000!important;
-    display:grid!important;
-    place-items:center!important;
-    direction:ltr!important;
-    pointer-events:none!important;
-    -webkit-tap-highlight-color:transparent!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-core,
-  #abq-mobile-4way-nav .abq-4way-btn{
-    box-sizing:border-box!important;
-    border:2px solid rgba(37,99,235,.92)!important;
-    background:linear-gradient(145deg,#eff6ff,#dbeafe)!important;
-    color:#1e3a8a!important;
-    box-shadow:0 10px 22px rgba(15,23,42,.22), inset 0 1px 2px rgba(255,255,255,.95)!important;
-    -webkit-backdrop-filter:blur(8px)!important;
-    backdrop-filter:blur(8px)!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-core{
-    position:absolute!important;
-    inset:0!important;
-    width:58px!important;
-    height:58px!important;
-    margin:0!important;
-    padding:0!important;
-    border-radius:50%!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    font-size:25px!important;
-    line-height:1!important;
-    cursor:pointer!important;
-    pointer-events:auto!important;
-    transform:scale(1)!important;
-    transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-core:active{
-    transform:scale(.93)!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-btn{
-    position:absolute!important;
-    left:50%!important;
-    top:50%!important;
-    width:42px!important;
-    height:42px!important;
-    margin:-21px 0 0 -21px!important;
-    padding:0!important;
-    border-radius:50%!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    font-size:18px!important;
-    line-height:1!important;
-    cursor:pointer!important;
-    pointer-events:none!important;
-    opacity:0!important;
-    transform:translate(0,0) scale(.35)!important;
-    transition:
-      transform .38s cubic-bezier(.2,.85,.2,1),
-      opacity .22s ease,
-      background .22s ease,
-      box-shadow .22s ease!important;
-  }
-
-  #abq-mobile-4way-nav.is-expanded .abq-4way-btn{
-    pointer-events:auto!important;
-    opacity:1!important;
-  }
-
-  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--top{
-    transform:translate(0,-68px) scale(1)!important;
-  }
-  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--bottom{
-    transform:translate(0,68px) scale(1)!important;
-  }
-  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--back{
-    transform:translate(68px,0) scale(1)!important;
-  }
-  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--forward{
-    transform:translate(-68px,0) scale(1)!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-btn:hover{
-    background:#eff6ff!important;
-    box-shadow:0 12px 24px rgba(15,23,42,.25), inset 0 1px 2px rgba(255,255,255,.98)!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-btn:active{
-    transform:scale(.9)!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-btn:focus-visible,
-  #abq-mobile-4way-nav .abq-4way-core:focus-visible{
-    outline:3px solid rgba(37,99,235,.28)!important;
-    outline-offset:3px!important;
-  }
-
-  #abq-mobile-4way-nav .abq-4way-label{
-    position:absolute!important;
-    width:1px!important;
-    height:1px!important;
-    padding:0!important;
-    margin:-1px!important;
-    overflow:hidden!important;
-    clip:rect(0,0,0,0)!important;
-    white-space:nowrap!important;
-    border:0!important;
-  }
+#abq-unified-4way-nav{
+  position:fixed!important;
+  right:18px!important;
+  bottom:18px!important;
+  width:92px!important;
+  height:92px!important;
+  z-index:100000!important;
+  display:grid!important;
+  place-items:center!important;
+  direction:ltr!important;
+  pointer-events:none!important;
+  -webkit-tap-highlight-color:transparent!important;
 }
-
-@media (max-width:420px){
-  #abq-mobile-4way-nav{
-    right:12px!important;
-    bottom:12px!important;
-  }
+#abq-unified-4way-nav .abq-unified-panel{
+  position:absolute!important;
+  inset:0!important;
+  border:1.5px solid rgba(37,99,235,.72)!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,rgba(248,250,252,.97),rgba(219,234,254,.94))!important;
+  box-shadow:
+    0 8px 20px rgba(15,23,42,.18),
+    0 0 14px rgba(37,99,235,.20),
+    inset 0 1px 2px rgba(255,255,255,.98)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+  backdrop-filter:blur(10px)!important;
+  pointer-events:auto!important;
 }
-
-@media (min-width:769px){
-  #abq-mobile-4way-nav{
-    display:none!important;
+#abq-unified-4way-nav .abq-unified-core{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:38px!important;
+  height:38px!important;
+  margin:-19px 0 0 -19px!important;
+  padding:0!important;
+  border:1.5px solid rgba(37,99,235,.85)!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.96)!important;
+  box-shadow:
+    0 4px 10px rgba(15,23,42,.18),
+    0 0 11px rgba(37,99,235,.25)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  overflow:hidden!important;
+  padding:5px!important;
+}
+#abq-unified-4way-nav .abq-unified-core img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  border-radius:50%!important;
+  display:block!important;
+}
+#abq-unified-4way-nav .abq-unified-btn{
+  position:absolute!important;
+  width:28px!important;
+  height:28px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.82)!important;
+  color:#1e3a8a!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:14px!important;
+  line-height:1!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  box-shadow:0 3px 8px rgba(15,23,42,.16)!important;
+  transition:transform .16s ease,background .16s ease,box-shadow .16s ease!important;
+}
+#abq-unified-4way-nav .abq-unified-btn:hover{
+  background:#eff6ff!important;
+  box-shadow:0 4px 11px rgba(37,99,235,.24)!important;
+  transform:scale(1.07)!important;
+}
+#abq-unified-4way-nav .abq-unified-btn:active{
+  transform:scale(.92)!important;
+}
+#abq-unified-4way-nav .abq-unified-btn--top{
+  left:50%!important;
+  top:7px!important;
+  margin-left:-14px!important;
+}
+#abq-unified-4way-nav .abq-unified-btn--bottom{
+  left:50%!important;
+  bottom:7px!important;
+  margin-left:-14px!important;
+}
+#abq-unified-4way-nav .abq-unified-btn--back{
+  right:7px!important;
+  top:50%!important;
+  margin-top:-14px!important;
+}
+#abq-unified-4way-nav .abq-unified-btn--forward{
+  left:7px!important;
+  top:50%!important;
+  margin-top:-14px!important;
+}
+#abq-unified-4way-nav button:focus-visible{
+  outline:2px solid rgba(37,99,235,.34)!important;
+  outline-offset:2px!important;
+}
+#abq-unified-4way-nav .abq-unified-label{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+@media(max-width:768px){
+  #abq-unified-4way-nav{
+    right:10px!important;
+    bottom:10px!important;
+    width:82px!important;
+    height:82px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-panel{
+    border-radius:23px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-core{
+    width:34px!important;
+    height:34px!important;
+    margin:-17px 0 0 -17px!important;
+    padding:4px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-btn{
+    width:25px!important;
+    height:25px!important;
+    font-size:13px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-btn--top{
+    top:6px!important;
+    margin-left:-12.5px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-btn--bottom{
+    bottom:6px!important;
+    margin-left:-12.5px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-btn--back{
+    right:6px!important;
+    margin-top:-12.5px!important;
+  }
+  #abq-unified-4way-nav .abq-unified-btn--forward{
+    left:6px!important;
+    margin-top:-12.5px!important;
   }
 }
 </style>
 
-<div id="abq-mobile-4way-nav" aria-label="لوحة العبقري الرباعية للتنقل">
-  <button class="abq-4way-btn abq-4way-btn--top" type="button" aria-label="أعلى الصفحة" title="أعلى الصفحة">
-    <span aria-hidden="true">⬆️</span>
-    <span class="abq-4way-label">أعلى الصفحة</span>
+<div id="abq-unified-4way-nav" aria-label="لوحة العبقري الرباعية للتنقل">
+  <div class="abq-unified-panel" aria-hidden="true"></div>
+  <button class="abq-unified-btn abq-unified-btn--top" type="button" aria-label="أعلى الصفحة" title="أعلى الصفحة">
+    <span aria-hidden="true">⬆️</span><span class="abq-unified-label">أعلى الصفحة</span>
   </button>
-  <button class="abq-4way-btn abq-4way-btn--back" type="button" aria-label="رجوع" title="رجوع">
-    <span aria-hidden="true">➡️</span>
-    <span class="abq-4way-label">رجوع</span>
+  <button class="abq-unified-btn abq-unified-btn--back" type="button" aria-label="رجوع" title="رجوع">
+    <span aria-hidden="true">➡️</span><span class="abq-unified-label">رجوع</span>
   </button>
-  <button class="abq-4way-btn abq-4way-btn--forward" type="button" aria-label="تقدم" title="تقدم">
-    <span aria-hidden="true">⬅️</span>
-    <span class="abq-4way-label">تقدم</span>
+  <button class="abq-unified-btn abq-unified-btn--forward" type="button" aria-label="تقدم" title="تقدم">
+    <span aria-hidden="true">⬅️</span><span class="abq-unified-label">تقدم</span>
   </button>
-  <button class="abq-4way-btn abq-4way-btn--bottom" type="button" aria-label="أسفل الصفحة" title="أسفل الصفحة">
-    <span aria-hidden="true">⬇️</span>
-    <span class="abq-4way-label">أسفل الصفحة</span>
+  <button class="abq-unified-btn abq-unified-btn--bottom" type="button" aria-label="أسفل الصفحة" title="أسفل الصفحة">
+    <span aria-hidden="true">⬇️</span><span class="abq-unified-label">أسفل الصفحة</span>
   </button>
-  <button id="abq-mobile-4way-core" class="abq-4way-core" type="button" aria-label="فتح لوحة العبقري الرباعية" aria-expanded="false" title="لوحة العبقري الرباعية">
-    <span aria-hidden="true">🌿</span>
+  <button id="abq-unified-4way-core" class="abq-unified-core" type="button" aria-label="شعار منصة العبقري" title="منصة العبقري">
+    <img src="https://img2link.online/api/file/1784959287743-580091929.png" alt="شعار منصة العبقري">
   </button>
 </div>
 
-<script id="abq-mobile-4way-navigation-script">
+<script id="abq-unified-4way-navigation-script">
 (function(){
   'use strict';
-
-  function initAbqMobile4Way(){
-    var nav = document.getElementById('abq-mobile-4way-nav');
-    var core = document.getElementById('abq-mobile-4way-core');
+  function initAbqUnified4Way(){
+    var nav=document.getElementById('abq-unified-4way-nav');
+    var core=document.getElementById('abq-unified-4way-core');
     if(!nav || !core) return;
-
-    var topBtn = nav.querySelector('.abq-4way-btn--top');
-    var bottomBtn = nav.querySelector('.abq-4way-btn--bottom');
-    var backBtn = nav.querySelector('.abq-4way-btn--back');
-    var forwardBtn = nav.querySelector('.abq-4way-btn--forward');
-    var collapseTimer = null;
-
-    function isMobile(){
-      return window.matchMedia('(max-width: 768px)').matches;
-    }
-
-    function collapse(){
-      nav.classList.remove('is-expanded');
-      core.setAttribute('aria-expanded','false');
-      core.setAttribute('aria-label','فتح لوحة العبقري الرباعية');
-    }
-
-    function scheduleCollapse(){
-      if(collapseTimer) window.clearTimeout(collapseTimer);
-      collapseTimer = window.setTimeout(collapse, 3500);
-    }
-
-    function expand(){
-      if(!isMobile()) return;
-      nav.classList.add('is-expanded');
-      core.setAttribute('aria-expanded','true');
-      core.setAttribute('aria-label','إغلاق لوحة العبقري الرباعية');
-      scheduleCollapse();
-    }
-
-    function toggle(){
-      if(nav.classList.contains('is-expanded')){
-        collapse();
-      }else{
-        expand();
-      }
-    }
-
-    function useAction(action){
-      if(!isMobile()) return;
-      action();
-      scheduleCollapse();
-    }
-
-    core.addEventListener('click', function(e){
+    var topBtn=nav.querySelector('.abq-unified-btn--top');
+    var bottomBtn=nav.querySelector('.abq-unified-btn--bottom');
+    var backBtn=nav.querySelector('.abq-unified-btn--back');
+    var forwardBtn=nav.querySelector('.abq-unified-btn--forward');
+    core.addEventListener('click',function(e){
       e.preventDefault();
       e.stopPropagation();
-      toggle();
+      window.scrollTo({top:0,behavior:'smooth'});
     });
-
-    topBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      useAction(function(){
-        window.scrollTo({top:0, behavior:'smooth'});
-      });
+    topBtn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      window.scrollTo({top:0,behavior:'smooth'});
     });
-
-    bottomBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      useAction(function(){
-        window.scrollTo({top:document.documentElement.scrollHeight, behavior:'smooth'});
-      });
+    bottomBtn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'});
     });
-
-    backBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      useAction(function(){
-        if(typeof window.abqGoBack === 'function') window.abqGoBack();
-      });
+    backBtn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      if(typeof window.abqGoBack==='function') window.abqGoBack();
     });
-
-    forwardBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      useAction(function(){
-        if(typeof window.abqGoForward === 'function') window.abqGoForward();
-      });
+    forwardBtn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      if(typeof window.abqGoForward==='function') window.abqGoForward();
     });
-
-    document.addEventListener('click', function(e){
-      if(!nav.contains(e.target)) collapse();
-    }, true);
-
-    window.addEventListener('resize', function(){
-      if(!isMobile()) collapse();
-    });
-
-    collapse();
   }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initAbqMobile4Way);
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initAbqUnified4Way);
   }else{
-    initAbqMobile4Way();
+    initAbqUnified4Way();
   }
 })();
 </script>
