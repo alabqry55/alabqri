@@ -41,3 +41,14 @@ CREATE TABLE IF NOT EXISTS feedback_ratings (
 );
 INSERT OR IGNORE INTO feedback_ratings (rating,count) VALUES
   ('excellent',245),('good',63),('average',27),('suggestion',15);
+
+-- المشتركين الفعليين بالمنصة — منفصلون عن عداد الزوار والتفاعل
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL DEFAULT '',
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_subscribers_active ON subscribers(active);
