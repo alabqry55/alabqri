@@ -1019,8 +1019,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
 </style>
 
 
-<style id="alabqari-v21-icon-fixes">
-/* Alabqari V2.1 — self-contained icon fallbacks */
+<style id="alabqri-v21-icon-fixes">
+/* Alabqri V2.1 — self-contained icon fallbacks */
 .alb-icon{display:inline-flex;align-items:center;justify-content:center;line-height:1;font-family:Arial,sans-serif;font-weight:700;font-style:normal}
 .alb-arrow-up::before{content:"↑"}
 .alb-arrow-right::before{content:"→"}
@@ -1028,8 +1028,8 @@ img.abq-zoomable-image { cursor: zoom-in; }
 .alb-close::before{content:"×"}
 .alb-zoom::before{content:"⌕"}
 /* Keep Font Awesome when available, but ensure controls remain visible if CDN is unavailable. */
-.alabqari-icon-fallback{font-family:Arial,sans-serif!important}
-.alabqari-icon-fallback::before{font-family:Arial,sans-serif!important}
+.alabqri-icon-fallback{font-family:Arial,sans-serif!important}
+.alabqri-icon-fallback::before{font-family:Arial,sans-serif!important}
 </style>
 
 
@@ -7669,7 +7669,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                                     <div class="flex justify-between"><span>5 — ينطبق جدًا</span><span class="font-black text-teal-700">راسخ</span></div>
                                 </div>
                             </div>
-                            <button onclick="startAlabqariCompass()" class="mt-5 w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">إبدأ استكشاف الخريطة 🧭</button>
+                            <button onclick="startAlabqriCompass()" class="mt-5 w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">إبدأ استكشاف الخريطة 🧭</button>
                         </div>
                     </div>
                     <div class="mt-3 bg-blue-50/60 p-2 rounded-2xl border border-blue-700 leading-7"><strong>ملاحظة مهمة:</strong> إذا كانت لديك معاناة نفسية شديدة أو مستمرة، فهذه الأداة لا تستبدل التقييم المتخصص أو الرعاية الصحية المناسبة.</div>
@@ -7689,8 +7689,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                     </div>
                     <div id="compass-options-container" class="grid gap-3 mb-0"></div>
                     <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-200">
-                        <button id="compass-prev-btn" onclick="AlabqariCompass.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">← السابق</button>
-                        <button id="compass-next-btn" onclick="AlabqariCompass.next()" class="px-3 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">التالي →</button>
+                        <button id="compass-prev-btn" onclick="AlabqriCompass.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">← السابق</button>
+                        <button id="compass-next-btn" onclick="AlabqriCompass.next()" class="px-3 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">التالي →</button>
                     </div>
                 </div>
 
@@ -7709,8 +7709,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                     <div id="compass-direction-box" class="bg-slate-950 text-white rounded-3xl p-5 md:p-7 mb-6 text-right"></div>
                     <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-900 leading-7 mb-6"><strong>تذكّر:</strong> الإتزان ليس أن تتوقف الحياة عن الاضطراب؛ بل أن تمتلك بوصلة تعيدك إلى اتزانك كلما اضطربت.</div>
                     <div class="grid sm:grid-cols-2 gap-3">
-                        <button onclick="AlabqariCompass.saveResult()" class="py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">حفظ النتيجة على هذا الجهاز 💾</button>
-                        <button onclick="AlabqariCompass.reset()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow">إعادة التجربة 🔄</button>
+                        <button onclick="AlabqriCompass.saveResult()" class="py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">حفظ النتيجة على هذا الجهاز 💾</button>
+                        <button onclick="AlabqriCompass.reset()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow">إعادة التجربة 🔄</button>
                     </div>
                 </div>
 
@@ -7750,7 +7750,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                             <li><strong class="text-blue-700">5:</strong> دائماً — ينطبق عليّ كلياً.</li>
                         </ul>
                     </div>
-                    <button onclick="startAlabqariMatrix()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold rounded-xl shadow-lg hover:opacity-95 transition transform hover:-translate-y-0.5">
+                    <button onclick="startAlabqriMatrix()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold rounded-xl shadow-lg hover:opacity-95 transition transform hover:-translate-y-0.5">
                         بدء الاختبار الشامل (100 سؤال)
                     </button>
                 </div>
@@ -7776,10 +7776,10 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                     <div id="matrix-options-container" class="grid gap-3 mb-0"></div>
 
                     <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-200">
-                        <button id="matrix-prev-btn" onclick="AlabqariMatrix.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <button id="matrix-prev-btn" onclick="AlabqriMatrix.prev()" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs md:text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
                             ← السابق
                         </button>
-                        <button id="matrix-next-btn" onclick="AlabqariMatrix.next()" class="px-3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">
+                        <button id="matrix-next-btn" onclick="AlabqriMatrix.next()" class="px-3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-md">
                             التالي →
                         </button>
                     </div>
@@ -7810,7 +7810,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
                         </div>
                     </div>
 
-                    <button onclick="AlabqariMatrix.reset()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow-lg transition text-sm">
+                    <button onclick="AlabqriMatrix.reset()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow-lg transition text-sm">
                         إعادة الاختبار
                     </button>
                 </div>
@@ -8683,7 +8683,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — CORE / AZKAR / STORAGE
+   ALABQRI 1.3 PRO — CORE / AZKAR / STORAGE
    ========================================================= */
         let count = 0; let loops = 0; let soundOn = true; let audioCtx = null;
         let dynamicTopics = [];
@@ -9165,9 +9165,9 @@ function azkarInit() {
     <!-- سكربت التبديل والتفاعل والأسئلة -->
     <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — COMPASS ENGINE
+   ALABQRI 1.3 PRO — COMPASS ENGINE
    ========================================================= */
-window.AlabqariCompass = (function(){
+window.AlabqriCompass = (function(){
 const questions = [
     {
         "axis": "السكينة الداخلية",
@@ -9636,9 +9636,9 @@ return {start,next,prev,reset,saveResult};
 </script>
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — MATRIX ENGINE
+   ALABQRI 1.3 PRO — MATRIX ENGINE
    ========================================================= */
-window.AlabqariMatrix = (function(){
+window.AlabqriMatrix = (function(){
 const matrixAxes = [
     { cat: "المحور الأول: العلاج المعرفي (CBT)", name: "العلاج المعرفي (CBT)", desc: "هل أستطيع أن أرصد أفكاري التلقائية وأميّزها عن الحقائق، وأعيد صياغتها بعقلانية؟" },
     { cat: "المحور الثاني: العلاج الجدلي السلوكي (DBT)", name: "العلاج الجدلي السلوكي (DBT)", desc: "هل أحتمل الضيق العاطفي وأنظّم انفعالاتي دون اندفاع أو سلوك مدمّر؟" },
@@ -9884,7 +9884,7 @@ return {start,next,prev,reset};
 </script>
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — OBSERVATORY NAVIGATION BRIDGE
+   ALABQRI 1.3 PRO — OBSERVATORY NAVIGATION BRIDGE
    ========================================================= */
 /* ===== مرصد العبقري: التنقل الآمن بين البوصلة والمصفوفة ===== */
 window.switchBalanceWindow = function(name) {
@@ -9917,18 +9917,18 @@ window.switchBalanceWindow = function(name) {
     return true;
 };
 
-window.startAlabqariCompass = function() {
-    if (window.AlabqariCompass && typeof window.AlabqariCompass.start === 'function') {
-        window.AlabqariCompass.start();
+window.startAlabqriCompass = function() {
+    if (window.AlabqriCompass && typeof window.AlabqriCompass.start === 'function') {
+        window.AlabqriCompass.start();
         return true;
     }
     console.error('بوصلة العبقري: محرك الاختبار غير محمّل.');
     return false;
 };
 
-window.startAlabqariMatrix = function() {
-    if (window.AlabqariMatrix && typeof window.AlabqariMatrix.start === 'function') {
-        window.AlabqariMatrix.start();
+window.startAlabqriMatrix = function() {
+    if (window.AlabqriMatrix && typeof window.AlabqriMatrix.start === 'function') {
+        window.AlabqriMatrix.start();
         return true;
     }
     console.error('مصفوفة العبقري: محرك الاختبار غير محمّل.');
@@ -9950,7 +9950,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — UI / SCROLL / COUNTERS
+   ALABQRI 1.3 PRO — UI / SCROLL / COUNTERS
    ========================================================= */
 (function(){
     // مؤشر التقدم + زر العودة للأعلى
@@ -10080,7 +10080,7 @@ window.showFavorites = function showFavorites(){
 
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — ABQ CORE SYSTEM
+   ALABQRI 1.3 PRO — ABQ CORE SYSTEM
    ========================================================= */
 // ===== ABQ CORE SYSTEM (لا يتعارض مع الكود الحالي) =====
 
@@ -10152,7 +10152,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 <script id="abq-hero-lightbox-js">
 /* =========================================================
-   ALABQARI 1.3 PRO — HERO LIGHTBOX
+   ALABQRI 1.3 PRO — HERO LIGHTBOX
    ========================================================= */
 (function () {
     function initHeroLightbox() {
@@ -10219,7 +10219,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 <script id="abq-global-image-lightbox-js">
 /* =========================================================
-   ALABQARI 1.3 PRO — GLOBAL IMAGE LIGHTBOX
+   ALABQRI 1.3 PRO — GLOBAL IMAGE LIGHTBOX
    ========================================================= */
 (function () {
     function initGlobalImageLightbox() {
@@ -10303,9 +10303,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 
-<script id="alabqari-v21-fixes">
+<script id="alabqri-v21-fixes">
 /* =========================================================
-   ALABQARI 1.3 PRO — CRITICAL ICONS / FALLBACKS
+   ALABQRI 1.3 PRO — CRITICAL ICONS / FALLBACKS
    ========================================================= */
 (function(){
   'use strict';
@@ -10320,7 +10320,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.querySelectorAll(selectors.join(',')).forEach(function(el){
       var txt=(el.textContent||'').trim();
       if(!txt && !el.querySelector('svg,img')){
-        el.classList.add('alabqari-icon-fallback');
+        el.classList.add('alabqri-icon-fallback');
       }
     });
   }
@@ -10331,7 +10331,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   function ensureLightbox(){
     if(box) return;
     box=document.createElement('div');
-    box.id='alabqari-v21-lightbox';
+    box.id='alabqri-v21-lightbox';
     box.setAttribute('role','dialog');
     box.setAttribute('aria-modal','true');
     box.setAttribute('aria-label','تكبير الصورة');
@@ -10492,7 +10492,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 <!-- ===== نظام التبويبات الرئيسية — موحّد وآمن ===== -->
 <script>
 /* =========================================================
-   ALABQARI 1.3 PRO — FIXED MODAL + PERSISTENT NAVIGATION
+   ALABQRI 1.3 PRO — FIXED MODAL + PERSISTENT NAVIGATION
    ========================================================= */
 (function(){
   'use strict';
@@ -10942,19 +10942,19 @@ const diplomasData = {
 </script>
 
 
-<!-- ALABQARI 1.3 PRO — BUTTON COMPATIBILITY GUARD -->
+<!-- ALABQRI 1.3 PRO — BUTTON COMPATIBILITY GUARD -->
 <script>
 (function(){
   'use strict';
   var required = ['openDiplomaModal','closeDiplomaModal','openAboutModal','closeAboutModal','openAdminPanel','closeAdminPanel','saveNewTopic','toggleAbqManagerMode','closeTopicSecurityModal','verifyTopicSecurityPassword','incrementDynamicCount','editDynamicTopic','deleteDynamicTopic','incrementHasanat','incrementTCounts','clickSubha','resetSubha','toggleSound'];
   required.forEach(function(name){
-    if (typeof window[name] !== 'function') console.warn('ALABQARI: وظيفة زر غير متاحة:', name);
+    if (typeof window[name] !== 'function') console.warn('ALABQRI: وظيفة زر غير متاحة:', name);
   });
 })();
 </script>
 
 <!-- =========================================================
-     ALABQARI — عزل بوابة الأذكار في مكانها فقط
+     ALABQRI — عزل بوابة الأذكار في مكانها فقط
      هذا الإصلاح لا يغيّر محتوى أي تبويب؛ يضبط الظهور فقط.
      ========================================================= -->
 <style id="abq-azkar-isolation-fix">
@@ -11058,7 +11058,7 @@ body > .azkar-inner-tab {
 </script>
 
 <!-- =========================================================
-     ALABQARI — زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات)
+     ALABQRI — زر إذاعة القرآن الكريم المباشرة (يعمل بكل الصفحات)
      ========================================================= -->
 <style id="abq-toast-style">
 #abq-toast-container {
@@ -12100,7 +12100,7 @@ window.AbqToast = (function(){
 
 
 <!-- =========================================================
-     ALABQARI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
+     ALABQRI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
      يحافظ على التمرير الطبيعي باللمس ويزيد استجابة عجلة الماوس
      ========================================================= -->
 <style id="abq-fast-scroll-final-style">
