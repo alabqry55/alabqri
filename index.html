@@ -5732,6 +5732,30 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
+
+<style id="abq-articles-tab-icon-mobile-alignment-20261007">
+/* الموبايل فقط: ضبط أيقونة «أحدث المقالات والأبحاث» لتطابق محاذاة باقي أيقونات التبويبات */
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('articles')"] .abq-tab-icon{
+    width:1.10em !important;
+    min-width:1.10em !important;
+    height:1.10em !important;
+    flex-basis:1.10em !important;
+    font-size:1.08em !important;
+    transform:translateX(.06rem) !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('articles')"] .abq-tab-icon{
+    width:1.10em !important;
+    min-width:1.10em !important;
+    height:1.10em !important;
+    flex-basis:1.10em !important;
+    font-size:1.08em !important;
+    transform:translateX(.05rem) !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
