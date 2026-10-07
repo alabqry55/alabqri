@@ -1,0 +1,86 @@
+name: Build Alabqri Android APK
+
+on:
+  push:
+    branches:
+      - apk-build
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout platform
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Prepare Capacitor wrapper
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf mobile-apk
+          mkdir -p mobile-apk/www
+          cp index.html mobile-apk/www/index.html
+          cd mobile-apk
+
+          npm init -y
+          npm install @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
+
+          cat > capacitor.config.ts <<'EOF'
+          import type { CapacitorConfig } from '@capacitor/cli';
+
+          const config: CapacitorConfig = {
+            appId: 'com.alabqri.platform',
+            appName: 'منصة العبقري',
+            webDir: 'www',
+            server: {
+              url: 'https://alabqri.pages.dev',
+              cleartext: false
+            },
+            android: {
+              allowMixedContent: false
+            }
+          };
+
+          export default config;
+          EOF
+
+          npx cap add android
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android API 36
+        shell: bash
+        run: |
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Build debug APK
+        shell: bash
+        working-directory: mobile-apk/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Publish APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: alabqri-platform-debug-apk
+          path: mobile-apk/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
