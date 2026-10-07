@@ -5995,7 +5995,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
             <!-- 1) HERO -->
             <div class="abq-home-live-hero hero-bg text-white shadow-2xl relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
-    <img class="abq-main-hero-image abq-zoomable-image" src="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" alt="الواجهة الرئيسية لمركز العبقري" loading="eager" decoding="async" fetchpriority="high" loading="eager" decoding="async" fetchpriority="high" referrerpolicy="no-referrer">
+    <img class="abq-main-hero-image abq-zoomable-image" src="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" alt="الواجهة الرئيسية لمركز العبقري" loading="eager" decoding="async" fetchpriority="high" referrerpolicy="no-referrer">
     <div class="abq-home-live-overlay" aria-hidden="true"></div>
 </div>
 
@@ -6448,7 +6448,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
                     <img src="https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg"
                          alt="عضوية رابطة الروحانيين العرب واعتماد أكاديمية الجعفري للعلوم الروحانية والطب التكميلي"
-                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="eager" decoding="async" fetchpriority="high" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="lazy" decoding="async" referrerpolicy="no-referrer">
 
                     <span class="relative z-10 text-white font-bold text-sm
                                  bg-slate-900/60 px-3 py-1 rounded-lg">
@@ -12120,16 +12120,18 @@ window.AbqToast = (function(){
     img.setAttribute('decoding','async');
     img.setAttribute('fetchpriority','high');
     img.setAttribute('referrerpolicy','no-referrer');
-    if(img.complete && img.naturalWidth>0) return;
-    var src=img.currentSrc || img.src;
-    if(src){
-      var probe=new Image();
-      probe.decoding='async';
-      probe.referrerPolicy='no-referrer';
-      probe.onload=function(){ img.src=src; };
-      probe.src=src;
-    }
-  }
+     if(!img.dataset.abqImgRetryBound){
+       img.dataset.abqImgRetryBound='1';
+       img.addEventListener('error',function(){
+         if(img.dataset.abqImgRetried) return;
+         img.dataset.abqImgRetried='1';
+         img.removeAttribute('referrerpolicy');
+         var current=img.getAttribute('src');
+         if(current) img.setAttribute('src',current);
+       },{once:false});
+     }
+     if(img.complete && img.naturalWidth>0) return;
+     }
   window.abqShowMainTab=show;
   function hook(){
     if(!normalize()) return;
