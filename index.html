@@ -8027,8 +8027,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
     <div class="abq-ecg-wrap" aria-hidden="true">
       <svg class="abq-ecg" viewBox="0 0 900 120" preserveAspectRatio="none">
-        <path class="abq-ecg-base" d="M0 60 H150 H245 L270 60 L285 60 L300 18 L318 102 L337 60 H430 H505 L525 60 L540 42 L553 78 L566 60 H700 H900"></path>
-        <path class="abq-ecg-line" d="M0 60 H150 H245 L270 60 L285 60 L300 18 L318 102 L337 60 H430 H505 L525 60 L540 42 L553 78 L566 60 H700 H900"></path>
+        <path class="abq-ecg-base" d="M0 60 H72 L86 60 L98 54 L110 60 H160 L176 60 L190 56 L204 60 H238 L250 60 L264 52 L276 60 L292 60 L306 68 L316 68 L326 96 L340 14 L354 108 L368 68 L378 68 L390 60 L430 60 L448 60 L462 54 L476 60 H520 L538 60 L552 42 L566 60 H610 L624 60 L638 56 L652 60 H690 L702 60 L716 52 L728 60 L744 60 L758 68 L768 68 L778 96 L792 14 L806 108 L820 68 L830 68 L842 60 H900"></path>
+        <path class="abq-ecg-line" d="M0 60 H72 L86 60 L98 54 L110 60 H160 L176 60 L190 56 L204 60 H238 L250 60 L264 52 L276 60 L292 60 L306 68 L316 68 L326 96 L340 14 L354 108 L368 68 L378 68 L390 60 L430 60 L448 60 L462 54 L476 60 H520 L538 60 L552 42 L566 60 H610 L624 60 L638 56 L652 60 H690 L702 60 L716 52 L728 60 L744 60 L758 68 L768 68 L778 96 L792 14 L806 108 L820 68 L830 68 L842 60 H900"></path>
       </svg>
     </div>
 
@@ -14727,6 +14727,28 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
 }
 </style>
+
+<style id="abq-ecg-heartbeat-shape-20261007">
+/* نبض احترافي — تغيير شكل الموجة فقط مع الحفاظ على حركة ECG الأصلية */
+#contact .abq-ecg-wrap{
+  background:linear-gradient(180deg,rgba(239,246,255,.62),rgba(255,255,255,.82),rgba(239,246,255,.62))!important;
+}
+#contact .abq-ecg-base,
+#contact .abq-ecg-line{
+  stroke-width:3.2!important;
+  filter:drop-shadow(0 0 5px rgba(37,99,235,.48))!important;
+}
+#contact .abq-ecg-base{opacity:.12!important}
+#contact .abq-ecg-line{
+  stroke-dasharray:170 730!important;
+  animation-duration:3.6s!important;
+}
+@media(max-width:768px){
+  #contact .abq-ecg-line,
+  #contact .abq-ecg-base{stroke-width:3!important}
+}
+</style>
+<!-- ABQ ECG SHAPE UPDATE -->
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
