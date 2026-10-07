@@ -13979,6 +13979,281 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 
+
+<style id="abq-mobile-4way-smart-navigation-20261007">
+/* =========================================================
+   لوحة العبقري الرباعية 4-Way Smart Navigation — موبايل فقط
+   PC يظل على نظام التنقل الحالي دون تغيير.
+   ========================================================= */
+@media (max-width:768px){
+  #abq-safe-history-nav{
+    display:none!important;
+  }
+
+  #abq-mobile-4way-nav{
+    position:fixed!important;
+    right:16px!important;
+    bottom:16px!important;
+    width:58px!important;
+    height:58px!important;
+    z-index:100000!important;
+    display:grid!important;
+    place-items:center!important;
+    direction:ltr!important;
+    pointer-events:none!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-core,
+  #abq-mobile-4way-nav .abq-4way-btn{
+    box-sizing:border-box!important;
+    border:2px solid rgba(37,99,235,.92)!important;
+    background:linear-gradient(145deg,#eff6ff,#dbeafe)!important;
+    color:#1e3a8a!important;
+    box-shadow:0 10px 22px rgba(15,23,42,.22), inset 0 1px 2px rgba(255,255,255,.95)!important;
+    -webkit-backdrop-filter:blur(8px)!important;
+    backdrop-filter:blur(8px)!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-core{
+    position:absolute!important;
+    inset:0!important;
+    width:58px!important;
+    height:58px!important;
+    margin:0!important;
+    padding:0!important;
+    border-radius:50%!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    font-size:25px!important;
+    line-height:1!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+    transform:scale(1)!important;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-core:active{
+    transform:scale(.93)!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-btn{
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    width:42px!important;
+    height:42px!important;
+    margin:-21px 0 0 -21px!important;
+    padding:0!important;
+    border-radius:50%!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    font-size:18px!important;
+    line-height:1!important;
+    cursor:pointer!important;
+    pointer-events:none!important;
+    opacity:0!important;
+    transform:translate(0,0) scale(.35)!important;
+    transition:
+      transform .38s cubic-bezier(.2,.85,.2,1),
+      opacity .22s ease,
+      background .22s ease,
+      box-shadow .22s ease!important;
+  }
+
+  #abq-mobile-4way-nav.is-expanded .abq-4way-btn{
+    pointer-events:auto!important;
+    opacity:1!important;
+  }
+
+  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--top{
+    transform:translate(0,-68px) scale(1)!important;
+  }
+  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--bottom{
+    transform:translate(0,68px) scale(1)!important;
+  }
+  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--back{
+    transform:translate(68px,0) scale(1)!important;
+  }
+  #abq-mobile-4way-nav.is-expanded .abq-4way-btn--forward{
+    transform:translate(-68px,0) scale(1)!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-btn:hover{
+    background:#eff6ff!important;
+    box-shadow:0 12px 24px rgba(15,23,42,.25), inset 0 1px 2px rgba(255,255,255,.98)!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-btn:active{
+    transform:scale(.9)!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-btn:focus-visible,
+  #abq-mobile-4way-nav .abq-4way-core:focus-visible{
+    outline:3px solid rgba(37,99,235,.28)!important;
+    outline-offset:3px!important;
+  }
+
+  #abq-mobile-4way-nav .abq-4way-label{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    padding:0!important;
+    margin:-1px!important;
+    overflow:hidden!important;
+    clip:rect(0,0,0,0)!important;
+    white-space:nowrap!important;
+    border:0!important;
+  }
+}
+
+@media (max-width:420px){
+  #abq-mobile-4way-nav{
+    right:12px!important;
+    bottom:12px!important;
+  }
+}
+
+@media (min-width:769px){
+  #abq-mobile-4way-nav{
+    display:none!important;
+  }
+}
+</style>
+
+<div id="abq-mobile-4way-nav" aria-label="لوحة العبقري الرباعية للتنقل">
+  <button class="abq-4way-btn abq-4way-btn--top" type="button" aria-label="أعلى الصفحة" title="أعلى الصفحة">
+    <span aria-hidden="true">⬆️</span>
+    <span class="abq-4way-label">أعلى الصفحة</span>
+  </button>
+  <button class="abq-4way-btn abq-4way-btn--back" type="button" aria-label="رجوع" title="رجوع">
+    <span aria-hidden="true">➡️</span>
+    <span class="abq-4way-label">رجوع</span>
+  </button>
+  <button class="abq-4way-btn abq-4way-btn--forward" type="button" aria-label="تقدم" title="تقدم">
+    <span aria-hidden="true">⬅️</span>
+    <span class="abq-4way-label">تقدم</span>
+  </button>
+  <button class="abq-4way-btn abq-4way-btn--bottom" type="button" aria-label="أسفل الصفحة" title="أسفل الصفحة">
+    <span aria-hidden="true">⬇️</span>
+    <span class="abq-4way-label">أسفل الصفحة</span>
+  </button>
+  <button id="abq-mobile-4way-core" class="abq-4way-core" type="button" aria-label="فتح لوحة العبقري الرباعية" aria-expanded="false" title="لوحة العبقري الرباعية">
+    <span aria-hidden="true">🌿</span>
+  </button>
+</div>
+
+<script id="abq-mobile-4way-navigation-script">
+(function(){
+  'use strict';
+
+  function initAbqMobile4Way(){
+    var nav = document.getElementById('abq-mobile-4way-nav');
+    var core = document.getElementById('abq-mobile-4way-core');
+    if(!nav || !core) return;
+
+    var topBtn = nav.querySelector('.abq-4way-btn--top');
+    var bottomBtn = nav.querySelector('.abq-4way-btn--bottom');
+    var backBtn = nav.querySelector('.abq-4way-btn--back');
+    var forwardBtn = nav.querySelector('.abq-4way-btn--forward');
+    var collapseTimer = null;
+
+    function isMobile(){
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function collapse(){
+      nav.classList.remove('is-expanded');
+      core.setAttribute('aria-expanded','false');
+      core.setAttribute('aria-label','فتح لوحة العبقري الرباعية');
+    }
+
+    function scheduleCollapse(){
+      if(collapseTimer) window.clearTimeout(collapseTimer);
+      collapseTimer = window.setTimeout(collapse, 3500);
+    }
+
+    function expand(){
+      if(!isMobile()) return;
+      nav.classList.add('is-expanded');
+      core.setAttribute('aria-expanded','true');
+      core.setAttribute('aria-label','إغلاق لوحة العبقري الرباعية');
+      scheduleCollapse();
+    }
+
+    function toggle(){
+      if(nav.classList.contains('is-expanded')){
+        collapse();
+      }else{
+        expand();
+      }
+    }
+
+    function useAction(action){
+      if(!isMobile()) return;
+      action();
+      scheduleCollapse();
+    }
+
+    core.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      toggle();
+    });
+
+    topBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      useAction(function(){
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    });
+
+    bottomBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      useAction(function(){
+        window.scrollTo({top:document.documentElement.scrollHeight, behavior:'smooth'});
+      });
+    });
+
+    backBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      useAction(function(){
+        if(typeof window.abqGoBack === 'function') window.abqGoBack();
+      });
+    });
+
+    forwardBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      useAction(function(){
+        if(typeof window.abqGoForward === 'function') window.abqGoForward();
+      });
+    });
+
+    document.addEventListener('click', function(e){
+      if(!nav.contains(e.target)) collapse();
+    }, true);
+
+    window.addEventListener('resize', function(){
+      if(!isMobile()) collapse();
+    });
+
+    collapse();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initAbqMobile4Way);
+  }else{
+    initAbqMobile4Way();
+  }
+})();
+</script>
+
 </body>
 </html>
 
