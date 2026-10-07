@@ -9764,8 +9764,11 @@ window.showFavorites = function showFavorites(){
 </script>
 
 <!-- زر العودة إلى أعلى الصفحة -->
-<button id="scrollTopBtn" title="العودة إلى أعلى الصفحة">
-    <i class="fas fa-chevron-up"></i>
+<button id="scrollTopBtn" title="العودة إلى أعلى الصفحة" aria-label="العودة إلى أعلى الصفحة">
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+</button>
+<button id="scrollBottomBtn" title="الانتقال إلى أسفل الصفحة" aria-label="الانتقال إلى أسفل الصفحة">
+    <i class="fas fa-chevron-down" aria-hidden="true"></i>
 </button>
 <script>
 /* =========================================================
@@ -9788,6 +9791,28 @@ scrollTopBtn.addEventListener("click", function () {
         behavior: "smooth"
     });
 });
+
+const scrollBottomBtn = document.getElementById("scrollBottomBtn");
+if (scrollBottomBtn) {
+    function updateScrollBottomButton() {
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const remaining = maxScroll - (window.pageYOffset || window.scrollY || 0);
+        scrollBottomBtn.classList.toggle("show", maxScroll > 300 && remaining > 300);
+    }
+
+    window.addEventListener("scroll", updateScrollBottomButton, {passive:true});
+    window.addEventListener("resize", updateScrollBottomButton);
+    window.addEventListener("load", updateScrollBottomButton);
+
+    scrollBottomBtn.addEventListener("click", function () {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth"
+        });
+    });
+
+    updateScrollBottomButton();
+}
 </script>
     <!-- ===== أزرار الرجوع والتقدم الآمنة ===== -->
     <div id="abq-safe-history-nav" aria-label="التنقل بين تبويبات المشروع">
@@ -10456,6 +10481,8 @@ const diplomasData = {
           // ---- Persistent main-tab history with last viewed coordinates ----
   const ABQ_MAIN_TABS = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
   const ABQ_HISTORY_KEY = 'abq_main_navigation_v13';
+  const ABQ_LAST_POSITIONS_KEY = 'abq_main_tab_last_positions_v1';
+  let abqLastPositions = {};
   let abqNavBackStack = [];
   let abqNavForwardStack = [];
   let abqCurrentMainTab = 'home';
@@ -10470,6 +10497,25 @@ const diplomasData = {
     } catch(e){
       abqNavBackStack=[]; abqNavForwardStack=[]; abqCurrentMainTab='home';
     }
+    try{
+      const rawPositions = JSON.parse(localStorage.getItem(ABQ_LAST_POSITIONS_KEY) || '{}');
+      abqLastPositions = rawPositions && typeof rawPositions === 'object' ? rawPositions : {};
+    }catch(e){
+      abqLastPositions = {};
+    }
+  }
+
+  function writeLastPosition(tab, x, y){
+    if(!ABQ_MAIN_TABS.includes(tab)) return;
+    abqLastPositions[tab] = {x:Number(x)||0, y:Number(y)||0};
+    try{localStorage.setItem(ABQ_LAST_POSITIONS_KEY, JSON.stringify(abqLastPositions));}catch(e){}
+  }
+
+  function getLastPosition(item){
+    if(!item || !ABQ_MAIN_TABS.includes(item.tab)) return item;
+    const saved = abqLastPositions[item.tab];
+    if(!saved) return item;
+    return {tab:item.tab, x:Number(saved.x)||0, y:Number(saved.y)||0};
   }
 
   function writeNavState(){
@@ -10488,8 +10534,9 @@ const diplomasData = {
 
   function restoreSnapshot(item){
     if(!item || !ABQ_MAIN_TABS.includes(item.tab)) return;
+    const target = getLastPosition(item);
     window.requestAnimationFrame(function(){
-      window.scrollTo({left:Number(item.x)||0, top:Number(item.y)||0, behavior:'auto'});
+      window.scrollTo({left:Number(target.x)||0, top:Number(target.y)||0, behavior:'auto'});
     });
   }
 
@@ -10620,11 +10667,14 @@ const diplomasData = {
     if (abqScrollSaveTimer) return;
     abqScrollSaveTimer = window.setTimeout(function(){
       abqScrollSaveTimer = null;
+      const x = window.scrollX || 0;
+      const y = window.scrollY || 0;
+      writeLastPosition(abqCurrentMainTab, x, y);
       try {
         localStorage.setItem(ABQ_HISTORY_KEY, JSON.stringify({
           current: abqCurrentMainTab,
-          x: window.scrollX || 0,
-          y: window.scrollY || 0,
+          x: x,
+          y: y,
           back: abqNavBackStack.slice(-50),
           forward: abqNavForwardStack.slice(-50)
         }));
@@ -10643,6 +10693,7 @@ const diplomasData = {
   window.addEventListener('beforeunload',function(){
     // Save the exact coordinates and current tab before leaving/reloading.
     const current=snapshot(abqCurrentMainTab);
+    writeLastPosition(current.tab, current.x, current.y);
     if(abqNavBackStack.length){
       const last=abqNavBackStack[abqNavBackStack.length-1];
       if(last && last.tab===current.tab) abqNavBackStack[abqNavBackStack.length-1]=current;
@@ -13781,6 +13832,57 @@ table{max-width:100%;display:block;overflow-x:auto}
     min-width:0!important;
     white-space:nowrap!important;
     text-align:center!important;
+  }
+}
+</style>
+
+<style id="abq-scroll-bottom-button-20261007">
+/* زر الانتقال إلى أسفل الصفحة — نفس هوية زر العودة للأعلى، دون تغيير وظائف الأزرار الحالية */
+#scrollBottomBtn{
+  position:fixed;
+  right:110px!important;
+  bottom:20px!important;
+  width:55px;
+  height:55px;
+  border:none;
+  border-radius:50%;
+  background:#2563eb;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+  display:none;
+  z-index:99999;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  transition:all .3s ease;
+  align-items:center;
+  justify-content:center;
+}
+#scrollBottomBtn:hover{
+  background:#1d4ed8;
+  transform:translateY(-4px) scale(1.08);
+}
+#scrollBottomBtn.show{
+  display:flex;
+  animation:fadeIn .3s;
+}
+#scrollBottomBtn:focus-visible{
+  outline:3px solid rgba(37,99,235,.35);
+  outline-offset:3px;
+}
+@media(max-width:768px){
+  #scrollBottomBtn{
+    right:101px!important;
+    bottom:16px!important;
+    width:55px;
+    height:55px;
+  }
+}
+@media(max-width:420px){
+  #scrollBottomBtn{
+    right:91px!important;
+    bottom:12px!important;
+    width:50px;
+    height:50px;
   }
 }
 </style>
