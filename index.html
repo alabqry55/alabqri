@@ -14669,27 +14669,8 @@ table{max-width:100%;display:block;overflow-x:auto}
 
 
 <style id="abq-pc-main-tabs-final-fit-20261007">
-/* ===== ALABQRI — تصغير نهائي إضافي لأسماء التبويبات على PC فقط ===== */
+/* ===== ALABQRI — ضبط بصري نهائي للتبويبات على PC فقط ===== */
 @media (min-width:901px){
-  .main-tabs-nav .nav-btn,
-  .main-tabs-nav .nav-btn:first-child,
-  .main-tabs-nav .nav-btn:last-child{
-    min-width:0 !important;
-    max-width:100% !important;
-    width:auto !important;
-    box-sizing:border-box !important;
-    flex:1 1 0 !important;
-    padding-left:.02rem !important;
-    padding-right:.02rem !important;
-    font-size:clamp(.32rem,.35vw,.43rem) !important;
-    line-height:1 !important;
-    letter-spacing:-.05em !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:clip !important;
-    word-break:normal !important;
-    overflow-wrap:normal !important;
-  }
   .main-tabs-nav{
     display:grid !important;
     grid-template-columns:repeat(8,minmax(0,1fr)) !important;
@@ -14698,11 +14679,59 @@ table{max-width:100%;display:block;overflow-x:auto}
     width:100% !important;
     box-sizing:border-box !important;
     overflow:hidden !important;
+    align-items:stretch !important;
   }
-  .main-tabs-nav .nav-btn.abq-contact-tab,
-  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label{
-    font-size:clamp(.34rem,.37vw,.46rem) !important;
-    line-height:1.05 !important;
+  .main-tabs-nav .nav-btn,
+  .main-tabs-nav .nav-btn:first-child,
+  .main-tabs-nav .nav-btn:last-child{
+    min-width:0 !important;
+    max-width:100% !important;
+    width:100% !important;
+    min-height:50px !important;
+    box-sizing:border-box !important;
+    padding:.28rem .06rem !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.16rem !important;
+    font-family:'Cairo',sans-serif !important;
+    font-size:clamp(.40rem,.42vw,.52rem) !important;
+    font-weight:600 !important;
+    line-height:1.08 !important;
+    letter-spacing:-.045em !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    word-break:normal !important;
+    overflow-wrap:normal !important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-label{
+    display:inline-block !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    font-size:inherit !important;
+    font-weight:600 !important;
+    line-height:1.08 !important;
+    letter-spacing:inherit !important;
+    white-space:nowrap !important;
+    text-align:center !important;
+    transform:scaleX(.90) !important;
+    transform-origin:center center !important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-icon{
+    flex:0 0 auto !important;
+    font-size:clamp(.62rem,.66vw,.78rem) !important;
+    line-height:1 !important;
+  }
+  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
+  .main-tabs-nav .nav-btn .abq-contact-label{
+    font-size:inherit !important;
+    font-weight:600 !important;
+    line-height:1.08 !important;
+    letter-spacing:inherit !important;
+    white-space:nowrap !important;
+    transform:scaleX(.90) !important;
+    transform-origin:center center !important;
   }
 }
 </style>
