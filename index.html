@@ -87,6 +87,7 @@
     <link rel="preconnect" href="https://www.image2url.com" crossorigin>
     <link rel="preconnect" href="https://img2link.online" crossorigin>
     <link rel="preload" as="image" href="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" fetchpriority="high">
+<link rel="preload" as="image" href="https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg" fetchpriority="high">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -2040,7 +2041,7 @@ html { scroll-behavior: auto !important; }
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    background-image:url('https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe') !important;
+    background-image:none !important;
     background-size:cover !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
@@ -6448,7 +6449,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
                     <img src="https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg"
                          alt="عضوية رابطة الروحانيين العرب واعتماد أكاديمية الجعفري للعلوم الروحانية والطب التكميلي"
-                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="lazy" decoding="async">
+                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="lazy" decoding="async" loading="eager" decoding="async" fetchpriority="high">
 
                     <span class="relative z-10 text-white font-bold text-sm
                                  bg-slate-900/60 px-3 py-1 rounded-lg">
@@ -14919,7 +14920,18 @@ table{max-width:100%;display:block;overflow-x:auto}
     var imgs = scope.querySelectorAll ? scope.querySelectorAll('img') : [];
     for(var i=0;i<imgs.length;i++){
       var img = imgs[i];
-      if(img.classList && img.classList.contains('abq-main-hero-image')) continue;
+      if(img.classList && img.classList.contains('abq-main-hero-image')){
+        img.setAttribute('loading','eager');
+        img.setAttribute('decoding','async');
+        img.setAttribute('fetchpriority','high');
+        continue;
+      }
+      if(img.src === 'https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg'){
+        img.setAttribute('loading','eager');
+        img.setAttribute('decoding','async');
+        img.setAttribute('fetchpriority','high');
+        return;
+      }
       if(img.alt === 'شعار المركز') continue;
       if(!img.getAttribute('loading')) img.setAttribute('loading','lazy');
       if(!img.getAttribute('decoding')) img.setAttribute('decoding','async');
