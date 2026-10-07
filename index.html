@@ -14012,7 +14012,7 @@ table{max-width:100%;display:block;overflow-x:auto}
 \n<!-- deploy verification 2026-10-07: mobile linktree two lines -->
 
 <style id="abq-unified-4way-core-logo-fill-frame-20261007">
-/* إطار 1.5px حول الشعار فقط — الشعار ملاصق للإطار من الداخل دون مسافة بيضاء */
+/* إزالة المسافة الشفافة تمامًا: الشعار يملأ الإطار الداخلي مباشرة */
 #abq-unified-4way-nav .abq-unified-core{
   width:56px!important;
   height:56px!important;
@@ -14026,9 +14026,11 @@ table{max-width:100%;display:block;overflow-x:auto}
   box-sizing:border-box!important;
 }
 #abq-unified-4way-nav .abq-unified-core img{
-  width:100%!important;
-  height:100%!important;
-  margin:0!important;
+  width:calc(100% + 3px)!important;
+  height:calc(100% + 3px)!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:-1.5px!important;
   padding:0!important;
   object-fit:cover!important;
   border:0!important;
