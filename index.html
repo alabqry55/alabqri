@@ -5647,7 +5647,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 <style id="abq-mobile-contact-same-as-home-20261007">
-/* التواصل والخدمات: نفس عرض وتمركز الرئيسية على الموبايل — بدون التأثير على بقية التبويبات */
+/* التواصل والخدمات: نفس عرض وتمركز الرئيسية على الموبايل */
 @media (max-width:768px){
   .main-tabs-nav .nav-btn.abq-contact-tab,
   .main-tabs-nav .nav-btn:last-child{
@@ -5673,6 +5673,23 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     top:auto !important;
     transform:none !important;
     margin:0 !important;
+  }
+}
+/* نفس حجم خط زر التواصل والخدمات على أسماء التبويبات الثمانية */
+.main-tabs-nav .nav-btn{
+  font-size:.98rem !important;
+}
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn{
+    font-size:.98rem !important;
+  }
+}
+</style>
+<style id="abq-mobile-contact-left-shift-20261007">
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn.abq-contact-tab,
+  .main-tabs-nav .nav-btn:last-child{
+    transform:translateX(-3ch) !important;
   }
 }
 </style>
@@ -14144,47 +14161,20 @@ table{max-width:100%;display:block;overflow-x:auto}
 
 
 <style id="abq-mobile-main-tabs-canonical-20261007">
-/* المرجع النهائي الوحيد للتبويبات على الموبايل: منع تعارض القواعد المتراكمة */
+/* قاعدة موحدة للتبويبات الوسطى على الموبايل فقط — دون المساس بالرئيسية أو الكمبيوتر */
 @media (max-width:768px){
-  .main-tabs-nav .nav-btn{
-    box-sizing:border-box !important;
-    min-width:0 !important;
-    max-width:100% !important;
-    overflow:hidden !important;
-    text-overflow:clip !important;
-    line-height:1.15 !important;
-    text-align:center !important;
-  }
-  /* الرئيسية: نفس الحجم الحالي دون تغيير */
-  .main-tabs-nav .nav-btn:first-child{
-    grid-column:1 / -1 !important;
-    font-size:.64rem !important;
-    white-space:nowrap !important;
-  }
-  /* التبويبات الوسطى الستة: حجم موحّد ومحتوى داخل الإطار */
   .main-tabs-nav .nav-btn:nth-child(n+2):nth-child(-n+7){
-    font-size:.64rem !important;
-    white-space:nowrap !important;
-    padding-left:.22rem !important;
-    padding-right:.22rem !important;
-  }
-  /* التواصل والخدمات: نفس حجم الرئيسية، مع توسيط حقيقي */
-  .main-tabs-nav .nav-btn:last-child{
-    grid-column:1 / -1 !important;
-    justify-self:stretch !important;
-    width:100% !important;
-    max-width:none !important;
-    font-size:.64rem !important;
-    white-space:nowrap !important;
-    padding-left:.30rem !important;
-    padding-right:.30rem !important;
-    text-align:center !important;
-  }
-}
-@media (max-width:420px){
-  .main-tabs-nav .nav-btn:first-child,
-  .main-tabs-nav .nav-btn:last-child{
-    font-size:.64rem !important;
+    box-sizing:border-box!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:.64rem!important;
+    line-height:1.15!important;
+    letter-spacing:-.01em!important;
+    padding-left:.22rem!important;
+    padding-right:.22rem!important;
   }
 }
 </style>
