@@ -4335,6 +4335,20 @@ body{
     }
 }
 </style>
+<style id="abq-pc-weather-location-containment-20261007">
+/* منع خروج نص طقس موقعك بعد تحديد الموقع — PC فقط */
+@media (min-width:769px){
+  .abq-top-location{min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+  .abq-top-location .abq-top-values{min-width:0!important;max-width:100%!important;flex:1 1 auto!important;overflow:hidden!important;box-sizing:border-box!important}
+  .abq-top-location .abq-user-weather-btn,
+  .abq-top-location .abq-top-secondary{
+    display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+    box-sizing:border-box!important;white-space:normal!important;overflow-wrap:anywhere!important;
+    word-break:break-word!important;text-overflow:clip!important;overflow:hidden!important;text-align:center!important;
+  }
+  .abq-top-location .abq-user-weather-btn{height:auto!important;line-height:1.15!important;padding:.18rem .35rem!important}
+}
+</style>
 <style id="abq-weather-blue-frame">
 /* ===== إطار أزرق للإطار العام لليوم والوقت والطقس والموقع ===== */
 .abq-top-live-bar{
