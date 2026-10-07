@@ -14314,3 +14314,113 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
 }
 </style>
+
+
+<style id="abq-tabs-responsive-unified-20261007">
+/* توحيد محاذاة أيقونات وأسماء التبويبات — PC + Mobile فقط */
+.main-tabs-nav .nav-btn{
+  position:relative!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+}
+.main-tabs-nav .nav-btn .abq-tab-icon{
+  position:absolute!important;
+  right:.42rem!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:1.12em!important;
+  min-width:1.12em!important;
+  height:1.12em!important;
+  flex:0 0 1.12em!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:1em!important;
+  line-height:1!important;
+  margin:0!important;
+}
+.main-tabs-nav .nav-btn .abq-tab-label{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding-left:1.25em!important;
+  padding-right:1.25em!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  line-height:1.2!important;
+}
+
+/* الكمبيوتر: سطر واحد قدر الإمكان، حجم موحّد ومريح */
+@media (min-width:769px){
+  .main-tabs-nav{
+    flex-wrap:nowrap!important;
+    gap:.16rem!important;
+  }
+  .main-tabs-nav .nav-btn{
+    flex:1 1 0!important;
+    min-width:0!important;
+    min-height:34px!important;
+    padding:.24rem .26rem!important;
+    font-size:clamp(.56rem,.66vw,.68rem)!important;
+    line-height:1.2!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-icon{
+    right:.38rem!important;
+    font-size:1em!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-label{
+    padding-left:1.22em!important;
+    padding-right:1.22em!important;
+  }
+}
+
+/* الموبايل: نفس خط محاذاة الأيقونات مع تكبير «المؤهلات والإعتمادات» بشكل مناسب */
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn{
+    min-height:36px!important;
+    padding:.30rem .22rem!important;
+    font-size:.64rem!important;
+    line-height:1.15!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-icon{
+    right:.34rem!important;
+    width:1.10em!important;
+    min-width:1.10em!important;
+    height:1.10em!important;
+    flex-basis:1.10em!important;
+    font-size:1.04em!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-label{
+    padding-left:1.18em!important;
+    padding-right:1.18em!important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('qualifications')"]{
+    font-size:.69rem!important;
+    font-weight:800!important;
+  }
+}
+
+/* الشاشات الأصغر: الحفاظ على وضوح النص داخل الإطار */
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn{
+    min-height:36px!important;
+    padding:.30rem .18rem!important;
+    font-size:.62rem!important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('qualifications')"]{
+    font-size:.66rem!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-icon{
+    right:.28rem!important;
+  }
+  .main-tabs-nav .nav-btn .abq-tab-label{
+    padding-left:1.12em!important;
+    padding-right:1.12em!important;
+  }
+}
+</style>
+
