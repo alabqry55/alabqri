@@ -8006,6 +8006,40 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
       <a class="abq-contact-secondary-action" href="https://maps.app.goo.gl/hC4uAgHYbGngqoK29" target="_blank" rel="noopener noreferrer">فتح الموقع ↗</a>
     </div>
   </div>
+
+  <div class="abq-live-subscriber-panel" aria-labelledby="abq-subscriber-title">
+    <div class="abq-subscriber-heading">
+      <div class="abq-subscriber-heart" aria-hidden="true">🫀</div>
+      <div>
+        <div id="abq-subscriber-title" class="abq-subscriber-title">نبض العبقري</div>
+        <div class="abq-subscriber-subtitle">التواصل والخدمات • مجتمع حيّ من المشتركين</div>
+      </div>
+    </div>
+
+    <div class="abq-ecg-wrap" aria-hidden="true">
+      <svg class="abq-ecg" viewBox="0 0 900 120" preserveAspectRatio="none">
+        <path class="abq-ecg-base" d="M0 60 H150 H245 L270 60 L285 60 L300 18 L318 102 L337 60 H430 H505 L525 60 L540 42 L553 78 L566 60 H700 H900"></path>
+        <path class="abq-ecg-line" d="M0 60 H150 H245 L270 60 L285 60 L300 18 L318 102 L337 60 H430 H505 L525 60 L540 42 L553 78 L566 60 H700 H900"></path>
+      </svg>
+    </div>
+
+    <div class="abq-subscriber-counter" aria-live="polite">
+      <span class="abq-subscriber-count-label">مشترك فعلي بالمنصة</span>
+      <strong id="abq-subscriber-count">—</strong>
+      <span class="abq-subscriber-count-note">يُحتسب تلقائيًا من سجلات الاشتراك الحقيقية</span>
+    </div>
+
+    <form id="abq-subscriber-form" class="abq-subscriber-form" autocomplete="on">
+      <div class="abq-subscriber-form-title">انضم إلى مجتمع العبقري</div>
+      <div class="abq-subscriber-form-grid">
+        <input id="abq-subscriber-name" name="name" type="text" maxlength="80" placeholder="الاسم (اختياري)" aria-label="الاسم">
+        <input id="abq-subscriber-email" name="email" type="email" maxlength="254" placeholder="البريد الإلكتروني" aria-label="البريد الإلكتروني" required>
+        <button id="abq-subscriber-submit" type="submit">💙 اشتراك</button>
+      </div>
+      <div class="abq-subscriber-privacy">لن نعرض بريدك الإلكتروني للعامة، ويُستخدم فقط لتسجيل اشتراكك الفعلي بالمنصة.</div>
+      <div id="abq-subscriber-status" class="abq-subscriber-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
 </div></div>
 
         </section>
@@ -14332,6 +14366,307 @@ table{max-width:100%;display:block;overflow-x:auto}
 </style>
 
 </body>
+
+<style id="abq-live-heartbeat-subscribers-20261007">
+/* نبض العبقري — إضافة معزولة: لا تستبدل pulse-card بل تعمل معه */
+#contact .abq-contact-premium-card.pulse-card .abq-live-subscriber-panel{
+  position:relative!important;
+  width:100%!important;
+  margin:1rem 0 0!important;
+  padding:1rem!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  border:2px solid #2563eb!important;
+  border-radius:1rem!important;
+  background:linear-gradient(135deg,rgba(239,246,255,.98),rgba(255,255,255,.98),rgba(240,249,255,.98))!important;
+  box-shadow:0 10px 28px -18px rgba(37,99,235,.5)!important;
+}
+#contact .abq-subscriber-heading{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:.55rem!important;
+  text-align:center!important;
+}
+#contact .abq-subscriber-heart{
+  width:2.5rem!important;
+  height:2.5rem!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:1.65rem!important;
+  border-radius:50%!important;
+  background:#eff6ff!important;
+  border:2px solid #60a5fa!important;
+  animation:abqHeartBeat 1.25s ease-in-out infinite!important;
+  box-shadow:0 0 0 0 rgba(37,99,235,.18)!important;
+}
+#contact .abq-subscriber-title{
+  color:#1e3a8a!important;
+  font-size:clamp(1rem,2vw,1.35rem)!important;
+  font-weight:900!important;
+  line-height:1.35!important;
+}
+#contact .abq-subscriber-subtitle{
+  margin-top:.12rem!important;
+  color:#475569!important;
+  font-size:.72rem!important;
+  font-weight:800!important;
+}
+#contact .abq-ecg-wrap{
+  width:100%!important;
+  height:70px!important;
+  margin:.55rem auto .35rem!important;
+  overflow:hidden!important;
+  border-top:1px solid rgba(147,197,253,.35)!important;
+  border-bottom:1px solid rgba(147,197,253,.35)!important;
+  background:rgba(239,246,255,.45)!important;
+}
+#contact .abq-ecg{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+}
+#contact .abq-ecg-base,
+#contact .abq-ecg-line{
+  fill:none!important;
+  stroke:#2563eb!important;
+  stroke-width:3!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+#contact .abq-ecg-base{opacity:.14!important}
+#contact .abq-ecg-line{
+  stroke-dasharray:150 750!important;
+  stroke-dashoffset:900!important;
+  animation:abqEcgMove 4.2s linear infinite!important;
+  filter:drop-shadow(0 0 4px rgba(37,99,235,.45))!important;
+}
+#contact .abq-subscriber-counter{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:.08rem!important;
+  width:100%!important;
+  margin:.35rem auto .75rem!important;
+  padding:.7rem .8rem!important;
+  box-sizing:border-box!important;
+  border:2px solid #60a5fa!important;
+  border-radius:.9rem!important;
+  background:rgba(255,255,255,.94)!important;
+}
+#contact .abq-subscriber-count-label{
+  color:#1e3a8a!important;
+  font-size:.78rem!important;
+  font-weight:900!important;
+}
+#contact #abq-subscriber-count{
+  color:#2563eb!important;
+  font-size:clamp(1.55rem,4vw,2.2rem)!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  direction:ltr!important;
+  font-variant-numeric:tabular-nums!important;
+}
+#contact .abq-subscriber-count-note{
+  color:#64748b!important;
+  font-size:.62rem!important;
+  font-weight:700!important;
+  text-align:center!important;
+}
+#contact .abq-subscriber-form{
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:.75rem!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:.9rem!important;
+  background:rgba(255,255,255,.92)!important;
+}
+#contact .abq-subscriber-form-title{
+  margin-bottom:.5rem!important;
+  text-align:center!important;
+  color:#0f3b82!important;
+  font-size:.85rem!important;
+  font-weight:900!important;
+}
+#contact .abq-subscriber-form-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;
+  gap:.45rem!important;
+  align-items:stretch!important;
+}
+#contact .abq-subscriber-form-grid input,
+#contact .abq-subscriber-form-grid button{
+  min-width:0!important;
+  min-height:42px!important;
+  box-sizing:border-box!important;
+  border-radius:.7rem!important;
+  font-family:'Cairo',sans-serif!important;
+  font-weight:800!important;
+}
+#contact .abq-subscriber-form-grid input{
+  border:1px solid #93c5fd!important;
+  background:#fff!important;
+  color:#1e293b!important;
+  padding:.5rem .65rem!important;
+  outline:none!important;
+}
+#contact .abq-subscriber-form-grid input:focus{
+  border-color:#2563eb!important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12)!important;
+}
+#contact .abq-subscriber-form-grid button{
+  border:2px solid #2563eb!important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8)!important;
+  color:#fff!important;
+  padding:.5rem .85rem!important;
+  cursor:pointer!important;
+  transition:transform .15s ease,box-shadow .15s ease!important;
+}
+#contact .abq-subscriber-form-grid button:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 7px 16px -9px rgba(37,99,235,.7)!important;
+}
+#contact .abq-subscriber-form-grid button:disabled{
+  opacity:.65!important;
+  cursor:wait!important;
+  transform:none!important;
+}
+#contact .abq-subscriber-privacy{
+  margin-top:.42rem!important;
+  color:#64748b!important;
+  font-size:.58rem!important;
+  font-weight:700!important;
+  line-height:1.55!important;
+  text-align:center!important;
+}
+#contact .abq-subscriber-status{
+  min-height:1.25rem!important;
+  margin-top:.35rem!important;
+  color:#166534!important;
+  font-size:.68rem!important;
+  font-weight:900!important;
+  line-height:1.5!important;
+  text-align:center!important;
+}
+#contact .abq-subscriber-status.error{color:#b91c1c!important}
+@keyframes abqHeartBeat{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(37,99,235,.16)}
+  14%{transform:scale(1.12);box-shadow:0 0 0 7px rgba(37,99,235,.05)}
+  28%{transform:scale(1)}
+  42%{transform:scale(1.08)}
+  56%{transform:scale(1)}
+}
+@keyframes abqEcgMove{
+  from{stroke-dashoffset:900}
+  to{stroke-dashoffset:0}
+}
+@media(max-width:768px){
+  #contact .abq-contact-premium-card.pulse-card .abq-live-subscriber-panel{padding:.7rem!important;border-radius:.9rem!important}
+  #contact .abq-subscriber-heading{gap:.42rem!important}
+  #contact .abq-subscriber-heart{width:2.2rem!important;height:2.2rem!important;font-size:1.4rem!important}
+  #contact .abq-subscriber-title{font-size:.95rem!important}
+  #contact .abq-subscriber-subtitle{font-size:.62rem!important}
+  #contact .abq-ecg-wrap{height:58px!important}
+  #contact .abq-subscriber-form-grid{grid-template-columns:1fr 1fr!important}
+  #contact .abq-subscriber-form-grid button{grid-column:1 / -1!important;width:100%!important}
+}
+@media(max-width:420px){
+  #contact .abq-subscriber-form-grid{grid-template-columns:1fr!important}
+  #contact .abq-subscriber-form-grid button{grid-column:auto!important}
+  #contact .abq-subscriber-privacy{font-size:.55rem!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #contact .abq-subscriber-heart,
+  #contact .abq-ecg-line{animation:none!important}
+}
+</style>
+
+<script id="abq-real-subscriber-counter-20261007">
+/* ===== اشتراك حقيقي + عداد المشتركين — منفصل تمامًا عن عداد الزوار ===== */
+(function(){
+  'use strict';
+
+  var countEl = document.getElementById('abq-subscriber-count');
+  var form = document.getElementById('abq-subscriber-form');
+  var nameEl = document.getElementById('abq-subscriber-name');
+  var emailEl = document.getElementById('abq-subscriber-email');
+  var submitEl = document.getElementById('abq-subscriber-submit');
+  var statusEl = document.getElementById('abq-subscriber-status');
+
+  if(!countEl || !form) return;
+
+  function fmt(v){
+    return Number.isFinite(Number(v)) ? Number(v).toLocaleString('en-US') : '—';
+  }
+
+  function setCount(v){
+    countEl.textContent = fmt(v);
+  }
+
+  function setStatus(message,isError){
+    statusEl.textContent = message || '';
+    statusEl.classList.toggle('error',!!isError);
+  }
+
+  function loadCount(){
+    fetch('/api/subscribers',{method:'GET',cache:'no-store',credentials:'same-origin'})
+      .then(function(res){
+        if(!res.ok) throw new Error('subscriber api '+res.status);
+        return res.json();
+      })
+      .then(function(data){
+        setCount(data && data.subscribers);
+      })
+      .catch(function(){
+        setCount('—');
+      });
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=String(emailEl.value||'').trim();
+    var name=String(nameEl.value||'').trim();
+
+    if(!email){
+      setStatus('اكتب بريدك الإلكتروني أولًا.',true);
+      emailEl.focus();
+      return;
+    }
+
+    submitEl.disabled=true;
+    setStatus('جاري تسجيل اشتراكك...');
+
+    fetch('/api/subscribers',{
+      method:'POST',
+      credentials:'same-origin',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({email:email,name:name})
+    })
+    .then(function(res){
+      return res.json().catch(function(){return {};}).then(function(data){
+        if(!res.ok) throw new Error(data.error||'تعذر تسجيل الاشتراك.');
+        return data;
+      });
+    })
+    .then(function(data){
+      setCount(data && data.subscribers);
+      setStatus('تم تسجيل اشتراكك بنجاح 💙');
+      form.reset();
+    })
+    .catch(function(error){
+      setStatus(error.message||'تعذر تسجيل الاشتراك حاليًا.',true);
+    })
+    .finally(function(){
+      submitEl.disabled=false;
+    });
+  });
+
+  loadCount();
+})();
+</script>
+
 </html>
 
 <style id="abq-contact-services-title-exact-match-20261007">
