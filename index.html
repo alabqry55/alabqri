@@ -87,7 +87,6 @@
     <link rel="preconnect" href="https://www.image2url.com" crossorigin>
     <link rel="preconnect" href="https://img2link.online" crossorigin>
     <link rel="preload" as="image" href="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" fetchpriority="high">
-<link rel="preload" as="image" href="https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg" fetchpriority="high">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -5996,7 +5995,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
             <!-- 1) HERO -->
             <div class="abq-home-live-hero hero-bg text-white shadow-2xl relative overflow-hidden reveal" role="region" aria-label="الواجهة الرئيسية لمنصة العبقري">
-    <img class="abq-main-hero-image abq-zoomable-image" src="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" alt="الواجهة الرئيسية لمركز العبقري" loading="eager" decoding="async" fetchpriority="high">
+    <img class="abq-main-hero-image abq-zoomable-image" src="https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe" alt="الواجهة الرئيسية لمركز العبقري" loading="eager" decoding="async" fetchpriority="high" loading="eager" decoding="async" fetchpriority="high" referrerpolicy="no-referrer">
     <div class="abq-home-live-overlay" aria-hidden="true"></div>
 </div>
 
@@ -6449,7 +6448,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
                     <img src="https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg"
                          alt="عضوية رابطة الروحانيين العرب واعتماد أكاديمية الجعفري للعلوم الروحانية والطب التكميلي"
-                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="eager" decoding="async" fetchpriority="high">
+                         class="w-full h-full object-cover absolute inset-0 opacity-80" loading="eager" decoding="async" fetchpriority="high" loading="lazy" decoding="async" referrerpolicy="no-referrer">
 
                     <span class="relative z-10 text-white font-bold text-sm
                                  bg-slate-900/60 px-3 py-1 rounded-lg">
@@ -12103,13 +12102,33 @@ window.AbqToast = (function(){
       sec.style.setProperty('display',active?'block':'none','important');
       sec.style.setProperty('visibility',active?'visible':'hidden','important');
       sec.setAttribute('aria-hidden',active?'false':'true');
-    });
+       });
+     if(id==='qualifications'){
+       requestAnimationFrame(function(){ prioritizeQualificationsImage(); });
+     }
     document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
       const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
       const active=!!m && m[1]===id;
       btn.classList.toggle('active',active);
       btn.setAttribute('aria-selected',active?'true':'false');
     });
+  }
+  function prioritizeQualificationsImage(){
+    var img=document.querySelector('#qualifications img[src*="1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c"]');
+    if(!img) return;
+    img.setAttribute('loading','eager');
+    img.setAttribute('decoding','async');
+    img.setAttribute('fetchpriority','high');
+    img.setAttribute('referrerpolicy','no-referrer');
+    if(img.complete && img.naturalWidth>0) return;
+    var src=img.currentSrc || img.src;
+    if(src){
+      var probe=new Image();
+      probe.decoding='async';
+      probe.referrerPolicy='no-referrer';
+      probe.onload=function(){ img.src=src; };
+      probe.src=src;
+    }
   }
   window.abqShowMainTab=show;
   function hook(){
@@ -14927,10 +14946,10 @@ table{max-width:100%;display:block;overflow-x:auto}
         continue;
       }
       if(img.src === 'https://www.image2url.com/r2/default/images/1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c.jpeg'){
-        img.setAttribute('loading','eager');
+        img.setAttribute('loading','lazy');
         img.setAttribute('decoding','async');
-        img.setAttribute('fetchpriority','high');
-        return;
+        img.setAttribute('referrerpolicy','no-referrer');
+        continue;
       }
       if(img.alt === 'شعار المركز') continue;
       if(!img.getAttribute('loading')) img.setAttribute('loading','lazy');
@@ -15350,10 +15369,10 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 
-<style id="abq-hero-visibility-safe-fix-20261007">
-/* ===== إصلاح آمن لظهور صورة الـHero — دون تغيير المحتوى أو التصميم ===== */
+<style id="abq-hero-visibility-safe-fix-20261008">
+/* ===== Hero: مصدر الصورة الوحيد هو عنصر img الحرج ===== */
 .abq-home-live-hero{
-  background-image:url('https://www.image2url.com/r2/default/images/1791087951085-d687fe80-4c04-47d3-99a4-f1a2374adce4.jpe') !important;
+  background-image:none !important;
   background-repeat:no-repeat !important;
   background-position:center center !important;
   background-size:contain !important;
