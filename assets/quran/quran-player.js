@@ -29,7 +29,7 @@ function inject(){
  wrap.innerHTML=`
 <style id="abq-qp-style">
 #abq-quran-player{font-family:Cairo,sans-serif;margin:1rem auto;max-width:980px}
-#abq-quran-player .abq-qp-card{background:linear-gradient(145deg,#fffdf7,#f8fafc);border:2px solid #bfdbfe;border-radius:18px;padding:18px;box-shadow:0 14px 34px -24px rgba(15,23,42,.45)}
+#abq-quran-player .abq-qp-card{background:linear-gradient(145deg,#fffdf7,#f8fafc);border:3px solid #2563eb;border-radius:18px;padding:18px;box-shadow:0 10px 28px -18px rgba(37,99,235,.42)}
 #abq-quran-player .abq-qp-title{text-align:center;font-size:1.15rem;font-weight:900;color:#1e3a8a;margin:0 0 14px}
 #abq-quran-player .abq-qp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 #abq-quran-player label{display:block;font-size:.78rem;font-weight:800;color:#334155;margin:0 0 5px}
