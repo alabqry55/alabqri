@@ -5539,6 +5539,29 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+    <style id="abq-contact-tab-center-and-unified-label-size-20261007">
+/* ===== توسيط التواصل والخدمات بين عمودي التبويبات + توحيد حجم أسماء الأبواب ===== */
+.main-tabs-nav .nav-btn{
+    font-size:.70rem;
+    text-align:center;
+}
+@media (max-width:768px){
+    .main-tabs-nav .nav-btn{
+        font-size:.64rem;
+    }
+    .main-tabs-nav .nav-btn:last-child{
+        grid-column:1 / -1;
+        justify-self:center;
+        width:calc(100% - .6rem);
+        max-width:100%;
+    }
+}
+@media (max-width:420px){
+    .main-tabs-nav .nav-btn{
+        font-size:.64rem;
+    }
+}
+    </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
