@@ -13743,7 +13743,49 @@ table{max-width:100%;display:block;overflow-x:auto}
 }
 </style>
 
+
+<style id="abq-contact-mobile-buttons-adjacent-20261007">
+/* الموبايل فقط: اسم الدكتور في السطر الأول والزرّان متجاوران في السطر الثاني */
+@media(max-width:768px){
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card{
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-wrap:nowrap!important;
+    overflow:visible!important;
+    width:100%!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-name{
+    order:1!important;
+    width:100%!important;
+    flex:0 0 auto!important;
+    text-align:center!important;
+    justify-content:center!important;
+    white-space:nowrap!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions{
+    order:2!important;
+    width:auto!important;
+    flex:0 0 auto!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-wrap:nowrap!important;
+    gap:.45rem!important;
+    margin:0 auto!important;
+  }
+  #contact .abq-contact-premium-card > .abq-contact-doctor-card > .abq-contact-doctor-actions > a{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    white-space:nowrap!important;
+    text-align:center!important;
+  }
+}
+</style>
+
 </body>
 </html>
 
-<!-- deploy verification 2026-10-06: contact inner blue frames + mobile buttons -->
+<!-- deploy verification 2026-10-07: mobile doctor buttons adjacent -->
