@@ -5785,6 +5785,30 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+
+<style id="abq-pc-weather-location-text-containment-20261007">
+/* ===== منع خروج نص طقس موقعك بعد تحديد الموقع — PC فقط ===== */
+@media (min-width:769px){
+  .abq-top-location .abq-top-secondary{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    text-align:center !important;
+    line-height:1.15 !important;
+  }
+  .abq-top-location .abq-top-values{
+    min-width:0 !important;
+    max-width:100% !important;
+    flex:1 1 auto !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
