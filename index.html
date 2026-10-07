@@ -14012,15 +14012,16 @@ table{max-width:100%;display:block;overflow-x:auto}
 \n<!-- deploy verification 2026-10-07: mobile linktree two lines -->
 
 <style id="abq-unified-4way-core-logo-fill-frame-20261007">
-/* إزالة المسافة الداخلية بين شعار المركز وإطاره في اللوحة الرباعية */
+/* إزالة الفراغ الداخلي فعليًا: الشعار يلامس الإطار من الداخل */
 #abq-unified-4way-nav .abq-unified-core{
   padding:0!important;
 }
 #abq-unified-4way-nav .abq-unified-core img{
   width:100%!important;
   height:100%!important;
-  object-fit:cover!important;
+  object-fit:contain!important;
   border-radius:50%!important;
+  display:block!important;
 }
 </style>
 
