@@ -5807,13 +5807,13 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
             <p class="text-xs md:text-sm font-semibold tracking-wide text-blue-700 bg-sky-50 px-3 py-1.5 rounded-lg border border-blue-700">د/أحمد السيد رَسَّه | س.ت.92527</div>
 </div>
         <nav class="main-tabs-nav top-0 z-50" aria-label="التبويبات الرئيسية للمنصة">
-            <button type="button" onclick="switchTab('home')" class="nav-btn active">الرئيسية</button>
-            <button type="button" onclick="switchTab('qualifications')" class="nav-btn">المؤهلات والإعتمادات</button>
-            <button type="button" onclick="switchTab('doors')" class="nav-btn">الدبلومات الرسمية المعتمدة</button>
-            <button type="button" onclick="switchTab('courses')" class="nav-btn">العلوم والدورات المساعدة</button>
+            <button type="button" onclick="switchTab('home')" class="nav-btn active"><span aria-hidden="true">🏠</span> الرئيسية</button>
+            <button type="button" onclick="switchTab('qualifications')" class="nav-btn"><span aria-hidden="true">🎓</span> المؤهلات والإعتمادات</button>
+            <button type="button" onclick="switchTab('doors')" class="nav-btn"><span aria-hidden="true">📜</span> الدبلومات الرسمية المعتمدة</button>
+            <button type="button" onclick="switchTab('courses')" class="nav-btn"><span aria-hidden="true">📚</span> العلوم والدورات المساعدة</button>
             <button type="button" onclick="switchTab('articles')" class="nav-btn">📰 أحدث المقالات والأبحاث</button>
-            <button type="button" onclick="switchTab('matrix')" class="nav-btn">مرصد العبقري للإتزان الشامل</button>
-            <button type="button" onclick="switchTab('azkar')" class="nav-btn">مجلس العبقري للذكر والتسبيح</button>
+            <button type="button" onclick="switchTab('matrix')" class="nav-btn"><span aria-hidden="true">🌿</span> مرصد العبقري للإتزان الشامل</button>
+            <button type="button" onclick="switchTab('azkar')" class="nav-btn"><span aria-hidden="true">📿</span> مجلس العبقري للذكر والتسبيح</button>
             <button type="button" onclick="switchTab('contact')" class="nav-btn">التواصل والخدمات 📞</button>
         </nav>
     </header>
@@ -14194,6 +14194,39 @@ table{max-width:100%;display:block;overflow-x:auto}
     font-size:.64rem !important;
   }
 }
+<style id="abq-main-tabs-six-icons-and-home-contact-size-20261007">
+/* أيقونات التبويبات الستة المطلوبة فقط — المقالات والتواصل مستثنيان */
+.main-tabs-nav .nav-btn > span[aria-hidden="true"]{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+  line-height:1 !important;
+  vertical-align:middle !important;
+  margin-inline-end:.22rem !important;
+}
+.main-tabs-nav .nav-btn:first-child,
+.main-tabs-nav .nav-btn:last-child{
+  font-size:.76rem !important;
+}
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn > span[aria-hidden="true"]{
+    font-size:.9em !important;
+    margin-inline-end:.16rem !important;
+  }
+  .main-tabs-nav .nav-btn:first-child,
+  .main-tabs-nav .nav-btn:last-child{
+    font-size:.70rem !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn:first-child,
+  .main-tabs-nav .nav-btn:last-child{
+    font-size:.70rem !important;
+  }
+}
+</style>
+
 </style>
 
 </body>
