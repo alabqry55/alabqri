@@ -14751,14 +14751,14 @@ table{max-width:100%;display:block;overflow-x:auto}
 <!-- ABQ ECG SHAPE UPDATE -->
 
 <style id="abq-unified-4way-logo-tight-frame-20261007">
-/* شعار اللوحة الرباعية: تكبير + إطار ملاصق للشعار بلا فواصل داخلية */
+/* شعار اللوحة الرباعية: الشعار دائري فقط داخل الإطار الخارجي */
 #abq-unified-4way-nav .abq-unified-core{
   width:56px !important;
   height:56px !important;
   margin:-28px 0 0 -28px !important;
   padding:0 !important;
   border:2.5px solid #2563eb !important;
-  border-radius:14px !important;
+  border-radius:50% !important;
   background:transparent !important;
   overflow:hidden !important;
   box-sizing:border-box !important;
@@ -14770,8 +14770,8 @@ table{max-width:100%;display:block;overflow-x:auto}
   margin:0 !important;
   padding:0 !important;
   border:0 !important;
-  border-radius:11px !important;
-  object-fit:contain !important;
+  border-radius:50% !important;
+  object-fit:cover !important;
   display:block !important;
 }
 @media(max-width:768px){
@@ -14781,9 +14781,12 @@ table{max-width:100%;display:block;overflow-x:auto}
     margin:-26px 0 0 -26px !important;
     padding:0 !important;
     border-width:2px !important;
-    border-radius:13px !important;
+    border-radius:50% !important;
   }
-  #abq-unified-4way-nav .abq-unified-core img{border-radius:10px !important;}
+  #abq-unified-4way-nav .abq-unified-core img{
+    border-radius:50% !important;
+    object-fit:cover !important;
+  }
 }
 </style>
 </body>
