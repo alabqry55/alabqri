@@ -15030,67 +15030,70 @@ table{max-width:100%;display:block;overflow-x:auto}
 </script>
 
 
-<style id="abq-pc-main-tabs-final-fit-20261007">
-/* ===== ALABQRI — توسيع إطارات التبويبات لاحتواء الاسم كاملًا على PC فقط ===== */
+<style id="abq-pc-main-tabs-contained-20261007">
+/* ===== ALABQRI — إعادة تنسيق التبويبات الثمانية ومنع خروج أي اسم من إطاره — PC فقط ===== */
 @media (min-width:901px){
   .main-tabs-nav{
     display:grid !important;
     grid-template-columns:repeat(8,minmax(0,1fr)) !important;
-    gap:.12rem !important;
+    gap:.14rem !important;
     width:100% !important;
     box-sizing:border-box !important;
-    overflow:visible !important;
+    overflow:hidden !important;
     align-items:stretch !important;
   }
   .main-tabs-nav .nav-btn,
   .main-tabs-nav .nav-btn:first-child,
   .main-tabs-nav .nav-btn:last-child{
     min-width:0 !important;
-    max-width:none !important;
     width:100% !important;
-    min-height:54px !important;
+    max-width:100% !important;
+    min-height:60px !important;
+    height:auto !important;
     box-sizing:border-box !important;
-    padding:.34rem .08rem !important;
+    padding:.30rem .18rem !important;
     display:flex !important;
+    flex-direction:column !important;
     align-items:center !important;
     justify-content:center !important;
-    gap:.14rem !important;
+    gap:.10rem !important;
     font-family:'Cairo',sans-serif !important;
-    font-size:clamp(.44rem,.46vw,.56rem) !important;
-    font-weight:600 !important;
-    line-height:1.1 !important;
-    letter-spacing:-.04em !important;
-    white-space:nowrap !important;
-    overflow:visible !important;
+    font-size:clamp(.50rem,.52vw,.64rem) !important;
+    font-weight:700 !important;
+    line-height:1.18 !important;
+    letter-spacing:0 !important;
+    white-space:normal !important;
+    overflow:hidden !important;
     text-overflow:clip !important;
     word-break:normal !important;
-    overflow-wrap:normal !important;
+    overflow-wrap:anywhere !important;
   }
-  .main-tabs-nav .nav-btn .abq-tab-label{
-    display:inline-block !important;
+  .main-tabs-nav .nav-btn .abq-tab-label,
+  .main-tabs-nav .nav-btn .abq-contact-label{
+    display:block !important;
+    width:100% !important;
     min-width:0 !important;
-    max-width:none !important;
+    max-width:100% !important;
+    height:auto !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:0 !important;
     font-size:inherit !important;
-    font-weight:600 !important;
-    line-height:1.1 !important;
-    letter-spacing:inherit !important;
-    white-space:nowrap !important;
+    font-weight:700 !important;
+    line-height:1.18 !important;
+    letter-spacing:0 !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
     text-align:center !important;
     transform:none !important;
   }
   .main-tabs-nav .nav-btn .abq-tab-icon{
     flex:0 0 auto !important;
-    font-size:clamp(.66rem,.70vw,.82rem) !important;
+    font-size:clamp(.70rem,.74vw,.88rem) !important;
     line-height:1 !important;
-  }
-  .main-tabs-nav .nav-btn.abq-contact-tab .abq-contact-label,
-  .main-tabs-nav .nav-btn .abq-contact-label{
-    font-size:inherit !important;
-    font-weight:600 !important;
-    line-height:1.1 !important;
-    letter-spacing:inherit !important;
-    white-space:nowrap !important;
-    transform:none !important;
   }
 }
 </style>
