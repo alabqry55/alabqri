@@ -5756,6 +5756,51 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
+
+<style id="abq-final-targeted-home-articles-spacing-20261007">
+/* إصلاح انتقائي نهائي: الرئيسية + أحدث المقالات والأبحاث فقط
+   لا تعديل للمؤهلات والإعتمادات ولا لأي تبويب/وظيفة أخرى. */
+.main-tabs-nav .nav-btn[onclick="switchTab('home')"]{
+  gap:.34rem !important;
+}
+.main-tabs-nav .nav-btn[onclick="switchTab('articles')"]{
+  gap:.12rem !important;
+  white-space:nowrap !important;
+}
+.main-tabs-nav .nav-btn[onclick="switchTab('articles')"] .abq-tab-icon{
+  transform:none !important;
+  align-self:center !important;
+  margin:0 !important;
+}
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"]{
+    gap:.34rem !important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('articles')"]{
+    gap:.12rem !important;
+    align-items:center !important;
+    justify-content:center !important;
+    white-space:nowrap !important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('articles')"] .abq-tab-icon{
+    transform:none !important;
+    width:1.08em !important;
+    min-width:1.08em !important;
+    height:1.08em !important;
+    flex-basis:1.08em !important;
+    margin:0 !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"]{
+    gap:.34rem !important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('articles')"]{
+    gap:.10rem !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
