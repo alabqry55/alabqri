@@ -5685,14 +5685,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
-<style id="abq-mobile-contact-left-shift-20261007">
-@media (max-width:768px){
-  .main-tabs-nav .nav-btn.abq-contact-tab,
-  .main-tabs-nav .nav-btn:last-child{
-    transform:translateX(-3ch) !important;
-  }
-}
-</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -14161,20 +14154,44 @@ table{max-width:100%;display:block;overflow-x:auto}
 
 
 <style id="abq-mobile-main-tabs-canonical-20261007">
-/* قاعدة موحدة للتبويبات الوسطى على الموبايل فقط — دون المساس بالرئيسية أو الكمبيوتر */
+/* المرجع النهائي الوحيد للتبويبات على الموبايل: منع تعارض القواعد المتراكمة */
 @media (max-width:768px){
+  .main-tabs-nav .nav-btn{
+    box-sizing:border-box !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    line-height:1.15 !important;
+    text-align:center !important;
+  }
+  .main-tabs-nav .nav-btn:first-child{
+    grid-column:1 / -1 !important;
+    font-size:.64rem !important;
+    white-space:nowrap !important;
+  }
   .main-tabs-nav .nav-btn:nth-child(n+2):nth-child(-n+7){
-    box-sizing:border-box!important;
-    min-width:0!important;
-    max-width:100%!important;
-    overflow:hidden!important;
-    text-overflow:clip!important;
-    white-space:nowrap!important;
-    font-size:.64rem!important;
-    line-height:1.15!important;
-    letter-spacing:-.01em!important;
-    padding-left:.22rem!important;
-    padding-right:.22rem!important;
+    font-size:.64rem !important;
+    white-space:nowrap !important;
+    padding-left:.22rem !important;
+    padding-right:.22rem !important;
+  }
+  .main-tabs-nav .nav-btn:last-child{
+    grid-column:1 / -1 !important;
+    justify-self:stretch !important;
+    width:100% !important;
+    max-width:none !important;
+    font-size:.64rem !important;
+    white-space:nowrap !important;
+    padding-left:.30rem !important;
+    padding-right:.30rem !important;
+    text-align:center !important;
+  }
+}
+@media (max-width:420px){
+  .main-tabs-nav .nav-btn:first-child,
+  .main-tabs-nav .nav-btn:last-child{
+    font-size:.64rem !important;
   }
 }
 </style>
