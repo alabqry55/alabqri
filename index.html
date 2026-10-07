@@ -14012,16 +14012,34 @@ table{max-width:100%;display:block;overflow-x:auto}
 \n<!-- deploy verification 2026-10-07: mobile linktree two lines -->
 
 <style id="abq-unified-4way-core-logo-fill-frame-20261007">
-/* إزالة الفراغ الداخلي فعليًا: الشعار يلامس الإطار من الداخل */
+/* إلغاء الفراغ الأبيض حول الشعار: الإطار نفسه يصبح خلفية الشعار */
 #abq-unified-4way-nav .abq-unified-core{
+  width:56px!important;
+  height:56px!important;
+  margin:-28px 0 0 -28px!important;
   padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  overflow:hidden!important;
+  box-shadow:none!important;
 }
 #abq-unified-4way-nav .abq-unified-core img{
   width:100%!important;
   height:100%!important;
-  object-fit:contain!important;
+  margin:0!important;
+  padding:0!important;
+  object-fit:cover!important;
+  border:0!important;
   border-radius:50%!important;
   display:block!important;
+}
+@media(max-width:768px){
+  #abq-unified-4way-nav .abq-unified-core{
+    width:52px!important;
+    height:52px!important;
+    margin:-26px 0 0 -26px!important;
+  }
 }
 </style>
 
