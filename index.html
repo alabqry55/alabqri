@@ -14854,6 +14854,54 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
 }
 </style>
+<style id="abq-living-motion-20261007">
+/* ===== ALABQRI Living Motion — منظومة الحركة الحيوية =====
+   إضافية فقط: تحافظ على Pulse/ECG الحالي ولا تستبدله.
+*/
+@keyframes abqBreathing{
+  0%,100%{transform:scale(1);filter:brightness(1)}
+  50%{transform:scale(1.012);filter:brightness(1.035)}
+}
+@keyframes abqBreathingGlow{
+  0%,100%{box-shadow:0 0 0 rgba(37,99,235,0),0 0 10px rgba(37,99,235,.10)}
+  50%{box-shadow:0 0 0 2px rgba(37,99,235,.10),0 0 24px rgba(37,99,235,.28)}
+}
+@keyframes abqRadialPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.10),0 5px 15px rgba(37,99,235,.28)}
+  50%{box-shadow:0 0 0 7px rgba(37,99,235,0),0 5px 20px rgba(37,99,235,.38)}
+}
+@keyframes abqCalmWave{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+/* التنفس الهادئ — الواجهة الرئيسية */
+#home .abq-home-live-hero{
+  animation:abqBreathing 7s ease-in-out infinite;
+  transform-origin:center center;
+}
+/* هالة تنفسية — منظومة الاتزان */
+#matrix > div > div.relative.overflow-hidden.rounded-3xl{
+  animation:abqBreathingGlow 5.5s ease-in-out infinite;
+}
+/* موجة هادئة — مجلس الذكر والتسبيح */
+#azkar-app > header{
+  background-size:180% 100%;
+  animation:abqCalmWave 9s ease-in-out infinite;
+}
+/* نبض دائري هادئ — شعار اللوحة الرباعية، دون تغيير شكله أو حجمه */
+#abq-unified-4way-nav .abq-unified-core{
+  animation:abqRadialPulse 3.8s ease-in-out infinite;
+}
+/* لا نلمس Pulse Card / ECG الحالي: يظل يعمل كما هو */
+@media(prefers-reduced-motion:reduce){
+  #home .abq-home-live-hero,
+  #matrix > div > div.relative.overflow-hidden.rounded-3xl,
+  #azkar-app > header,
+  #abq-unified-4way-nav .abq-unified-core{
+    animation:none !important;
+  }
+}
+</style>
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
