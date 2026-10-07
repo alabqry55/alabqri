@@ -5817,6 +5817,29 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
+<style id="abq-home-contact-desktop-replace-20261008">
+.abq-home-contact-mobile-only{display:block!important}
+#abq-home-contact-desktop-host{display:none!important}
+.abq-contact-inner-host{width:100%;max-width:100%;box-sizing:border-box}
+@media (min-width:901px){
+  .abq-home-contact-mobile-only{display:none!important}
+  #abq-home-contact-desktop-host{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    margin:1rem 0 1.25rem!important;
+  }
+  #abq-home-contact-desktop-host #contact-inner-main{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+  }
+}
+@media (max-width:900px){
+  #abq-home-contact-desktop-host{display:none!important}
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -6261,6 +6284,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     </div>
   </section>
 
+<!-- الكمبيوتر فقط: منطقة التواصل والخدمات مطابقة لتبويب التواصل والخدمات -->
+<div class="abq-home-contact-mobile-only">
 <div class="abq-contact-single-frame">
 <div class="abq-contact-section-heading mb-4 text-right"><h2 class="text-2xl md:text-3xl font-black">التواصل والخدمات</h2></div>
 <section class="space-y-0 abq-center-v2">
@@ -6303,6 +6328,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
             </div>
         </section>
 </div></div>
+</div>
+<div id="abq-home-contact-desktop-host" class="abq-contact-single-frame abq-contact-single-frame-tab" aria-label="التواصل والخدمات على الكمبيوتر"></div>
 
         </section>
 
@@ -7940,7 +7967,9 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 <section id="contact" class="tab-content">
     <div class="w-full max-w-7xl mx-auto">
 
-    <div id="contact-inner-main" class="contact-inner-panel">
+    <div id="contact-inner-main-host" class="abq-contact-inner-host"></div>
+
+        <div id="contact-inner-main" class="contact-inner-panel">
 
         <div class="abq-contact-single-frame abq-contact-single-frame-tab">
 <!-- ALABQRI — النبذة التعريفية: مكانها الوحيد تبويب التواصل والخدمات 📞 -->
@@ -10809,7 +10838,30 @@ const diplomasData = {
     forward.setAttribute('aria-disabled',String(forward.disabled));
   }
 
-  function applyTab(tabId){
+  function relocateDesktopContactServices(){
+    var homeHost=document.getElementById('abq-home-contact-desktop-host');
+    var contactHost=document.getElementById('contact-inner-main-host');
+    var content=document.getElementById('contact-inner-main');
+    if(!homeHost || !contactHost || !content) return;
+    var desktop=window.matchMedia && window.matchMedia('(min-width: 901px)').matches;
+    if(!desktop){
+      if(content.parentElement!==contactHost) contactHost.appendChild(content);
+      return;
+    }
+    var home=document.getElementById('home');
+    var contact=document.getElementById('contact');
+    var homeActive=home && home.classList.contains('tab-active') && getComputedStyle(home).display!=='none';
+    var contactActive=contact && contact.classList.contains('tab-active') && getComputedStyle(contact).display!=='none';
+    if(homeActive){
+      if(content.parentElement!==homeHost) homeHost.appendChild(content);
+    }else if(contactActive){
+      if(content.parentElement!==contactHost) contactHost.appendChild(content);
+    }else if(content.parentElement!==contactHost){
+      contactHost.appendChild(content);
+    }
+  }
+
+function applyTab(tabId){
     const mainTabsContainer = document.querySelector('.main-tabs-content');
     if(!mainTabsContainer) return false;
 
@@ -10838,6 +10890,8 @@ const diplomasData = {
     target.style.setProperty('display','block','important');
     target.style.setProperty('visibility','visible','important');
     target.setAttribute('aria-hidden','false');
+
+    relocateDesktopContactServices();
 
     const buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
     buttons.forEach(function(btn){
@@ -10899,6 +10953,11 @@ const diplomasData = {
 
   function initHistory(){
     readNavState();
+    relocateDesktopContactServices();
+    window.addEventListener('resize', function(){
+      clearTimeout(window.__abqContactRelocateTimer);
+      window.__abqContactRelocateTimer=setTimeout(relocateDesktopContactServices,120);
+    });
     const hash=(location.hash||'').replace('#','');
     const initial=ABQ_MAIN_TABS.includes(hash)?hash:(ABQ_MAIN_TABS.includes(abqCurrentMainTab)?abqCurrentMainTab:'home');
     applyTab(initial);
