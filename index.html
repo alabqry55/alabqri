@@ -17262,4 +17262,31 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
+
+<style id="abq-home-contact-dedup-split-20261008">
+/* ===== إصلاح انتقائي: منع تكرار التواصل والخدمات داخل الرئيسية فقط =====
+   الموبايل/التابلت: يحتفظان بالنسخة الخاصة بهما.
+   الكمبيوتر: يحتفظ بالنسخة المطابقة لتبويب التواصل والخدمات.
+   لا تغيير في أي جزء آخر من الصفحة.
+*/
+.abq-home-contact-mobile-only{display:block!important;}
+#abq-home-contact-desktop-host{display:none!important;}
+
+@media (min-width:901px){
+  .abq-home-contact-mobile-only{display:none!important;}
+  #abq-home-contact-desktop-host{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    margin:1rem auto 1.25rem!important;
+  }
+}
+
+@media (max-width:900px){
+  .abq-home-contact-mobile-only{display:block!important;}
+  #abq-home-contact-desktop-host{display:none!important;}
+}
+</style>
+
 </html>
