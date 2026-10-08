@@ -75,4 +75,15 @@
   #tab-center:has(a[href*="wa.me/201120909856"]) a[href*="wa.me/201120909856"]{
     text-align:center !important;
   }
+
+  /* PC only: render U+1FAC0 anatomically as a real emoji asset on Windows browsers */
+  #contact .abq-subscriber-heart{
+    font-size:0 !important;
+    font-family:inherit !important;
+    background-color:#eff6ff !important;
+    background-image:url("https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fac0.svg") !important;
+    background-position:center !important;
+    background-repeat:no-repeat !important;
+    background-size:1.65rem 1.65rem !important;
+  }
 }
