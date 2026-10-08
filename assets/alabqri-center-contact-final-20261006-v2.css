@@ -76,14 +76,34 @@
     text-align:center !important;
   }
 
-  /* PC only: render U+1FAC0 anatomically as a real emoji asset on Windows browsers */
-  #contact .abq-subscriber-heart{
+  /* PC only: replace Windows tofu/rectangle for 🫀 with a clean heart glyph asset — no box */
+  #contact .abq-subscriber-heart,
+  #abq-home-contact-services .abq-subscriber-heart,
+  #abq-home-contact-desktop-host .abq-subscriber-heart{
+    position:relative !important;
+    width:2.5rem !important;
+    height:2.5rem !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex:0 0 2.5rem !important;
     font-size:0 !important;
-    font-family:inherit !important;
-    background-color:#eff6ff !important;
-    background-image:url("https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fac0.svg") !important;
-    background-position:center !important;
-    background-repeat:no-repeat !important;
-    background-size:1.65rem 1.65rem !important;
+    color:transparent !important;
+    background:transparent !important;
+    background-image:none !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    animation:none !important;
+  }
+  #contact .abq-subscriber-heart::before,
+  #abq-home-contact-services .abq-subscriber-heart::before,
+  #abq-home-contact-desktop-host .abq-subscriber-heart::before{
+    content:"" !important;
+    width:1.8rem !important;
+    height:1.8rem !important;
+    display:block !important;
+    background:transparent url("https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fac0.svg") center/contain no-repeat !important;
+    animation:abqHeartBeat 1.25s ease-in-out infinite !important;
   }
 }
