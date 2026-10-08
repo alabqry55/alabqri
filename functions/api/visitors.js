@@ -63,7 +63,7 @@ export async function onRequestGet({ env, request }) {
       headers:{
         "content-type":"application/json; charset=UTF-8",
         "cache-control":"no-store, no-cache, must-revalidate",
-        "set-cookie":`abq_vid=${encodeURIComponent(sessionId)}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
+        "set-cookie":`abq_vid=${encodeURIComponent(sessionId)}; Path=/; Max-Age=31536000; SameSite=Lax; Secure; HttpOnly`
       }
     });
   } catch (error) {
