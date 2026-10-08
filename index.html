@@ -9559,7 +9559,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     <div class="abq-contact-license">✓ ترخيص رسمي وموثق — س.ت. 92527</div>
   </div>
   <div class="abq-contact-doctor-card">
-    <p class="abq-contact-doctor-name">تواصل مع الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)</p>
+    <p class="abq-contact-doctor-name"><span class="abq-doctor-name-main">تواصل مع الدكتور/ أحمد السيد رَسَّه</span><span class="abq-doctor-alias">(أحمد الزمخشري)</span></p>
     <div class="abq-contact-doctor-actions">
       <a href="https://wa.me/201120909856?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%20%D9%88%D8%B1%D8%AD%D9%85%D8%A9%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%B1%D9%83%D8%A7%D8%AA%D9%87%20%D9%8A%D8%A7%20%D8%AF%D9%83%D8%AA%D9%88%D8%B1%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D8%AC%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D9%8A%D8%A9." target="_blank" rel="noopener noreferrer">🟢 واتساب مباشر</a>
       <a href="tel:+201120909856">📞 اتصال مباشر</a>
@@ -11307,7 +11307,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     <div class="abq-contact-license">✓ ترخيص رسمي وموثق — س.ت. 92527</div>
   </div>
   <div class="abq-contact-doctor-card">
-    <p class="abq-contact-doctor-name">تواصل مع الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)</p>
+    <p class="abq-contact-doctor-name"><span class="abq-doctor-name-main">تواصل مع الدكتور/ أحمد السيد رَسَّه</span><span class="abq-doctor-alias">(أحمد الزمخشري)</span></p>
     <div class="abq-contact-doctor-actions">
       <a href="https://wa.me/201120909856?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%20%D9%88%D8%B1%D8%AD%D9%85%D8%A9%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%B1%D9%83%D8%A7%D8%AA%D9%87%20%D9%8A%D8%A7%20%D8%AF%D9%83%D8%AA%D9%88%D8%B1%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D8%AC%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D9%8A%D8%A9." target="_blank" rel="noopener noreferrer">🟢 واتساب مباشر</a>
       <a href="tel:+201120909856">📞 اتصال مباشر</a>
@@ -20611,6 +20611,35 @@ load();
 #home .abq-home-services-canonical,
 #home .abq-home-feedback-canonical,
 #home .abq-contact-intro-block{display:block !important;}
+</style>
+
+<style id="abq-home-doctor-two-lines-20261008">
+/* الرئيسية فقط: اسم الدكتور في سطر والاسم المستعار في سطر مستقل فوق أزرار التواصل */
+#home #abq-home-contact-services .abq-contact-doctor-name,
+#home #abq-home-contact-desktop-host .abq-contact-doctor-name{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  text-align:center!important;
+  white-space:normal!important;
+  line-height:1.65!important;
+  gap:.02rem!important;
+}
+#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
+#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main,
+#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
+#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{
+  display:block!important;
+  width:100%!important;
+  flex:none!important;
+  margin:0!important;
+}
+#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
+#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main{color:#1e40af!important;}
+#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
+#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{color:#16a34a!important;}
 </style>
 </html>
 
