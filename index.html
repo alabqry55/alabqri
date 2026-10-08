@@ -17295,9 +17295,52 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
    لا تغيير على الموبايل/التابلت ولا على محتوى التبويب الأصلي.
 */
 @media (min-width:901px){
-  #home .abq-home-contact-mobile-only,
+  /* منع النسخة القديمة داخل الرئيسية من التكرار */
+  #home .abq-home-contact-mobile-only{
+    display:none !important;
+  }
+
+  /* إظهار إطار التواصل والخدمات بعد مركز التحميلات على PC فقط */
+  #home #abq-home-contact-desktop-host{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    margin:1rem 0 1.25rem !important;
+    padding:1rem !important;
+    border:3px solid #2563eb !important;
+    border-radius:1.5rem !important;
+    background:linear-gradient(135deg,#eff6ff 0%,#ffffff 55%,#f8fafc 100%) !important;
+    box-shadow:0 16px 34px -22px rgba(30,64,175,.42) !important;
+    overflow:hidden !important;
+    direction:rtl !important;
+  }
+
+  #home #abq-home-contact-desktop-host .abq-contact-single-frame-tab{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  #home #abq-home-contact-desktop-host .abq-contact-premium-card{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+}
+
+@media (max-width:900px){
   #home #abq-home-contact-desktop-host{
     display:none !important;
+  }
+  #home .abq-home-contact-mobile-only{
+    display:block !important;
   }
 }
 </style>
