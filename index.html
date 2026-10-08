@@ -20684,4 +20684,44 @@ load();
 
 
 
+
+<style id="abq-subscriber-heart-vector-fix-20261009">
+/* ALABQRI: use a real vector heart so Windows font fallback cannot render a missing-glyph rectangle */
+#contact .abq-subscriber-heart,
+#abq-home-contact-services .abq-subscriber-heart,
+#abq-home-contact-desktop-host .abq-subscriber-heart{
+  font-size:0!important;
+  line-height:0!important;
+  color:transparent!important;
+  overflow:visible!important;
+  background:#eff6ff!important;
+  border:2px solid #60a5fa!important;
+  border-radius:50%!important;
+  box-shadow:0 0 0 0 rgba(37,99,235,.18)!important;
+  animation:abqHeartBeat 1.25s ease-in-out infinite!important;
+}
+#contact .abq-subscriber-heart::before,
+#abq-home-contact-services .abq-subscriber-heart::before,
+#abq-home-contact-desktop-host .abq-subscriber-heart::before{
+  content:""!important;
+  display:block!important;
+  width:1.55rem!important;
+  height:1.55rem!important;
+  flex:0 0 1.55rem!important;
+  background-color:transparent!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23dc2626' stroke='%23991b1b' stroke-width='2' stroke-linejoin='round' d='M32 55S7 40 7 22C7 10 22 5 32 18 42 5 57 10 57 22 57 40 32 55 32 55Z'/%3E%3Cpath fill='none' stroke='%23fecaca' stroke-width='3' stroke-linecap='round' d='M17 23c0-5 4-8 8-8'/%3E%3C/svg%3E")!important;
+  background-position:center!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  animation:none!important;
+}
+@media(max-width:768px){
+  #contact .abq-subscriber-heart::before,
+  #abq-home-contact-services .abq-subscriber-heart::before,
+  #abq-home-contact-desktop-host .abq-subscriber-heart::before{
+    width:1.35rem!important;height:1.35rem!important;flex-basis:1.35rem!important;
+  }
+}
+</style>
+
 </html>
