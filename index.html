@@ -16535,6 +16535,36 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
 }
 </style>
+
+<script id="abq-active-tab-authoritative-controller-20261008">
+(function(){
+'use strict';
+var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+function getId(btn){
+  var raw=btn && btn.getAttribute('onclick') || '';
+  var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
+  return m ? m[1] : '';
+}
+function setActive(id){
+  if(!IDS.includes(id)) return;
+  document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
+    var active=getId(btn)===id;
+    btn.classList.toggle('active',active);
+    btn.setAttribute('aria-selected',active?'true':'false');
+  });
+}
+window.addEventListener('click',function(event){
+  var target=event.target;
+  if(!target || !target.closest) return;
+  var btn=target.closest('.main-tabs-nav .nav-btn');
+  if(!btn) return;
+  var id=getId(btn);
+  if(!IDS.includes(id) || typeof window.switchTab!=='function') return;
+  setActive(id);
+},true);
+})();
+</script>
+
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
