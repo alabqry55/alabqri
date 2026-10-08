@@ -20614,32 +20614,34 @@ load();
 </style>
 
 <style id="abq-home-doctor-two-lines-20261008">
-/* الرئيسية فقط: اسم الدكتور في سطر والاسم المستعار في سطر مستقل فوق أزرار التواصل */
-#home #abq-home-contact-services .abq-contact-doctor-name,
-#home #abq-home-contact-desktop-host .abq-contact-doctor-name{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:100%!important;
-  text-align:center!important;
-  white-space:normal!important;
-  line-height:1.65!important;
-  gap:.02rem!important;
+/* الرئيسية — الموبايل فقط: اسم الدكتور في سطر والاسم المستعار في سطر مستقل فوق أزرار التواصل */
+@media (max-width:768px){
+  #home #abq-home-contact-services .abq-contact-doctor-name,
+  #home #abq-home-contact-desktop-host .abq-contact-doctor-name{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    text-align:center!important;
+    white-space:normal!important;
+    line-height:1.65!important;
+    gap:.02rem!important;
+  }
+  #home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
+  #home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main,
+  #home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
+  #home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{
+    display:block!important;
+    width:100%!important;
+    flex:none!important;
+    margin:0!important;
+  }
+  #home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
+  #home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main{color:#1e40af!important;}
+  #home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
+  #home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{color:#16a34a!important;}
 }
-#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
-#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main,
-#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
-#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{
-  display:block!important;
-  width:100%!important;
-  flex:none!important;
-  margin:0!important;
-}
-#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-name-main,
-#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-name-main{color:#1e40af!important;}
-#home #abq-home-contact-services .abq-contact-doctor-name .abq-doctor-alias,
-#home #abq-home-contact-desktop-host .abq-contact-doctor-name .abq-doctor-alias{color:#16a34a!important;}
 </style>
 </html>
 
