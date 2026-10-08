@@ -1,6 +1,3 @@
-# Deleted legacy asset: never serve the old heartbeat WebP
-/assets/abq-heartbeat.webp / 410
-
 # Redirect www to root (handled by Cloudflare, but as fallback)
 # https://www.alabqri.com/* https://alabqri.com/:splat 301
 
