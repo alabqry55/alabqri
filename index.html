@@ -3322,7 +3322,7 @@ body{
     white-space:nowrap!important;
     overflow:hidden!important;
     text-overflow:clip!important;
-    word-break:normal!important;
+    word-break:break-word!important;
     overflow-wrap:normal!important;
     box-sizing:border-box!important;
   }
@@ -20646,7 +20646,8 @@ load();
 <style id="abq-home-license-mobile-contained-20261008">
 /* الرئيسية — الموبايل فقط: احتواء سطر الترخيص داخل إطاره دون أي خروج أو تمدد */
 @media (max-width:768px){
-  #home .abq-contact-license{
+  #home #abq-home-contact-services .abq-contact-premium-head .abq-contact-license,
+  #home #abq-home-contact-desktop-host .abq-contact-premium-head .abq-contact-license{
     display:block!important;
     width:100%!important;
     max-width:100%!important;
