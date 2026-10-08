@@ -4,7 +4,11 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(self), microphone=(), camera=()
   X-XSS-Protection: 1; mode=block
+  X-Permitted-Cross-Domain-Policies: none
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate
 
 /assets/quran/quran-player.js
   Cache-Control: public, max-age=300, must-revalidate
