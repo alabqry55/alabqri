@@ -76,7 +76,7 @@
     text-align:center !important;
   }
 
-  /* PC only: replace Windows tofu/rectangle for 🫀 with a clean heart glyph asset — no box */
+  /* PC only: use the requested animated heart GIF — mobile remains untouched */
   #contact .abq-subscriber-heart,
   #abq-home-contact-services .abq-subscriber-heart,
   #abq-home-contact-desktop-host .abq-subscriber-heart{
@@ -100,10 +100,11 @@
   #abq-home-contact-services .abq-subscriber-heart::before,
   #abq-home-contact-desktop-host .abq-subscriber-heart::before{
     content:"" !important;
-    width:1.8rem !important;
-    height:1.8rem !important;
+    width:2.1rem !important;
+    height:2.1rem !important;
     display:block !important;
-    background:transparent url("https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fac0.svg") center/contain no-repeat !important;
-    animation:abqHeartBeat 1.25s ease-in-out infinite !important;
+    background:transparent url("https://www.image2url.com/r2/default/gifs/1791489907142-37a2dacd-dece-4adb-91c0-c429706680cb.gif") center/contain no-repeat !important;
+    animation:none !important;
+  }
   }
 }
