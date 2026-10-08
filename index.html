@@ -12438,6 +12438,15 @@ function getTabId(el){
  var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
  return m?m[1]:'';
 }
+function syncActiveButton(id){
+ var buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
+ buttons.forEach(function(button){
+   var buttonId=getTabId(button);
+   var active=buttonId===id;
+   button.classList.toggle('active',active);
+   button.setAttribute('aria-selected',active?'true':'false');
+ });
+}
 document.addEventListener('click',function(event){
  var target=event.target;
  if(!target||!target.closest)return;
@@ -12447,7 +12456,8 @@ document.addEventListener('click',function(event){
  if(!IDS.includes(id)||typeof window.switchTab!=='function')return;
  event.preventDefault();
  event.stopImmediatePropagation();
- window.switchTab(id,false);
+ var switched=window.switchTab(id,false);
+ if(switched!==false) syncActiveButton(id);
 },true);
 })();
 </script>
