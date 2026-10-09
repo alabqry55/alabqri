@@ -21566,3 +21566,23 @@ load();
 }
 </style>
 
+
+
+<style id="abq-top-live-section-separators">
+/* فواصل واضحة ومنفصلة بين أقسام شريط التاريخ والوقت والطقس والموقع */
+.abq-top-live-bar > .abq-top-live-item{
+  border-inline-start:1px solid rgba(37,99,235,.32) !important;
+  position:relative;
+}
+.abq-top-live-bar > .abq-top-live-item:last-child{
+  border-inline-start:0 !important;
+}
+@media (max-width:768px){
+  .abq-top-live-bar > .abq-top-live-item{
+    border:1px solid rgba(37,99,235,.24) !important;
+    border-radius:.65rem !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(239,246,255,.82)) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.72);
+  }
+}
+</style>
