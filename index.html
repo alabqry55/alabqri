@@ -20805,6 +20805,33 @@ load();
 }
 </style>
 
+
+<style id="abq-mobile-home-tab-match-contact-size-20261009">
+/* موبايل فقط: تكبير زر «الرئيسية» ليطابق حجم زر «التواصل والخدمات» */
+@media (max-width:768px){
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"]{
+    min-height:64px!important;
+    height:64px!important;
+    max-height:64px!important;
+    padding:.20rem .16rem!important;
+    font-size:.70rem!important;
+    line-height:1.18!important;
+    font-weight:700!important;
+    gap:.08rem!important;
+    box-sizing:border-box!important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"] .abq-tab-icon{
+    font-size:1.08em!important;
+    line-height:1!important;
+  }
+  .main-tabs-nav .nav-btn[onclick="switchTab('home')"] .abq-tab-label{
+    font-size:inherit!important;
+    line-height:inherit!important;
+    font-weight:inherit!important;
+  }
+}
+</style>
+
 </html>
 
 
