@@ -15258,13 +15258,19 @@ window.AbqToast = (function(){
       {id:'azkar-balance',title:'أثر الأذكار في الاتزان النفسي',category:'الأذكار والاتزان',date:'15 سبتمبر 2026',excerpt:'موضوع معرفي عن الذكر والتحصينات وعلاقتهما بمسار السكينة والاتزان.',content:'موضوع معرفي تمهيدي يربط بين المداومة على الذكر ومسار السكينة والاتزان ضمن الإطار الإيماني للمركز.\n\nيمكن توسيع المقال مستقبلًا وإضافة المراجع والمواد العلمية المرتبطة به.'}
     ];
     const ABQ_ARTICLE_STORAGE='abq_articles_library_v1';
+    const ABQ_ARTICLE_TOKEN_KEY='abq_articles_admin_token_v1';
     let ABQ_DYNAMIC_ARTICLES=[];
     try{ABQ_DYNAMIC_ARTICLES=JSON.parse(localStorage.getItem(ABQ_ARTICLE_STORAGE)||'[]');if(!Array.isArray(ABQ_DYNAMIC_ARTICLES))ABQ_DYNAMIC_ARTICLES=[];}catch(e){ABQ_DYNAMIC_ARTICLES=[];}
     function getAllArticles(){ return [...ABQ_DYNAMIC_ARTICLES, ...ABQ_STATIC_ARTICLES]; }
+    function saveLocalArticles(){try{localStorage.setItem(ABQ_ARTICLE_STORAGE,JSON.stringify(ABQ_DYNAMIC_ARTICLES));return true;}catch(e){return false;}}
+    function getArticleAdminToken(){let token=sessionStorage.getItem(ABQ_ARTICLE_TOKEN_KEY)||'';if(!token){token=window.prompt('أدخل مفتاح إدارة المقالات المحفوظ في Cloudflare باسم ARTICLES_ADMIN_KEY. لن يُحفظ هذا المفتاح في ملفات المنصة.');if(token)sessionStorage.setItem(ABQ_ARTICLE_TOKEN_KEY,token.trim());}return (token||'').trim();}
+    async function requestArticleAdmin(payload){const token=getArticleAdminToken();if(!token)return {ok:false,cancelled:true};try{const r=await fetch('/api/articles',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(r.status===401){sessionStorage.removeItem(ABQ_ARTICLE_TOKEN_KEY);return {ok:false,unauthorized:true,data};}return {ok:r.ok,data};}catch(e){return {ok:false,offline:true};}}
+    async function loadRemoteArticles(){try{const r=await fetch('/api/articles',{headers:{'Accept':'application/json'},cache:'no-store'});if(!r.ok)return;const data=await r.json();if(!Array.isArray(data.articles))return;const merged=new Map();data.articles.forEach(a=>merged.set(String(a.id),a));ABQ_DYNAMIC_ARTICLES.forEach(a=>{if(!merged.has(String(a.id)))merged.set(String(a.id),a);});ABQ_DYNAMIC_ARTICLES=Array.from(merged.values());saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();if(typeof window.renderAbqArticles==='function')window.renderAbqArticles();}catch(e){/* local content remains available */}}
     window.ABQ_ARTICLES=getAllArticles();
     function articleCard(a){
-      return '<article class="abq-article-card"><div class="abq-article-meta"><span class="abq-article-category">'+a.category+'</span><span class="abq-article-date">📅 '+a.date+'</span></div><h3>'+a.title+'</h3><p>'+a.excerpt+'</p><button type="button" class="abq-article-read" onclick="openAbqArticle(\''+a.id+'\')">اقرأ ←</button></article>';
-    }
+      const id=String(a.id??'').replace(/[^a-zA-Z0-9_-]/g,'');
+      return '<article class="abq-article-card"><div class="abq-article-meta"><span class="abq-article-category">'+escapeAbqText(a.category)+'</span><span class="abq-article-date">📅 '+escapeAbqText(a.date)+'</span></div><h3>'+escapeAbqText(a.title)+'</h3><p>'+escapeAbqText(a.excerpt)+'</p><button type="button" class="abq-article-read" onclick="openAbqArticle(\\''+id+'\\')">اقرأ ←</button></article>';
+    };
     window.renderAbqArticles=function(){
       const list=document.getElementById('abq-articles-list'),empty=document.getElementById('abq-articles-empty'),home=document.getElementById('home-latest-articles');
       const q=(document.getElementById('abq-article-search')?.value||'').trim().toLowerCase(),cat=document.getElementById('abq-article-category')?.value||'';
@@ -15310,14 +15316,13 @@ window.AbqToast = (function(){
       document.getElementById('abq-admin-preview-content').textContent=content;
       document.getElementById('abq-admin-preview-wrap').classList.remove('hidden');
     };
-    window.saveAbqArticle=function(){
+    window.saveAbqArticle=async function(){
       const title=document.getElementById('abq-admin-title-input')?.value.trim(),category=document.getElementById('abq-admin-category-input')?.value,excerpt=document.getElementById('abq-admin-excerpt-input')?.value.trim(),content=document.getElementById('abq-admin-content-input')?.value.trim(),editId=document.getElementById('abq-article-edit-id')?.value;
       if(!title||!content){AbqToast?.show?.('⚠️ يرجى كتابة عنوان المقال والنص الكامل قبل الحفظ.','error');return;}
       const item={id:editId||('article_'+Date.now()),title,category,date:new Date().toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}),excerpt:excerpt||content.slice(0,140)+'…',content};
-      if(editId){const i=ABQ_DYNAMIC_ARTICLES.findIndex(a=>a.id===editId);if(i>=0)ABQ_DYNAMIC_ARTICLES[i]=item;else ABQ_DYNAMIC_ARTICLES.unshift(item);}else ABQ_DYNAMIC_ARTICLES.unshift(item);
-      localStorage.setItem(ABQ_ARTICLE_STORAGE,JSON.stringify(ABQ_DYNAMIC_ARTICLES));
-      window.ABQ_ARTICLES=getAllArticles(); renderAbqArticles(); resetAbqArticleForm(); renderAbqArticleAdminList();
-      AbqToast?.show?.('✅ تم حفظ المقال ونشره في مكتبة المقالات والأبحاث.','success');
+      const result=await requestArticleAdmin({action:'save',article:item});
+      if(!result.ok){AbqToast?.show?.(result.unauthorized?'❌ مفتاح الإدارة غير صحيح؛ لم يُحفظ المقال سحابيًا.':result.cancelled?'تم إلغاء الحفظ؛ لم يتغير المحتوى.':'❌ تعذر الحفظ السحابي؛ لم يتم تأكيد حفظ المقال.', 'error');return;}
+      const i=ABQ_DYNAMIC_ARTICLES.findIndex(a=>String(a.id)===String(item.id));if(i>=0)ABQ_DYNAMIC_ARTICLES[i]=item;else ABQ_DYNAMIC_ARTICLES.unshift(item);saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();renderAbqArticles();resetAbqArticleForm();renderAbqArticleAdminList();AbqToast?.show?.('✅ تم حفظ المقال في قاعدة البيانات السحابية ويمكن عرضه من الأجهزة الأخرى.','success');
     };
     window.editAbqArticle=function(id){
       const a=ABQ_DYNAMIC_ARTICLES.find(x=>x.id===id); if(!a)return;
@@ -15328,9 +15333,11 @@ window.AbqToast = (function(){
       const a=getAllArticles().find(x=>x.id===id);if(!a)return;
       document.getElementById('abq-admin-preview-title').textContent=a.title; document.getElementById('abq-admin-preview-meta').textContent='📚 '+a.category+' • 📅 '+a.date; document.getElementById('abq-admin-preview-content').textContent=a.content; document.getElementById('abq-admin-preview-wrap').classList.remove('hidden');
     };
-    window.deleteAbqArticle=function(id){
+    window.deleteAbqArticle=async function(id){
       if(!confirm('هل تريد حذف هذا المقال من مكتبة المقالات والأبحاث؟'))return;
-      ABQ_DYNAMIC_ARTICLES=ABQ_DYNAMIC_ARTICLES.filter(a=>a.id!==id); localStorage.setItem(ABQ_ARTICLE_STORAGE,JSON.stringify(ABQ_DYNAMIC_ARTICLES)); renderAbqArticles(); renderAbqArticleAdminList(); AbqToast?.show?.('🗑️ تم حذف المقال.','success');
+      const result=await requestArticleAdmin({action:'delete',id:String(id)});
+      if(!result.ok){AbqToast?.show?.(result.unauthorized?'❌ مفتاح الإدارة غير صحيح؛ لم يُحذف المقال سحابيًا.':result.cancelled?'تم إلغاء الحذف؛ لم يتغير المحتوى.':'❌ تعذر تأكيد الحذف السحابي؛ لم يُحذف المقال محليًا.','error');return;}
+      ABQ_DYNAMIC_ARTICLES=ABQ_DYNAMIC_ARTICLES.filter(a=>String(a.id)!==String(id));saveLocalArticles();renderAbqArticles();renderAbqArticleAdminList();AbqToast?.show?.('🗑️ تم حذف المقال من قاعدة البيانات السحابية.','success');
     };
     window.renderAbqArticleAdminList=function(){
       const box=document.getElementById('abq-admin-list'),count=document.getElementById('abq-admin-count');if(!box)return;
@@ -15345,6 +15352,7 @@ window.AbqToast = (function(){
         setTimeout(function(){if(typeof window.switchBalanceWindow==='function')window.switchBalanceWindow(name);window.scrollTo({top:0,behavior:'auto'});},80);
       }
     };
+    loadRemoteArticles();
     window.showJourneyNotice=function(name){
       const labels={indicator:'📈 مؤشر العبقري للاتزان',map:'🗺️ خريطة العبقري للتطور',balance:'⚖️ ميزان العبقري لسلامة الوصول'};
       const toast=document.getElementById('site-toast');
