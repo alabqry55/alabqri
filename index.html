@@ -9222,7 +9222,10 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     box-shadow:inset 0 0 0 1px rgba(191,219,254,.92),0 0 0 1px rgba(30,64,175,.75),0 0 10px rgba(37,99,235,.22) !important;
   }
   #home .abq-home-live-hero::before{inset:2px;border-radius:8px;}
-  #home .abq-home-live-hero .abq-main-hero-image{width:100% !important;border-radius:5px !important;}
+  #home .abq-home-live-hero .abq-main-hero-image{width:100% !important;max-width:100% !important;height:auto !important;border-radius:5px !important;}
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-home-live-hero{scroll-behavior:auto !important;}
 }
 </style>
 
