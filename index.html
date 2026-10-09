@@ -15269,8 +15269,8 @@ window.AbqToast = (function(){
     window.ABQ_ARTICLES=getAllArticles();
     function articleCard(a){
       const id=String(a.id??'').replace(/[^a-zA-Z0-9_-]/g,'');
-      return '<article class="abq-article-card"><div class="abq-article-meta"><span class="abq-article-category">'+escapeAbqText(a.category)+'</span><span class="abq-article-date">📅 '+escapeAbqText(a.date)+'</span></div><h3>'+escapeAbqText(a.title)+'</h3><p>'+escapeAbqText(a.excerpt)+'</p><button type="button" class="abq-article-read" onclick="openAbqArticle(\\''+id+'\\')">اقرأ ←</button></article>';
-    };
+      return '<article class="abq-article-card"><div class="abq-article-meta"><span class="abq-article-category">'+escapeAbqText(a.category)+'</span><span class="abq-article-date">📅 '+escapeAbqText(a.date)+'</span></div><h3>'+escapeAbqText(a.title)+'</h3><p>'+escapeAbqText(a.excerpt)+'</p><button type="button" data-article-id="'+id+'" class="abq-article-read" onclick="openAbqArticle(this.dataset.articleId)">اقرأ ←</button></article>';
+    }
     window.renderAbqArticles=function(){
       const list=document.getElementById('abq-articles-list'),empty=document.getElementById('abq-articles-empty'),home=document.getElementById('home-latest-articles');
       const q=(document.getElementById('abq-article-search')?.value||'').trim().toLowerCase(),cat=document.getElementById('abq-article-category')?.value||'';
