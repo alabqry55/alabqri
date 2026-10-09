@@ -9168,6 +9168,71 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+
+<style id="abq-hero-islamic-frame-20261009">
+/* برواز إسلامي خارجي لصورة الهيرو فقط — معزول عن بقية مكونات المنصة */
+#home .abq-home-live-hero{
+  position:relative !important;
+  box-sizing:border-box !important;
+  padding:7px !important;
+  border:3px double #d6b568 !important;
+  border-radius:18px !important;
+  background:
+    linear-gradient(135deg,rgba(37,99,235,.98),rgba(8,47,110,.98) 48%,rgba(37,99,235,.98)) padding-box,
+    linear-gradient(135deg,#f7e7a5 0%,#b88735 22%,#dbeafe 50%,#b88735 78%,#f7e7a5 100%) border-box !important;
+  box-shadow:inset 0 0 0 2px rgba(191,219,254,.92),0 0 0 1px rgba(30,64,175,.8),0 0 18px rgba(37,99,235,.25) !important;
+  overflow:hidden !important;
+}
+#home .abq-home-live-hero::before{
+  content:"۞";
+  position:absolute;
+  z-index:3;
+  inset:3px;
+  border:1px solid rgba(245,218,145,.9);
+  border-radius:12px;
+  color:#f6df9b;
+  font-size:clamp(18px,2.1vw,27px);
+  line-height:1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12px 12px,rgba(8,47,110,.96) 0 13px,transparent 14px) top left/26px 26px no-repeat,
+    radial-gradient(circle at calc(100% - 12px) 12px,rgba(8,47,110,.96) 0 13px,transparent 14px) top right/26px 26px no-repeat,
+    radial-gradient(circle at 12px calc(100% - 12px),rgba(8,47,110,.96) 0 13px,transparent 14px) bottom left/26px 26px no-repeat,
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),rgba(8,47,110,.96) 0 13px,transparent 14px) bottom right/26px 26px no-repeat;
+  text-shadow:0 0 5px rgba(246,223,155,.55);
+}
+#home .abq-home-live-hero .abq-main-hero-image{
+  display:block !important;
+  position:relative !important;
+  z-index:1 !important;
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  margin:0 !important;
+  border:0 !important;
+  border-radius:7px !important;
+  box-shadow:none !important;
+}
+#home .abq-home-live-hero .abq-home-live-overlay{z-index:2 !important;pointer-events:none !important;}
+@media (max-width:640px){
+  #home .abq-home-live-hero{
+    padding:5px !important;
+    border-width:2px !important;
+    border-radius:12px !important;
+    box-shadow:inset 0 0 0 1px rgba(191,219,254,.92),0 0 0 1px rgba(30,64,175,.75),0 0 10px rgba(37,99,235,.22) !important;
+  }
+  #home .abq-home-live-hero::before{inset:2px;border-radius:8px;font-size:18px;}
+  #home .abq-home-live-hero .abq-main-hero-image{width:100% !important;max-width:100% !important;height:auto !important;border-radius:5px !important;}
+}
+@media (prefers-reduced-motion:reduce){
+  #home .abq-home-live-hero{scroll-behavior:auto !important;}
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
