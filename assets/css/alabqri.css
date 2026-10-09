@@ -564,3 +564,70 @@ body{overflow-x:hidden!important}
 
 /* شعار المركز داخل أيقونة رأس صفحات التوثيق */
 .pro-logo-icon img{width:100%;height:100%;display:block;object-fit:contain;border-radius:inherit}
+
+
+/* ALABQRI — إطار إسلامي روحاني خارجي للهيرو، مستلهم من صورة قسم التعليم الزمخشري */
+.abq-home-live-hero{
+    position:relative!important;
+    isolation:isolate;
+    border-radius:0!important;
+    outline:2px solid #c9a227;
+    outline-offset:7px;
+    box-shadow:
+      0 0 0 4px #173b72,
+      0 0 0 6px rgba(201,162,39,.92),
+      0 0 0 10px rgba(23,59,114,.72),
+      0 16px 38px -20px rgba(9,28,55,.68);
+}
+.abq-home-live-hero::before{
+    content:"";
+    position:absolute;
+    inset:-17px;
+    z-index:5;
+    pointer-events:none;
+    border:1px solid rgba(201,162,39,.95);
+    background:
+      radial-gradient(circle at 14px 14px,#eadb9a 0 2px,transparent 2.8px),
+      radial-gradient(circle at calc(100% - 14px) 14px,#eadb9a 0 2px,transparent 2.8px),
+      radial-gradient(circle at 14px calc(100% - 14px),#eadb9a 0 2px,transparent 2.8px),
+      radial-gradient(circle at calc(100% - 14px) calc(100% - 14px),#eadb9a 0 2px,transparent 2.8px);
+    box-shadow:inset 0 0 0 2px rgba(23,59,114,.9),0 0 0 1px rgba(201,162,39,.28);
+}
+.abq-home-live-hero::after{
+    content:"۞";
+    position:absolute;
+    inset:-28px;
+    z-index:6;
+    pointer-events:none;
+    color:#c9a227;
+    font-family:serif;
+    font-size:27px;
+    line-height:1;
+    text-shadow:0 1px 0 #173b72,0 0 5px rgba(201,162,39,.32);
+    background:
+      radial-gradient(circle at 13px 13px,#173b72 0 7px,transparent 7.8px),
+      radial-gradient(circle at calc(100% - 13px) 13px,#173b72 0 7px,transparent 7.8px),
+      radial-gradient(circle at 13px calc(100% - 13px),#173b72 0 7px,transparent 7.8px),
+      radial-gradient(circle at calc(100% - 13px) calc(100% - 13px),#173b72 0 7px,transparent 7.8px);
+    -webkit-mask:
+      linear-gradient(#000 0 0) top left/32px 32px no-repeat,
+      linear-gradient(#000 0 0) top right/32px 32px no-repeat,
+      linear-gradient(#000 0 0) bottom left/32px 32px no-repeat,
+      linear-gradient(#000 0 0) bottom right/32px 32px no-repeat;
+    mask:
+      linear-gradient(#000 0 0) top left/32px 32px no-repeat,
+      linear-gradient(#000 0 0) top right/32px 32px no-repeat,
+      linear-gradient(#000 0 0) bottom left/32px 32px no-repeat,
+      linear-gradient(#000 0 0) bottom right/32px 32px no-repeat;
+}
+@media(max-width:600px){
+    .abq-home-live-hero{
+      outline-offset:4px;
+      box-shadow:0 0 0 3px #173b72,0 0 0 5px rgba(201,162,39,.92),0 0 0 7px rgba(23,59,114,.72),0 12px 26px -18px rgba(9,28,55,.68);
+    }
+    .abq-home-live-hero::before{inset:-12px}
+    .abq-home-live-hero::after{inset:-19px;font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){
+    .abq-home-live-hero{transition:none!important}
+}
