@@ -21068,3 +21068,61 @@ load();
 })();
 </script>
 
+
+<!-- ALABQRI active-tab button sync after 4-way navigation -->
+<script id="abq-4way-active-tab-button-sync-20261009">
+(function(){
+  'use strict';
+  var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+  function activeTabId(){
+    for(var i=0;i<IDS.length;i++){
+      var section=document.getElementById(IDS[i]);
+      if(section && section.classList.contains('tab-active')) return IDS[i];
+    }
+    var hash=(location.hash||'').replace(/^#/,'');
+    return IDS.indexOf(hash)!==-1?hash:'home';
+  }
+  function buttonTabId(button){
+    var raw=button && button.getAttribute('onclick')||'';
+    var match=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
+    return match?match[1]:'';
+  }
+  function syncActiveButton(){
+    var id=activeTabId();
+    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(button){
+      var active=buttonTabId(button)===id;
+      button.classList.toggle('active',active);
+      button.setAttribute('aria-selected',active?'true':'false');
+      button.setAttribute('aria-current',active?'page':'false');
+    });
+  }
+  var scheduled=false;
+  function scheduleSync(){
+    if(scheduled)return;
+    scheduled=true;
+    window.requestAnimationFrame(function(){
+      scheduled=false;
+      syncActiveButton();
+    });
+  }
+  function init(){
+    syncActiveButton();
+    var observer=new MutationObserver(scheduleSync);
+    IDS.forEach(function(id){
+      var section=document.getElementById(id);
+      if(section) observer.observe(section,{attributes:true,attributeFilter:['class']});
+    });
+    window.addEventListener('hashchange',scheduleSync);
+    window.addEventListener('popstate',scheduleSync);
+    document.addEventListener('click',function(event){
+      var target=event.target&&event.target.closest?event.target.closest('#abq-unified-4way-nav .abq-unified-btn'):null;
+      if(target && (target.classList.contains('abq-unified-btn--back')||target.classList.contains('abq-unified-btn--forward'))){
+        window.setTimeout(scheduleSync,0);
+        window.setTimeout(scheduleSync,80);
+      }
+    },true);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
