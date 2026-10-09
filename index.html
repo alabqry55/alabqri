@@ -9170,17 +9170,24 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 
 
 <style id="abq-hero-islamic-frame-20261009">
-/* برواز إسلامي خارجي لصورة الهيرو فقط — زخارف هندسية على حواف الإطار دون أي عناصر في الزوايا */
+/* برواز إسلامي معدني ثلاثي الأبعاد لصورة الهيرو فقط؛ دون تعديل الصورة أو زخارف في الأركان */
 #home .abq-home-live-hero{
   position:relative !important;
   box-sizing:border-box !important;
   padding:7px !important;
-  border:3px double #d6b568 !important;
+  border:4px solid transparent !important;
   border-radius:18px !important;
   background:
-    linear-gradient(135deg,rgba(37,99,235,.98),rgba(8,47,110,.98) 48%,rgba(37,99,235,.98)) padding-box,
-    linear-gradient(135deg,#f7e7a5 0%,#b88735 22%,#dbeafe 50%,#b88735 78%,#f7e7a5 100%) border-box !important;
-  box-shadow:inset 0 0 0 2px rgba(191,219,254,.92),0 0 0 1px rgba(30,64,175,.8),0 0 18px rgba(37,99,235,.25) !important;
+    linear-gradient(135deg,#123c82 0%,#2563eb 28%,#082f6e 58%,#1d4ed8 78%,#082f6e 100%) padding-box,
+    linear-gradient(145deg,#fff0b3 0%,#b88735 12%,#f9e7a2 23%,#8d641f 36%,#e5c16d 50%,#9b7027 64%,#f8e4a0 78%,#80591c 90%,#fff0b3 100%) border-box !important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.78),
+    inset 0 -3px 3px rgba(4,20,55,.8),
+    inset 0 0 0 2px rgba(191,219,254,.72),
+    0 2px 0 #704d19,
+    0 4px 0 rgba(5,24,61,.9),
+    0 7px 12px rgba(0,0,0,.24),
+    0 0 15px rgba(37,99,235,.22) !important;
   overflow:hidden !important;
 }
 #home .abq-home-live-hero::before{
@@ -9188,14 +9195,15 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   position:absolute;
   z-index:3;
   inset:3px;
-  border:1px solid rgba(245,218,145,.9);
-  border-radius:12px;
+  border:1px solid rgba(255,232,163,.96);
+  border-radius:11px;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.55),inset 0 -1px 2px rgba(5,25,65,.7);
   pointer-events:none;
   background:
-    repeating-linear-gradient(45deg,transparent 0 4px,rgba(246,223,155,.38) 4px 5px,transparent 5px 9px) top 0 left 18%/64% 5px repeat-x,
-    repeating-linear-gradient(45deg,transparent 0 4px,rgba(246,223,155,.38) 4px 5px,transparent 5px 9px) bottom 0 left 18%/64% 5px repeat-x,
-    repeating-linear-gradient(135deg,transparent 0 4px,rgba(246,223,155,.38) 4px 5px,transparent 5px 9px) left 0 top 18%/5px 64% repeat-y,
-    repeating-linear-gradient(135deg,transparent 0 4px,rgba(246,223,155,.38) 4px 5px,transparent 5px 9px) right 0 top 18%/5px 64% repeat-y;
+    repeating-linear-gradient(45deg,transparent 0 4px,rgba(255,231,163,.48) 4px 5px,transparent 5px 9px) top 0 left 18%/64% 5px repeat-x,
+    repeating-linear-gradient(45deg,transparent 0 4px,rgba(255,231,163,.48) 4px 5px,transparent 5px 9px) bottom 0 left 18%/64% 5px repeat-x,
+    repeating-linear-gradient(135deg,transparent 0 4px,rgba(255,231,163,.48) 4px 5px,transparent 5px 9px) left 0 top 18%/5px 64% repeat-y,
+    repeating-linear-gradient(135deg,transparent 0 4px,rgba(255,231,163,.48) 4px 5px,transparent 5px 9px) right 0 top 18%/5px 64% repeat-y;
 }
 #home .abq-home-live-hero .abq-main-hero-image{
   display:block !important;
@@ -9211,15 +9219,21 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   margin:0 !important;
   border:0 !important;
   border-radius:7px !important;
-  box-shadow:none !important;
+  box-shadow:0 1px 2px rgba(0,0,0,.12) !important;
 }
 #home .abq-home-live-hero .abq-home-live-overlay{z-index:2 !important;pointer-events:none !important;}
 @media (max-width:640px){
   #home .abq-home-live-hero{
     padding:5px !important;
-    border-width:2px !important;
+    border-width:3px !important;
     border-radius:12px !important;
-    box-shadow:inset 0 0 0 1px rgba(191,219,254,.92),0 0 0 1px rgba(30,64,175,.75),0 0 10px rgba(37,99,235,.22) !important;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.72),
+      inset 0 -2px 2px rgba(4,20,55,.75),
+      inset 0 0 0 1px rgba(191,219,254,.8),
+      0 2px 0 #704d19,
+      0 4px 8px rgba(0,0,0,.2),
+      0 0 8px rgba(37,99,235,.18) !important;
   }
   #home .abq-home-live-hero::before{inset:2px;border-radius:8px;}
   #home .abq-home-live-hero .abq-main-hero-image{width:100% !important;max-width:100% !important;height:auto !important;border-radius:5px !important;}
