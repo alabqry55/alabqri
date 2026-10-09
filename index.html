@@ -20953,3 +20953,111 @@ load();
   }
 }
 </style>
+
+<script id="abq-unified-4way-history-fix-20261009">
+/* ALABQRI — إصلاح معزول لسجل الرجوع/التقدم في اللوحة الرباعية */
+(function(){
+  'use strict';
+  if (window.__abqFourWayHistoryFixInstalled) return;
+  window.__abqFourWayHistoryFixInstalled = true;
+  var nav=document.getElementById('abq-unified-4way-nav');
+  if(!nav) return;
+  var tabIds=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+  var backStack=[], forwardStack=[];
+  var currentTab=readActiveTab()||'home';
+  var currentState=snapshot(currentTab);
+  var stateBeforeTabClick=null, navigating=false, pendingTarget=null;
+
+  function readActiveTab(){
+    for(var i=0;i<tabIds.length;i++){
+      var el=document.getElementById(tabIds[i]);
+      if(el&&el.classList.contains('tab-active')) return tabIds[i];
+    }
+    return null;
+  }
+  function snapshot(tab){return {tab:tab,x:window.scrollX||0,y:window.scrollY||0};}
+  function validState(item){return !!(item&&tabIds.indexOf(item.tab)!==-1);}
+  function goToState(item){
+    if(!validState(item)) return false;
+    navigating=true;
+    pendingTarget={tab:item.tab,x:Number(item.x)||0,y:Number(item.y)||0};
+    var ok=false;
+    if(typeof window.switchTab==='function'){
+      try{ok=window.switchTab(item.tab,true)!==false;}catch(e){ok=false;}
+    }
+    if(!ok){
+      var target=document.getElementById(item.tab);
+      if(!target){navigating=false;pendingTarget=null;return false;}
+      tabIds.forEach(function(id){
+        var el=document.getElementById(id); if(!el) return;
+        el.classList.toggle('tab-active',id===item.tab);
+        el.setAttribute('aria-hidden',id===item.tab?'false':'true');
+        el.style.setProperty('display',id===item.tab?'block':'none','important');
+      });
+    }
+    window.requestAnimationFrame(function(){
+      var restore=pendingTarget||{x:Number(item.x)||0,y:Number(item.y)||0};
+      window.scrollTo({left:restore.x,top:restore.y,behavior:'auto'});
+      currentTab=item.tab;
+      currentState={tab:item.tab,x:restore.x,y:restore.y};
+      pendingTarget=null;
+      navigating=false;
+    });
+    return true;
+  }
+
+  document.addEventListener('click',function(e){
+    var target=e.target&&e.target.closest?e.target.closest('#abq-unified-4way-nav .abq-unified-btn'):null;
+    if(!target){
+      var tabButton=e.target&&e.target.closest?e.target.closest('.main-tabs-nav .nav-btn'):null;
+      if(tabButton){
+        stateBeforeTabClick=snapshot(readActiveTab()||currentTab);
+        window.setTimeout(function(){if(readActiveTab()===currentTab) stateBeforeTabClick=null;},0);
+      }
+      return;
+    }
+    var isBack=target.classList.contains('abq-unified-btn--back');
+    var isForward=target.classList.contains('abq-unified-btn--forward');
+    if(!isBack&&!isForward) return;
+    e.preventDefault(); e.stopPropagation();
+    if(typeof e.stopImmediatePropagation==='function') e.stopImmediatePropagation();
+    var from=snapshot(readActiveTab()||currentTab);
+    var stack=isBack?backStack:forwardStack;
+    var opposite=isBack?forwardStack:backStack;
+    if(!stack.length) return;
+    var destination=stack.pop();
+    if(!validState(destination)) return;
+    opposite.push(from);
+    if(opposite.length>50) opposite.shift();
+    goToState(destination);
+  },true);
+
+  var observer=new MutationObserver(function(){
+    var next=readActiveTab(); if(!next) return;
+    if(navigating){
+      currentTab=next;
+      if(pendingTarget) currentState={tab:pendingTarget.tab,x:pendingTarget.x,y:pendingTarget.y};
+      return;
+    }
+    if(next!==currentTab){
+      var previous=validState(stateBeforeTabClick)?stateBeforeTabClick:currentState;
+      if(validState(previous)&&previous.tab!==next){
+        backStack.push(previous);
+        if(backStack.length>50) backStack.shift();
+        forwardStack=[];
+      }
+      currentTab=next;
+      currentState=snapshot(next);
+      stateBeforeTabClick=null;
+    }
+  });
+  tabIds.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.classList.contains('tab-content')) observer.observe(el,{attributes:true,attributeFilter:['class']});
+  });
+  window.addEventListener('scroll',function(){
+    if(!navigating) currentState=snapshot(readActiveTab()||currentTab);
+  },{passive:true});
+})();
+</script>
+
