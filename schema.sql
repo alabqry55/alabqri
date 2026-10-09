@@ -52,3 +52,16 @@ CREATE TABLE IF NOT EXISTS subscribers (
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_subscribers_active ON subscribers(active);
+
+-- مكتبة المقالات والأبحاث — محتوى دائم مشترك بين الأجهزة
+CREATE TABLE IF NOT EXISTS articles (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  date TEXT NOT NULL,
+  excerpt TEXT NOT NULL DEFAULT '',
+  content TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_articles_updated_at ON articles(updated_at DESC);
