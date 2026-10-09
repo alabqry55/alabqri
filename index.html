@@ -21223,12 +21223,15 @@ load();
 }
 </style>
 
-<style id="abq-mobile-weather-live-row-spacing-20261009">
-/* موبايل فقط: زيادة المسافة الرأسية بين صفوف شريط التاريخ والوقت والطقس والموقع */
+<style id="abq-mobile-weather-live-text-line-spacing-20261009">
+/* موبايل فقط: زيادة المسافة بين سطور النص داخل صفوف التاريخ والوقت والطقس والموقع */
 @media (max-width:768px){
   .abq-top-live-bar{
-    row-gap:.55rem!important;
+    row-gap:.18rem!important;
     column-gap:.18rem!important;
+  }
+  .abq-top-live-item .abq-top-values{
+    gap:.32rem!important;
   }
 }
 </style>
