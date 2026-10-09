@@ -9131,6 +9131,36 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   }
 }
 </style>
+
+<!-- ALABQRI desktop-only contact layout; mobile styles intentionally unchanged -->
+<style id="abq-contact-pc-only-layout-20261009">
+@media (min-width: 769px) {
+  .abq-contact-doctor-name {
+    white-space: nowrap !important;
+  }
+  .abq-contact-doctor-name .abq-doctor-name-main,
+  .abq-contact-doctor-name .abq-doctor-alias {
+    display: inline !important;
+    white-space: nowrap !important;
+  }
+  .abq-contact-doctor-name + .abq-contact-doctor-actions,
+  .abq-contact-doctor-name + div.grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: .65rem !important;
+    width: 100% !important;
+  }
+  .abq-contact-doctor-name + .abq-contact-doctor-actions > a,
+  .abq-contact-doctor-name + div.grid > a {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
