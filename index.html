@@ -9146,6 +9146,10 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
   .abq-contact-doctor-name .abq-doctor-alias {
     margin-inline-end: .25rem !important;
   }
+  .abq-contact-doctor-name .abq-doctor-alias::before {
+    content: "\00a0" !important;
+    white-space: pre !important;
+  }
   .abq-contact-doctor-name + .abq-contact-doctor-actions,
   .abq-contact-doctor-name + div.grid {
     display: flex !important;
