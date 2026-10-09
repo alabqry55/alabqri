@@ -20829,3 +20829,63 @@ load();
 .abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line{order:1!important}
 .abq-contact-premium-head .abq-contact-brand-row .abq-contact-logo-wrap{order:2!important}
 </style>
+
+
+<style id="abq-contact-brand-responsive-alignment-20261009">
+/* Responsive alignment for center logo, leaf and full center title */
+.abq-contact-premium-head .abq-contact-brand-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:clamp(6px,1vw,12px)!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  text-align:center!important;
+}
+.abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line h3{
+  margin:0!important;
+  max-width:100%!important;
+  text-align:center!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+.abq-contact-premium-head .abq-contact-brand-row .abq-contact-logo-wrap,
+.abq-contact-premium-head .abq-contact-brand-row .abq-contact-premium-icon{
+  flex:0 0 auto!important;
+  align-self:center!important;
+}
+@media (max-width:768px){
+  .abq-contact-premium-head .abq-contact-brand-row{
+    justify-content:flex-start!important;
+    flex-direction:row!important;
+    gap:6px!important;
+    text-align:right!important;
+  }
+  .abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line{
+    flex:1 1 0!important;
+    width:auto!important;
+    text-align:right!important;
+  }
+  .abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line h3{
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    text-align:right!important;
+    width:100%!important;
+    font-size:clamp(.68rem,3.1vw,.82rem)!important;
+    line-height:1.4!important;
+  }
+  .abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line h3 .abq-contact-title-line-1,
+  .abq-contact-premium-head .abq-contact-brand-row .abq-contact-title-line h3 .abq-contact-title-line-2{
+    display:block!important;
+    width:100%!important;
+    text-align:right!important;
+    overflow-wrap:anywhere!important;
+  }
+}
+</style>
