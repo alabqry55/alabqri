@@ -15227,6 +15227,7 @@ window.AbqToast = (function(){
           <button type="button" onclick="previewAbqArticleDraft()" class="px-4 py-2.5 rounded-xl bg-blue-100 text-blue-800 font-black text-xs">👁️ معاينة</button>
           <button type="button" onclick="saveAbqArticle()" id="abq-article-save-btn" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs">💾 حفظ المقال ونشره</button>
           <button type="button" onclick="resetAbqArticleForm()" class="px-4 py-2.5 rounded-xl bg-slate-200 text-slate-700 font-black text-xs">مسح الحقول</button>
+          <button type="button" onclick="syncAbqArticlesToCloud()" class="px-4 py-2.5 rounded-xl bg-sky-100 text-sky-800 font-black text-xs">☁️ مزامنة المقالات الحالية مع السحابة</button>
         </div>
       </div>
       <div>
@@ -15323,6 +15324,13 @@ window.AbqToast = (function(){
       const result=await requestArticleAdmin({action:'save',article:item});
       if(!result.ok){AbqToast?.show?.(result.unauthorized?'❌ مفتاح الإدارة غير صحيح؛ لم يُحفظ المقال سحابيًا.':result.cancelled?'تم إلغاء الحفظ؛ لم يتغير المحتوى.':'❌ تعذر الحفظ السحابي؛ لم يتم تأكيد حفظ المقال.', 'error');return;}
       const i=ABQ_DYNAMIC_ARTICLES.findIndex(a=>String(a.id)===String(item.id));if(i>=0)ABQ_DYNAMIC_ARTICLES[i]=item;else ABQ_DYNAMIC_ARTICLES.unshift(item);saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();renderAbqArticles();resetAbqArticleForm();renderAbqArticleAdminList();AbqToast?.show?.('✅ تم حفظ المقال في قاعدة البيانات السحابية ويمكن عرضه من الأجهزة الأخرى.','success');
+    };
+    window.syncAbqArticlesToCloud=async function(){
+      if(!ABQ_DYNAMIC_ARTICLES.length){AbqToast?.show?.('لا توجد مقالات مضافة يدويًا لمزامنتها.','error');return;}
+      if(!confirm('سيتم نسخ المقالات المضافة على هذا المتصفح إلى قاعدة البيانات السحابية. هل تريد المتابعة؟'))return;
+      let done=0;
+      for(const article of ABQ_DYNAMIC_ARTICLES){const result=await requestArticleAdmin({action:'save',article});if(!result.ok){AbqToast?.show?.('توقفت المزامنة بعد حفظ '+done+' مقالًا. تحقق من مفتاح الإدارة وإعدادات Cloudflare ثم أعد المحاولة.','error');return;}done++;}
+      AbqToast?.show?.('✅ تمت مزامنة '+done+' مقالًا مع قاعدة البيانات السحابية.','success');
     };
     window.editAbqArticle=function(id){
       const a=ABQ_DYNAMIC_ARTICLES.find(x=>x.id===id); if(!a)return;
