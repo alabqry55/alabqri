@@ -21238,16 +21238,16 @@ load();
 
 
 <style id="abq-pc-hero-match-mobile-centering-20261009">
-/* الكمبيوتر فقط: إزالة تعارض الإزاحة وتوسيط الهيرو بعرض الشاشة دون تغيير الموبايل */
+/* الكمبيوتر فقط: توسيط الهيرو بعرض نافذة العرض مع إبقاء إطار الصورة والموبايل دون تغيير */
 @media (min-width:769px){
   #home .abq-home-live-hero{
     position:relative !important;
-    left:calc(50% - 50vw) !important;
+    left:50% !important;
     right:auto !important;
-    transform:none !important;
+    transform:translateX(-50%) !important;
     width:100vw !important;
     max-width:100vw !important;
-    margin:0 !important;
+    margin-inline:0 !important;
     box-sizing:border-box !important;
   }
   #home .abq-home-live-hero .abq-main-hero-image{
@@ -21257,7 +21257,7 @@ load();
     height:auto !important;
     object-fit:contain !important;
     object-position:center center !important;
-    margin:0 !important;
+    margin-inline:auto !important;
   }
 }
 </style>
