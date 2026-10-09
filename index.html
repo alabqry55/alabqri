@@ -20230,6 +20230,104 @@ load();
   filter:none!important;
 }
 </style>
+
+<style id="abq-video-library-all-devices-final-20261009">
+/* ضبط مكتبة الفيديوهات لكل الأجهزة دون تغيير الروابط أو الوظائف */
+#home-restored-sections > section:first-child{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  overflow-wrap:anywhere;
+}
+#home-restored-sections > section:first-child > .flex{
+  min-width:0;
+  flex-wrap:wrap;
+  align-items:center;
+}
+#home-restored-sections > section:first-child > .flex h2{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+#home-restored-sections .abq-video-library{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
+  gap:1rem;
+  width:100%;
+  min-width:0;
+}
+#home-restored-sections .abq-video-slot{
+  display:flex;
+  width:100%;
+  min-width:0;
+  height:auto;
+  min-height:230px !important;
+  max-height:none;
+  aspect-ratio:auto;
+  padding:1rem !important;
+  overflow:visible;
+}
+#home-restored-sections .abq-video-slot-inner{
+  display:flex;
+  flex:1 1 auto;
+  width:100%;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  padding:.5rem !important;
+  overflow:visible;
+  overflow-wrap:anywhere;
+}
+#home-restored-sections .abq-video-slot h4,
+#home-restored-sections .abq-video-slot p{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+#home-restored-sections .abq-video-slot a{
+  display:inline-flex;
+  max-width:100%;
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:center;
+  line-height:1.5;
+}
+@media (max-width:767px){
+  #home-restored-sections .abq-video-library{
+    grid-template-columns:minmax(0,1fr);
+    gap:.875rem;
+  }
+  #home-restored-sections .abq-video-slot{
+    min-height:0 !important;
+    padding:.875rem !important;
+  }
+  #home-restored-sections .abq-video-slot-inner{
+    padding:.25rem !important;
+  }
+  #home-restored-sections .abq-video-slot p{
+    font-size:.875rem;
+    line-height:1.7;
+  }
+  #home-restored-sections .abq-video-slot a{
+    width:auto;
+    max-width:100%;
+    padding:.7rem 1rem;
+  }
+}
+@media (max-width:380px){
+  #home-restored-sections > section:first-child{padding:.75rem !important;}
+  #home-restored-sections > section:first-child > .flex{gap:.5rem;}
+  #home-restored-sections > section:first-child > .flex h2{font-size:1.25rem;line-height:1.5;}
+  #home-restored-sections .abq-video-slot{padding:.75rem !important;}
+  #home-restored-sections .abq-video-slot a{font-size:.8rem;padding:.6rem .75rem;}
+}
+</style>
+
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
