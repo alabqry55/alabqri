@@ -21642,3 +21642,36 @@ load();
   }
 }
 </style>
+
+<style id="abq-mobile-weather-content-single-line">
+/* جعل محتوى إطار الطقس كله في سطر أفقي واحد على الموبايل فقط */
+@media (max-width:768px){
+  .abq-top-live-bar > .abq-top-weather{
+    flex-direction:row !important;
+    align-items:center !important;
+    flex-wrap:nowrap !important;
+  }
+  .abq-top-weather .abq-top-values{
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex-wrap:nowrap !important;
+    gap:.3rem !important;
+    width:auto !important;
+    max-width:calc(100% - 1.35rem) !important;
+    min-width:0 !important;
+  }
+  .abq-top-weather #abq-cairo-weather-temp,
+  .abq-top-weather #abq-cairo-weather-state{
+    display:inline-block !important;
+    width:auto !important;
+    max-width:none !important;
+    flex:0 0 auto !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+    font-size:.82rem !important;
+    line-height:1.35 !important;
+  }
+}
+</style>
