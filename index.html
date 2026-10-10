@@ -14003,7 +14003,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var pool=egyptian.length?egyptian:voices;
     var feminine=pool.find(function(v){
       var identity=(v.name||'')+' '+(v.voiceURI||'');
-      return /female|woman|zira|sara|hoda|heba|salma|noura|layla|منى|هند|سلمى|هدى|أنثى|نسائي/i.test(identity) && !/male|mascul|ذكر/i.test(v.name||'');
+      return /female|woman|zira|sara|hoda|heba|salma|noura|layla|منى|هند|سلمى|هدى|أنثى|نسائي/i.test(identity) && !/\bmale\b|mascul|ذكر/i.test(v.name||'');
     });
     return feminine||pool[0]||voices[0]||null;
   }
