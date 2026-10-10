@@ -20,6 +20,7 @@
     "زوار اليوم": "Today's visitors",
     "زوار الآن": "Visitors online",
     "نبذة تعريفية :": "About the Center",
+    "📌 نبذة تعريفية :": "📌 About the Center",
     "🎯 هدفنا": "🎯 Our Goal",
     "📜 رسالتنا": "📜 Our Mission",
     "💡 رؤيتنا الفكرية نؤمن بأن :": "💡 Our Philosophy",
@@ -75,7 +76,42 @@
     "الدورات (99):": "Cycles (99):",
     "📿 المسبحة الإلكترونية التفاعلية 📿": "📿 Interactive Digital Tasbeeh 📿",
     "انقر على الدائرة للعد مع الحفظ التلقائي": "Tap the circle to count; progress is saved automatically",
-    "ترخيص رسمي وموثق (س.ت. 92527)": "Officially documented registration (Commercial Reg. 92527)"
+    "ترخيص رسمي وموثق (س.ت. 92527)": "Officially documented registration (Commercial Reg. 92527)",
+    "المرجعية العلمية": "Scientific Foundation",
+    "الهوية الإسلامية": "Islamic Identity",
+    "الابتكار والتطوير": "Innovation & Development",
+    "صناعة الأثر": "Creating Lasting Impact",
+    "الأمانة العلمية": "Academic Integrity",
+    "الجودة والتميز": "Quality & Excellence",
+    "الإبتكار": "Innovation",
+    "التعلم المستمر": "Continuous Learning",
+    "الاحترافية": "Professionalism",
+    "المسؤولية المجتمعية": "Social Responsibility",
+    "احترام الإنسان": "Respect for People",
+    "الالتزام بالقيم الإسلامية": "Commitment to Islamic Values",
+    "خدمة المجتمع": "Community Service",
+    "إعداد المدربين والاستشاريين": "Training Trainers & Consultants",
+    "البحث العلمي والتأليف والنشر": "Research, Writing & Publishing",
+    "منهج العبقري في سلامة الوصول": "ALABQRI Method for Reliable Understanding",
+    "نبض العبقري": "ALABQRI Pulse",
+    "التواصل والخدمات • مجتمع حيّ من المشتركين": "Contact & Services • A Live Community",
+    "مشترك فعلي بالمنصة": "Verified Platform Subscriber",
+    "يُحتسب تلقائيًا من سجلات الاشتراك الحقيقية": "Automatically counted from actual subscription records",
+    "برنامج تدريبي": "Training Program",
+    "(بحث علمي وروحاني)": "(Scientific & Spiritual Research)",
+    "متدرب ومستفيد": "Trainee & Beneficiary",
+    "شهادة معتمدة": "Accredited Certificate",
+    "سنوات خبرة وإستشارات": "Years of Experience & Consulting",
+    "اعتماد رسمي": "Official Accreditation",
+    "خبرة طويلة": "Extensive Experience",
+    "شهادات معتمدة": "Accredited Certificates",
+    "متابعة بعد التدريب": "Post-Training Follow-Up",
+    "حضوري وأونلاين": "In-Person & Online",
+    "🟢 واتساب مباشر": "🟢 WhatsApp",
+    "📞 اتصال مباشر": "📞 Call Now",
+    "مراسلة المركز": "Email the Center",
+    "🔗 فتح شجرة الحسابات": "🔗 Open Official Accounts",
+    "▶ مشاهدة على TikTok": "▶ Watch on TikTok"
   };
 
   const norm = value => String(value || "").replace(/\s+/g, " ").trim();
@@ -294,9 +330,9 @@
       const voice = chooseVoice(language === "ar" ? "ar" : "en");
       if (voice) utterance.voice = voice;
       utterance.onstart = () => { if (audioButton) audioButton.dataset.playing = "true"; };
-      utterance.onend = () => { if (audioButton) delete audioButton.dataset.playing; };
+      utterance.onend = () => { if (audioButton) delete audioButton.dataset.playing; airportChime(); };
       utterance.onerror = () => { if (audioButton) delete audioButton.dataset.playing; };
-      if (!isAuto) airportChime();
+      airportChime();
       window.speechSynthesis.speak(utterance);
     } catch (_) {}
   }
