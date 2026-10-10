@@ -21881,7 +21881,7 @@ load();
     display:grid !important;
     grid-template-columns:minmax(0,1fr) !important;
     align-items:stretch !important;
-    row-gap:0 !important;
+    row-gap:.75rem !important;
     column-gap:.85rem !important;
     margin:0 !important;
     padding:0 !important;
@@ -21889,8 +21889,6 @@ load();
     background:transparent !important;
     box-shadow:none !important;
   }
-
-  /* عداد الزوار: يحتفظ بإطاره الأزرق المستقل */
   #home .abq-hero-visitor-welcome .abq-visitor-counter{
     position:relative !important;
     box-sizing:border-box !important;
@@ -21930,8 +21928,6 @@ load();
     overflow-wrap:anywhere !important;
     text-align:center !important;
   }
-
-  /* إطار موحّد واحد فقط لرسالة الترحيب وزر الاستماع */
   #home .abq-hero-visitor-welcome .abq-hero-welcome,
   #home .abq-hero-visitor-welcome .abq-audio-welcome-row{
     box-sizing:border-box !important;
@@ -21948,9 +21944,8 @@ load();
     align-items:center !important;
     justify-content:center !important;
     min-height:0 !important;
-    padding:.65rem .8rem .25rem !important;
-    border-radius:.9rem .9rem 0 0 !important;
-    border-bottom:0 !important;
+    padding:.65rem .8rem !important;
+    border-radius:.9rem !important;
     color:#1e3a8a !important;
     text-align:center !important;
     line-height:1.85 !important;
@@ -21971,9 +21966,8 @@ load();
     align-items:center !important;
     justify-content:center !important;
     min-height:0 !important;
-    padding:.25rem .8rem .8rem !important;
-    border-radius:0 0 .9rem .9rem !important;
-    border-top:0 !important;
+    padding:.65rem .8rem !important;
+    border-radius:.9rem !important;
   }
   #home #abq-audio-welcome-btn{
     box-sizing:border-box !important;
@@ -22009,35 +22003,33 @@ load();
 }
 @media (min-width:1100px){
   #home .abq-hero-visitor-welcome{
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-    grid-template-rows:auto auto !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-template-rows:minmax(5.5rem,auto) !important;
     align-items:stretch !important;
     row-gap:0 !important;
     column-gap:.85rem !important;
   }
-  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+  /* RTL: رسالة الترحيب يمين، الاستماع في المنتصف، والعداد يسار */
+  #home .abq-hero-visitor-welcome .abq-hero-welcome{
+    grid-column:1 !important;
+    grid-row:1 !important;
+    min-height:5.5rem !important;
+    align-self:stretch !important;
+    padding:.65rem .8rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-audio-welcome-row{
     grid-column:2 !important;
-    grid-row:1 / span 2 !important;
+    grid-row:1 !important;
+    min-height:5.5rem !important;
+    align-self:stretch !important;
+    padding:.65rem .8rem !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter{
+    grid-column:3 !important;
+    grid-row:1 !important;
     height:100% !important;
     min-height:5.5rem !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-hero-welcome{
-    grid-row:1 !important;
-    padding:.65rem 1rem .2rem !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-audio-welcome-row{
-    grid-row:2 !important;
-    padding:.25rem 1rem .8rem !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-hero-welcome,
-  #home .abq-hero-visitor-welcome .abq-audio-welcome-row{
-    grid-column:1 !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-hero-welcome{
-    align-self:end !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-audio-welcome-row{
-    align-self:start !important;
+    align-self:stretch !important;
   }
 }
 </style>
