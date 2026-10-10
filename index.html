@@ -22261,3 +22261,73 @@ load();
   }
 }
 </style>
+
+
+<!-- ALABQRI: توحيد إطار العدادات/الترحيب والنبذة التعريفية مع البرواز المعدني الذهبي لصورة الهيرو -->
+<style id="abq-home-gold-frame-match-hero-20261010">
+/* إطار معدني متعدد الطبقات، معزول عن صورة الهيرو وبقية أقسام المنصة */
+#home .abq-home-actions-stats-frame.abq-home-gold-content-frame,
+#home .abq-contact-intro-block{
+  position:relative !important;
+  box-sizing:border-box !important;
+  max-width:100% !important;
+  border:7px solid transparent !important;
+  border-radius:18px !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.98) 0%,rgba(255,250,235,.98) 48%,rgba(255,255,255,.96) 100%) padding-box,
+    linear-gradient(145deg,#fffdf0 0%,#ffdf55 5%,#fff2a0 10%,#e9a900 18%,#ffed78 26%,#c88908 34%,#ffeaa0 40%,#f7f8fb 43%,#c7ced8 46%,#fffdf4 48%,#8e99a8 51%,#e0a51b 54%,#123875 57%,#09295f 62%,#ffdf55 69%,#e6a500 77%,#ffef99 85%,#b87900 92%,#fff7cf 100%) border-box !important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.82),
+    inset 0 -3px 3px rgba(4,20,55,.24),
+    inset 0 0 0 2px rgba(229,234,241,.98),
+    inset 0 0 0 4px rgba(13,43,91,.32),
+    inset 0 0 0 5px rgba(255,190,18,.95),
+    inset 0 0 0 6px rgba(255,242,163,.98),
+    0 0 0 1px #ffdf55,
+    0 2px 0 #8a5700,
+    0 4px 0 rgba(5,24,61,.55),
+    0 7px 12px rgba(0,0,0,.16),
+    0 0 12px rgba(255,191,25,.26) !important;
+}
+#home .abq-home-actions-stats-frame.abq-home-gold-content-frame::before,
+#home .abq-contact-intro-block::before{
+  content:"" !important;
+  position:absolute !important;
+  z-index:5 !important;
+  inset:3px !important;
+  border:2px solid rgba(255,231,139,.99) !important;
+  border-radius:11px !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.96),inset 0 -1px 2px rgba(105,70,17,.42),0 0 0 1px rgba(255,194,25,.9),0 0 5px rgba(255,210,65,.65) !important;
+  pointer-events:none !important;
+  background:none !important;
+}
+#home .abq-home-actions-stats-frame.abq-home-gold-content-frame{
+  overflow:visible !important;
+}
+#home .abq-contact-intro-block{
+  overflow:visible !important;
+}
+@media(max-width:768px){
+  #home .abq-home-actions-stats-frame.abq-home-gold-content-frame,
+  #home .abq-contact-intro-block{
+    border-width:3px !important;
+    border-radius:12px !important;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.78),
+      inset 0 -2px 2px rgba(4,20,55,.22),
+      inset 0 0 0 1px rgba(229,234,241,.98),
+      inset 0 0 0 2px rgba(13,43,91,.28),
+      inset 0 0 0 3px rgba(255,190,18,.96),
+      0 0 0 1px #ffdf55,
+      0 2px 0 #8a5700,
+      0 4px 8px rgba(0,0,0,.16),
+      0 0 9px rgba(255,191,25,.3) !important;
+  }
+  #home .abq-home-actions-stats-frame.abq-home-gold-content-frame::before,
+  #home .abq-contact-intro-block::before{
+    inset:2px !important;
+    border-radius:8px !important;
+    border-width:1px !important;
+  }
+}
+</style>
