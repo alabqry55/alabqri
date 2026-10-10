@@ -1278,3 +1278,20 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     line-height: 1.4 !important;
   }
 }
+
+/* Final specificity guard: neutralise legacy logo positioning on the new section wrapper */
+html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div.abq-header-logo-section {
+  display: flex !important;
+  flex: 0 1 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
