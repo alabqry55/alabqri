@@ -9453,7 +9453,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 <div class="abq-home-actions-stats-frame bg-blue-50/60 p-2 rounded-xl border border-blue-700">
 <div class="abq-hero-visitor-welcome" aria-live="polite">
     <div class="abq-visitor-counter loading" aria-label="إحصائيات زوار منصة العبقري">
-        <span class="abq-visitor-stat"><span class="abq-visitor-label"><i class="fa-solid fa-eye abq-visitor-eye" aria-hidden="true"></i> إجمالي الزوار</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
+        <span class="abq-visitor-stat"><span class="abq-visitor-label"><i class="fa-solid fa-eye abq-visitor-eye" aria-hidden="true"></i> عداد الزائرين</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
         <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار اليوم</span> <span id="abq-visitor-today" class="abq-visitor-count">—</span></span>
         <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار الآن</span> <span id="abq-visitor-now" class="abq-visitor-count">—</span></span>
     </div>
@@ -13948,7 +13948,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-real-visitor-counter">
-/* ===== عداد زوار حقيقي: إجمالي الزوار + زوار اليوم + زوار الآن ===== */
+/* ===== عداد زوار حقيقي: عداد الزائرين + زوار اليوم + زوار الآن ===== */
 (function(){
   'use strict';
   function initVisitorCounter(){
@@ -22109,11 +22109,14 @@ load();
   position:absolute !important;
   inset-inline-end:0 !important;
   top:16% !important;
-  height:68% !important;
+  height:102% !important;
   width:1px !important;
   background:linear-gradient(180deg,transparent 0%,#60a5fa 18%,#2563eb 50%,#60a5fa 82%,transparent 100%) !important;
   opacity:.8 !important;
   pointer-events:none !important;
+}
+#home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat:first-child::after{
+  transform:translateX(-4px) !important;
 }
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label{
   display:block !important;
@@ -22152,6 +22155,12 @@ load();
   font-weight:900 !important;
   line-height:1.2 !important;
 }
+#home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat:first-child .abq-visitor-count{
+  min-width:3rem !important;
+  min-height:2.7rem !important;
+  padding:.24rem .42rem !important;
+  font-size:clamp(.95rem,1.2vw,1.2rem) !important;
+}
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label .abq-visitor-eye{
   display:inline-block !important;
   margin-inline-end:.12rem !important;
@@ -22172,6 +22181,12 @@ load();
     min-height:1.75rem !important;
     padding:.16rem .12rem !important;
     font-size:clamp(.68rem,2.5vw,.9rem) !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat:first-child .abq-visitor-count{
+    min-width:2.2rem !important;
+    min-height:2.25rem !important;
+    padding:.18rem .2rem !important;
+    font-size:clamp(.82rem,3vw,1rem) !important;
   }
 }
 @media(max-width:360px){
