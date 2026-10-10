@@ -12,7 +12,7 @@ export async function onRequest(context) {
   if (!response.ok || !contentType.toLowerCase().includes("text/html")) return response;
 
   const html = await response.text();
-  const scriptTag = '<script src="/assets/alabqri-bilingual.js?v=20261010-2" defer></script>';
+  const scriptTag = '<script src="/assets/alabqri-bilingual.js?v=20261010-3" defer></script>';
   if (html.includes("/assets/alabqri-bilingual.js")) {
     return new Response(html, { status: response.status, statusText: response.statusText, headers: response.headers });
   }
