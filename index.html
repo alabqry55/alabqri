@@ -20547,6 +20547,44 @@ load();
 
 
 
+
+<style id="abq-mobile-unified-gold-identity-frame-20261010">
+/* موبايل فقط: إبقاء عنوان المنصة واسم المشرف والسجل التجاري داخل إطار الهوية الذهبي الواحد */
+@media (max-width: 767px) {
+  header .abq-header-brand-license-frame {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  header .abq-header-brand-area,
+  header .abq-header-license-area {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  header .abq-header-license-text {
+    display: block !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow-wrap: anywhere !important;
+    text-align: center !important;
+  }
+  header .abq-header-brand-area h1,
+  header .abq-header-brand-area h1 span {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+</style>
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
