@@ -1107,13 +1107,6 @@ html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav {
 }
 
 
-/* ALABQRI mobile-only: centre logo vertically against the full gold identity frame */
-@media screen and (max-width: 767px) {
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
-    transform: translateY(40%) !important;
-  }
-}
-
 
 /* ALABQRI identity header: three isolated sections, responsive and contained */
 html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
@@ -1294,4 +1287,104 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   margin: 0 !important;
   padding: 0 !important;
   transform: none !important;
+}
+
+
+/* ALABQRI mobile logo alignment — isolated logo column, vertically centred in the gold frame */
+@media screen and (max-width: 767px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
+    display: grid !important;
+    grid-template-columns: 60px minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    column-gap: 10px !important;
+    row-gap: 7px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area {
+    display: contents !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section {
+    grid-column: 1 !important;
+    grid-row: 1 / span 2 !important;
+    align-self: stretch !important;
+    justify-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: end !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    text-align: right !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-license-area {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    align-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: right !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section h1,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-center-name,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-text {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    text-align: right !important;
+    overflow-wrap: anywhere !important;
+    box-sizing: border-box !important;
+  }
+}
+@media screen and (max-width: 360px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    column-gap: 7px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section {
+    width: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    flex-basis: 44px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+  }
 }
