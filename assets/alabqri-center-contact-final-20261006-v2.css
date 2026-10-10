@@ -1105,3 +1105,11 @@ html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav {
     word-break: normal !important;
   }
 }
+
+
+/* ALABQRI mobile-only: lower the logo slightly within the identity frame */
+@media screen and (max-width: 767px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    transform: translateY(3px) !important;
+  }
+}
