@@ -1107,9 +1107,9 @@ html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav {
 }
 
 
-/* ALABQRI mobile-only: lower the logo slightly within the identity frame */
+/* ALABQRI mobile-only: centre logo vertically against the full gold identity frame */
 @media screen and (max-width: 767px) {
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
-    transform: translateY(3px) !important;
+    transform: translateY(40%) !important;
   }
 }
