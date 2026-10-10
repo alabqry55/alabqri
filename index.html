@@ -9453,8 +9453,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 <div class="abq-home-actions-stats-frame bg-blue-50/60 p-2 rounded-xl border border-blue-700">
 <div class="abq-hero-visitor-welcome" aria-live="polite">
     <div class="abq-visitor-counter loading" aria-label="إحصائيات زوار منصة العبقري">
-        <i class="fa-solid fa-eye" aria-hidden="true"></i>
-        <span class="abq-visitor-stat"><span class="abq-visitor-label">إجمالي الزيارات</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
+        <span class="abq-visitor-stat"><span class="abq-visitor-label"><i class="fa-solid fa-eye abq-visitor-eye" aria-hidden="true"></i> إجمالي الزيارات</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
         <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار اليوم</span> <span id="abq-visitor-today" class="abq-visitor-count">—</span></span>
         <span class="abq-visitor-stat"><span class="abq-visitor-label">زوار الآن</span> <span id="abq-visitor-now" class="abq-visitor-count">—</span></span>
     </div>
@@ -21945,6 +21944,14 @@ load();
     min-width:0 !important;
     white-space:nowrap !important;
     font-size:inherit !important;
+  }
+  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label .abq-visitor-eye{
+    display:inline-block !important;
+    margin-inline-end:.18rem !important;
+    color:#2563eb !important;
+    font-size:.95em !important;
+    vertical-align:middle !important;
+    flex-shrink:0 !important;
   }
   #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat{
     box-sizing:border-box !important;
