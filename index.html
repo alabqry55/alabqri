@@ -13979,7 +13979,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-audio-welcome-script">
-/* ترحيب صوتي مع تفضيل العربية المصرية، وتحميل الأصوات المتأخر، وزر يدوي ثابت */
+/* ترحيب صوتي: معالجة تحميل الأصوات المتأخر وتسجيل أسباب التعثر مع إبقاء التشغيل اليدوي متاحًا */
 (function(){
   'use strict';
   var button=document.getElementById('abq-audio-welcome-btn');
@@ -13987,6 +13987,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(!button||!totalEl) return;
   var autoAttempted=false;
   var waitingForCount=false;
+  var voicesRetryUsed=false;
+  var lastSpeechError='';
   function currentCount(){
     var raw=(totalEl.textContent||'').replace(/,/g,'').trim();
     var value=Number(raw);
@@ -13994,7 +13996,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
   function getArabicVoices(){
     var voices=[];
-    try{voices=window.speechSynthesis.getVoices()||[];}catch(e){}
+    try{voices=window.speechSynthesis.getVoices()||[];}catch(e){
+      console.warn('[ALABQRI audio] تعذر جلب الأصوات المتاحة:',e);
+    }
     return voices.filter(function(v){return /^ar([_-]|$)/i.test(v.lang||'');});
   }
   function chooseVoice(voices){
@@ -14011,6 +14015,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(!('speechSynthesis' in window)||typeof window.SpeechSynthesisUtterance!=='function'){
       button.textContent='الصوت غير مدعوم في هذا المتصفح';
       button.setAttribute('aria-pressed','false');
+      console.warn('[ALABQRI audio] واجهة النطق الصوتي غير مدعومة في هذا المتصفح.');
       return;
     }
     var total=currentCount();
@@ -14028,23 +14033,54 @@ document.addEventListener("DOMContentLoaded", ()=>{
     utterance.volume=1;
     var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
-    utterance.onstart=function(){button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';button.setAttribute('aria-pressed','true');};
-    utterance.onend=function(){button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';button.setAttribute('aria-pressed','false');};
-    utterance.onerror=function(){button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';button.setAttribute('aria-pressed','false');};
+    utterance.onstart=function(){
+      lastSpeechError='';
+      button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
+      button.setAttribute('aria-pressed','true');
+    };
+    utterance.onend=function(){
+      lastSpeechError='';
+      button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';
+      button.setAttribute('aria-pressed','false');
+    };
+    utterance.onerror=function(event){
+      lastSpeechError=(event&&event.error)||'unknown';
+      console.warn('[ALABQRI audio] تعذر تشغيل الترحيب الصوتي. السبب:',lastSpeechError,event||'');
+      button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
+      button.setAttribute('aria-pressed','false');
+    };
     try{
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
       if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
     }catch(error){
+      lastSpeechError=(error&&error.name)||'exception';
+      console.warn('[ALABQRI audio] حدث استثناء أثناء طلب تشغيل الترحيب الصوتي:',error);
       button.textContent='🔊 اضغط لتشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     }
   }
-  try{
-    if(!(window.speechSynthesis.getVoices()||[]).length){
-      window.speechSynthesis.addEventListener('voiceschanged',function(){getArabicVoices();});
+  function handleVoicesChanged(){
+    var voices=getArabicVoices();
+    if(voices.length && lastSpeechError==='voice-unavailable' && !voicesRetryUsed && currentCount()!==null){
+      voicesRetryUsed=true;
+      lastSpeechError='';
+      console.info('[ALABQRI audio] أُعيدت محاولة الترحيب مرة واحدة بعد تحميل الأصوات العربية.');
+      speakWelcome(false);
     }
-  }catch(e){}
+  }
+  try{
+    if(window.speechSynthesis){
+      if(typeof window.speechSynthesis.addEventListener==='function'){
+        window.speechSynthesis.addEventListener('voiceschanged',handleVoicesChanged);
+      }else{
+        window.speechSynthesis.onvoiceschanged=handleVoicesChanged;
+      }
+      getArabicVoices();
+    }
+  }catch(error){
+    console.warn('[ALABQRI audio] تعذر إعداد متابعة تحميل الأصوات:',error);
+  }
   button.addEventListener('click',function(){speakWelcome(true);});
   var observer=new MutationObserver(function(){
     if(waitingForCount&&currentCount()!==null) speakWelcome(true);
