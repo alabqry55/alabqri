@@ -22089,10 +22089,11 @@ load();
   box-sizing:border-box !important;
   display:flex !important;
   flex:1 1 0 !important;
-  flex-direction:column !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
   align-items:center !important;
   justify-content:center !important;
-  gap:.28rem !important;
+  gap:.35rem !important;
   min-width:0 !important;
   padding:.2rem .12rem !important;
   border:0 !important;
@@ -22116,16 +22117,18 @@ load();
   font-weight:850 !important;
   line-height:1.35 !important;
   text-align:center !important;
-  white-space:normal !important;
+  white-space:nowrap !important;
   overflow-wrap:normal !important;
+  flex:0 1 auto !important;
 }
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-count{
   box-sizing:border-box !important;
   display:inline-flex !important;
   align-items:center !important;
   justify-content:center !important;
-  width:100% !important;
-  min-width:0 !important;
+  width:auto !important;
+  flex:0 1 auto !important;
+  min-width:2.5rem !important;
   min-height:2rem !important;
   padding:.2rem .3rem !important;
   border:1.5px solid #2563eb !important;
@@ -22145,14 +22148,15 @@ load();
 }
 @media(max-width:768px){
   #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat{
-    gap:.2rem !important;
+    gap:.22rem !important;
     padding:.12rem .06rem !important;
   }
   #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label{
-    font-size:clamp(.52rem,2.1vw,.7rem) !important;
+    font-size:clamp(.52rem,1.8vw,.7rem) !important;
     line-height:1.3 !important;
   }
   #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-count{
+    min-width:1.9rem !important;
     min-height:1.75rem !important;
     padding:.16rem .12rem !important;
     font-size:clamp(.68rem,2.5vw,.9rem) !important;
