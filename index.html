@@ -2244,6 +2244,26 @@ html { scroll-behavior: auto !important; }
     margin:0 auto 1rem;
     box-sizing:border-box;
 }
+/* إطار ذهبي موحّد للنصوص والإحصائيات والنبذة فقط، مستقل عن صورة الهيرو */
+.abq-home-gold-content-frame{
+    background:linear-gradient(135deg,rgba(212,175,55,.075),rgba(255,250,235,.72),rgba(212,175,55,.075)) !important;
+    border:2px solid #d4af37 !important;
+    border-radius:1rem !important;
+    box-shadow:0 0 0 1px rgba(212,175,55,.22),0 5px 18px rgba(122,91,12,.12) !important;
+    padding:.75rem !important;
+}
+.abq-home-gold-content-frame #stats-bar,
+.abq-home-gold-content-frame .abq-contact-intro-block{
+    box-sizing:border-box;
+    max-width:100%;
+}
+@media(max-width:768px){
+    .abq-home-gold-content-frame{
+        padding:.5rem !important;
+        border-width:2px !important;
+        border-radius:.85rem !important;
+    }
+}
 .abq-home-actions-stats-frame .abq-home-live-actions-below{
     width:100%;
     margin:.2rem auto .55rem;
@@ -9450,7 +9470,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 <!-- عداد الزوار ورسالة الترحيب في إطار واحد -->
 
 <!-- إطار أزرق موحّد للأزرار وعداد الزوار والإحصائيات -->
-<div class="abq-home-actions-stats-frame bg-blue-50/60 p-2 rounded-xl border border-blue-700">
+<div class="abq-home-actions-stats-frame abq-home-gold-content-frame p-2 rounded-xl">
 <div class="abq-hero-visitor-welcome" aria-live="polite">
     <div class="abq-visitor-counter loading" aria-label="إحصائيات زوار منصة العبقري">
         <span class="abq-visitor-stat"><span class="abq-visitor-label"><i class="fa-solid fa-eye abq-visitor-eye" aria-hidden="true"></i> عداد الزائرين</span> <span id="abq-visitor-count" class="abq-visitor-count">—</span></span>
