@@ -1062,3 +1062,46 @@ html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav {
     text-align: center !important;
   }
 }
+
+
+/* ALABQRI mobile-only: logo beside platform title, isolated from desktop */
+@media screen and (max-width: 767px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    column-gap: 12px !important;
+    row-gap: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 60px) !important;
+    text-align: right !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-brand-area h1 {
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: clamp(11px, 3.5vw, 14px) !important;
+    line-height: 1.35 !important;
+    text-align: right !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+}
