@@ -20544,6 +20544,99 @@ load();
   }
 }
 </style>
+
+<style id="abq-responsive-frames-weather-width-20261010">
+/* ضبط عرض الإطارات المطلوبة واحتواء محتوياتها — دون تعديل الوظائف أو المحتوى */
+#home .abq-requested-excellence-frame,
+#home .abq-requested-services-section > div,
+#home .abq-requested-balance-section > div,
+#home .abq-requested-courses-section > div,
+#home-restored-sections > section{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  margin-inline:0 !important;
+  box-sizing:border-box !important;
+}
+#home .abq-requested-excellence-frame *,
+#home .abq-requested-services-section > div *,
+#home .abq-requested-balance-section > div *,
+#home .abq-requested-courses-section > div *,
+#home-restored-sections > section *{
+  box-sizing:border-box;
+  min-width:0;
+}
+.abq-top-live-bar{
+  width:100% !important;
+  max-width:none !important;
+  min-width:0 !important;
+  margin-inline:0 !important;
+  box-sizing:border-box !important;
+}
+.abq-top-live-bar,
+.abq-top-live-bar *{
+  box-sizing:border-box !important;
+}
+.abq-top-live-item{
+  min-width:0 !important;
+}
+@media (min-width:769px){
+  .abq-top-live-bar{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:.35rem !important;
+    padding:.35rem !important;
+  }
+  .abq-top-live-item{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+  }
+  .abq-top-weather,
+  .abq-top-weather .abq-top-values{
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+  .abq-top-weather .abq-top-primary,
+  .abq-top-weather .abq-top-secondary{
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+  }
+}
+@media (max-width:768px){
+  #home .abq-requested-excellence-frame,
+  #home .abq-requested-services-section > div,
+  #home .abq-requested-balance-section > div,
+  #home .abq-requested-courses-section > div,
+  #home-restored-sections > section{
+    width:100% !important;
+    max-width:100% !important;
+    padding:.65rem !important;
+    margin-inline:0 !important;
+    overflow-wrap:anywhere !important;
+  }
+  .abq-top-live-bar{
+    width:100% !important;
+    max-width:100% !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    margin-inline:0 !important;
+  }
+}
+@media (max-width:420px){
+  #home .abq-requested-excellence-frame,
+  #home .abq-requested-services-section > div,
+  #home .abq-requested-balance-section > div,
+  #home .abq-requested-courses-section > div,
+  #home-restored-sections > section{
+    padding:.5rem !important;
+    border-radius:.85rem !important;
+  }
+  .abq-top-live-bar{
+    gap:.14rem !important;
+    padding:.16rem !important;
+  }
+}
+</style>
+
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
