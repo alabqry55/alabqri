@@ -22544,3 +22544,96 @@ header .abq-header-brand-license-frame > .main-tabs-nav{
   }
 }
 </style>
+
+
+<style id="abq-mobile-frame-overlap-repair-20261010">
+/* إصلاح توزيع الإطارات المتداخلة على الموبايل فقط؛ مع إبقاء محتوى ووظائف المنصة كما هي */
+@media (max-width: 768px) {
+  #home .abq-requested-services-section,
+  #home .abq-requested-balance-section,
+  #home .abq-requested-courses-section {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 0 1rem !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #home .abq-requested-services-section > div,
+  #home .abq-requested-balance-section > div,
+  #home .abq-requested-courses-section > div,
+  #home .abq-requested-excellence-frame,
+  #home-restored-sections > section {
+    display: flow-root !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 0 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  #home .abq-requested-services-section > div > *,
+  #home .abq-requested-balance-section > div > *,
+  #home .abq-requested-courses-section > div > *,
+  #home .abq-requested-excellence-frame > *,
+  #home-restored-sections > section > * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  #home .abq-requested-services-section .grid,
+  #home .abq-requested-balance-section .grid,
+  #home .abq-requested-courses-section .grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: .75rem !important;
+  }
+
+  #home .abq-requested-services-section .service-card,
+  #home .abq-requested-balance-section .abq-journey-card,
+  #home .abq-requested-courses-section .abq-journey-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-inline: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  #home .abq-requested-services-section h3,
+  #home .abq-requested-balance-section h3,
+  #home .abq-requested-courses-section h3,
+  #home .abq-requested-services-section p,
+  #home .abq-requested-balance-section p,
+  #home .abq-requested-courses-section p,
+  #home .abq-requested-services-section button,
+  #home .abq-requested-balance-section button,
+  #home .abq-requested-courses-section button {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+@media (max-width: 420px) {
+  #home .abq-requested-services-section > div,
+  #home .abq-requested-balance-section > div,
+  #home .abq-requested-courses-section > div,
+  #home .abq-requested-excellence-frame,
+  #home-restored-sections > section {
+    padding: .55rem !important;
+    margin-bottom: .85rem !important;
+  }
+}
+</style>
+
