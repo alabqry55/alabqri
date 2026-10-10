@@ -1,0 +1,8 @@
+name = "alabqri"
+compatibility_date = "2026-10-10"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "alabqri-db"
+database_id = "EC89342F-1553-48E8-969E-07DC0B86B2A7"
