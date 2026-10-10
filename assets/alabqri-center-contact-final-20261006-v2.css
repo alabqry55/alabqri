@@ -185,3 +185,176 @@
   }
 }
 
+
+
+/* ALABQRI mobile identity-frame final stabilization — 2026-10-10
+   Scoped to the real homepage header classes; leaves desktop and tab behavior intact. */
+@media screen and (max-width: 767px) {
+  html body header.bg-white div.abq-header-brand-license-frame {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 9px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 9px 8px !important;
+    box-sizing: border-box !important;
+    border: 3px solid #d4af37 !important;
+    border-radius: 13px !important;
+    overflow: visible !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > div.abq-header-brand-area {
+    display: flex !important;
+    flex: 0 1 auto !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    display: flex !important;
+    flex: 0 0 58px !important;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child {
+    display: block !important;
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-brand-area h1,
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-brand-area h1 > span,
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-brand-area h1 > span > span {
+    display: block !important;
+    position: static !important;
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-align: center !important;
+    line-height: 1.55 !important;
+    letter-spacing: 0 !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-brand-area h1 {
+    font-size: clamp(13px, 4vw, 16px) !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-brand-area h1 > span > span {
+    margin-top: 2px !important;
+    font-size: clamp(11px, 3.5vw, 14px) !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > div.abq-header-license-area {
+    display: block !important;
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame .abq-header-license-text {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 auto !important;
+    padding: 3px 4px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: clamp(10px, 3.1vw, 12px) !important;
+    line-height: 1.55 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 5px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 5px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 36px !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 6px 4px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    line-height: 1.4 !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+}
+@media screen and (max-width: 360px) {
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn {
+    font-size: 11px !important;
+    padding-inline: 3px !important;
+  }
+}
