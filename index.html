@@ -22084,16 +22084,16 @@ load();
 
 
 <style id="abq-visitor-labels-outside-number-frames">
-/* إبقاء إطار العدادات الثلاثة موحدًا، وإخراج العناوين من إطارات الأرقام الداخلية */
+/* عناوين العدادات في صف علوي واحد، والأرقام الثلاثة في صف سفلي واحد داخل الإطار الموحد */
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat{
   box-sizing:border-box !important;
   display:flex !important;
   flex:1 1 0 !important;
-  flex-direction:row !important;
+  flex-direction:column !important;
   flex-wrap:nowrap !important;
   align-items:center !important;
-  justify-content:center !important;
-  gap:.35rem !important;
+  justify-content:flex-start !important;
+  gap:.3rem !important;
   min-width:0 !important;
   padding:.2rem .12rem !important;
   border:0 !important;
@@ -22119,7 +22119,7 @@ load();
   text-align:center !important;
   white-space:nowrap !important;
   overflow-wrap:normal !important;
-  flex:0 1 auto !important;
+  flex:0 0 auto !important;
 }
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-count{
   box-sizing:border-box !important;
@@ -22127,7 +22127,7 @@ load();
   align-items:center !important;
   justify-content:center !important;
   width:auto !important;
-  flex:0 1 auto !important;
+  flex:0 0 auto !important;
   min-width:2.5rem !important;
   min-height:2rem !important;
   padding:.2rem .3rem !important;
