@@ -591,6 +591,15 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     gap:.18rem;
   }
 }
+
+/* ALABQRI audio welcome — isolated styles only */
+.abq-audio-welcome-row{display:flex;justify-content:center;align-items:center;margin:.65rem auto .15rem;padding:0 .5rem}
+#abq-audio-welcome-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;max-width:100%;min-height:42px;padding:.55rem 1.05rem;border:2px solid #2563eb;border-radius:999px;background:linear-gradient(180deg,#fff,#dbeafe);color:#1d4ed8;font-family:inherit;font-size:.92rem;font-weight:800;line-height:1.45;text-align:center;white-space:normal;box-shadow:0 2px 8px rgba(37,99,235,.14);cursor:pointer;transition:background .2s ease,box-shadow .2s ease}
+#abq-audio-welcome-btn:hover{background:linear-gradient(180deg,#eff6ff,#bfdbfe);box-shadow:0 3px 12px rgba(37,99,235,.2)}
+#abq-audio-welcome-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+#abq-audio-welcome-btn:disabled{opacity:.75;cursor:wait}
+@media(max-width:768px){.abq-audio-welcome-row{width:100%;margin:.55rem auto .1rem}#abq-audio-welcome-btn{width:min(100%,22rem);font-size:.88rem;padding:.5rem .75rem}}
+
 </style>
 </style>
 <style id="abq-contact-inner-center-tab">.contact-inner-tab-btn{transition:background-color .15s ease,color .15s ease,box-shadow .15s ease,transform .15s ease}.contact-inner-tab-btn.active{box-shadow:0 8px 18px -12px rgba(37,99,235,.8)}.contact-inner-tab-btn:hover{transform:translateY(-1px)}</style>
@@ -9452,6 +9461,9 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     <p class="abq-hero-welcome">
         <strong><span class="abq-welcome-line-1">🌿 أهلاً بأعضاء وزوار المنصة الكرام 🌿</span><span class="abq-welcome-line-2">"هنا نرتقي بالإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل"</span></strong>
     </p>
+    <div class="abq-audio-welcome-row">
+        <button id="abq-audio-welcome-btn" type="button" aria-label="تشغيل الترحيب الصوتي لمنصة ALABQRI">🔊 استمع إلى الترحيب الصوتي</button>
+    </div>
 </div>
 
 
@@ -13964,6 +13976,71 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initVisitorCounter);
   else initVisitorCounter();
+})();
+</script>
+
+<script id="abq-audio-welcome-script">
+/* ترحيب صوتي اختياري/تلقائي عند سماح المتصفح، مع زر تشغيل بديل */
+(function(){
+  'use strict';
+  var button=document.getElementById('abq-audio-welcome-btn');
+  var totalEl=document.getElementById('abq-visitor-count');
+  if(!button||!totalEl) return;
+  var autoAttempted=false;
+  var waitingForCount=false;
+  function currentCount(){
+    var raw=(totalEl.textContent||'').replace(/,/g,'').trim();
+    var value=Number(raw);
+    return raw && raw!=='—' && Number.isFinite(value) && value>=0 ? String(Math.floor(value)) : null;
+  }
+  function speakWelcome(manual){
+    if(!('speechSynthesis' in window)||typeof window.SpeechSynthesisUtterance!=='function'){
+      button.textContent='الصوت غير مدعوم في هذا المتصفح';
+      return;
+    }
+    var total=currentCount();
+    if(total===null){
+      waitingForCount=!!manual;
+      button.textContent='⏳ جارٍ تجهيز الترحيب الصوتي…';
+      return;
+    }
+    waitingForCount=false;
+    var message='يسرّ مركز العبقري أن يرحّب بكم في منصة ALABQRI للتدريب والاستشارات والطب التكميلي والتنمية البشرية. تحت إشراف الدكتور أحمد السيد رَسَّه، أحمد الزمخشري. أهلًا بكم في منصة العبقري، حيث المعرفة والتطوير والارتقاء. أنت الزائر الكريم رقم '+total+' لمنصة العبقري.';
+    var utterance=new SpeechSynthesisUtterance(message);
+    utterance.lang='ar-SA';
+    utterance.rate=0.88;
+    utterance.pitch=0.86;
+    utterance.volume=1;
+    var voices=window.speechSynthesis.getVoices()||[];
+    var arabicVoices=voices.filter(function(v){return /^ar([_-]|$)/i.test(v.lang||'');});
+    var preferred=arabicVoices.find(function(v){return /male|mascul|hamed|majed|tarik|salim|mohammed|ahmed|ذكر/i.test(v.name||'')&&!/female|woman/i.test(v.name||'');});
+    if(preferred) utterance.voice=preferred;
+    else if(arabicVoices.length) utterance.voice=arabicVoices[0];
+    utterance.onstart=function(){button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';button.setAttribute('aria-pressed','true');};
+    utterance.onend=function(){button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';button.setAttribute('aria-pressed','false');};
+    utterance.onerror=function(){button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';button.setAttribute('aria-pressed','false');};
+    try{
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
+    }catch(error){
+      button.textContent='🔊 اضغط لتشغيل الترحيب الصوتي';
+      button.setAttribute('aria-pressed','false');
+    }
+  }
+  button.addEventListener('click',function(){speakWelcome(true);});
+  var observer=new MutationObserver(function(){
+    if(waitingForCount&&currentCount()!==null) speakWelcome(true);
+    if(!autoAttempted&&currentCount()!==null){
+      autoAttempted=true;
+      speakWelcome(false);
+    }
+  });
+  observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
+  if(currentCount()!==null&&!autoAttempted){
+    autoAttempted=true;
+    speakWelcome(false);
+  }
 })();
 </script>
 
