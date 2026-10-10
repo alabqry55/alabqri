@@ -13979,7 +13979,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-audio-welcome-script">
-/* ترحيب صوتي اختياري/تلقائي عند سماح المتصفح، مع زر تشغيل بديل */
+/* ترحيب صوتي مع تفضيل العربية المصرية، وتحميل الأصوات المتأخر، وزر يدوي ثابت */
 (function(){
   'use strict';
   var button=document.getElementById('abq-audio-welcome-btn');
@@ -13992,9 +13992,25 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var value=Number(raw);
     return raw && raw!=='—' && Number.isFinite(value) && value>=0 ? String(Math.floor(value)) : null;
   }
+  function getArabicVoices(){
+    var voices=[];
+    try{voices=window.speechSynthesis.getVoices()||[];}catch(e){}
+    return voices.filter(function(v){return /^ar([_-]|$)/i.test(v.lang||'');});
+  }
+  function chooseVoice(voices){
+    if(!voices.length) return null;
+    var egyptian=voices.filter(function(v){return /^ar[-_]EG$/i.test(v.lang||'');});
+    var pool=egyptian.length?egyptian:voices;
+    var feminine=pool.find(function(v){
+      var identity=(v.name||'')+' '+(v.voiceURI||'');
+      return /female|woman|zira|sara|hoda|heba|salma|noura|layla|منى|هند|سلمى|هدى|أنثى|نسائي/i.test(identity) && !/male|mascul|ذكر/i.test(v.name||'');
+    });
+    return feminine||pool[0]||voices[0]||null;
+  }
   function speakWelcome(manual){
     if(!('speechSynthesis' in window)||typeof window.SpeechSynthesisUtterance!=='function'){
       button.textContent='الصوت غير مدعوم في هذا المتصفح';
+      button.setAttribute('aria-pressed','false');
       return;
     }
     var total=currentCount();
@@ -14006,15 +14022,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
     waitingForCount=false;
     var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشرية. تحت إشراف الدكتور أحمد السيد رَسَّه، أحمد الزمخشري. أهلًا بكم في منصة العبقري، حيث المعرفة والتطوير والارتقاء. أنت الزائر الكريم رقم '+total+' لمنصة العبقري.';
     var utterance=new SpeechSynthesisUtterance(message);
-    utterance.lang='ar-SA';
+    utterance.lang='ar-EG';
     utterance.rate=0.88;
-    utterance.pitch=0.86;
+    utterance.pitch=0.98;
     utterance.volume=1;
-    var voices=window.speechSynthesis.getVoices()||[];
-    var arabicVoices=voices.filter(function(v){return /^ar([_-]|$)/i.test(v.lang||'');});
-    var preferred=arabicVoices.find(function(v){return /male|mascul|hamed|majed|tarik|salim|mohammed|ahmed|ذكر/i.test(v.name||'')&&!/female|woman/i.test(v.name||'');});
+    var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
-    else if(arabicVoices.length) utterance.voice=arabicVoices[0];
     utterance.onstart=function(){button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';button.setAttribute('aria-pressed','true');};
     utterance.onend=function(){button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';button.setAttribute('aria-pressed','false');};
     utterance.onerror=function(){button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';button.setAttribute('aria-pressed','false');};
@@ -14027,19 +14040,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
       button.setAttribute('aria-pressed','false');
     }
   }
+  try{
+    if(!(window.speechSynthesis.getVoices()||[]).length){
+      window.speechSynthesis.addEventListener('voiceschanged',function(){getArabicVoices();});
+    }
+  }catch(e){}
   button.addEventListener('click',function(){speakWelcome(true);});
   var observer=new MutationObserver(function(){
     if(waitingForCount&&currentCount()!==null) speakWelcome(true);
-    if(!autoAttempted&&currentCount()!==null){
-      autoAttempted=true;
-      speakWelcome(false);
-    }
+    if(!autoAttempted&&currentCount()!==null){autoAttempted=true;speakWelcome(false);}
   });
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
-  if(currentCount()!==null&&!autoAttempted){
-    autoAttempted=true;
-    speakWelcome(false);
-  }
+  if(currentCount()!==null&&!autoAttempted){autoAttempted=true;speakWelcome(false);}
 })();
 </script>
 
@@ -22084,6 +22096,7 @@ load();
 
 
 <style id="abq-visitor-labels-outside-number-frames">
+@media (min-width:769px){
 /* عناوين العدادات في صف علوي واحد، والأرقام الثلاثة في صف سفلي واحد داخل الإطار الموحد */
 #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat{
   position:relative !important;
@@ -22167,34 +22180,8 @@ load();
   color:#2563eb !important;
   vertical-align:middle !important;
 }
-@media(max-width:768px){
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat{
-    gap:.38rem !important;
-    padding:.12rem .06rem !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label{
-    font-size:clamp(.52rem,1.8vw,.7rem) !important;
-    line-height:1.3 !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-count{
-    min-width:1.9rem !important;
-    min-height:1.75rem !important;
-    padding:.16rem .12rem !important;
-    font-size:clamp(.68rem,2.5vw,.9rem) !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-stat:first-child .abq-visitor-count{
-    min-width:2.2rem !important;
-    min-height:2.25rem !important;
-    padding:.18rem .2rem !important;
-    font-size:clamp(.82rem,3vw,1rem) !important;
-  }
-}
-@media(max-width:360px){
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-label{
-    font-size:.5rem !important;
-  }
-  #home .abq-hero-visitor-welcome .abq-visitor-counter .abq-visitor-count{
-    font-size:.66rem !important;
-  }
+
+
+
 }
 </style>
