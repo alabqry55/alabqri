@@ -1290,7 +1290,7 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 }
 
 
-/* ALABQRI mobile logo alignment — isolated logo column, vertically centred in the gold frame */
+/* ALABQRI mobile logo alignment — robust grid placement of direct identity-frame children */
 @media screen and (max-width: 767px) {
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
     display: grid !important;
@@ -1300,10 +1300,16 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     justify-items: stretch !important;
     column-gap: 10px !important;
     row-gap: 7px !important;
+    box-sizing: border-box !important;
   }
+
+  /* Flatten the brand wrapper so logo and title can occupy separate grid cells. */
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area {
     display: contents !important;
   }
+
+  /* Place the entire first brand child in the left column across both text rows. */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child,
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section {
     grid-column: 1 !important;
     grid-row: 1 / span 2 !important;
@@ -1315,14 +1321,16 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
-    height: 100% !important;
-    min-height: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
     transform: none !important;
+    box-sizing: border-box !important;
   }
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box,
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box {
     flex: 0 0 48px !important;
     width: 48px !important;
     min-width: 48px !important;
@@ -1333,6 +1341,9 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     margin: 0 !important;
     transform: none !important;
   }
+
+  /* Title stays in the upper right cell; license stays in the lower right cell. */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child,
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section {
     grid-column: 2 !important;
     grid-row: 1 !important;
@@ -1342,7 +1353,9 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     max-width: 100% !important;
     margin: 0 !important;
     text-align: right !important;
+    box-sizing: border-box !important;
   }
+
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-license-area {
     grid-column: 2 !important;
     grid-row: 2 !important;
@@ -1353,7 +1366,9 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     margin: 0 !important;
     padding: 0 !important;
     text-align: right !important;
+    box-sizing: border-box !important;
   }
+
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section h1,
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main,
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub,
@@ -1367,18 +1382,19 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     box-sizing: border-box !important;
   }
 }
+
 @media screen and (max-width: 360px) {
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
     grid-template-columns: 52px minmax(0, 1fr) !important;
     column-gap: 7px !important;
   }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child,
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section {
     width: 52px !important;
     min-width: 52px !important;
     max-width: 52px !important;
   }
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box,
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-box {
     flex-basis: 44px !important;
     width: 44px !important;
     min-width: 44px !important;
