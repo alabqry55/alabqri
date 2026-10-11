@@ -23690,38 +23690,63 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 }
 </style>
 
-<style id="alabqri-tabs-weather-frame-match-20261011">
-/* توحيد لون وسمك حدود أزرار التبويبات الثمانية مع إطار شريط الطقس العلوي:
-   نفس قيمة الإطار الأصلي في .abq-top-live-bar، دون تغيير الأبعاد أو التخطيط أو الوظائف. */
-.main-tabs-nav .nav-btn,
-.main-tabs-nav .nav-btn:hover,
-.main-tabs-nav .nav-btn:focus,
-.main-tabs-nav .nav-btn:focus-visible,
-.main-tabs-nav .nav-btn:active,
-.main-tabs-nav .nav-btn.active {
-  border:1px solid rgba(37,99,235,.22) !important;
-}
-</style>
-
-
-<style id="alabqri-tabs-weather-full-frame-match-20261011">
-/* مطابقة الإطار الخارجي والداخلي للتبويبات مع إطار منطقة الطقس، دون تغيير المقاسات أو ترتيب التبويبات أو وظائفها. */
-.main-tabs-nav .nav-btn,
-.main-tabs-nav .nav-btn:hover,
-.main-tabs-nav .nav-btn:focus,
-.main-tabs-nav .nav-btn:focus-visible,
-.main-tabs-nav .nav-btn:active,
-.main-tabs-nav .nav-btn.active {
-  border:1px solid rgba(37,99,235,.22) !important;
-  border-radius:1.15rem !important;
-  box-shadow:0 10px 28px -16px rgba(15,23,42,.55), inset 0 1px 0 rgba(255,255,255,.9) !important;
+<style id="alabqri-tabs-weather-frame-unified-fix-20261011">
+/* إصلاح موحّد لإطارات التبويبات على الكمبيوتر والتابلت والموبايل.
+   يطابق الإطار الخارجي إطار الطقس الأزرق، ويضبط الإطارات الداخلية دون تغيير الترتيب أو الوظائف. */
+/* الإطار الخارجي لشريط التبويبات: نفس إطار الطقس */
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav,
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav {
   box-sizing:border-box !important;
-}
-.main-tabs-nav .nav-btn:not(.active),
-.main-tabs-nav .nav-btn:not(.active):hover,
-.main-tabs-nav .nav-btn:not(.active):focus,
-.main-tabs-nav .nav-btn:not(.active):focus-visible,
-.main-tabs-nav .nav-btn:not(.active):active {
+  border:3px solid #2563eb !important;
+  border-radius:1.15rem !important;
   background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(239,246,255,.94)) !important;
+  box-shadow:0 4px 14px -10px rgba(37,99,235,.48), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+/* الإطارات الداخلية للأزرار الثمانية */
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn,
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn {
+  box-sizing:border-box !important;
+  border:1px solid #2563eb !important;
+  border-radius:.75rem !important;
+  box-shadow:0 4px 14px -10px rgba(37,99,235,.38), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow-wrap:anywhere !important;
+}
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn:not(.active),
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn:not(.active) {
+  background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(239,246,255,.94)) !important;
+}
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn:hover,
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn:focus-visible,
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn:hover,
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn:focus-visible {
+  border-color:#1d4ed8 !important;
+  box-shadow:0 4px 14px -8px rgba(37,99,235,.55), inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn.active,
+html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn.active {
+  border-color:#2563eb !important;
+  background:linear-gradient(135deg,#2563eb 0%,#0ea5e9 100%) !important;
+  color:#fff !important;
+  box-shadow:0 7px 16px -8px rgba(37,99,235,.65) !important;
+}
+/* الشاشات الصغيرة: الاحتفاظ بتوزيع الأزرار الحالي ومنع تجاوز حدود الإطار */
+@media screen and (max-width:768px) {
+  html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav,
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav {
+    width:100% !important;
+    padding:5px !important;
+    gap:5px !important;
+    overflow:visible !important;
+  }
+  html body header.bg-white > div.container.mx-auto > nav.main-tabs-nav .nav-btn,
+  html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav .nav-btn {
+    white-space:normal !important;
+    line-height:1.4 !important;
+    text-align:center !important;
+  }
 }
 </style>
