@@ -23625,3 +23625,45 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   }
 }
 </style>
+
+
+<style id="alabqri-mobile-subtitle-no-clipping-20261011">
+/* إصلاح السطر الفرعي للموبايل: اعرض العبارة بعرض محتواها الطبيعي، دون قصّ أو التفاف. */
+@media screen and (max-width:767px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section {
+    min-width:0 !important;
+    width:100% !important;
+    overflow:visible !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title {
+    overflow:visible !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title > span.abq-header-title-sub {
+    display:block !important;
+    width:max-content !important;
+    max-width:none !important;
+    min-width:max-content !important;
+    flex:0 0 auto !important;
+    align-self:center !important;
+    white-space:nowrap !important;
+    word-break:normal !important;
+    overflow-wrap:normal !important;
+    line-break:auto !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+    font-size:clamp(8px,2.45vw,10px) !important;
+    letter-spacing:-.035em !important;
+    line-height:1.3 !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:content-box !important;
+    text-align:center !important;
+  }
+}
+@media screen and (max-width:360px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title > span.abq-header-title-sub {
+    font-size:8px !important;
+    letter-spacing:-.045em !important;
+  }
+}
+</style>
