@@ -32,7 +32,7 @@ export async function onRequest({ request, env }) {
       if (!/^[A-Z0-9][A-Z0-9-]{3,59}$/.test(certificateNumber) ||
           !holderName || holderName.length > 180 ||
           !programName || programName.length > 180 ||
-          !/^\\d{4}-\\d{2}-\\d{2}$/.test(issueDate) ||
+          !/^\d{4}-\d{2}-\d{2}$/.test(issueDate) ||
           (hours !== null && (!Number.isInteger(hours) || hours < 0 || hours > 10000)) ||
           issuer.length > 180) {
         return json({ error: 'تحقق من رقم الشهادة والاسم والبرنامج والتاريخ وعدد الساعات.' }, 400);
