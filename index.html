@@ -23761,33 +23761,26 @@ header .abq-header-brand-license-frame .abq-header-license-area{
   box-sizing:border-box !important;
   min-width:0 !important;
 }
-/* إزالة أي حدود متعارضة عن النص نفسه مع إبقاء إطار القسم الموحد */
 header .abq-header-brand-license-frame .abq-header-license-text{
   border:0 !important;
   box-shadow:none !important;
 }
-/* توحيد لون نصوص بطاقات أحدث المقالات في الرئيسية وتبويب المقالات مع النصوص المعتمدة ببقية المنصة */
-#home #home-latest-articles,
-#home #home-latest-articles h1,
-#home #home-latest-articles h2,
-#home #home-latest-articles h3,
-#home #home-latest-articles h4,
-#home #home-latest-articles p,
-#home #home-latest-articles span,
-#home #home-latest-articles div,
-#articles #abq-articles-list,
-#articles #abq-articles-list h1,
-#articles #abq-articles-list h2,
-#articles #abq-articles-list h3,
-#articles #abq-articles-list h4,
-#articles #abq-articles-list p,
-#articles #abq-articles-list span,
-#articles #abq-articles-list div{
-  color:#334155 !important;
+/* مطابقة ألوان نصوص بطاقات المقالات للدرجات الموحدة المستخدمة في بطاقات المنصة */
+#home #home-latest-articles .abq-article-card h3,
+#articles #abq-articles-list .abq-article-card h3{
+  color:#0f172a !important;
 }
-#home section:has(#home-latest-articles) h2,
-#articles .hero-bg h2{
-  color:#1e3a8a !important;
+#home #home-latest-articles .abq-article-card p,
+#articles #abq-articles-list .abq-article-card p{
+  color:#475569 !important;
+}
+#home #home-latest-articles .abq-article-date,
+#articles #abq-articles-list .abq-article-date{
+  color:#64748b !important;
+}
+#home #home-latest-articles .abq-article-category,
+#articles #abq-articles-list .abq-article-category{
+  color:#1d4ed8 !important;
 }
 @media(max-width:767px){
   header .abq-header-brand-license-frame .abq-header-brand-area,
