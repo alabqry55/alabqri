@@ -23915,3 +23915,25 @@ header .abq-header-brand-license-frame .abq-header-license-text{
   }
 }
 </style>
+
+<style id="alabqri-doors-tab-icon-spacing-correction-20261012">
+/* تصحيح نهائي للموبايل: إزالة الفراغ الأفقي بين رمز 📜 واسم تبويب الدبلومات */
+@media screen and (max-width:767px) {
+  html body .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] {
+    column-gap:0 !important;
+    gap:0 !important;
+  }
+  html body .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] > .abq-tab-icon {
+    flex:0 0 .72em !important;
+    width:.72em !important;
+    min-width:.72em !important;
+    margin:0 !important;
+    margin-inline:0 !important;
+    padding:0 !important;
+  }
+  html body .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] > .abq-tab-label {
+    margin:0 !important;
+    padding:0 !important;
+  }
+}
+</style>
