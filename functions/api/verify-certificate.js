@@ -1,3 +1,39 @@
-const SAMPLE_CERTIFICATES={'ABQ-2026-00001':{certificateNumber:'ABQ-2026-00001',traineeName:'متدرب نموذجي',programName:'دبلومة التأصيل المنهجي',hours:'50',issueDate:'2026-01-15',issuer:'مركز العبقري للتدريب والتطوير',status:'valid'},'ABQ-2026-00002':{certificateNumber:'ABQ-2026-00002',traineeName:'متدرب نموذجي 2',programName:'برنامج مرصد الاتزان',hours:'30',issueDate:'2026-03-20',issuer:'مركز العبقري للتدريب والتطوير',status:'valid'}};
-export async function onRequestPost({request,env}){const corsHeaders={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Content-Type':'application/json'};if(request.method==='OPTIONS'){return new Response(null,{status:204,headers:corsHeaders})}try{const body=await request.json();const certNumber=(body.certificateNumber||'').trim().toUpperCase();if(!certNumber){return new Response(JSON.stringify({valid:false,message:'لم يتم إدخال رقم شهادة.'}),{status:400,headers:corsHeaders})}const cert=SAMPLE_CERTIFICATES[certNumber];if(cert&&cert.status==='valid'){return new Response(JSON.stringify({valid:true,certificateNumber:cert.certificateNumber,traineeName:cert.traineeName,programName:cert.programName,hours:cert.hours,issueDate:cert.issueDate,issuer:cert.issuer}),{status:200,headers:corsHeaders})}else if(cert&&cert.status==='expired'){return new Response(JSON.stringify({valid:false,message:'هذه الشهادة لم تعد سارية.'}),{status:200,headers:corsHeaders})}else{return new Response(JSON.stringify({valid:false,message:'لم يتم العثور على شهادة بهذا الرقم.'}),{status:404,headers:corsHeaders})}}catch(err){return new Response(JSON.stringify({valid:false,message:'حدث خطأ في معالجة الطلب.'}),{status:500,headers:corsHeaders})}}
-export async function onRequestGet({request}){const headers={'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};return new Response(JSON.stringify({endpoint:'/api/verify-certificate',method:'POST',description:'بوابة التحقق من شهادات مركز العبقري'}),{status:200,headers})}
+const jsonHeaders = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
+
+export async function onRequestPost({ request, env }) {
+  try {
+    if (!env.DB) {
+      return Response.json({ valid: false, message: 'خدمة التحقق غير مهيأة حاليًا.' }, { status: 503, headers: jsonHeaders });
+    }
+    const body = await request.json();
+    const certificateNumber = String(body?.certificateNumber || '').trim().toUpperCase();
+    if (!/^[A-Z0-9][A-Z0-9-]{3,59}$/.test(certificateNumber)) {
+      return Response.json({ valid: false, message: 'يرجى إدخال رقم شهادة صحيح.' }, { status: 400, headers: jsonHeaders });
+    }
+    const cert = await env.DB.prepare(
+      'SELECT certificate_number, holder_name, program_name, hours, issue_date, issuer, status FROM certificates WHERE certificate_number = ? LIMIT 1'
+    ).bind(certificateNumber).first();
+    if (!cert) {
+      return Response.json({ valid: false, message: 'لم يتم العثور على شهادة بهذا الرقم في السجل الرسمي.' }, { status: 404, headers: jsonHeaders });
+    }
+    if (cert.status !== 'active') {
+      return Response.json({ valid: false, status: 'revoked', message: 'هذه الشهادة ملغاة وغير سارية.' }, { status: 200, headers: jsonHeaders });
+    }
+    return Response.json({
+      valid: true,
+      certificateNumber: cert.certificate_number,
+      traineeName: cert.holder_name,
+      programName: cert.program_name,
+      hours: cert.hours == null ? '' : String(cert.hours),
+      issueDate: cert.issue_date,
+      issuer: cert.issuer,
+      status: 'active'
+    }, { status: 200, headers: jsonHeaders });
+  } catch (error) {
+    return Response.json({ valid: false, message: 'تعذر إتمام التحقق الآن.' }, { status: 500, headers: jsonHeaders });
+  }
+}
+
+export async function onRequestGet() {
+  return Response.json({ endpoint: '/api/verify-certificate', method: 'POST', description: 'بوابة التحقق من شهادات مركز العبقري' }, { headers: jsonHeaders });
+}
