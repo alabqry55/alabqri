@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>إدارة سجل الشهادات | ALABQRI</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;padding:20px}.wrap{max-width:980px;margin:auto}.card{background:#fff;border:1px solid #d7e1ed;border-radius:16px;padding:20px;margin:0 0 16px;box-shadow:0 5px 18px #1831530d}h1{font-size:1.45rem;margin:0 0 8px}p{line-height:1.7;color:#526174}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;font-weight:650;font-size:.92rem}input{display:block;width:100%;margin-top:6px;padding:11px;border:1px solid #bdc9d8;border-radius:9px;font:inherit}button{border:0;border-radius:9px;padding:11px 16px;background:#155eaa;color:#fff;font:inherit;font-weight:700;cursor:pointer;margin:8px 0 0}button.danger{background:#a92b36}button.secondary{background:#43566d}.actions{display:flex;gap:8px;flex-wrap:wrap}#status{white-space:pre-wrap;padding:10px 0;font-weight:600}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:right;padding:10px;border-bottom:1px solid #e4eaf1}th{background:#f3f6fa}.muted{color:#64748b}.revoked{color:#a92b36;font-weight:700}@media(max-width:600px){body{padding:12px}.grid{grid-template-columns:1fr}.card{padding:15px}}
+</style>
+</head>
+<body><main class="wrap">
+<section class="card"><h1>إدارة سجل شهادات ALABQRI</h1><p>احمِ هذه الصفحة عبر Cloudflare Access. عمليات الإدارة تتطلب أيضًا مفتاحًا محفوظًا على الخادم باسم CERTIFICATE_ADMIN_KEY؛ لا تضع المفتاح في ملفات الموقع أو مستودع GitHub.</p>
+<label>مفتاح الإدارة<input id="admin-key" type="password" autocomplete="current-password" placeholder="أدخل مفتاح الإدارة"></label>
+<div class="actions"><button id="load">تحميل السجل</button><button id="clear-key" class="secondary">مسح المفتاح</button></div><div id="status" role="status" aria-live="polite"></div></section>
+<section class="card"><h2>إضافة شهادة حقيقية</h2><form id="add-form"><div class="grid">
+<label>رقم الشهادة<input name="certificateNumber" required maxlength="60" placeholder="ABQ-2026-00003" dir="ltr"></label>
+<label>اسم صاحب الشهادة<input name="holderName" required maxlength="180"></label>
+<label>اسم البرنامج<input name="programName" required maxlength="180"></label>
+<label>تاريخ الإصدار<input name="issueDate" type="date" required></label>
+<label>عدد الساعات (اختياري)<input name="hours" type="number" min="0" max="10000"></label>
+<label>الجهة المصدرة<input name="issuer" maxlength="180" value="مركز العبقري للتدريب والإستشارات"></label>
+</div><button type="submit">إضافة إلى السجل</button></form></section>
+<section class="card"><h2>السجل الحالي</h2><p class="muted">السجل يبدأ فارغًا؛ لا توجد شهادات نموذجية مضافة تلقائيًا.</p><div class="tablewrap"><table><thead><tr><th>رقم الشهادة</th><th>صاحب الشهادة</th><th>البرنامج</th><th>الإصدار</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="rows"><tr><td colspan="6">حمّل السجل بعد إدخال مفتاح الإدارة.</td></tr></tbody></table></div></section>
+</main>
+<script>
+(function(){
+const keyEl=document.getElementById('admin-key'),statusEl=document.getElementById('status'),rows=document.getElementById('rows');
+function say(message){statusEl.textContent=message}
+async function api(method,body){const response=await fetch('/api/admin/certificates',{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+keyEl.value.trim()},body:body?JSON.stringify(body):undefined,cache:'no-store'});const data=await response.json().catch(()=>({error:'استجابة غير مفهومة من الخادم.'}));if(!response.ok)throw new Error(data.error||'فشل الطلب.');return data}
+function cell(tr,value){const td=document.createElement('td');td.textContent=value==null?'':String(value);tr.appendChild(td);return td}
+async function load(){try{const data=await api('GET');rows.replaceChildren();if(!data.certificates.length){const tr=document.createElement('tr');const td=cell(tr,'السجل فارغ — أضف الشهادات الحقيقية المعتمدة تدريجيًا.');td.colSpan=6;rows.appendChild(tr);say('تم تحميل السجل: لا توجد شهادات مسجلة.');return}data.certificates.forEach(cert=>{const tr=document.createElement('tr');cell(tr,cert.certificate_number);cell(tr,cert.holder_name);cell(tr,cert.program_name);cell(tr,cert.issue_date);const status=cell(tr,cert.status==='active'?'سارية':'ملغاة');if(cert.status!=='active')status.className='revoked';const action=cell(tr,'');if(cert.status==='active'){const button=document.createElement('button');button.className='danger';button.textContent='إلغاء';button.addEventListener('click',async()=>{if(!confirm('تأكيد إلغاء الشهادة '+cert.certificate_number+'؟'))return;try{await api('PATCH',{certificateNumber:cert.certificate_number});say('تم إلغاء الشهادة.');await load()}catch(e){say(e.message)}});action.appendChild(button)}rows.appendChild(tr)});say('تم تحميل '+data.certificates.length+' شهادة (بحد أقصى 500).')}catch(e){say(e.message)}}
+document.getElementById('load').addEventListener('click',load);
+document.getElementById('clear-key').addEventListener('click',()=>{keyEl.value='';say('تم مسح المفتاح من الحقل.')});
+document.getElementById('add-form').addEventListener('submit',async event=>{event.preventDefault();const form=new FormData(event.currentTarget);const body=Object.fromEntries(form.entries());body.hours=body.hours===''?null:Number(body.hours);try{await api('POST',body);event.currentTarget.reset();event.currentTarget.elements.issuer.value='مركز العبقري للتدريب والإستشارات';say('تمت إضافة الشهادة إلى السجل.');await load()}catch(e){say(e.message)}});
+})();
+</script></body></html>
