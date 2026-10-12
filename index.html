@@ -9326,7 +9326,8 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     <link rel="stylesheet" href="/assets/alabqri-center-contact-final-20261006-v2.css?v=20261010-identity-three-sections-12">
 
 <style id="alabqri-mobile-two-tab-single-line-20261012">
-/* موبايل فقط: سطر واحد لاسم تبويبي الدبلومات والعلوم، مع محاذاة الرمز بجانب الاسم داخل الإطار. */
+/* موبايل فقط: سطر واحد لاسم تبويبي الدبلومات والعلوم، مع محاذاة الرمز بجانب الاسم.
+   يرث الاسمان حجم خط التبويبات الموحد دون تصغير منفصل. */
 @media screen and (max-width: 767px) {
   .main-tabs-nav .nav-btn[onclick="switchTab('doors')"],
   .main-tabs-nav .nav-btn[onclick="switchTab('courses')"] {
@@ -9363,17 +9364,10 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
     white-space:nowrap !important;
     word-break:keep-all !important;
     overflow-wrap:normal !important;
-    font-size:clamp(8px, 2.5vw, 11px) !important;
-    line-height:1.15 !important;
-    letter-spacing:-.035em !important;
+    font:inherit !important;
+    line-height:1.2 !important;
+    letter-spacing:normal !important;
     text-overflow:clip !important;
-  }
-}
-@media screen and (max-width: 360px) {
-  .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] .abq-tab-label,
-  .main-tabs-nav .nav-btn[onclick="switchTab('courses')"] .abq-tab-label {
-    font-size:8px !important;
-    letter-spacing:-.045em !important;
   }
 }
 </style>
