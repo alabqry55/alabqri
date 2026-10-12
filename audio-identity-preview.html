@@ -101,19 +101,16 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:0 20px 22px}
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.voice === voice)));
     title.textContent = voice === 'male' ? 'النداء الرجالي الرسمي' : 'النداء النسائي الرسمي';
     play.disabled = true;
-    status.textContent = 'بانتظار إرفاق التسجيل الصوتي النهائي.';
+    play.textContent = '▶ تشغيل العينة';
+    audio.src = sources[voice];
+    audio.load();
+    status.textContent = 'جارٍ التحقق من توفر التسجيل…';
   }
   buttons.forEach(button => button.addEventListener('click', () => selectVoice(button.dataset.voice)));
   audio.addEventListener('canplay', () => { play.disabled = false; status.textContent = 'العينة جاهزة للتشغيل.'; });
   audio.addEventListener('ended', () => { play.textContent = '▶ تشغيل العينة'; status.textContent = 'انتهى النداء.'; });
-  audio.addEventListener('error', () => { play.disabled = true; status.textContent = 'ملف العينة غير متوفر بعد.'; });
+  audio.addEventListener('error', () => { play.disabled = true; status.textContent = 'ملف التسجيل النهائي لم يُرفق بعد.'; });
   play.addEventListener('click', async () => {
-    if (!audio.src) {
-      audio.src = sources[selected];
-      audio.load();
-      status.textContent = 'جارٍ التحقق من وجود ملف العينة…';
-      return;
-    }
     if (audio.paused) {
       try { await audio.play(); play.textContent = 'Ⅱ إيقاف مؤقت'; status.textContent = 'يعمل النداء الآن.'; }
       catch { status.textContent = 'تعذر تشغيل العينة؛ تحقق من وجود الملف الصوتي.'; }
@@ -122,6 +119,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:0 20px 22px}
     }
   });
   audio.addEventListener('pause', () => { if (audio.currentTime > 0 && !audio.ended) play.textContent = '▶ متابعة التشغيل'; });
+  selectVoice('male');
 })();
 </script>
 </body>
