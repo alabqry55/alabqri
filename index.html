@@ -23922,21 +23922,40 @@ header .abq-header-brand-license-frame .abq-header-license-text{
 
 
 <style id="alabqri-tab-font-balance-20261012">
-/* توازن بصري للتبويبات المطلوبة فقط، مع الحفاظ على الإطارات والوظائف. */
+/* ضبط نهائي للتبويبات المطلوبة فقط: حجم متوازن واحتواء النص داخل الإطار. */
 @media screen and (max-width: 767px) {
-  .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] .abq-tab-label {
-    font-size:clamp(9px, 2.4vw, 11px) !important;
-    line-height:1.15 !important;
+  /* الدبلومات: قريب من حجم بقية أسماء التبويبات مع السماح بالالتفاف داخل الإطار. */
+  .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] {
+    gap:2px !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    padding-inline:2px !important;
+    overflow:hidden !important;
   }
+  .main-tabs-nav .nav-btn[onclick="switchTab('doors')"] .abq-tab-label {
+    display:block !important;
+    flex:0 1 auto !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    font-size:clamp(9px, 2.4vw, 10px) !important;
+    line-height:1.15 !important;
+    letter-spacing:0 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+  }
+  /* الرئيسية والتواصل والخدمات: استعادة الحجم الأكبر المتوافق مع الهاتف. */
   .main-tabs-nav .nav-btn:first-child,
   .main-tabs-nav .nav-btn:last-child {
     font-size:.80rem !important;
     font-weight:800 !important;
   }
   .main-tabs-nav .nav-btn:first-child .abq-tab-label,
-  .main-tabs-nav .nav-btn:last-child .abq-tab-label {
+  .main-tabs-nav .nav-btn:last-child .abq-tab-label,
+  .main-tabs-nav .nav-btn:last-child .abq-contact-label {
     font-size:inherit !important;
     font-weight:inherit !important;
+    line-height:1.15 !important;
   }
 }
 </style>
