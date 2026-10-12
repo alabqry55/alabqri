@@ -23750,3 +23750,50 @@ html body header.bg-white div.abq-header-brand-license-frame > nav.main-tabs-nav
   }
 }
 </style>
+
+
+<style id="abq-inner-identity-blue-frames-and-articles-text-20261012">
+/* تعديل محدود: توحيد الإطارات الداخلية لهوية المشرف مع الإطار الأزرق 2px */
+header .abq-header-brand-license-frame .abq-header-brand-area,
+header .abq-header-brand-license-frame .abq-header-license-area{
+  border:2px solid #2563eb !important;
+  border-radius:10px !important;
+  box-sizing:border-box !important;
+  min-width:0 !important;
+}
+/* إزالة أي حدود متعارضة عن النص نفسه مع إبقاء إطار القسم الموحد */
+header .abq-header-brand-license-frame .abq-header-license-text{
+  border:0 !important;
+  box-shadow:none !important;
+}
+/* توحيد لون نصوص بطاقات أحدث المقالات في الرئيسية وتبويب المقالات مع النصوص المعتمدة ببقية المنصة */
+#home #home-latest-articles,
+#home #home-latest-articles h1,
+#home #home-latest-articles h2,
+#home #home-latest-articles h3,
+#home #home-latest-articles h4,
+#home #home-latest-articles p,
+#home #home-latest-articles span,
+#home #home-latest-articles div,
+#articles #abq-articles-list,
+#articles #abq-articles-list h1,
+#articles #abq-articles-list h2,
+#articles #abq-articles-list h3,
+#articles #abq-articles-list h4,
+#articles #abq-articles-list p,
+#articles #abq-articles-list span,
+#articles #abq-articles-list div{
+  color:#334155 !important;
+}
+#home section:has(#home-latest-articles) h2,
+#articles .hero-bg h2{
+  color:#1e3a8a !important;
+}
+@media(max-width:767px){
+  header .abq-header-brand-license-frame .abq-header-brand-area,
+  header .abq-header-brand-license-frame .abq-header-license-area{
+    width:100% !important;
+    max-width:100% !important;
+  }
+}
+</style>
