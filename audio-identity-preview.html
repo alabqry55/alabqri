@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10233f">
+<title>معاينة الهوية الصوتية | ALABQRI</title>
+<style>
+:root{color-scheme:light;--navy:#10233f;--blue:#1769aa;--gold:#c5a35a;--ink:#17243a;--muted:#64748b;--line:#dce5ef;--paper:#fff;--soft:#f3f7fb}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(145deg,#edf4fa,#fff 58%,#f7f3e9);font-family:Tahoma,Arial,sans-serif;color:var(--ink);min-height:100vh;padding:24px}
+main{width:min(760px,100%);margin:0 auto}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px #10233f12;overflow:hidden}
+.hero{background:linear-gradient(120deg,#10233f,#174b78);color:#fff;padding:28px 24px;border-bottom:3px solid var(--gold)}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:#e6d3a4;margin:0 0 12px}
+h1{font-size:clamp(23px,5vw,34px);line-height:1.4;margin:0}
+.sub{margin:8px 0 0;color:#dce8f4;line-height:1.8}
+.content{padding:24px;display:grid;gap:20px}
+.switch{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;cursor:pointer}
+.voice{border:1px solid var(--line);background:#fff;border-radius:14px;padding:15px 12px;text-align:right;color:var(--ink);display:flex;gap:12px;align-items:center;min-height:76px}
+.voice[aria-pressed=true]{border:2px solid var(--blue);background:#f0f7ff;box-shadow:0 0 0 3px #1769aa12}
+.voice-icon{width:42px;height:42px;border-radius:12px;background:#e7f0f9;color:var(--blue);display:grid;place-items:center;font-size:22px;flex:0 0 auto}
+.voice strong{display:block;margin-bottom:5px}.voice small{color:var(--muted)}
+.player{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--soft)}
+.player-head{display:flex;gap:14px;align-items:center}
+.logo{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:#fff;border:1px solid #d9e5f0;color:var(--blue);font-size:24px;flex:0 0 auto}
+.player h2{font-size:18px;margin:0 0 5px}.player p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.play{border:0;background:var(--navy);color:#fff;border-radius:12px;padding:12px 18px;font-weight:700;min-width:150px}
+.play:disabled{opacity:.45;cursor:not-allowed}
+.status{font-size:13px;color:var(--muted);line-height:1.7}
+.notice{border-right:4px solid var(--gold);padding:12px 14px;background:#fffaf0;border-radius:8px;color:#65542e;font-size:13px;line-height:1.8}
+ul{margin:0;padding-right:20px;line-height:2;color:#425168;font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:0 20px 22px}
+@media(max-width:520px){body{padding:12px}.hero{padding:23px 18px}.content{padding:16px}.switch{grid-template-columns:1fr}.voice{min-height:66px}.play{width:100%}.controls{align-items:stretch}}
+</style>
+</head>
+<body>
+<main>
+<section class="card" aria-labelledby="page-title">
+<header class="hero">
+<p class="eyebrow">الهوية الصوتية الرسمية · نسخة معاينة مستقلة</p>
+<h1 id="page-title">منصة ALABQRI</h1>
+<p class="sub">نداء إذاعي رسمي بطابع احترافي، مستوحى من وضوح الإعلانات العامة ورصانتها.</p>
+</header>
+<div class="content">
+<div>
+<h2 style="font-size:17px;margin:0 0 12px">اختر أسلوب النداء</h2>
+<div class="switch" role="group" aria-label="اختيار الصوت">
+<button class="voice" type="button" data-voice="male" aria-pressed="true">
+<span class="voice-icon" aria-hidden="true">🎙</span><span><strong>الصوت الرجالي</strong><small>عميق، واضح، ووقور</small></span>
+</button>
+<button class="voice" type="button" data-voice="female" aria-pressed="false">
+<span class="voice-icon" aria-hidden="true">🔊</span><span><strong>الصوت النسائي</strong><small>نقي، رسمي، وواثق</small></span>
+</button>
+</div>
+</div>
+<section class="player" aria-live="polite">
+<div class="player-head">
+<div class="logo" aria-hidden="true">🌿</div>
+<div><h2 id="voice-title">النداء الرجالي الرسمي</h2><p>ترحيب وتعريف بالمنصة · تشغيل يدوي فقط</p></div>
+</div>
+<div class="controls">
+<button id="play" class="play" type="button" disabled>▶ تشغيل العينة</button>
+<span id="status" class="status">بانتظار إرفاق التسجيل الصوتي النهائي.</span>
+</div>
+<audio id="audio" preload="none"></audio>
+</section>
+<div class="notice"><strong>معاينة آمنة:</strong> هذه صفحة مستقلة للتقييم فقط. لا يوجد تسجيل فعلي مرفق بعد، ولا يتم تشغيل صوت تلقائيًا أو تغيير أي وظيفة في الموقع الأصلي.</div>
+<div>
+<h2 style="font-size:17px;margin:0 0 8px">معايير النسخة النهائية</h2>
+<ul>
+<li>نطق عربي فصيح واسم ALABQRI مضبوط وفق النطق الذي يعتمده المركز.</li>
+<li>مستوى صوت موحّد بين المؤديين ومن دون موسيقى مزعجة.</li>
+<li>إيقاف الصوت الحالي قبل تشغيل تسجيل آخر.</li>
+<li>توافق مع شاشة الهاتف والكمبيوتر وإمكانية التحكم بلوحة المفاتيح.</li>
+</ul>
+</div>
+</div>
+<footer>معاينة غير منشورة على الموقع الرئيسي · لا تغيّر الصفحة الأصلية</footer>
+</section>
+</main>
+<script>
+(() => {
+  const buttons = [...document.querySelectorAll('[data-voice]')];
+  const title = document.getElementById('voice-title');
+  const audio = document.getElementById('audio');
+  const play = document.getElementById('play');
+  const status = document.getElementById('status');
+  const sources = {
+    male: 'audio/alabqri-welcome-male.mp3',
+    female: 'audio/alabqri-welcome-female.mp3'
+  };
+  let selected = 'male';
+  function selectVoice(voice) {
+    selected = voice;
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.voice === voice)));
+    title.textContent = voice === 'male' ? 'النداء الرجالي الرسمي' : 'النداء النسائي الرسمي';
+    play.disabled = true;
+    status.textContent = 'بانتظار إرفاق التسجيل الصوتي النهائي.';
+  }
+  buttons.forEach(button => button.addEventListener('click', () => selectVoice(button.dataset.voice)));
+  audio.addEventListener('canplay', () => { play.disabled = false; status.textContent = 'العينة جاهزة للتشغيل.'; });
+  audio.addEventListener('ended', () => { play.textContent = '▶ تشغيل العينة'; status.textContent = 'انتهى النداء.'; });
+  audio.addEventListener('error', () => { play.disabled = true; status.textContent = 'ملف العينة غير متوفر بعد.'; });
+  play.addEventListener('click', async () => {
+    if (!audio.src) {
+      audio.src = sources[selected];
+      audio.load();
+      status.textContent = 'جارٍ التحقق من وجود ملف العينة…';
+      return;
+    }
+    if (audio.paused) {
+      try { await audio.play(); play.textContent = 'Ⅱ إيقاف مؤقت'; status.textContent = 'يعمل النداء الآن.'; }
+      catch { status.textContent = 'تعذر تشغيل العينة؛ تحقق من وجود الملف الصوتي.'; }
+    } else {
+      audio.pause(); play.textContent = '▶ متابعة التشغيل'; status.textContent = 'تم إيقاف النداء مؤقتًا.';
+    }
+  });
+  audio.addEventListener('pause', () => { if (audio.currentTime > 0 && !audio.ended) play.textContent = '▶ متابعة التشغيل'; });
+})();
+</script>
+</body>
+</html>
