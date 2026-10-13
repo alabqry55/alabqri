@@ -14054,10 +14054,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-real-visitor-counter">
-/* ===== عداد زوار حقيقي: عداد الزائرين + زوار اليوم + زوار الآن ===== */
+/* ===== عداد زوار حقيقي: إعادة المحاولة عند تعثر اتصال مؤقت ===== */
 (function(){
   'use strict';
-  function initVisitorCounter(){
+  function initVisitorCounter(attempt){
+    attempt = Number(attempt || 0);
     var totalEl=document.getElementById('abq-visitor-count');
     var todayEl=document.getElementById('abq-visitor-today');
     var nowEl=document.getElementById('abq-visitor-now');
@@ -14073,14 +14074,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
         if(box) box.classList.remove('loading');
       })
       .catch(function(){
+        if(attempt < 3){
+          window.setTimeout(function(){initVisitorCounter(attempt + 1);},1500);
+          return;
+        }
         totalEl.textContent='—';
         if(todayEl) todayEl.textContent='—';
         if(nowEl) nowEl.textContent='—';
         if(box) box.classList.remove('loading');
       });
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initVisitorCounter);
-  else initVisitorCounter();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){initVisitorCounter(0);});
+  else initVisitorCounter(0);
 })();
 </script>
 
