@@ -27,4 +27,4 @@ jobs:
         with:
           python-version: "3.x"
       - name: Test certificate SQL migration in an isolated SQLite database
-        run: python -m unittest tests/test_certificate_migration.py -v
+        run: python tests/test_certificate_migration.py -v
