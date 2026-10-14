@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS certificates (
   status TEXT NOT NULL DEFAULT 'active'
     CHECK (status IN ('active', 'revoked')),
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by TEXT,
+  updated_by TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_certificates_status
