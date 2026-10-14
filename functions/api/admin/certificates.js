@@ -43,6 +43,12 @@ export async function onRequest({ request, env }) {
       return json({ error: "طريقة الطلب غير مسموحة." }, 405, { allow: "GET, POST" });
     }
 
+    // Reject simple cross-site form submissions before parsing a state-changing request.
+    const contentType = (request.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+    if (contentType !== "application/json") {
+      return json({ error: "يجب إرسال البيانات بصيغة JSON." }, 415);
+    }
+
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return json({ error: "صيغة الطلب غير صحيحة." }, 400);
