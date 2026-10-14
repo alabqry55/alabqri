@@ -81,6 +81,7 @@ export async function onRequest({ request, env }) {
     const hours = body.hours == null || body.hours === "" ? null : Number(body.hours);
     if (!holderName || !programName || !issuer || !/^\d{4}-\d{2}-\d{2}$/.test(issueDate) ||
         Number.isNaN(Date.parse(issueDate + "T00:00:00Z")) ||
+        new Date(issueDate + "T00:00:00Z").toISOString().slice(0, 10) !== issueDate ||
         (hours !== null && (!Number.isInteger(hours) || hours < 0 || hours > 100000))) {
       return json({ error: "بيانات الشهادة غير مكتملة أو غير صالحة." }, 400);
     }
