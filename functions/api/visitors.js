@@ -87,7 +87,7 @@ export async function onRequestGet({ env, request }) {
       total: Number(row?.total || 0),
       today: Number(daily?.unique_visitors || 0),
       now: Number(active?.active_now || 0),
-      updated_at: row?.updated_at || null
+      updated_at: formatCairoTimestamp(row?.updated_at)
     }), {
       status: 200,
       headers: {
@@ -125,4 +125,26 @@ function json(data, status = 200) {
       "cache-control": "no-store, no-cache, must-revalidate"
     }
   });
+}
+
+function formatCairoTimestamp(value) {
+  if (!value) return null;
+  // SQLite CURRENT_TIMESTAMP is UTC; keep storage unchanged and format only
+  // the API response for the Africa/Cairo local clock.
+  const utcValue = value.includes("T") ? value : value.replace(" ", "T");
+  const date = new Date(/(?:Z|[+-]\\d{2}:?\\d{2})$/.test(utcValue) ? utcValue : utcValue + "Z");
+  if (Number.isNaN(date.getTime())) return value;
+
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Cairo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(date);
+  const part = (type) => parts.find((item) => item.type === type)?.value;
+  return `${part("year")}-${part("month")}-${part("day")} ${part("hour")}:${part("minute")}:${part("second")}`;
 }
