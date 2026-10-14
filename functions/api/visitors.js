@@ -132,7 +132,7 @@ function formatCairoTimestamp(value) {
   // SQLite CURRENT_TIMESTAMP is UTC; keep storage unchanged and format only
   // the API response for the Africa/Cairo local clock.
   const utcValue = value.includes("T") ? value : value.replace(" ", "T");
-  const date = new Date(/(?:Z|[+-]\\d{2}:?\\d{2})$/.test(utcValue) ? utcValue : utcValue + "Z");
+  const date = new Date(/(?:Z|[+-]\d{2}:?\d{2})$/.test(utcValue) ? utcValue : utcValue + "Z");
   if (Number.isNaN(date.getTime())) return value;
 
   const parts = new Intl.DateTimeFormat("en-GB", {
