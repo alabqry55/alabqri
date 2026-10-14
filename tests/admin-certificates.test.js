@@ -41,11 +41,11 @@ async function makeSignedToken(email = "admin@example.com", overrides = {}) {
   };
 }
 
-function postRequest(token, body) {
+function postRequest(token, body, contentType = "application/json") {
   return new Request("https://alabqri.pages.dev/api/admin/certificates", {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": contentType,
       "Cf-Access-Jwt-Assertion": token
     },
     body: JSON.stringify(body)
@@ -97,6 +97,22 @@ async function assertRejectedClaims(overrides) {
     globalThis.fetch = previousFetch;
   }
 }
+
+test("rejects state-changing requests sent as simple form content types", async () => {
+  const { token, publicJwk } = await makeSignedToken();
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ keys: [publicJwk] });
+  try {
+    const response = await onRequest({
+      request: postRequest(token, { action: "revoke", certificateNumber: "ALB-2026-0001" }, "text/plain"),
+      env: { DB: {}, ...envConfig }
+    });
+    assert.equal(response.status, 415);
+    assert.match(await response.text(), /JSON/);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
 
 test("rejects expired Access tokens", async () => {
   await assertRejectedClaims({ exp: Math.floor(Date.now() / 1000) - 60 });
