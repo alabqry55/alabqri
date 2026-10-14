@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 22
       - name: Test certificate verification API
-        run: node --experimental-default-type=module --test tests/verify-certificate.test.js
+        run: node --experimental-default-type=module --test tests/*.test.js
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
