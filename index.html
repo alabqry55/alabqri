@@ -9395,7 +9395,7 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 /* توحيد الإحساس البصري للكروت المعروفة مع إبقاء لون كل إطار كما هو محدد في قواعده الأصلية. */
 :where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame) {
-  border-radius: 16px;
+  /* Preserve each component's existing radius; standardize interaction only. */
   transition: box-shadow .2s ease, transform .2s ease;
 }
 :where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame):hover {
