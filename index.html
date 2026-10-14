@@ -9372,6 +9372,50 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+
+
+<!-- ALABQRI — visual consistency layer; reuses only colors already present in this file. -->
+<style id="alabqri-visual-consistency-layer-20261014">
+:root {
+  --abq-ui-primary: #2563eb;
+  --abq-ui-primary-deep: #1e3a8a;
+  --abq-ui-primary-soft: #bfdbfe;
+  --abq-ui-surface: #fff;
+  --abq-ui-surface-soft: #eff6ff;
+  --abq-ui-gold: #d4af37;
+  --abq-ui-text-muted: #475569;
+}
+/* توحيد سلوك التفاعل دون المساس بمقاسات الأزرار أو وظائفها أو ألوانها الأصلية. */
+:where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn) {
+  -webkit-tap-highlight-color: transparent;
+}
+:where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn):focus-visible {
+  outline: 2px solid var(--abq-ui-primary);
+  outline-offset: 2px;
+}
+/* توحيد الإحساس البصري للكروت المعروفة مع إبقاء لون كل إطار كما هو محدد في قواعده الأصلية. */
+:where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame) {
+  border-radius: 16px;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+:where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame):hover {
+  box-shadow: 0 6px 18px rgba(37,99,235,.10);
+}
+/* إطار التبويبات يظل بنفس ألوانه الحالية؛ توحيد الحركة فقط. */
+.main-tabs-nav .nav-btn {
+  transition: box-shadow .18s ease, transform .18s ease;
+}
+.main-tabs-nav .nav-btn:active {
+  transform: translateY(1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn, .glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame) {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
