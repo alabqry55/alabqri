@@ -14,7 +14,7 @@ function base64url(value) {
   return Buffer.from(value).toString("base64url");
 }
 
-async function makeSignedToken(email = "admin@example.com") {
+async function makeSignedToken(email = "admin@example.com", overrides = {}) {
   const pair = await crypto.subtle.generateKey({
     name: "RSASSA-PKCS1-v1_5",
     modulusLength: 2048,
@@ -28,7 +28,8 @@ async function makeSignedToken(email = "admin@example.com") {
     iss: `https://${teamDomain}`,
     aud: ["alabqri-admin-audience"],
     email,
-    exp: Math.floor(Date.now() / 1000) + 300
+    exp: Math.floor(Date.now() / 1000) + 300,
+    ...overrides
   }));
   const input = `${header}.${payload}`;
   const signature = await crypto.subtle.sign(
@@ -80,6 +81,37 @@ test("rejects a correctly signed token when email is not allowlisted", async () 
   } finally {
     globalThis.fetch = previousFetch;
   }
+});
+
+async function assertRejectedClaims(overrides) {
+  const { token, publicJwk } = await makeSignedToken("admin@example.com", overrides);
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ keys: [publicJwk] });
+  try {
+    const response = await onRequest({
+      request: postRequest(token, { action: "create", certificateNumber: "ALB-2026-0001" }),
+      env: { DB: {}, ...envConfig }
+    });
+    assert.equal(response.status, 401);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+}
+
+test("rejects expired Access tokens", async () => {
+  await assertRejectedClaims({ exp: Math.floor(Date.now() / 1000) - 60 });
+});
+
+test("rejects tokens issued for a different Access application", async () => {
+  await assertRejectedClaims({ aud: ["another-application-audience"] });
+});
+
+test("rejects tokens issued by a different team", async () => {
+  await assertRejectedClaims({ iss: "https://attacker.cloudflareaccess.com" });
+});
+
+test("rejects tokens that are not valid yet", async () => {
+  await assertRejectedClaims({ nbf: Math.floor(Date.now() / 1000) + 300 });
 });
 
 test("creates a certificate only after signature and email authorization", async () => {
