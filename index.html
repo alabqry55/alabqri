@@ -24114,3 +24114,57 @@ header .abq-header-brand-license-frame .abq-header-license-text{
   }
 }
 </style>
+
+
+<style id="abq-unified-outer-frames-tabs-20261015">
+/* نظام موحّد للإطارات الخارجية والتبويبات: ألوان ALABQRI الحالية فقط، دون حركة مستمرة */
+:where(
+  .main-tabs-content > .tab-content > div > div[class*="border"][class*="rounded"],
+  .main-tabs-content > .tab-content > div > section[class*="border"][class*="rounded"],
+  .main-tabs-content > .tab-content > div > article[class*="border"][class*="rounded"],
+  .main-tabs-content > .tab-content > div > header[class*="border"][class*="rounded"]
+){
+  border-color:#2563eb!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(203,213,225,.58),
+    0 0 0 1px rgba(212,175,55,.34),
+    0 5px 16px -13px rgba(37,99,235,.48)!important;
+}
+#matrix > div > div.relative.overflow-hidden.rounded-3xl,
+#matrix > div > section.relative.overflow-hidden.rounded-3xl,
+#azkar-app > header,
+#azkar-app > .relative.overflow-hidden.rounded-3xl{
+  box-shadow:
+    inset 0 0 0 1px rgba(203,213,225,.52),
+    0 0 0 1px rgba(212,175,55,.30),
+    0 5px 16px -13px rgba(37,99,235,.42)!important;
+}
+.main-tabs-nav{
+  border-color:#dbeafe!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(203,213,225,.72),
+    0 0 0 1px rgba(212,175,55,.40),
+    0 8px 20px -14px rgba(15,23,42,.35)!important;
+}
+.main-tabs-nav .nav-btn{
+  border-color:rgba(37,99,235,.18)!important;
+  box-shadow:inset 0 0 0 1px rgba(203,213,225,.32);
+}
+.main-tabs-nav .nav-btn:hover{
+  border-color:#d4af37!important;
+}
+.main-tabs-nav .nav-btn.active{
+  border-color:#d4af37!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.36),
+    inset 0 -2px 0 rgba(212,175,55,.95),
+    0 7px 16px -8px rgba(37,99,235,.65)!important;
+}
+.main-tabs-nav .nav-btn:focus-visible{
+  outline:2px solid #d4af37!important;
+  outline-offset:2px!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .main-tabs-nav .nav-btn{transition:none!important}
+}
+</style>
