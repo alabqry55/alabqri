@@ -24482,3 +24482,18 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   }
 }
 </style>
+
+<style id="abq-pc-header-font-size-final-correction-20261015">
+/* تصحيح نهائي للكمبيوتر فقط: مطابقة اسم المركز مع حجم عنوان المنصة المرئي فعليًا، لا مع النص المخفي داخله. */
+@media screen and (min-width: 1024px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-brand-area h1 > span:first-child::before {
+    font-size: clamp(16px, 1.65vw, 22px) !important;
+    line-height: 1.3 !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-area .abq-header-center-name {
+    font-size: clamp(16px, 1.65vw, 22px) !important;
+    line-height: 1.3 !important;
+    font-weight: 800 !important;
+  }
+}
+</style>
