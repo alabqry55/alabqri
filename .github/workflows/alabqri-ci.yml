@@ -1,0 +1,30 @@
+name: ALABQRI safety checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, "fix/certificate-registry-safe-*"]
+
+permissions:
+  contents: read
+
+jobs:
+  certificate-registry:
+    name: Certificate registry tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test certificate verification API
+        run: node --experimental-default-type=module --test tests/*.test.js
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Test certificate SQL migration in an isolated SQLite database
+        run: python tests/test_certificate_migration.py -v
