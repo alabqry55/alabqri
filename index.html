@@ -24375,3 +24375,40 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 }
 </style>
 
+
+
+<style id="abq-pc-header-balanced-pairs-20261015">
+/* الكمبيوتر فقط: توحيد أحجام السطرين المتناظرين مع إبقاء شبكة الرأس ومكان الشعار كما هما. */
+@media screen and (min-width: 1024px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-center-name {
+    font-size: clamp(18px, 1.65vw, 23px) !important;
+    line-height: 1.25 !important;
+    font-weight: 800 !important;
+    margin-block: 0 !important;
+    text-align: center !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-text {
+    font-size: clamp(13px, 1.1vw, 16px) !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    margin-block: 0 !important;
+    text-align: center !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 100% !important;
+    margin: 0 !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > .abq-header-license-area {
+    justify-content: center !important;
+    align-self: stretch !important;
+    gap: 6px !important;
+  }
+}
+</style>
