@@ -24086,3 +24086,31 @@ header .abq-header-brand-license-frame .abq-header-license-text{
   }
 }
 </style>
+
+
+<style id="abq-home-contact-frame-heartbeat-reuse-20261015">
+/* إعادة استخدام نبض العبقري الأصلي نفسه؛ نبض ضوئي للإطار دون تحريك أو تكبير الصندوق */
+#home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:3px;
+  border:1px solid rgba(219,231,255,.42);
+  border-radius:13px;
+  pointer-events:none;
+  background:transparent!important;
+  transform:none!important;
+  animation:abqHeartBeat 1.25s ease-in-out infinite!important;
+}
+@media(max-width:640px){
+  #home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+    inset:2px;
+    border-radius:9px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+    animation:none!important;
+  }
+}
+</style>
