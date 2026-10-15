@@ -24412,3 +24412,60 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   }
 }
 </style>
+
+<style id="abq-pc-header-two-line-logo-centered-20261015">
+/* الكمبيوتر فقط: سطران متناظران على جانبي الشعار، مع الحفاظ على عمود الشعار وموضعه وحجمه. */
+@media screen and (min-width: 1024px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    min-height: 92px !important;
+    align-items: stretch !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > .abq-header-brand-area {
+    display: contents !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section {
+    grid-column: 1 !important;
+    grid-row: 1 / span 2 !important;
+    align-self: center !important;
+    justify-self: center !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > .abq-header-license-area {
+    display: contents !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-center-name {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-text {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+  }
+}
+</style>
