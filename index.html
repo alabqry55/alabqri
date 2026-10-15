@@ -24168,3 +24168,79 @@ header .abq-header-brand-license-frame .abq-header-license-text{
   .main-tabs-nav .nav-btn{transition:none!important}
 }
 </style>
+
+
+<style id="abq-contact-tab-matched-frame-connect-ornament-20261015">
+/* تبويب التواصل والخدمات: إطار معدني مطابق لهوية الرئيسية، مع زخرفة اتصال دقيقة ودون تغيير محتوى البطاقة */
+#contact .abq-contact-premium-card{
+  position:relative!important;
+  isolation:isolate!important;
+  box-sizing:border-box!important;
+  border:6px solid transparent!important;
+  border-radius:1.35rem!important;
+  background:
+    linear-gradient(135deg,#eff6ff 0%,#fff 50%,#f8fafc 100%) padding-box,
+    linear-gradient(145deg,#fffdf0 0%,#ffdf55 7%,#e9a900 17%,#fff0a0 27%,#f7f8fb 40%,#c7ced8 45%,#fffdf4 49%,#8e99a8 52%,#e0a51b 57%,#123875 62%,#ffdf55 72%,#e6a500 83%,#fff7cf 100%) border-box!important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.95),
+    inset 0 0 0 1px rgba(203,213,225,.9),
+    0 0 0 1px rgba(37,99,235,.75),
+    0 2px 0 rgba(138,87,0,.78),
+    0 5px 14px -8px rgba(15,23,42,.28),
+    0 0 10px rgba(37,99,235,.14)!important;
+}
+#contact .abq-contact-premium-card::before{
+  content:"";
+  position:absolute;
+  z-index:5;
+  pointer-events:none;
+  inset:3px;
+  border:1px solid rgba(212,175,55,.92);
+  border-radius:calc(1.35rem - 7px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 0 0 1px rgba(203,213,225,.68);
+  background:
+    linear-gradient(90deg,transparent 0%,rgba(212,175,55,.75) 18%,transparent 34%) top left/34% 1px no-repeat,
+    linear-gradient(270deg,transparent 0%,rgba(212,175,55,.75) 18%,transparent 34%) top right/34% 1px no-repeat,
+    linear-gradient(90deg,transparent,rgba(148,163,184,.55),transparent) bottom center/72% 1px no-repeat;
+}
+#contact .abq-contact-premium-card::after{
+  content:"☎  ·  ◇  ·  ☎";
+  position:absolute;
+  z-index:6;
+  top:2px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:0 .42rem;
+  border-radius:999px;
+  color:#1d4ed8;
+  background:#fffdf4;
+  border:1px solid rgba(212,175,55,.88);
+  box-shadow:0 1px 3px rgba(15,23,42,.12);
+  font-family:Arial,sans-serif;
+  font-size:.56rem;
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:.04em;
+  pointer-events:none;
+}
+@media(max-width:640px){
+  #contact .abq-contact-premium-card{
+    border-width:3px!important;
+    border-radius:1rem!important;
+  }
+  #contact .abq-contact-premium-card::before{
+    inset:2px;
+    border-radius:calc(1rem - 5px);
+  }
+  #contact .abq-contact-premium-card::after{
+    top:1px;
+    font-size:.46rem;
+    padding:0 .3rem;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #contact .abq-contact-premium-card{scroll-behavior:auto!important}
+}
+</style>
