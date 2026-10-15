@@ -9372,6 +9372,50 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 }
 </style>
 
+
+
+<!-- ALABQRI — visual consistency layer; reuses only colors already present in this file. -->
+<style id="alabqri-visual-consistency-layer-20261014">
+:root {
+  --abq-ui-primary: #2563eb;
+  --abq-ui-primary-deep: #1e3a8a;
+  --abq-ui-primary-soft: #bfdbfe;
+  --abq-ui-surface: #fff;
+  --abq-ui-surface-soft: #eff6ff;
+  --abq-ui-gold: #d4af37;
+  --abq-ui-text-muted: #475569;
+}
+/* توحيد سلوك التفاعل دون المساس بمقاسات الأزرار أو وظائفها أو ألوانها الأصلية. */
+:where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn) {
+  -webkit-tap-highlight-color: transparent;
+}
+:where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn):focus-visible {
+  outline: 2px solid var(--abq-ui-primary);
+  outline-offset: 2px;
+}
+/* توحيد الإحساس البصري للكروت المعروفة مع إبقاء لون كل إطار كما هو محدد في قواعده الأصلية. */
+:where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame) {
+  /* Preserve each component's existing radius; standardize interaction only. */
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+:where(.glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame):hover {
+  box-shadow: 0 6px 18px rgba(37,99,235,.10);
+}
+/* إطار التبويبات يظل بنفس ألوانه الحالية؛ توحيد الحركة فقط. */
+.main-tabs-nav .nav-btn {
+  transition: box-shadow .18s ease, transform .18s ease;
+}
+.main-tabs-nav .nav-btn:active {
+  transform: translateY(1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(button, a, input, select, textarea, [role="button"], .nav-btn, .balance-window-btn, .glass-card, .card-hover, .abq-diploma-card, .balance-window, .mihrab-wrapper .verse-card, .abq-feedback-counters-frame) {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -23963,6 +24007,110 @@ header .abq-header-brand-license-frame .abq-header-license-text{
     line-height:1.15 !important;
     white-space:normal !important;
     overflow-wrap:anywhere !important;
+  }
+}
+</style>
+
+
+<style id="abq-home-contact-hero-matching-frame-20261015">
+/* إطار قسم التواصل والخدمات بالرئيسية: مطابق لإطار صورة الهيرو، دون تغيير المحتوى الداخلي */
+#home #abq-home-contact-services.abq-home-contact-exact-copy{
+  position:relative!important;
+  isolation:isolate!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  padding:9px!important;
+  border:7px solid transparent!important;
+  border-radius:18px!important;
+  background:
+    linear-gradient(135deg,#123c82 0%,#2563eb 28%,#082f6e 58%,#1d4ed8 78%,#082f6e 100%) padding-box,
+    linear-gradient(145deg,#fffdf0 0%,#ffdf55 5%,#fff2a0 10%,#e9a900 18%,#ffed78 26%,#c88908 34%,#ffeaa0 40%,#f7f8fb 43%,#c7ced8 46%,#fffdf4 48%,#8e99a8 51%,#e0a51b 54%,#123875 57%,#09295f 62%,#ffdf55 69%,#e6a500 77%,#ffef99 85%,#b87900 92%,#fff7cf 100%) border-box!important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.82),
+    inset 0 -3px 3px rgba(4,20,55,.82),
+    inset 0 0 0 2px rgba(229,234,241,.98),
+    inset 0 0 0 4px rgba(13,43,91,.98),
+    inset 0 0 0 6px rgba(255,190,18,.99),
+    inset 0 0 0 7px rgba(255,242,163,.98),
+    0 0 0 1px #ffdf55,
+    0 2px 0 #8a5700,
+    0 4px 0 rgba(5,24,61,.9),
+    0 7px 12px rgba(0,0,0,.24),
+    0 0 15px rgba(37,99,235,.24),
+    0 0 12px rgba(255,191,25,.32)!important;
+  overflow:hidden!important;
+}
+#home #abq-home-contact-services.abq-home-contact-exact-copy::before{
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:3px;
+  border:2px solid rgba(255,231,139,.99);
+  border-radius:11px;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.96),inset 0 -1px 2px rgba(105,70,17,.68),0 0 0 1px rgba(255,194,25,.99),0 0 5px rgba(255,210,65,.95);
+  pointer-events:none;
+  background:none!important;
+}
+#home #abq-home-contact-services.abq-home-contact-exact-copy > .abq-home-contact-exact-inner{
+  position:relative!important;
+  z-index:1!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:640px){
+  #home #abq-home-contact-services.abq-home-contact-exact-copy{
+    padding:5px!important;
+    border-width:3px!important;
+    border-radius:12px!important;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.78),
+      inset 0 -2px 2px rgba(4,20,55,.78),
+      inset 0 0 0 1px rgba(229,234,241,.98),
+      inset 0 0 0 2px rgba(13,43,91,.98),
+      inset 0 0 0 3px rgba(255,190,18,.99),
+      inset 0 0 0 4px rgba(255,239,145,.98),
+      0 0 0 1px #ffdf55,
+      0 2px 0 #8a5700,
+      0 4px 8px rgba(0,0,0,.2),
+      0 0 8px rgba(37,99,235,.2),
+      0 0 9px rgba(255,191,25,.38)!important;
+  }
+  #home #abq-home-contact-services.abq-home-contact-exact-copy::before{
+    inset:2px;
+    border-radius:8px;
+    border-width:1px;
+  }
+}
+</style>
+
+
+<style id="abq-home-contact-frame-heartbeat-reuse-20261015">
+/* إعادة استخدام نبض العبقري الأصلي نفسه؛ نبض ضوئي للإطار دون تحريك أو تكبير الصندوق */
+#home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:3px;
+  border:1px solid rgba(219,231,255,.42);
+  border-radius:13px;
+  pointer-events:none;
+  background:transparent!important;
+  transform:none!important;
+  animation:abqHeartBeat 1.25s ease-in-out infinite!important;
+}
+@media(max-width:640px){
+  #home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+    inset:2px;
+    border-radius:9px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #home #abq-home-contact-services.abq-home-contact-exact-copy::after{
+    animation:none!important;
   }
 }
 </style>
