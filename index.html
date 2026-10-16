@@ -14144,6 +14144,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   var waitingForCount=false;
   var voicesRetryUsed=false;
   var lastSpeechError='';
+  var automaticRetryUsed=false;
   function currentCount(){
     var raw=(totalEl.textContent||'').replace(/,/g,'').trim();
     var value=Number(raw);
@@ -14201,12 +14202,33 @@ document.addEventListener("DOMContentLoaded", ()=>{
     utterance.onerror=function(event){
       lastSpeechError=(event&&event.error)||'unknown';
       console.warn('[ALABQRI audio] تعذر تشغيل الترحيب الصوتي. السبب:',lastSpeechError,event||'');
+      /* إعادة محاولة واحدة للأخطاء العابرة فقط؛ لا نكرر المحاولة إذا كان المتصفح يمنع التشغيل. */
+      if(!manual && !automaticRetryUsed && ['canceled','interrupted','synthesis-failed','voice-unavailable'].indexOf(lastSpeechError)!==-1){
+        automaticRetryUsed=true;
+        window.setTimeout(function(){
+          if(currentCount()!==null) speakWelcome(false);
+        },500);
+        return;
+      }
       button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     };
     try{
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+      var synth=window.speechSynthesis;
+      /* لا تلغِ طابور النطق الفارغ عند أول تشغيل؛ قد يؤدي ذلك إلى إسكات المحاولة الأولى على بعض إصدارات Edge/Android. */
+      if(synth.speaking||synth.pending){
+        synth.cancel();
+        window.setTimeout(function(){
+          try{synth.speak(utterance);}catch(error){
+            lastSpeechError=(error&&error.name)||'exception';
+            console.warn('[ALABQRI audio] تعذر استكمال النطق بعد إيقاف نطق سابق:',error);
+            button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
+            button.setAttribute('aria-pressed','false');
+          }
+        },120);
+      }else{
+        synth.speak(utterance);
+      }
       if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
     }catch(error){
       lastSpeechError=(error&&error.name)||'exception';
