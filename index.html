@@ -14273,8 +14273,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
       if(!autoStarted && currentCount()!==null) speakWelcome(false);
       return;
     }
-    if(voices.length && !autoStarted && autoAttempted && autoTryCount<2 && currentCount()!==null){
-      if(lastSpeechError==='voice-unavailable') lastSpeechError='';
+    if(voices.length && lastSpeechError==='voice-unavailable' && !autoStarted && autoTryCount<2 && currentCount()!==null){
+      lastSpeechError='';
       speakWelcome(false);
     }
   }
@@ -14320,7 +14320,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
   if(currentCount()!==null) startAutomaticWelcome();
   window.addEventListener('pageshow',function(){
-    if(!autoStarted&&autoAttempted&&autoTryCount<2&&currentCount()!==null){
+    if(!autoStarted&&autoAttempted&&autoTryCount===0&&currentCount()!==null){
       if(autoStartTimer) window.clearTimeout(autoStartTimer);
       autoStartTimer=window.setTimeout(function(){autoStartTimer=null;speakWelcome(false);},350);
     }
