@@ -55,12 +55,23 @@
       })
       .then(data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
-        const articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
-        root.replaceChildren();
-        if (!articles.length) {
-          showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
-          return;
+        let articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+        // Preserve the legacy article library as a read-only fallback when D1 is empty.
+        if (!articles.length && Array.isArray(window.ABQ_ARTICLES)) {
+          articles = window.ABQ_ARTICLES.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
         }
+        // Keep the verified historical static article available if both cloud and legacy lists are empty.
+        if (!articles.length) {
+          articles = [{
+            id: "azkar-balance",
+            title: "أثر الأذكار في الاتزان النفسي",
+            category: "الأذكار والاتزان",
+            date: "15 سبتمبر 2026",
+            excerpt: "موضوع معرفي عن الذكر والتحصينات وعلاقتهما بمسار السكينة والاتزان.",
+            content: "موضوع معرفي تمهيدي يربط بين المداومة على الذكر ومسار السكينة والاتزان ضمن الإطار الإيماني للمركز.\\n\\nيمكن توسيع المقال مستقبلًا وإضافة المراجع والمواد العلمية المرتبطة به."
+          }];
+        }
+        root.replaceChildren();
         const tools = el("div", "abq-articles-tools");
         const search = el("input");
         search.type = "search";
