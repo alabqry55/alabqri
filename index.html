@@ -24500,10 +24500,22 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 
 
 <style id="abq-pc-three-section-frame-bottom-spacing-20261016">
-/* الكمبيوتر فقط: ضبط المسافة الداخلية السفلية للإطار الجامع للأقسام الثلاثة دون تغيير مواضعها أو الموبايل والتابلت. */
+/* الكمبيوتر فقط: مساواة المسافة الداخلية السفلية بالعلوية في الإطار الجامع، وفي كل واحد من أقسام الرأس الثلاثة. */
 @media screen and (min-width: 1024px) {
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
-    padding-bottom: 3px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* القسم الأول: مساحة الشعار */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child,
+  /* القسم الثاني: مساحة عنوان المنصة */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child,
+  /* القسم الثالث: مساحة بيانات المركز والترخيص */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-license-area {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
     box-sizing: border-box !important;
   }
 }
