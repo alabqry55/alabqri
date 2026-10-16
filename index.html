@@ -15666,7 +15666,17 @@ window.AbqToast = (function(){
     const ABQ_ARTICLE_TOKEN_KEY='abq_articles_admin_token_v1';
     let ABQ_DYNAMIC_ARTICLES=[];
     try{ABQ_DYNAMIC_ARTICLES=JSON.parse(localStorage.getItem(ABQ_ARTICLE_STORAGE)||'[]');if(!Array.isArray(ABQ_DYNAMIC_ARTICLES))ABQ_DYNAMIC_ARTICLES=[];}catch(e){ABQ_DYNAMIC_ARTICLES=[];}
-    function getAllArticles(){ return [...ABQ_DYNAMIC_ARTICLES, ...ABQ_STATIC_ARTICLES]; }
+    function getAllArticles(){
+      const seenTitles=new Set();
+      const normalizedTitle=value=>String(value||'').normalize('NFKC').replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/\s+/g,' ').trim().toLocaleLowerCase('ar');
+      return [...ABQ_DYNAMIC_ARTICLES, ...ABQ_STATIC_ARTICLES].filter(article=>{
+        const titleKey=normalizedTitle(article&&article.title);
+        if(!titleKey)return true;
+        if(seenTitles.has(titleKey))return false;
+        seenTitles.add(titleKey);
+        return true;
+      });
+    }
     function saveLocalArticles(){try{localStorage.setItem(ABQ_ARTICLE_STORAGE,JSON.stringify(ABQ_DYNAMIC_ARTICLES));return true;}catch(e){return false;}}
     function getArticleAdminToken(){let token=sessionStorage.getItem(ABQ_ARTICLE_TOKEN_KEY)||'';if(!token){token=window.prompt('أدخل مفتاح إدارة المقالات المحفوظ في Cloudflare باسم ARTICLES_ADMIN_KEY. لن يُحفظ هذا المفتاح في ملفات المنصة.');if(token)sessionStorage.setItem(ABQ_ARTICLE_TOKEN_KEY,token.trim());}return (token||'').trim();}
     async function requestArticleAdmin(payload){const token=getArticleAdminToken();if(!token)return {ok:false,cancelled:true};try{const r=await fetch('/api/articles',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(r.status===401){sessionStorage.removeItem(ABQ_ARTICLE_TOKEN_KEY);return {ok:false,unauthorized:true,data};}return {ok:r.ok,data};}catch(e){return {ok:false,offline:true};}}
