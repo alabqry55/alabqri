@@ -14192,7 +14192,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
-      autoNeedsGesture=false;
+      /* بدء حدث onstart لا يثبت أن الهاتف أخرج صوتًا مسموعًا؛ أبقِ إعادة المحاولة مفعّلة للتشغيل التلقائي حتى يحدث تفاعل من المستخدم. */
+      if(manual) autoNeedsGesture=false;
       lastSpeechError='';
       button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
       button.setAttribute('aria-pressed','true');
