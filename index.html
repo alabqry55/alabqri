@@ -24500,22 +24500,77 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 
 
 <style id="abq-pc-three-section-frame-bottom-spacing-20261016">
-/* الكمبيوتر فقط: مساواة المسافة الداخلية السفلية بالعلوية في الإطار الجامع، وفي كل واحد من أقسام الرأس الثلاثة. */
+/* الكمبيوتر فقط: إظهار الإطار الخارجي والإطارات الثلاثة الداخلية فعليًا، مع تساوي الحافة الداخلية العلوية والسفلية. */
 @media screen and (min-width: 1024px) {
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    display: grid !important;
+    grid-template-columns: minmax(112px,.72fr) minmax(0,1.5fr) minmax(0,1.35fr) !important;
+    grid-template-rows: minmax(92px,auto) !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding: 12px 14px !important;
     box-sizing: border-box !important;
   }
 
-  /* القسم الأول: مساحة الشعار */
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child,
-  /* القسم الثاني: مساحة عنوان المنصة */
-  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child,
-  /* القسم الثالث: مساحة بيانات المركز والترخيص */
+  /* القسم الأول: إطار الشعار */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* القسم الثاني: إطار عنوان المنصة، مع إبقاء العنوان وسطره الفرعي داخل الإطار نفسه */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-brand-area > div:last-child {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    box-sizing: border-box !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  /* القسم الثالث: إطار بيانات المركز والترخيص */
   html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > div.abq-header-license-area {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    gap: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* حماية الإطارات الثلاثة من قواعد display:contents السابقة */
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-logo-section,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section,
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame > .abq-header-license-area {
+    display: flex !important;
     box-sizing: border-box !important;
   }
 }
