@@ -22,6 +22,7 @@
     if (!heading) return;
     const section = heading.closest("section") || heading.parentElement;
     if (!section || section.querySelector(".abq-articles-library")) return;
+    if (!section.id) section.id = "articles";
     if (!document.getElementById("abq-articles-library-style")) {
       const style = document.createElement("style");
       style.id = "abq-articles-library-style";
@@ -63,7 +64,7 @@
         const tools = el("div", "abq-articles-tools");
         const search = el("input");
         search.type = "search";
-        search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
+        search.placeholder = "ابحث بعنوان البحث أو التصنيف أو كلمات من المحتوى...";
         search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
         const category = el("select");
         category.setAttribute("aria-label", "تصفية الأبحاث حسب التصنيف");
