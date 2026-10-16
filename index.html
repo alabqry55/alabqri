@@ -14134,21 +14134,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 
 <script id="abq-audio-welcome-script">
-/* ترحيب صوتي: تشغيل تلقائي أكثر موثوقية مع انتظار تهيئة أصوات الهاتف وتجنب إلغاء النطق عند بدء الصفحة */
+/* ترحيب صوتي: معالجة تحميل الأصوات المتأخر وتسجيل أسباب التعثر مع إبقاء التشغيل اليدوي متاحًا */
 (function(){
   'use strict';
   var button=document.getElementById('abq-audio-welcome-btn');
   var totalEl=document.getElementById('abq-visitor-count');
   if(!button||!totalEl) return;
   var autoAttempted=false;
-  var autoNeedsGesture=false;
   var waitingForCount=false;
   var voicesRetryUsed=false;
-  var autoStarted=false;
-  var autoTryCount=0;
   var lastSpeechError='';
-  var voiceWaitTimer=null;
-  var autoStartTimer=null;
   function currentCount(){
     var raw=(totalEl.textContent||'').replace(/,/g,'').trim();
     var value=Number(raw);
@@ -14181,100 +14176,51 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var total=currentCount();
     if(total===null){
       waitingForCount=!!manual;
-      if(manual) button.textContent='⏳ جارٍ تجهيز الترحيب الصوتي…';
+      button.textContent='⏳ جارٍ تجهيز الترحيب الصوتي…';
       return;
     }
     waitingForCount=false;
-    var voices=getArabicVoices();
-    /* بعض هواتف Android لا تُرجع الأصوات إلا بعد voiceschanged؛ انتظر قليلًا قبل استخدام صوت النظام الافتراضي. */
-    if(!manual && voices.length===0 && !voicesRetryUsed){
-      if(!voiceWaitTimer){
-        button.textContent='⏳ جارٍ تجهيز الترحيب الصوتي…';
-        voiceWaitTimer=window.setTimeout(function(){
-          voiceWaitTimer=null;
-          voicesRetryUsed=true;
-          speakWelcome(false);
-        },900);
-      }
-      return;
-    }
-    if(!manual) autoTryCount++;
     var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشريهْ. تحت إشراف الدكتور أحمد السَّيِّد رَسَّهْ، أحمد الزَمخْشَري. أهلًا بكم في منصة العبقري، حيث نَرتَقي بِالإِنْسان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَلْ. أنت الزائر الكريم رقم '+total+' لمنصة العبقري.';
     var utterance=new SpeechSynthesisUtterance(message);
     utterance.lang='ar-EG';
     utterance.rate=0.88;
     utterance.pitch=0.98;
     utterance.volume=1;
-    var preferred=chooseVoice(voices);
+    var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
-      autoNeedsGesture=false;
-      autoStarted=true;
       lastSpeechError='';
-      if(autoStartTimer){window.clearTimeout(autoStartTimer);autoStartTimer=null;}
       button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
       button.setAttribute('aria-pressed','true');
     };
     utterance.onend=function(){
-      autoNeedsGesture=false;
       lastSpeechError='';
       button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     };
     utterance.onerror=function(event){
-      autoNeedsGesture=true;
       lastSpeechError=(event&&event.error)||'unknown';
       console.warn('[ALABQRI audio] تعذر تشغيل الترحيب الصوتي. السبب:',lastSpeechError,event||'');
       button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     };
     try{
-      var synth=window.speechSynthesis;
-      /* لا تستدعِ cancel() في أول تشغيل؛ بعض متصفحات الهاتف تُسكت أول نطق إذا أُلغي الطابور الفارغ قبل speak(). */
-      if(synth.speaking||synth.pending){
-        synth.cancel();
-        window.setTimeout(function(){
-          try{synth.speak(utterance);}catch(error){
-            autoNeedsGesture=true;
-            lastSpeechError=(error&&error.name)||'exception';
-            console.warn('[ALABQRI audio] تعذر استكمال النطق بعد إيقاف نطق سابق:',error);
-            button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
-            button.setAttribute('aria-pressed','false');
-          }
-        },120);
-      }else{
-        synth.speak(utterance);
-      }
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
       if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
     }catch(error){
-      autoNeedsGesture=true;
       lastSpeechError=(error&&error.name)||'exception';
       console.warn('[ALABQRI audio] حدث استثناء أثناء طلب تشغيل الترحيب الصوتي:',error);
       button.textContent='🔊 اضغط لتشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     }
-    /* إذا لم يبدأ النطق إطلاقًا، أعد محاولة تلقائية واحدة بعد تهيئة المحرك؛ لا تتكرر المحاولات بلا نهاية. */
-    if(!manual && autoTryCount===1){
-      autoStartTimer=window.setTimeout(function(){
-        autoStartTimer=null;
-        if(!autoStarted && autoTryCount<2 && currentCount()!==null){
-          console.warn('[ALABQRI audio] لم يبدأ النطق في المحاولة الأولى؛ إعادة محاولة تلقائية أخيرة.');
-          speakWelcome(false);
-        }
-      },2200);
-    }
   }
   function handleVoicesChanged(){
     var voices=getArabicVoices();
-    if(voiceWaitTimer){
-      window.clearTimeout(voiceWaitTimer);
-      voiceWaitTimer=null;
+    if(voices.length && lastSpeechError==='voice-unavailable' && !voicesRetryUsed && currentCount()!==null){
       voicesRetryUsed=true;
-      if(!autoStarted && currentCount()!==null) speakWelcome(false);
-      return;
-    }
-    if(voices.length && lastSpeechError==='voice-unavailable' && !autoStarted && autoTryCount<2 && currentCount()!==null){
       lastSpeechError='';
+      console.info('[ALABQRI audio] أُعيدت محاولة الترحيب مرة واحدة بعد تحميل الأصوات العربية.');
       speakWelcome(false);
     }
   }
@@ -14290,41 +14236,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }catch(error){
     console.warn('[ALABQRI audio] تعذر إعداد متابعة تحميل الأصوات:',error);
   }
-  button.addEventListener('click',function(){
-    if(autoStartTimer){window.clearTimeout(autoStartTimer);autoStartTimer=null;}
-    speakWelcome(true);
-  });
-  /* عند منع المتصفح للصوت تلقائيًا فقط، يظل زر الاستماع اليدوي متاحًا؛ لا يمكن للكود إلغاء سياسة المتصفح. */
-  function retryWelcomeAfterGesture(event){
-    if(event&&event.target&&(event.target===button||button.contains(event.target))) return;
-    if(!autoNeedsGesture||waitingForCount||!currentCount()) return;
-    autoNeedsGesture=false;
-    speakWelcome(true);
-  }
-  ['pointerdown','touchstart','keydown','click'].forEach(function(eventName){
-    document.addEventListener(eventName,retryWelcomeAfterGesture,{capture:true,passive:true,once:false});
-  });
-  function startAutomaticWelcome(){
-    if(autoAttempted||currentCount()===null) return;
-    autoAttempted=true;
-    /* مهلة قصيرة لتجهيز الصفحة ومحرك النطق قبل أول محاولة. */
-    autoStartTimer=window.setTimeout(function(){
-      autoStartTimer=null;
-      speakWelcome(false);
-    },300);
-  }
+  button.addEventListener('click',function(){speakWelcome(true);});
   var observer=new MutationObserver(function(){
     if(waitingForCount&&currentCount()!==null) speakWelcome(true);
-    startAutomaticWelcome();
+    if(!autoAttempted&&currentCount()!==null){autoAttempted=true;speakWelcome(false);}
   });
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
-  if(currentCount()!==null) startAutomaticWelcome();
-  window.addEventListener('pageshow',function(){
-    if(!autoStarted&&autoAttempted&&autoTryCount===0&&currentCount()!==null){
-      if(autoStartTimer) window.clearTimeout(autoStartTimer);
-      autoStartTimer=window.setTimeout(function(){autoStartTimer=null;speakWelcome(false);},350);
-    }
-  });
+  if(currentCount()!==null&&!autoAttempted){autoAttempted=true;speakWelcome(false);}
 })();
 </script>
 
