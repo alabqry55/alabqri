@@ -26,6 +26,10 @@ export async function onRequest(context) {
           '<script src="/assets/visitor-heartbeat.js?v=20261014-1" defer></script>',
           { html: true }
         );
+        element.append(
+          '<script src="/assets/articles-library.js?v=20261016-1" defer></script>',
+          { html: true }
+        );
       }
     })
     .transform(response);
