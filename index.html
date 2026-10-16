@@ -14141,6 +14141,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   var totalEl=document.getElementById('abq-visitor-count');
   if(!button||!totalEl) return;
   var autoAttempted=false;
+  var autoNeedsGesture=false;
   var waitingForCount=false;
   var voicesRetryUsed=false;
   var lastSpeechError='';
@@ -14189,6 +14190,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
+      autoNeedsGesture=false;
       lastSpeechError='';
       button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
       button.setAttribute('aria-pressed','true');
@@ -14199,6 +14201,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       button.setAttribute('aria-pressed','false');
     };
     utterance.onerror=function(event){
+      autoNeedsGesture=true;
       lastSpeechError=(event&&event.error)||'unknown';
       console.warn('[ALABQRI audio] تعذر تشغيل الترحيب الصوتي. السبب:',lastSpeechError,event||'');
       button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
@@ -14209,6 +14212,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       window.speechSynthesis.speak(utterance);
       if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
     }catch(error){
+      autoNeedsGesture=true;
       lastSpeechError=(error&&error.name)||'exception';
       console.warn('[ALABQRI audio] حدث استثناء أثناء طلب تشغيل الترحيب الصوتي:',error);
       button.textContent='🔊 اضغط لتشغيل الترحيب الصوتي';
@@ -14237,6 +14241,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
     console.warn('[ALABQRI audio] تعذر إعداد متابعة تحميل الأصوات:',error);
   }
   button.addEventListener('click',function(){speakWelcome(true);});
+  /* إعادة المحاولة داخل أول تفاعل حقيقي إذا منع المتصفح التشغيل التلقائي؛ لا يمكن تجاوز سياسة المتصفح دون تفاعل المستخدم. */
+  function retryWelcomeAfterGesture(event){
+    if(event&&event.target&&(event.target===button||button.contains(event.target))) return;
+    if(!autoNeedsGesture||waitingForCount||!currentCount()) return;
+    autoNeedsGesture=false;
+    speakWelcome(true);
+  }
+  ['pointerdown','touchstart','keydown','click'].forEach(function(eventName){
+    document.addEventListener(eventName,retryWelcomeAfterGesture,{capture:true,passive:true,once:false});
+  });
   var observer=new MutationObserver(function(){
     if(waitingForCount&&currentCount()!==null) speakWelcome(true);
     if(!autoAttempted&&currentCount()!==null){autoAttempted=true;speakWelcome(false);}
