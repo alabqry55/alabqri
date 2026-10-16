@@ -27,7 +27,7 @@ export async function onRequest(context) {
           { html: true }
         );
         element.append(
-          '<script src="/assets/articles-library.js?v=20261016-2" defer></script>',
+          '<script src="/assets/articles-library.js?v=20261016-3" defer></script>',
           { html: true }
         );
       }
