@@ -103,6 +103,14 @@
             details.appendChild(el("summary", "", "قراءة البحث"));
             details.appendChild(el("div", "abq-article-content", a.content));
             card.appendChild(details);
+            if (adminMode) {
+              const btn = el("button", "", "تعديل المقال");
+              btn.type = "button";
+              btn.dataset.abqEdit = "1";
+              btn.style.cssText = "margin-top:.8rem;padding:.55rem .8rem;border:1px solid #b88a2b;border-radius:10px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+              btn.addEventListener("click", () => startEditing(a));
+              card.appendChild(btn);
+            }
             grid.appendChild(card);
           });
         }
@@ -110,6 +118,7 @@
         // Secure inline editor: the admin key is entered by the authorized editor and
         // remains only in this page's memory. It is never persisted in localStorage.
         let adminKey = "";
+        let adminMode = false;
         const adminBar = el("div", "abq-articles-tools");
         const adminButton = el("button", "", "إدارة محتوى المقالات");
         adminButton.type = "button";
@@ -187,21 +196,11 @@
             if (!entered) return;
             adminKey = entered.trim();
           }
-          const oldButtons = root.querySelectorAll("[data-abq-edit]");
-          oldButtons.forEach(b => b.remove());
-          articles.forEach(article => {
-            const card = Array.from(grid.children).find(c => c.querySelector("h3")?.textContent === article.title);
-            if (!card) return;
-            const btn = el("button", "", "تعديل المقال");
-            btn.type = "button";
-            btn.dataset.abqEdit = "1";
-            btn.style.cssText = "margin-top:.8rem;padding:.55rem .8rem;border:1px solid #b88a2b;border-radius:10px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-            btn.addEventListener("click", () => startEditing(article));
-            card.appendChild(btn);
-          });
+          adminMode = true;
+          render();
           editorStatus.textContent = "وضع الإدارة مفعّل لهذه الجلسة. اختر «تعديل المقال» من البطاقة المطلوبة.";
           editForm.hidden = true;
-          adminButton.textContent = "وضع الإدارة مفعّل — اضغط لإعادة عرض أزرار التعديل";
+          adminButton.textContent = "وضع الإدارة مفعّل";
         });
         cancelButton.addEventListener("click", () => { editForm.hidden = true; });
         editForm.addEventListener("submit", async event => {
