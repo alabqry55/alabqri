@@ -261,8 +261,8 @@
         editForm.addEventListener("submit", async event => {
           event.preventDefault();
           if (!adminKey) { editorStatus.textContent = "أدخل مفتاح الإدارة أولًا."; return; }
-          if (creatingArticle && !editForm.elements.scheduledAt.value) {
-            editorStatus.textContent = "حدد موعد نشر مستقبليًا قبل حفظ المقال الجديد.";
+          if (creatingArticle && (!editForm.elements.scheduledAt.value || Number.isNaN(new Date(editForm.elements.scheduledAt.value).getTime()) || new Date(editForm.elements.scheduledAt.value).getTime() <= Date.now())) {
+            editorStatus.textContent = "حدد موعد نشر في المستقبل قبل حفظ المقال الجديد.";
             return;
           }
           saveButton.disabled = true;
