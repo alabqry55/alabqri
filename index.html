@@ -15690,7 +15690,7 @@ window.AbqToast = (function(){
     try{ABQ_DYNAMIC_ARTICLES=JSON.parse(localStorage.getItem(ABQ_ARTICLE_STORAGE)||'[]');if(!Array.isArray(ABQ_DYNAMIC_ARTICLES))ABQ_DYNAMIC_ARTICLES=[];}catch(e){ABQ_DYNAMIC_ARTICLES=[];}
     function getAllArticles(){
       const seenTitles=new Set();
-      const normalizedTitle=value=>String(value||'').normalize('NFKC').replace(/[\\u064B-\\u065F\\u0670\\u0640]/g,'').replace(/[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}]/gu,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/\\s+/g,' ').trim().toLocaleLowerCase('ar');
+      const normalizedTitle=value=>String(value||'').normalize('NFKC').replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/\s+/g,' ').trim().toLocaleLowerCase('ar');
       return [...ABQ_DYNAMIC_ARTICLES, ...ABQ_STATIC_ARTICLES].filter(article=>{
         const titleKey=normalizedTitle(article&&article.title);
         if(!titleKey)return true;
