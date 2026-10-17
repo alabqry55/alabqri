@@ -146,10 +146,14 @@ export async function onRequest({request, env}) {
           continue;
         }
         const selected = matches.find(article => String(article.id || "") === canonical.id) || matches[0];
+        const alreadyCanonical = String(selected.id || "") === canonical.id;
         const normalized = {
           ...selected,
           id: canonical.id,
-          date: String(selected.id || "") === canonical.id ? selected.date : canonical.date
+          title: alreadyCanonical ? selected.title : canonical.title,
+          date: alreadyCanonical ? selected.date : canonical.date,
+          excerpt: alreadyCanonical ? selected.excerpt : canonical.excerpt,
+          content: alreadyCanonical ? selected.content : canonical.content
         };
         articles = articles.filter(article => !sameArticle(article, canonical));
         articles.push(normalized);
