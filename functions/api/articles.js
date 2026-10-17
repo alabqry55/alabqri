@@ -123,7 +123,9 @@ async function ensureTable(db) {
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`).run();
-  // Safe, additive migration for existing D1 databases; no article rows or dates are rewritten.
+}
+async function ensureScheduleColumn(db) {
+  // Run only after an authenticated admin save, never during a public read.
   try {
     await db.prepare("ALTER TABLE articles ADD COLUMN scheduled_at TEXT").run();
   } catch (error) {
@@ -143,11 +145,20 @@ export async function onRequest({request, env}) {
     if (request.method === "GET") {
       const suppliedAuth = (request.headers.get("Authorization") || "");
       const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
-      const {results=[]} = await env.DB.prepare(
-        isAdmin
-          ? "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles ORDER BY updated_at DESC, created_at DESC"
-          : "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE scheduled_at IS NULL OR datetime(scheduled_at) <= datetime('now') ORDER BY updated_at DESC, created_at DESC"
-      ).all();
+      let results = [];
+      try {
+        const response = await env.DB.prepare(
+          isAdmin
+            ? "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles ORDER BY updated_at DESC, created_at DESC"
+            : "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE scheduled_at IS NULL OR datetime(scheduled_at) <= datetime('now') ORDER BY updated_at DESC, created_at DESC"
+        ).all();
+        results = response.results || [];
+      } catch (error) {
+        // Existing databases are readable before an authorized save performs the additive migration.
+        if (!/no such column: scheduled_at/i.test(String(error?.message || error))) throw error;
+        const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+        results = legacy.results || [];
+      }
       // Keep all three dated editorial records visible without duplicates. A legacy
       // row with an equivalent title is normalized to the canonical ID/date in the
       // read response; the next authorized save writes the canonical ID to D1.
@@ -191,6 +202,7 @@ export async function onRequest({request, env}) {
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
+      await ensureScheduleColumn(env.DB);
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
