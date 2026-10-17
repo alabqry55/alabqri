@@ -14145,6 +14145,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
   var voicesRetryUsed=false;
   var lastSpeechError='';
   var automaticRetryUsed=false;
+  var welcomeSessionKey='alabqri-welcome-spoken-v1';
+  function wasWelcomedThisTab(){
+    try{return window.sessionStorage.getItem(welcomeSessionKey)==='1';}catch(e){return false;}
+  }
+  function markWelcomedThisTab(){
+    try{window.sessionStorage.setItem(welcomeSessionKey,'1');}catch(e){}
+  }
   function currentCount(){
     var raw=(totalEl.textContent||'').replace(/,/g,'').trim();
     var value=Number(raw);
@@ -14174,6 +14181,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
       console.warn('[ALABQRI audio] واجهة النطق الصوتي غير مدعومة في هذا المتصفح.');
       return;
     }
+    /* لا نكرر الترحيب تلقائيًا عند إعادة تحميل الصفحة داخل جلسة علامة التبويب؛ يظل التشغيل اليدوي متاحًا دائمًا. */
+    if(!manual && wasWelcomedThisTab()){
+      removeActivationListeners();
+      button.textContent='🔊 إعادة الاستماع للترحيب الصوتي';
+      button.setAttribute('aria-pressed','false');
+      return;
+    }
     var total=currentCount();
     /* لا نربط بدء الترحيب بنجاح عداد الزوار؛ إن تأخر العداد تُقال الرسالة دون رقم الزائر. */
     waitingForCount=false;
@@ -14186,6 +14200,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
+      markWelcomedThisTab();
       lastSpeechError='';
       if(typeof removeActivationListeners==='function') removeActivationListeners();
       button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
