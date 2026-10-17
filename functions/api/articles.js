@@ -230,6 +230,44 @@ export async function onRequest({request, env}) {
         .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt).run();
       return json({ok:true,id:a.id,scheduledAt});
     }
+    if (body.action === "saveMany") {
+      if (!Array.isArray(body.articles) || body.articles.length < 1 || body.articles.length > 30) {
+        return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
+      }
+      await ensureScheduleColumn(env.DB);
+      const incoming = body.articles;
+      const ids = new Set();
+      const titles = new Set();
+      for (const a of incoming) {
+        if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
+            a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
+            a.content.length > 200000 || !CATEGORIES.has(a.category) ||
+            typeof a.excerpt !== "string" || a.excerpt.length > 2000 ||
+            typeof a.date !== "string" || a.date.length > 80) {
+          return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
+        }
+        const schedule = String(a.scheduledAt || "");
+        if (!schedule || !/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d{1,3})?)?(?:Z|[+-]\\d{2}:?\\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
+          return json({error:"كل مقال في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
+        }
+        const titleKey = normalizeTitle(a.title);
+        if (ids.has(String(a.id)) || titles.has(titleKey) || canonicalArticles.some(c => normalizeTitle(c.title) === titleKey)) {
+          return json({error:"توجد هوية أو عناوين مكررة داخل الدفعة أو بين المقالات المرجعية؛ لم يُحفظ أي مقال."},409);
+        }
+        ids.add(String(a.id));
+        titles.add(titleKey);
+      }
+      const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
+      for (const a of incoming) {
+        const conflict = existingRows.find(row => String(row.id) === String(a.id) || normalizeTitle(row.title) === normalizeTitle(a.title));
+        if (conflict) return json({error:"يوجد مقال محفوظ مسبقًا يتعارض مع «" + a.title + "». لم يُحفظ أي مقال من الدفعة؛ راجع المقالات الحالية أولًا.",duplicateId:conflict.id},409);
+      }
+      const statements = incoming.map(a => env.DB.prepare(
+        "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
+      ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,String(a.scheduledAt)));
+      await env.DB.batch(statements);
+      return json({ok:true,saved:incoming.length,ids:incoming.map(a=>a.id)});
+    }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
       await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)).run();
