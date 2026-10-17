@@ -14187,6 +14187,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
       lastSpeechError='';
+      if(typeof removeActivationListeners==='function') removeActivationListeners();
       button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
       button.setAttribute('aria-pressed','true');
     };
