@@ -57,7 +57,12 @@ async function ensureTable(db) {
 }
 
 export async function onRequest({request, env}) {
-  if (!env.DB) return json({error:"D1 binding DB is not configured."},500);
+  // Read-only fallback keeps the canonical article visible in preview environments
+  // where the D1 binding is not attached. Writes still require a configured database.
+  if (!env.DB) {
+    if (request.method === "GET") return json({articles:[canonicalAzkarArticle], fallback:true});
+    return json({error:"D1 binding DB is not configured."},500);
+  }
   try {
     await ensureTable(env.DB);
     if (request.method === "GET") {
