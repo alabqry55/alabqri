@@ -285,8 +285,13 @@
             .then(async response => {
               const data = await response.json().catch(()=>({}));
               if (!response.ok || !Array.isArray(data.articles) || !data.admin) {
-                if (response.status === 401) adminKey = "";
-                throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : (data.error || "تعذر تحميل المقالات المجدولة."));
+                if (response.status === 401 || !data.admin) adminKey = "";
+                const message = data.fallback
+                  ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال."
+                  : (!data.admin
+                    ? "لم يتم قبول مفتاح الإدارة أو لم يُضبط ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages."
+                    : (data.error || "تعذر تحميل المقالات المجدولة."));
+                throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : message);
               }
               articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
               adminMode = true;
