@@ -232,11 +232,11 @@ export async function onRequest({request, env}) {
       return json({ok:true,id:a.id,scheduledAt});
     }
     if (body.action === "saveMany" || body.action === "seedSchedule") {
-      if (!Array.isArray(body.articles) || body.articles.length < 1 || body.articles.length > 30) {
+      const incoming = body.action === "seedSchedule" ? scheduledArticles : body.articles;
+      if (!Array.isArray(incoming) || incoming.length < 1 || incoming.length > 30) {
         return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
       }
       await ensureScheduleColumn(env.DB);
-      const incoming = body.action === "seedSchedule" ? scheduledArticles : body.articles;
       const ids = new Set();
       const titles = new Set();
       for (const a of incoming) {
