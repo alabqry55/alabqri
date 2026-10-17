@@ -20,7 +20,8 @@ export async function onRequestGet(context) {
   }
 
   // Strict allowlist: this proxy cannot be used as an open proxy.
-  if (upstream.protocol !== "https:" || upstream.hostname !== "www.image2url.com") {
+  const allowedHosts = new Set(["www.image2url.com", "cdn.imagetourls.com"]);
+  if (upstream.protocol !== "https:" || !allowedHosts.has(upstream.hostname)) {
     return new Response("Image host not allowed", { status: 403 });
   }
 
