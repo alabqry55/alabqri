@@ -104,7 +104,7 @@ export async function onRequest({request, env}) {
     // This targeted cleanup is idempotent and leaves all other articles untouched.
     const {results: legacyArticleRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
     for (const row of legacyArticleRows) {
-      if (String(row.id || "") === "hijama-prophetic-medicine" || normalizeTitle(row.title) === normalizeTitle("الحجامة: الطب النبوي بمنهج حديث")) {
+      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || (normalizeTitle(row.title).includes(normalizeTitle("الحجامة")) && normalizeTitle(row.title).includes(normalizeTitle("الطب النبوي")))) {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
       }
     }
@@ -114,7 +114,7 @@ export async function onRequest({request, env}) {
       // row with an equivalent title is normalized to the canonical ID/date in the
       // read response; the next authorized save writes the canonical ID to D1.
       // Once saved under that ID, the editor can intentionally change its date.
-      let articles = [...results];
+      let articles = results.filter(article => !(String(article.id || "").toLocaleLowerCase("en").includes("hijama") || (normalizeTitle(article.title).includes(normalizeTitle("الحجامة")) && normalizeTitle(article.title).includes(normalizeTitle("الطب النبوي")))));
       for (const canonical of canonicalArticles) {
         const matches = articles.filter(article => sameArticle(article, canonical));
         if (!matches.length) {
