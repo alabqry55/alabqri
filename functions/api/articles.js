@@ -134,17 +134,25 @@ export async function onRequest({request, env}) {
     await ensureTable(env.DB);
     if (request.method === "GET") {
       const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-      // Keep all three dated editorial records visible. If D1 already contains a
-      // matching article, retain its editable content and database ID but preserve
-      // the requested editorial date until an authorized save explicitly changes it.
-      const articles = [...results];
+      // Keep all three dated editorial records visible without duplicates. A legacy
+      // row with an equivalent title is normalized to the canonical ID/date in the
+      // read response; the next authorized save writes the canonical ID to D1.
+      // Once saved under that ID, the editor can intentionally change its date.
+      let articles = [...results];
       for (const canonical of canonicalArticles) {
-        const index = articles.findIndex(article => sameArticle(article, canonical));
-        if (index === -1) {
+        const matches = articles.filter(article => sameArticle(article, canonical));
+        if (!matches.length) {
           articles.push(canonical);
-        } else {
-          articles[index] = {...articles[index], date: canonical.date};
+          continue;
         }
+        const selected = matches.find(article => String(article.id || "") === canonical.id) || matches[0];
+        const normalized = {
+          ...selected,
+          id: canonical.id,
+          date: String(selected.id || "") === canonical.id ? selected.date : canonical.date
+        };
+        articles = articles.filter(article => !sameArticle(article, canonical));
+        articles.push(normalized);
       }
       return json({articles});
     }
