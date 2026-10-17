@@ -197,6 +197,14 @@
         editorActions.append(saveButton,cancelButton);
         const editorStatus = el("p", "abq-article-meta", "");
         editForm.append(editorActions,editorStatus);
+        const adminStatus = el("p", "abq-article-meta", "");
+        adminStatus.setAttribute("role", "status");
+        adminStatus.style.cssText = "padding:.6rem .8rem;border-radius:10px;background:#f8fafc;line-height:1.8";
+        function setAdminStatus(message) {
+          adminStatus.textContent = message;
+          editorStatus.textContent = message;
+        }
+        root.insertBefore(adminStatus, tools);
         root.insertBefore(editForm, tools);
 
         let creatingArticle = false;
@@ -240,13 +248,13 @@
         addButton.addEventListener("click", startCreating);
         importButton.addEventListener("click", async () => {
           if (!adminKey || !adminMode) {
-            editorStatus.textContent = "فعّل وضع الإدارة أولًا.";
+            setAdminStatus("فعّل وضع الإدارة أولًا.");
             return;
           }
           if (!window.confirm("سيتم فحص خطة النشر ثم حفظ المقالات الاثني عشر بجدولة مستقبلية. إذا وُجد تعارض في عنوان أو معرّف، سترفض الخدمة الدفعة كلها دون حفظ أي جزء. هل تريد المتابعة؟")) return;
           importButton.disabled = true;
           importButton.textContent = "جارٍ فحص الخطة وحفظها...";
-          editorStatus.textContent = "جارٍ تحميل الخطة ومقارنتها بالمقالات المحفوظة...";
+          setAdminStatus("جارٍ فحص خطة النشر ومقارنتها بالمقالات المحفوظة...");
           try {
             const response = await fetch("/api/articles", {
               method:"POST",
@@ -266,10 +274,10 @@
             }
             articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
             render();
-            editorStatus.textContent = "تم حفظ "+result.saved+" مقالًا في قاعدة البيانات بجدولة مستقبلية، وتم تأكيد إعادة تحميل القائمة.";
+            setAdminStatus("تم حفظ "+result.saved+" مقالًا في قاعدة البيانات بجدولة مستقبلية، وتم تأكيد إعادة تحميل القائمة.");
             importButton.textContent = "تم تحميل خطة النشر";
           } catch (error) {
-            editorStatus.textContent = error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.";
+            setAdminStatus(error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.");
           } finally {
             importButton.disabled = false;
             if (importButton.textContent !== "تم تحميل خطة النشر") importButton.textContent = "تحميل خطة النشر (12 مقالًا)";
@@ -298,11 +306,11 @@
               addButton.hidden = false;
               importButton.hidden = false;
               render();
-              editorStatus.textContent = "تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.";
+              setAdminStatus("تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.");
               editForm.hidden = true;
               adminButton.textContent = "وضع الإدارة مفعّل";
             })
-            .catch(error => { editorStatus.textContent = error.message || "تعذر تفعيل الإدارة."; });
+            .catch(error => { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); });
         });
         cancelButton.addEventListener("click", () => { editForm.hidden = true; });
         editForm.addEventListener("submit", async event => {
