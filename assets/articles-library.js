@@ -103,9 +103,147 @@
             details.appendChild(el("summary", "", "قراءة البحث"));
             details.appendChild(el("div", "abq-article-content", a.content));
             card.appendChild(details);
+            if (adminMode) {
+              const btn = el("button", "", "تعديل المقال");
+              btn.type = "button";
+              btn.dataset.abqEdit = "1";
+              btn.style.cssText = "margin-top:.8rem;padding:.55rem .8rem;border:1px solid #b88a2b;border-radius:10px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+              btn.addEventListener("click", () => startEditing(a));
+              card.appendChild(btn);
+            }
             grid.appendChild(card);
           });
         }
+
+        // Secure inline editor: the admin key is entered by the authorized editor and
+        // remains only in this page's memory. It is never persisted in localStorage.
+        let adminKey = "";
+        let adminMode = false;
+        const adminBar = el("div", "abq-articles-tools");
+        const adminButton = el("button", "", "إدارة محتوى المقالات");
+        adminButton.type = "button";
+        adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+        adminBar.style.gridTemplateColumns = "1fr";
+        adminBar.appendChild(adminButton);
+        root.insertBefore(adminBar, tools);
+
+        const editForm = el("form", "abq-article-card");
+        editForm.hidden = true;
+        editForm.style.margin = "1rem 0";
+        const field = (labelText, name, value, multiline=false) => {
+          const wrap = el("label");
+          wrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
+          wrap.appendChild(el("span", "", labelText));
+          const input = multiline ? el("textarea") : el("input");
+          input.name = name;
+          input.value = value || "";
+          input.required = ["title","date","excerpt","content"].includes(name);
+          input.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit;line-height:1.8";
+          if (multiline) { input.rows = name === "content" ? 14 : 3; input.maxLength = name === "content" ? 200000 : 2000; }
+          else if (name === "date") input.maxLength = 80;
+          else if (name === "title") input.maxLength = 240;
+          wrap.appendChild(input);
+          return wrap;
+        };
+        const editTitle = el("h3", "", "تعديل مقال");
+        const editId = el("input");
+        editId.type = "hidden";
+        editId.name = "id";
+        const editCategoryWrap = el("label");
+        editCategoryWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
+        editCategoryWrap.appendChild(el("span", "", "التصنيف"));
+        const editCategory = el("select");
+        editCategory.name = "category";
+        ["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"].forEach(c => {
+          const option = el("option", "", c); option.value = c; editCategory.appendChild(option);
+        });
+        editCategory.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit";
+        editCategoryWrap.appendChild(editCategory);
+        editForm.append(editTitle, editId,
+          field("عنوان المقال","title",""),
+          editCategoryWrap,
+          field("التاريخ (سيظل كما هو ما لم تغيّره)","date",""),
+          field("الوصف المختصر","excerpt","",true),
+          field("المحتوى الكامل","content","",true));
+        const editorActions = el("div");
+        editorActions.style.cssText = "display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem";
+        const saveButton = el("button", "", "حفظ التعديلات");
+        saveButton.type = "submit";
+        saveButton.style.cssText = adminButton.style.cssText;
+        const cancelButton = el("button", "", "إلغاء");
+        cancelButton.type = "button";
+        cancelButton.style.cssText = "padding:.7rem 1rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font:inherit;cursor:pointer";
+        editorActions.append(saveButton,cancelButton);
+        const editorStatus = el("p", "abq-article-meta", "");
+        editForm.append(editorActions,editorStatus);
+        root.insertBefore(editForm, tools);
+
+        function startEditing(article) {
+          editForm.elements.id.value = article.id;
+          editForm.elements.title.value = article.title || "";
+          editCategory.value = article.category || "موضوعات معرفية";
+          editForm.elements.date.value = article.date || "";
+          editForm.elements.excerpt.value = article.excerpt || "";
+          editForm.elements.content.value = article.content || "";
+          editTitle.textContent = "تعديل: " + (article.title || "مقال");
+          editorStatus.textContent = "التاريخ محفوظ كما هو؛ لا تغيّره إذا أردت الإبقاء عليه.";
+          editForm.hidden = false;
+          editForm.scrollIntoView({behavior:"smooth",block:"start"});
+        }
+        adminButton.addEventListener("click", () => {
+          if (!adminKey) {
+            const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
+            if (!entered) return;
+            adminKey = entered.trim();
+          }
+          adminMode = true;
+          render();
+          editorStatus.textContent = "وضع الإدارة مفعّل لهذه الجلسة. اختر «تعديل المقال» من البطاقة المطلوبة.";
+          editForm.hidden = true;
+          adminButton.textContent = "وضع الإدارة مفعّل";
+        });
+        cancelButton.addEventListener("click", () => { editForm.hidden = true; });
+        editForm.addEventListener("submit", async event => {
+          event.preventDefault();
+          if (!adminKey) { editorStatus.textContent = "أدخل مفتاح الإدارة أولًا."; return; }
+          saveButton.disabled = true;
+          saveButton.textContent = "جارٍ الحفظ...";
+          editorStatus.textContent = "جارٍ إرسال التعديلات إلى قاعدة البيانات...";
+          const article = {
+            id: editForm.elements.id.value,
+            title: editForm.elements.title.value.trim(),
+            category: editCategory.value,
+            date: editForm.elements.date.value.trim(),
+            excerpt: editForm.elements.excerpt.value.trim(),
+            content: editForm.elements.content.value
+          };
+          try {
+            const response = await fetch("/api/articles", {
+              method:"POST",
+              headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
+              body:JSON.stringify({action:"save",article}),
+              cache:"no-store"
+            });
+            const result = await response.json().catch(()=>({}));
+            if (!response.ok || !result.ok) {
+              if (response.status === 503) throw new Error("الحفظ غير مفعّل على هذه النسخة: راجع ربط D1 وسر ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages.");
+              if (response.status === 401) { adminKey = ""; throw new Error("مفتاح الإدارة غير صحيح. افتح إدارة المقالات وأدخل المفتاح الصحيح."); }
+              throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
+            }
+            editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ تحديث المقال...";
+            const index = articles.findIndex(a => String(a.id) === String(article.id));
+            if (index >= 0) articles[index] = article;
+            editForm.hidden = true;
+            render();
+            editorStatus.textContent = "تم حفظ المقال في قاعدة البيانات بنجاح.";
+          } catch (error) {
+            editorStatus.textContent = error?.message || "تعذر تأكيد الحفظ السحابي.";
+          } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = "حفظ التعديلات";
+          }
+        });
+
         search.addEventListener("input", render);
         category.addEventListener("change", render);
         render();
