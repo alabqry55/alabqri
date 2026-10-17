@@ -118,9 +118,16 @@ async function ensureTable(db) {
   await db.prepare(`CREATE TABLE IF NOT EXISTS articles (
     id TEXT PRIMARY KEY, title TEXT NOT NULL, category TEXT NOT NULL,
     date TEXT NOT NULL, excerpt TEXT NOT NULL DEFAULT '', content TEXT NOT NULL,
+    scheduled_at TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`).run();
+  // Safe, additive migration for existing D1 databases; no article rows or dates are rewritten.
+  try {
+    await db.prepare("ALTER TABLE articles ADD COLUMN scheduled_at TEXT").run();
+  } catch (error) {
+    if (!/duplicate column name/i.test(String(error?.message || error))) throw error;
+  }
 }
 
 export async function onRequest({request, env}) {
@@ -133,7 +140,13 @@ export async function onRequest({request, env}) {
   try {
     await ensureTable(env.DB);
     if (request.method === "GET") {
-      const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+      const suppliedAuth = (request.headers.get("Authorization") || "");
+      const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
+      const {results=[]} = await env.DB.prepare(
+        isAdmin
+          ? "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles ORDER BY updated_at DESC, created_at DESC"
+          : "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE scheduled_at IS NULL OR datetime(scheduled_at) <= datetime('now') ORDER BY updated_at DESC, created_at DESC"
+      ).all();
       // Keep all three dated editorial records visible without duplicates. A legacy
       // row with an equivalent title is normalized to the canonical ID/date in the
       // read response; the next authorized save writes the canonical ID to D1.
@@ -158,7 +171,18 @@ export async function onRequest({request, env}) {
         articles = articles.filter(article => !sameArticle(article, canonical));
         articles.push(normalized);
       }
-      return json({articles});
+      // Final guard against legacy duplicates: keep the newest record for each normalized title and ID.
+      const seenIds = new Set();
+      const seenTitles = new Set();
+      articles = articles.filter(article => {
+        const id = String(article.id || "");
+        const title = normalizeTitle(article.title);
+        if (!id || seenIds.has(id) || !title || seenTitles.has(title)) return false;
+        seenIds.add(id);
+        seenTitles.add(title);
+        return true;
+      });
+      return json({articles, admin:isAdmin});
     }
     if (request.method !== "POST") return json({error:"Method not allowed."},405);
     if (!env.ARTICLES_ADMIN_KEY) return json({error:"Articles admin secret is not configured."},503);
@@ -168,11 +192,21 @@ export async function onRequest({request, env}) {
     if (body.action === "save") {
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
-      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,updated_at)
-        VALUES(?1,?2,?3,?4,?5,?6,CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,updated_at=CURRENT_TIMESTAMP`)
-        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content).run();
-      return json({ok:true,id:a.id});
+      const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
+      if (scheduledAt !== null && (!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?(?:Z|[+-]\\d{2}:?\\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
+        return json({error:"Invalid scheduled publication date."},400);
+      }
+      const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles WHERE id <> ?1").bind(String(a.id)).all();
+      const normalizedNewTitle = normalizeTitle(a.title);
+      const duplicate = existingRows.find(row => normalizeTitle(row.title) === normalizedNewTitle);
+      if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
+      const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
+      if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
+      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
+        VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
+        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
+        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt).run();
+      return json({ok:true,id:a.id,scheduledAt});
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
