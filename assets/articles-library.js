@@ -128,11 +128,15 @@
         adminButton.type = "button";
         const addButton = el("button", "", "إضافة مقال مجدول");
         addButton.type = "button";
-        addButton.style.cssText = adminButton.style.cssText;
-        addButton.hidden = true;
+        const importButton = el("button", "", "تحميل خطة النشر (12 مقالًا)");
+        importButton.type = "button";
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+        addButton.style.cssText = adminButton.style.cssText;
+        importButton.style.cssText = adminButton.style.cssText;
+        addButton.hidden = true;
+        importButton.hidden = true;
         adminBar.style.gridTemplateColumns = "1fr";
-        adminBar.append(adminButton, addButton);
+        adminBar.append(adminButton, addButton, importButton);
         root.insertBefore(adminBar, tools);
 
         const editForm = el("form", "abq-article-card");
@@ -234,6 +238,46 @@
           editForm.scrollIntoView({behavior:"smooth",block:"start"});
         }
         addButton.addEventListener("click", startCreating);
+        importButton.addEventListener("click", async () => {
+          if (!adminKey || !adminMode) {
+            editorStatus.textContent = "فعّل وضع الإدارة أولًا.";
+            return;
+          }
+          if (!window.confirm("سيتم فحص خطة النشر ثم حفظ المقالات الاثني عشر بجدولة مستقبلية. إذا وُجد تعارض في عنوان أو معرّف، سترفض الخدمة الدفعة كلها دون حفظ أي جزء. هل تريد المتابعة؟")) return;
+          importButton.disabled = true;
+          importButton.textContent = "جارٍ فحص الخطة وحفظها...";
+          editorStatus.textContent = "جارٍ تحميل الخطة ومقارنتها بالمقالات المحفوظة...";
+          try {
+            const planResponse = await fetch("/assets/articles-schedule-2026.json", {headers:{"Accept":"application/json"},cache:"no-store"});
+            const plan = await planResponse.json();
+            if (!planResponse.ok || !Array.isArray(plan) || plan.length !== 12) throw new Error("تعذر تحميل خطة النشر الكاملة.");
+            const response = await fetch("/api/articles", {
+              method:"POST",
+              headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
+              body:JSON.stringify({action:"saveMany",articles:plan}),
+              cache:"no-store"
+            });
+            const result = await response.json().catch(()=>({}));
+            if (!response.ok || !result.ok) {
+              if (response.status === 401) { adminKey = ""; adminMode = false; }
+              throw new Error(result.error || "تعذر حفظ خطة النشر.");
+            }
+            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"});
+            const refreshedData = await refreshed.json().catch(()=>({}));
+            if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
+              throw new Error("تم إرسال الخطة، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
+            }
+            articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+            render();
+            editorStatus.textContent = "تم حفظ "+result.saved+" مقالًا في قاعدة البيانات بجدولة مستقبلية، وتم تأكيد إعادة تحميل القائمة.";
+            importButton.textContent = "تم تحميل خطة النشر";
+          } catch (error) {
+            editorStatus.textContent = error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.";
+          } finally {
+            importButton.disabled = false;
+            if (importButton.textContent !== "تم تحميل خطة النشر") importButton.textContent = "تحميل خطة النشر (12 مقالًا)";
+          }
+        });
         adminButton.addEventListener("click", () => {
           if (!adminKey) {
             const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
@@ -250,6 +294,7 @@
               articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
               adminMode = true;
               addButton.hidden = false;
+              importButton.hidden = false;
               render();
               editorStatus.textContent = "تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.";
               editForm.hidden = true;
