@@ -1,3 +1,4 @@
+import { scheduledArticles } from "../_lib/articles-schedule-2026.js";
 /** Cloudflare Pages Function: D1-backed articles library. */
 const CATEGORIES = new Set(["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
@@ -106,8 +107,9 @@ const canonicalAzkarArticle = {
 
 const canonicalArticles = [canonicalEnergyArticle, canonicalHijamaArticle, canonicalAzkarArticle];
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
-  .replace(/[✨🌿🍀]/gu, "").replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-  .replace(/[\sـ:：،؛,.!?؟]+/g, " ").trim();
+  .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
+  .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
+  .replace(/[\s:：،؛,.!?؟]+/g, " ").trim();
 const sameArticle = (article, canonical) =>
   String(article?.id || "") === canonical.id ||
   normalizeTitle(article?.title) === normalizeTitle(canonical.title) ||
@@ -118,9 +120,18 @@ async function ensureTable(db) {
   await db.prepare(`CREATE TABLE IF NOT EXISTS articles (
     id TEXT PRIMARY KEY, title TEXT NOT NULL, category TEXT NOT NULL,
     date TEXT NOT NULL, excerpt TEXT NOT NULL DEFAULT '', content TEXT NOT NULL,
+    scheduled_at TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`).run();
+}
+async function ensureScheduleColumn(db) {
+  // Run only after an authenticated admin save, never during a public read.
+  try {
+    await db.prepare("ALTER TABLE articles ADD COLUMN scheduled_at TEXT").run();
+  } catch (error) {
+    if (!/duplicate column name/i.test(String(error?.message || error))) throw error;
+  }
 }
 
 export async function onRequest({request, env}) {
@@ -133,19 +144,43 @@ export async function onRequest({request, env}) {
   try {
     await ensureTable(env.DB);
     if (request.method === "GET") {
-      const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-      // Keep all three dated editorial records visible without duplicates. A legacy
-      // row with an equivalent title is normalized to the canonical ID/date in the
-      // read response; the next authorized save writes the canonical ID to D1.
-      // Once saved under that ID, the editor can intentionally change its date.
+      const suppliedAuth = (request.headers.get("Authorization") || "");
+      const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
+      // An authenticated editor may safely apply the additive migration on first open,
+      // so scheduled items are visible in admin before the first save.
+      if (isAdmin) await ensureScheduleColumn(env.DB);
+      let allResults = [];
+      let hasScheduleColumn = true;
+      try {
+        const response = await env.DB.prepare(
+          "SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC"
+        ).all();
+        allResults = response.results || [];
+      } catch (error) {
+        if (!/no such column: scheduled_at/i.test(String(error?.message || error))) throw error;
+        hasScheduleColumn = false;
+        const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+        allResults = legacy.results || [];
+      }
+      // Filter public output only after retaining the full row set for canonical matching.
+      // Otherwise a future-dated canonical article could accidentally reappear via fallback.
+      const now = Date.now();
+      const results = isAdmin || !hasScheduleColumn ? allResults : allResults.filter(article => {
+        if (!article.scheduled_at) return true;
+        const timestamp = Date.parse(article.scheduled_at);
+        return Number.isFinite(timestamp) && timestamp <= now;
+      });
       let articles = [...results];
       for (const canonical of canonicalArticles) {
-        const matches = articles.filter(article => sameArticle(article, canonical));
-        if (!matches.length) {
+        const allMatches = allResults.filter(article => sameArticle(article, canonical));
+        const visibleMatches = articles.filter(article => sameArticle(article, canonical));
+        // A canonical record that exists but is scheduled for the future must remain hidden.
+        if (!visibleMatches.length && allMatches.length) continue;
+        if (!visibleMatches.length) {
           articles.push(canonical);
           continue;
         }
-        const selected = matches.find(article => String(article.id || "") === canonical.id) || matches[0];
+        const selected = visibleMatches.find(article => String(article.id || "") === canonical.id) || visibleMatches[0];
         const alreadyCanonical = String(selected.id || "") === canonical.id;
         const normalized = {
           ...selected,
@@ -158,7 +193,18 @@ export async function onRequest({request, env}) {
         articles = articles.filter(article => !sameArticle(article, canonical));
         articles.push(normalized);
       }
-      return json({articles});
+      // Final guard against legacy duplicates: keep the newest record for each normalized title and ID.
+      const seenIds = new Set();
+      const seenTitles = new Set();
+      articles = articles.filter(article => {
+        const id = String(article.id || "");
+        const title = normalizeTitle(article.title);
+        if (!id || seenIds.has(id) || !title || seenTitles.has(title)) return false;
+        seenIds.add(id);
+        seenTitles.add(title);
+        return true;
+      });
+      return json({articles, admin:isAdmin});
     }
     if (request.method !== "POST") return json({error:"Method not allowed."},405);
     if (!env.ARTICLES_ADMIN_KEY) return json({error:"Articles admin secret is not configured."},503);
@@ -166,13 +212,62 @@ export async function onRequest({request, env}) {
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
+      await ensureScheduleColumn(env.DB);
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
-      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,updated_at)
-        VALUES(?1,?2,?3,?4,?5,?6,CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,updated_at=CURRENT_TIMESTAMP`)
-        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content).run();
-      return json({ok:true,id:a.id});
+      const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
+      if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
+        return json({error:"Invalid scheduled publication date."},400);
+      }
+      const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles WHERE id <> ?1").bind(String(a.id)).all();
+      const normalizedNewTitle = normalizeTitle(a.title);
+      const duplicate = existingRows.find(row => normalizeTitle(row.title) === normalizedNewTitle);
+      if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
+      const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
+      if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
+      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
+        VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
+        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
+        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt).run();
+      return json({ok:true,id:a.id,scheduledAt});
+    }
+    if (body.action === "saveMany" || body.action === "seedSchedule") {
+      const incoming = body.action === "seedSchedule" ? scheduledArticles : body.articles;
+      if (!Array.isArray(incoming) || incoming.length < 1 || incoming.length > 30) {
+        return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
+      }
+      await ensureScheduleColumn(env.DB);
+      const ids = new Set();
+      const titles = new Set();
+      for (const a of incoming) {
+        if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
+            a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
+            a.content.length > 200000 || !CATEGORIES.has(a.category) ||
+            typeof a.excerpt !== "string" || a.excerpt.length > 2000 ||
+            typeof a.date !== "string" || a.date.length > 80) {
+          return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
+        }
+        const schedule = String(a.scheduledAt || "");
+        if (!schedule || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
+          return json({error:"كل مقال في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
+        }
+        const titleKey = normalizeTitle(a.title);
+        if (ids.has(String(a.id)) || titles.has(titleKey) || canonicalArticles.some(c => normalizeTitle(c.title) === titleKey)) {
+          return json({error:"توجد هوية أو عناوين مكررة داخل الدفعة أو بين المقالات المرجعية؛ لم يُحفظ أي مقال."},409);
+        }
+        ids.add(String(a.id));
+        titles.add(titleKey);
+      }
+      const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
+      for (const a of incoming) {
+        const conflict = existingRows.find(row => String(row.id) === String(a.id) || normalizeTitle(row.title) === normalizeTitle(a.title));
+        if (conflict) return json({error:"يوجد مقال محفوظ مسبقًا يتعارض مع «" + a.title + "». لم يُحفظ أي مقال من الدفعة؛ راجع المقالات الحالية أولًا.",duplicateId:conflict.id},409);
+      }
+      const statements = incoming.map(a => env.DB.prepare(
+        "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
+      ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,String(a.scheduledAt)));
+      await env.DB.batch(statements);
+      return json({ok:true,saved:incoming.length,ids:incoming.map(a=>a.id)});
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
