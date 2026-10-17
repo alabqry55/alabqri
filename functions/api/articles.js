@@ -151,7 +151,7 @@ export async function onRequest({request, env}) {
           ...selected,
           id: canonical.id,
           title: alreadyCanonical ? selected.title : canonical.title,
-          date: alreadyCanonical ? selected.date : canonical.date,
+          date: String(selected.date || "").trim() ? selected.date : canonical.date,
           excerpt: alreadyCanonical ? selected.excerpt : canonical.excerpt,
           content: alreadyCanonical ? selected.content : canonical.content
         };
