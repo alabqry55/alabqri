@@ -247,7 +247,7 @@ export async function onRequest({request, env}) {
           return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
         }
         const schedule = String(a.scheduledAt || "");
-        if (!schedule || !/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d{1,3})?)?(?:Z|[+-]\\d{2}:?\\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
+        if (!schedule || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
           return json({error:"كل مقال في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
         }
         const titleKey = normalizeTitle(a.title);
