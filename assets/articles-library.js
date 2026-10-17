@@ -248,13 +248,10 @@
           importButton.textContent = "جارٍ فحص الخطة وحفظها...";
           editorStatus.textContent = "جارٍ تحميل الخطة ومقارنتها بالمقالات المحفوظة...";
           try {
-            const planResponse = await fetch("/assets/articles-schedule-2026.json", {headers:{"Accept":"application/json"},cache:"no-store"});
-            const plan = await planResponse.json();
-            if (!planResponse.ok || !Array.isArray(plan) || plan.length !== 12) throw new Error("تعذر تحميل خطة النشر الكاملة.");
             const response = await fetch("/api/articles", {
               method:"POST",
               headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
-              body:JSON.stringify({action:"saveMany",articles:plan}),
+              body:JSON.stringify({action:"seedSchedule"}),
               cache:"no-store"
             });
             const result = await response.json().catch(()=>({}));
