@@ -14175,13 +14175,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
       return;
     }
     var total=currentCount();
-    if(total===null){
-      waitingForCount=!!manual;
-      button.textContent='⏳ جارٍ تجهيز الترحيب الصوتي…';
-      return;
-    }
+    /* لا نربط بدء الترحيب بنجاح عداد الزوار؛ إن تأخر العداد تُقال الرسالة دون رقم الزائر. */
     waitingForCount=false;
-    var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشريهْ. تحت إشراف الدكتور أحمد السَّيِّد رَسَّهْ، أحمد الزَمخْشَري. أهلًا بكم في منصة العبقري، حيث نَرتَقي بِالإِنْسان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَلْ. أنت الزائر الكريم رقم '+total+' لمنصة العبقري.';
+    var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشريهْ. تحت إشراف الدكتور أحمد السَّيِّد رَسَّهْ، أحمد الزَمخْشَري. أهلًا بكم في منصة العبقري، حيث نَرتَقي بِالإِنْسان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَلْ.'+(total!==null?' أنت الزائر الكريم رقم '+total+' لمنصة العبقري.':'');
     var utterance=new SpeechSynthesisUtterance(message);
     utterance.lang='ar-EG';
     utterance.rate=0.88;
@@ -14259,12 +14255,40 @@ document.addEventListener("DOMContentLoaded", ()=>{
     console.warn('[ALABQRI audio] تعذر إعداد متابعة تحميل الأصوات:',error);
   }
   button.addEventListener('click',function(){speakWelcome(true);});
+
+  /* إعادة محاولة واحدة داخل أول تفاعل حقيقي إذا رفض المتصفح التشغيل التلقائي. */
+  function removeActivationListeners(){
+    document.removeEventListener('pointerdown',retryFromFirstInteraction,true);
+    document.removeEventListener('touchstart',retryFromFirstInteraction,true);
+    document.removeEventListener('keydown',retryFromFirstInteraction,true);
+  }
+  function retryFromFirstInteraction(event){
+    if(event&&event.target&&button.contains(event.target)) return;
+    var synth=window.speechSynthesis;
+    if(synth&&(synth.speaking||synth.pending)){removeActivationListeners();return;}
+    removeActivationListeners();
+    speakWelcome(false);
+  }
+  document.addEventListener('pointerdown',retryFromFirstInteraction,{capture:true,passive:true});
+  document.addEventListener('touchstart',retryFromFirstInteraction,{capture:true,passive:true});
+  document.addEventListener('keydown',retryFromFirstInteraction,true);
+
   var observer=new MutationObserver(function(){
     if(waitingForCount&&currentCount()!==null) speakWelcome(true);
-    if(!autoAttempted&&currentCount()!==null){autoAttempted=true;speakWelcome(false);}
   });
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
-  if(currentCount()!==null&&!autoAttempted){autoAttempted=true;speakWelcome(false);}
+
+  /* لا ننتظر استجابة API العداد لبدء محاولة الترحيب على الكمبيوتر والهاتف. */
+  function attemptAutomaticWelcome(){
+    if(autoAttempted) return;
+    autoAttempted=true;
+    window.setTimeout(function(){speakWelcome(false);},650);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',attemptAutomaticWelcome,{once:true});
+  }else{
+    attemptAutomaticWelcome();
+  }
 })();
 </script>
 
