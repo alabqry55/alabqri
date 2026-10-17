@@ -1,8 +1,7 @@
 /**
  * ALABQRI image edge proxy
  * Purpose: cache critical remote images at the Cloudflare edge so the
- * hero and the 2018 credential image do not depend on a fresh browser
- * connection to image2url.com on every page view.
+ * hero and credential images do not depend on a fresh browser connection.
  */
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
@@ -19,8 +18,9 @@ export async function onRequestGet(context) {
     return new Response("Invalid image URL", { status: 400 });
   }
 
-  // Strict allowlist: this proxy cannot be used as an open proxy.
-  if (upstream.protocol !== "https:" || upstream.hostname !== "www.image2url.com") {
+  // Strict host allowlist: keep this proxy from becoming an open proxy.
+  const allowedHosts = new Set(["www.image2url.com", "cdn.imagetourls.com"]);
+  if (upstream.protocol !== "https:" || !allowedHosts.has(upstream.hostname)) {
     return new Response("Image host not allowed", { status: 403 });
   }
 
