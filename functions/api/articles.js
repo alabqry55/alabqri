@@ -145,32 +145,41 @@ export async function onRequest({request, env}) {
     if (request.method === "GET") {
       const suppliedAuth = (request.headers.get("Authorization") || "");
       const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
-      let results = [];
+      // An authenticated editor may safely apply the additive migration on first open,
+      // so scheduled items are visible in admin before the first save.
+      if (isAdmin) await ensureScheduleColumn(env.DB);
+      let allResults = [];
+      let hasScheduleColumn = true;
       try {
         const response = await env.DB.prepare(
-          isAdmin
-            ? "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles ORDER BY updated_at DESC, created_at DESC"
-            : "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE scheduled_at IS NULL OR datetime(scheduled_at) <= datetime('now') ORDER BY updated_at DESC, created_at DESC"
+          "SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC"
         ).all();
-        results = response.results || [];
+        allResults = response.results || [];
       } catch (error) {
-        // Existing databases are readable before an authorized save performs the additive migration.
         if (!/no such column: scheduled_at/i.test(String(error?.message || error))) throw error;
-        const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-        results = legacy.results || [];
+        hasScheduleColumn = false;
+        const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+        allResults = legacy.results || [];
       }
-      // Keep all three dated editorial records visible without duplicates. A legacy
-      // row with an equivalent title is normalized to the canonical ID/date in the
-      // read response; the next authorized save writes the canonical ID to D1.
-      // Once saved under that ID, the editor can intentionally change its date.
+      // Filter public output only after retaining the full row set for canonical matching.
+      // Otherwise a future-dated canonical article could accidentally reappear via fallback.
+      const now = Date.now();
+      const results = isAdmin || !hasScheduleColumn ? allResults : allResults.filter(article => {
+        if (!article.scheduled_at) return true;
+        const timestamp = Date.parse(article.scheduled_at);
+        return Number.isFinite(timestamp) && timestamp <= now;
+      });
       let articles = [...results];
       for (const canonical of canonicalArticles) {
-        const matches = articles.filter(article => sameArticle(article, canonical));
-        if (!matches.length) {
+        const allMatches = allResults.filter(article => sameArticle(article, canonical));
+        const visibleMatches = articles.filter(article => sameArticle(article, canonical));
+        // A canonical record that exists but is scheduled for the future must remain hidden.
+        if (!visibleMatches.length && allMatches.length) continue;
+        if (!visibleMatches.length) {
           articles.push(canonical);
           continue;
         }
-        const selected = matches.find(article => String(article.id || "") === canonical.id) || matches[0];
+        const selected = visibleMatches.find(article => String(article.id || "") === canonical.id) || visibleMatches[0];
         const alreadyCanonical = String(selected.id || "") === canonical.id;
         const normalized = {
           ...selected,
