@@ -106,8 +106,9 @@ const canonicalAzkarArticle = {
 
 const canonicalArticles = [canonicalEnergyArticle, canonicalHijamaArticle, canonicalAzkarArticle];
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
-  .replace(/[✨🌿🍀]/gu, "").replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-  .replace(/[\sـ:：،؛,.!?؟]+/g, " ").trim();
+  .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
+  .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
+  .replace(/[\s:：،؛,.!?؟]+/g, " ").trim();
 const sameArticle = (article, canonical) =>
   String(article?.id || "") === canonical.id ||
   normalizeTitle(article?.title) === normalizeTitle(canonical.title) ||
@@ -193,7 +194,7 @@ export async function onRequest({request, env}) {
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
-      if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
+      if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
         return json({error:"Invalid scheduled publication date."},400);
       }
       const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles WHERE id <> ?1").bind(String(a.id)).all();
