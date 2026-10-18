@@ -74,8 +74,12 @@ const canonicalAzkarArticle = {
 
 const canonicalArticles = [canonicalEnergyArticle, canonicalAzkarArticle];
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
-  .replace(/[✨🌿🍀]/gu, "").replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-  .replace(/[\sـ:：،؛,.!?؟]+/g, " ").trim();
+  .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
+  .replace(/[^\\p{L}\\p{N}]+/gu, "").trim();
+const isHijamaArticle = article => {
+  const title = normalizeTitle(article?.title);
+  return title.includes(normalizeTitle("الحجامة")) && title.includes(normalizeTitle("الطب النبوي"));
+};
 const sameArticle = (article, canonical) =>
   String(article?.id || "") === canonical.id ||
   normalizeTitle(article?.title) === normalizeTitle(canonical.title) ||
@@ -100,21 +104,32 @@ export async function onRequest({request, env}) {
   }
   try {
     await ensureTable(env.DB);
-    // Remove only the explicitly retired hijama article and its legacy-title duplicates.
-    // This targeted cleanup is idempotent and leaves all other articles untouched.
-    const {results: legacyArticleRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
-    for (const row of legacyArticleRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || (normalizeTitle(row.title).includes(normalizeTitle("الحجامة")) && normalizeTitle(row.title).includes(normalizeTitle("الطب النبوي")))) {
+    // Keep the newest hijama article and remove only older duplicate rows.
+    // The old cleanup removed every hijama article, including the current editorial entry.
+    const {results: hijamaRows=[]} = await env.DB.prepare(
+      "SELECT id,title FROM articles ORDER BY updated_at DESC, created_at DESC"
+    ).all();
+    let keptHijama = false;
+    for (const row of hijamaRows) {
+      if (!isHijamaArticle(row)) continue;
+      if (!keptHijama) {
+        keptHijama = true;
+      } else {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
       }
     }
     if (request.method === "GET") {
       const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-      // Keep all three dated editorial records visible without duplicates. A legacy
-      // row with an equivalent title is normalized to the canonical ID/date in the
-      // read response; the next authorized save writes the canonical ID to D1.
-      // Once saved under that ID, the editor can intentionally change its date.
-      let articles = results.filter(article => !(String(article.id || "").toLocaleLowerCase("en").includes("hijama") || (normalizeTitle(article.title).includes(normalizeTitle("الحجامة")) && normalizeTitle(article.title).includes(normalizeTitle("الطب النبوي")))));
+      // Keep the newest database hijama entry; never hide it solely because its ID is legacy.
+      let articles = results.filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(article));
+      const seenHijamaTitles = new Set();
+      articles = articles.filter(article => {
+        if (!isHijamaArticle(article)) return true;
+        const key = normalizeTitle(article.title);
+        if (seenHijamaTitles.has(key)) return false;
+        seenHijamaTitles.add(key);
+        return true;
+      });
       for (const canonical of canonicalArticles) {
         const matches = articles.filter(article => sameArticle(article, canonical));
         if (!matches.length) {
