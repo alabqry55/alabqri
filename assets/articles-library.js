@@ -59,13 +59,12 @@
         // make the same hijama article appear as two separate cards.
         const normalizeArticleTitle = value => String(value || "").toLocaleLowerCase("ar")
           .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-          .replace(/[^\p{L}\p{N}]+/gu, "");
+          .replace(/[^\\p{L}\\p{N}]+/gu, "");
+        // Defensive second layer: suppress repeated article titles across all categories.
         const seenArticleTitles = new Set();
         const articles = fetchedArticles.filter(article => {
           const title = normalizeArticleTitle(article.title);
-          const isHijama = title.includes(normalizeArticleTitle("الحجامة")) &&
-            title.includes(normalizeArticleTitle("الطب النبوي"));
-          if (!isHijama) return true;
+          if (!title) return true;
           if (seenArticleTitles.has(title)) return false;
           seenArticleTitles.add(title);
           return true;
@@ -245,12 +244,22 @@
               if (response.status === 401) { adminKey = ""; throw new Error("مفتاح الإدارة غير صحيح. افتح إدارة المقالات وأدخل المفتاح الصحيح."); }
               throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
             }
-            editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ تحديث المقال...";
-            const index = articles.findIndex(a => String(a.id) === String(article.id));
-            if (index >= 0) articles[index] = article;
+            if (!result.verified) throw new Error("لم تُرجع قاعدة البيانات تأكيدًا موثوقًا للحفظ.");
+            editorStatus.textContent = "تم تأكيد الحفظ في قاعدة البيانات. جارٍ إعادة تحميل المكتبة...";
+            const refresh = await fetch("/api/articles", {
+              headers: { "Accept": "application/json" }, cache: "no-store"
+            });
+            if (!refresh.ok) throw new Error("تم الحفظ، لكن تعذّر التحقق من ظهور النسخة المحفوظة في المكتبة.");
+            const refreshed = await refresh.json();
+            if (!Array.isArray(refreshed.articles) ||
+                !refreshed.articles.some(item => String(item.id) === String(article.id) &&
+                  item.title === article.title.trim() && item.content === article.content)) {
+              throw new Error("لم يظهر المقال المحفوظ كما هو في نتيجة المكتبة؛ لم يُعلن اكتمال العملية.");
+            }
+            articles.splice(0, articles.length, ...refreshed.articles);
             editForm.hidden = true;
             render();
-            editorStatus.textContent = "تم حفظ المقال في قاعدة البيانات بنجاح.";
+            editorStatus.textContent = "تم الحفظ والتحقق من ظهور المقال في المكتبة.";
           } catch (error) {
             editorStatus.textContent = error?.message || "تعذر تأكيد الحفظ السحابي.";
           } finally {
