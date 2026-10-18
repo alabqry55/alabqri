@@ -54,7 +54,22 @@
       })
       .then(data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
-        const articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+        const fetchedArticles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+        // Defensive UI deduplication: emoji, a leading #, and punctuation must not
+        // make the same hijama article appear as two separate cards.
+        const normalizeArticleTitle = value => String(value || "").toLocaleLowerCase("ar")
+          .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
+          .replace(/[^\\p{L}\\p{N}]+/gu, "");
+        const seenArticleTitles = new Set();
+        const articles = fetchedArticles.filter(article => {
+          const title = normalizeArticleTitle(article.title);
+          const isHijama = title.includes(normalizeArticleTitle("الحجامة")) &&
+            title.includes(normalizeArticleTitle("الطب النبوي"));
+          if (!isHijama) return true;
+          if (seenArticleTitles.has(title)) return false;
+          seenArticleTitles.add(title);
+          return true;
+        });
         root.replaceChildren();
         if (!articles.length) {
           showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
