@@ -56,7 +56,7 @@
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
         const isRetiredHijamaArticle = a => {
           const id = String(a?.id || "").toLocaleLowerCase("en");
-          const title = String(a?.title || "").normalize("NFKC").replace(/[\\u064B-\\u065F\\u0670\\u0640]/g, "").replace(/\\s+/g, " ").trim();
+          const title = String(a?.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/\s+/g, " ").trim();
           return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
         };
         const articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string" && !isRetiredHijamaArticle(a));
