@@ -75,7 +75,7 @@ const canonicalAzkarArticle = {
 const canonicalArticles = [canonicalEnergyArticle, canonicalAzkarArticle];
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-  .replace(/[^\\p{L}\\p{N}]+/gu, "").trim();
+  .replace(/[^\p{L}\p{N}]+/gu, "").trim();
 const isHijamaArticle = article => {
   const title = normalizeTitle(article?.title);
   return title.includes(normalizeTitle("الحجامة")) && title.includes(normalizeTitle("الطب النبوي"));
