@@ -160,3 +160,5 @@ export async function onRequest({request, env}) {
     return json({error:"Articles API failed."},500);
   }
 }
+
+// Deployment refresh: apply the latest Cloudflare Pages production environment bindings.
