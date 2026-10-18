@@ -59,7 +59,7 @@
         // make the same hijama article appear as two separate cards.
         const normalizeArticleTitle = value => String(value || "").toLocaleLowerCase("ar")
           .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-          .replace(/[^\\p{L}\\p{N}]+/gu, "");
+          .replace(/[^\p{L}\p{N}]+/gu, "");
         const seenArticleTitles = new Set();
         const articles = fetchedArticles.filter(article => {
           const title = normalizeArticleTitle(article.title);
