@@ -122,12 +122,14 @@ export async function onRequest({request, env}) {
       const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
       // Keep the newest database hijama entry; never hide it solely because its ID is legacy.
       let articles = results.filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(article));
-      const seenHijamaTitles = new Set();
+      // Deduplicate all article titles in the public response, not only hijama.
+      // Rows are ordered newest-first above, so the most recently updated copy wins.
+      const seenArticleTitles = new Set();
       articles = articles.filter(article => {
-        if (!isHijamaArticle(article)) return true;
         const key = normalizeTitle(article.title);
-        if (seenHijamaTitles.has(key)) return false;
-        seenHijamaTitles.add(key);
+        if (!key) return true;
+        if (seenArticleTitles.has(key)) return false;
+        seenArticleTitles.add(key);
         return true;
       });
       for (const canonical of canonicalArticles) {
@@ -163,7 +165,15 @@ export async function onRequest({request, env}) {
         VALUES(?1,?2,?3,?4,?5,?6,CURRENT_TIMESTAMP)
         ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,updated_at=CURRENT_TIMESTAMP`)
         .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content).run();
-      return json({ok:true,id:a.id});
+      // Confirm the persisted row before reporting success to the editor.
+      const saved = await env.DB.prepare(
+        "SELECT id,title,category,date,excerpt,content FROM articles WHERE id=?1"
+      ).bind(String(a.id)).first();
+      if (!saved || saved.title !== a.title.trim() || saved.category !== a.category ||
+          saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content) {
+        return json({error:"Article save could not be verified in D1."},503);
+      }
+      return json({ok:true,id:a.id,verified:true});
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
