@@ -50,7 +50,7 @@ jobs:
 
           def is_local(u):
               p = urllib.parse.urlsplit(u)
-              return p.hostname in {"alabqri.pages.dev", "localhost", "127.0.0.1"} or p.path.startswith("/assets/")
+              return (p.hostname in {"alabqri.pages.dev", "localhost", "127.0.0.1"} and not p.path.endswith("/api/image-proxy")) or p.path.startswith("/assets/")
 
           # Gather candidates only where a URL occurs in a likely image-bearing context.
           candidates = {}
