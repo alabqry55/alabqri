@@ -103,9 +103,13 @@ jobs:
                   with urllib.request.urlopen(req, timeout=35) as response:
                       data = response.read(25 * 1024 * 1024 + 1)
                       ctype = response.headers.get("Content-Type", "").split(";")[0].strip().lower()
-                  if not data or len(data) > 25 * 1024 * 1024 or not ctype.startswith("image/"):
-                      failed.append((source, f"not a valid image response ({ctype}, {len(data)} bytes)")); continue
-                  ext = mimetypes.guess_extension(ctype) or ""
+                  if not data or len(data) > 25 * 1024 * 1024:
+                      failed.append((source, f"invalid image size ({len(data)} bytes)")); continue
+                  if ctype.startswith("image/"):
+                      ext = mimetypes.guess_extension(ctype) or pathlib.PurePosixPath(parsed.path).suffix.lower()
+                  else:
+                      # Some image CDNs serve valid JPEG bytes as application/octet-stream.
+                      ext = pathlib.PurePosixPath(parsed.path).suffix.lower()
                   if ext == ".jpe": ext = ".jpg"
                   if ctype == "image/svg+xml": ext = ".svg"
                   if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".svg", ".bmp", ".tif", ".tiff"}:
