@@ -52,23 +52,25 @@ jobs:
               p = urllib.parse.urlsplit(u)
               return (p.hostname in {"alabqri.pages.dev", "localhost", "127.0.0.1"} and not p.path.endswith("/api/image-proxy")) or p.path.startswith("/assets/")
 
-          # Gather candidates only where a URL occurs in a likely image-bearing context.
+          # Gather image URLs from actual image-bearing attributes and known image CDNs.
+          image_hosts = {"i.ibb.co", "ibb.co", "www.image2url.com", "image2url.com", "cdn.imagetourls.com", "img2link.online", "imagetourls.com"}
+          image_exts = {".png", ".jpg", ".jpeg", ".jpe", ".gif", ".webp", ".avif", ".svg", ".bmp"}
           candidates = {}
           for path in files:
+              if path.as_posix() == "assets/image-recovery-manifest.json":
+                  continue
               try: txt = path.read_text(encoding="utf-8")
               except (UnicodeDecodeError, OSError): continue
               for m in url_re.finditer(txt):
                   u = clean_url(m.group(0))
                   if is_local(u): continue
+                  parsed = urllib.parse.urlsplit(u)
                   before = txt[max(0, m.start()-500):m.start()]
-                  tag_context = before.rsplit("<", 1)[-1]
-                  css_context = before.rsplit(";", 1)[-1]
-                  json_context = before.rsplit("{", 1)[-1].rsplit(",", 1)[-1]
-                  in_html_image_attr = re.search(r"""(?:src|srcset|poster)\s*=\s*["']?[^"'<>]*$""", tag_context, re.I)
-                  in_css_image_url = re.search(r"""url\(\s*["']?[^"'<>]*$""", css_context, re.I)
-                  in_image_meta = re.search(r"(?:og:image|twitter:image)", tag_context, re.I)
-                  in_image_json = re.search(r"""["'](?:image|imageUrl|image_url|logo|hero|thumbnail|avatar|poster)["']\s*:\s*["']?[^"'<>]*$""", json_context, re.I)
-                  if not (in_html_image_attr or in_css_image_url or in_image_meta or in_image_json): continue
+                  ext = pathlib.PurePosixPath(parsed.path).suffix.lower()
+                  is_proxy = parsed.path.endswith("/api/image-proxy") and "src=" in parsed.query
+                  image_context_match = bool(image_context.search(before))
+                  if not (is_proxy or (parsed.hostname in image_hosts and ext in image_exts) or (ext in image_exts and image_context_match)):
+                      continue
                   candidates.setdefault(u, []).append((path, m.start()))
 
           # Proxy URLs are decoded to their original source and both forms are rewritten.
@@ -133,6 +135,8 @@ jobs:
 
           changed = []
           for path in files:
+              if path.as_posix() == "assets/image-recovery-manifest.json":
+                  continue
               try: original = path.read_text(encoding="utf-8")
               except (UnicodeDecodeError, OSError): continue
               updated = original
