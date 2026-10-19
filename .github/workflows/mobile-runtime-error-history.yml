@@ -1,0 +1,25 @@
+name: Trace missing desktop relocation helper in git history
+on:
+  push:
+    branches:
+      - test/mobile-speech-audit-20261019
+    paths:
+      - .github/workflows/mobile-runtime-error-history.yml
+permissions:
+  contents: read
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Trace introduction and removal of the helper
+        shell: bash
+        run: |
+          echo '--- Commits changing the helper symbol ---'
+          git log --all --oneline --date=short -S'relocateDesktopContactServices' -- index.html | head -25
+          echo '--- Commits containing a function definition ---'
+          git log --all --oneline -S'function relocateDesktopContactServices' -- index.html | head -15
+          echo '--- Most recent changes around the caller ---'
+          git log --all --oneline -G'relocateDesktopContactServices' -- index.html | head -30
