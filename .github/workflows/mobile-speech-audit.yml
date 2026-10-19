@@ -1,0 +1,127 @@
+name: Mobile layout and welcome audio audit
+on:
+  push:
+    branches:
+      - test/mobile-speech-audit-20261019
+    paths:
+      - .github/workflows/mobile-speech-audit.yml
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install headless browser
+        run: |
+          mkdir -p /tmp/mobile-audit
+          npm install --prefix /tmp/mobile-audit playwright
+          /tmp/mobile-audit/node_modules/.bin/playwright install --with-deps chromium
+      - name: Audit official mobile page and test welcome speech logic
+        shell: bash
+        run: |
+          cat > /tmp/mobile-audit/audit.cjs <<'JS'
+          const fs = require('fs');
+          const vm = require('vm');
+          const { chromium, devices } = require('/tmp/mobile-audit/node_modules/playwright');
+          const source = fs.readFileSync('index.html', 'utf8');
+          const match = source.match(/<script id="abq-audio-welcome-script">([\\s\\S]*?)<\\/script>/);
+          if (!match) throw new Error('Welcome speech script not found in main/index.html');
+          const welcomeScript = match[1];
+          new vm.Script(welcomeScript);
+          async function main() {
+            const browser = await chromium.launch({headless:true});
+            const ctx = await browser.newContext({...devices['iPhone 13'], locale:'ar-EG'});
+            const page = await ctx.newPage();
+            const pageErrors = [];
+            page.on('pageerror', e => pageErrors.push(String(e)));
+            await page.goto('https://alabqri.pages.dev/?mobile_audit_ci=20261019', {waitUntil:'domcontentloaded', timeout:60000});
+            await page.waitForTimeout(3500);
+            const mobile = await page.evaluate(() => {
+              const el = document.querySelector('#abq-audio-welcome-btn');
+              const r = el ? el.getBoundingClientRect() : null;
+              const cs = el ? getComputedStyle(el) : null;
+              return {
+                title: document.title,
+                viewportWidth: document.documentElement.clientWidth,
+                documentWidth: document.documentElement.scrollWidth,
+                horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+                welcomeButtonFound: !!el,
+                welcomeButtonLabel: el ? el.innerText.trim() : null,
+                welcomeButtonVisible: !!el && !!r && r.width > 0 && r.height > 0 && cs.display !== 'none' && cs.visibility !== 'hidden',
+                welcomeButtonRect: r ? {x:Math.round(r.x),y:Math.round(r.y),width:Math.round(r.width),height:Math.round(r.height)} : null,
+                speechSynthesisAvailable: 'speechSynthesis' in window,
+                speechVoiceCount: ('speechSynthesis' in window) ? speechSynthesis.getVoices().length : 0,
+                fixedGreetingEndingInScript: Array.from(document.scripts).some(s => s.id === 'abq-audio-welcome-script' && s.textContent.includes('رحلة معرفية نافعة ومثمرة'))
+              };
+            });
+            // Execute the production welcome script in an isolated browser harness with a controlled speech engine.
+            async function runSpeechCase(delayCounter) {
+              const harness = `<!doctype html><html lang="ar" dir="rtl"><body>
+                <button id="abq-audio-welcome-btn">استمع</button><span id="abq-visitor-count">—</span>
+                <script>
+                  window.__speechLog=[];
+                  class MockUtterance { constructor(text){this.text=text;this.lang='';this.rate=1;this.pitch=1;this.volume=1;} }
+                  Object.defineProperty(window,'SpeechSynthesisUtterance',{value:MockUtterance,configurable:true});
+                  const synth={_speaking:false,_pending:false,_listeners:{},
+                    get speaking(){return this._speaking;},get pending(){return this._pending;},
+                    getVoices(){return [{lang:'ar-EG',name:'Arabic Test Voice'}];},
+                    addEventListener(n,f){(this._listeners[n]||(this._listeners[n]=[])).push(f);},
+                    speak(u){window.__speechLog.push(u.text);this._speaking=true;setTimeout(()=>{if(u.onstart)u.onstart();setTimeout(()=>{this._speaking=false;if(u.onend)u.onend();},40);},5);},
+                    cancel(){this._speaking=false;this._pending=false;},resume(){return;}
+                  };
+                  Object.defineProperty(window,'speechSynthesis',{value:synth,configurable:true});
+                <\/script>
+                <script>${welcomeScript}<\/script>
+                ${delayCounter ? '<script>setTimeout(()=>{document.getElementById("abq-visitor-count").textContent="37";},900);<\\/script>' : ''}
+                </body></html>`;
+              const testPage = await ctx.newPage();
+              await testPage.setContent(harness, {waitUntil:'load'});
+              await testPage.waitForTimeout(3800);
+              const result = await testPage.evaluate(() => ({
+                speechCallCount: window.__speechLog.length,
+                utterance: window.__speechLog[0] || '',
+                buttonLabel: document.getElementById('abq-audio-welcome-btn').innerText
+              }));
+              await testPage.close();
+              return result;
+            }
+            const delayed = await runSpeechCase(true);
+            const missing = await runSpeechCase(false);
+            const result = {mobile, pageErrors, delayedCounterCase:delayed, missingCounterCase:missing};
+            console.log('MOBILE_AUDIT_JSON=' + JSON.stringify(result));
+            const failures = [];
+            if (mobile.horizontalOverflow) failures.push('Horizontal overflow at iPhone 13 viewport');
+            if (!mobile.welcomeButtonFound) failures.push('Welcome audio button missing on official site');
+            if (!mobile.welcomeButtonVisible) failures.push('Welcome audio button is not visible on official mobile viewport');
+            if (pageErrors.length) failures.push('Runtime JavaScript errors on official mobile page');
+            if (delayed.speechCallCount < 1 || !delayed.utterance.includes('رحلة معرفية نافعة ومثمرة') || !delayed.utterance.includes('37')) failures.push('Delayed-counter speech did not contain complete ending and visitor number');
+            if (missing.speechCallCount < 1 || !missing.utterance.includes('رحلة معرفية نافعة ومثمرة')) failures.push('Missing-counter speech did not use the fixed ending');
+            if (delayed.speechCallCount !== 1 || missing.speechCallCount !== 1) failures.push('Speech engine was called more than once in an automated scenario');
+            await browser.close();
+            if (failures.length) { console.error('AUDIT_FAILURES=' + JSON.stringify(failures)); process.exit(1); }
+          }
+          main().catch(e=>{console.error(e);process.exit(1);});
+          JS
+          node /tmp/mobile-audit/audit.cjs | tee /tmp/mobile-audit/output.txt
+          grep 'MOBILE_AUDIT_JSON=' /tmp/mobile-audit/output.txt | tail -1 | sed 's/^MOBILE_AUDIT_JSON=//' > mobile-audit-report.json
+          {
+            echo '## Mobile audit report (iPhone 13 viewport)'
+            echo
+            echo '`node --check` passed for the production welcome-speech script.'
+            echo
+            echo '```json'
+            cat mobile-audit-report.json
+            echo
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-audit-report
+          path: mobile-audit-report.json
+          if-no-files-found: ignore
