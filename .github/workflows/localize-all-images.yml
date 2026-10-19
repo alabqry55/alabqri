@@ -75,6 +75,12 @@ jobs:
 
           # Proxy URLs are decoded to their original source and both forms are rewritten.
           expanded = {}
+          # Explicitly include the current hero image source and its same-site proxy URL.
+          known_hero_source = "https://cdn.imagetourls.com/uploads/tyImg/xYgsfKih.jpg"
+          known_hero_proxy = "https://alabqri.pages.dev/api/image-proxy?src=https%3A%2F%2Fcdn.imagetourls.com%2Fuploads%2FtyImg%2FxYgsfKih.jpg"
+          candidates.setdefault(known_hero_source, [])
+          candidates.setdefault(known_hero_proxy, [])
+
           for u, refs in candidates.items():
               parsed = urllib.parse.urlsplit(u)
               if parsed.path.endswith("/api/image-proxy"):
