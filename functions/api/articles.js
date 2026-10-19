@@ -222,7 +222,8 @@ export async function onRequest({request, env}) {
       await ensureScheduleColumn(env.DB);
       const ids = new Set();
       const titles = new Set();
-      for (const a of incoming) {
+      for (let index = 0; index < incoming.length; index++) {
+        const a = incoming[index];
         if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
             a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
             a.content.length > 200000 || !CATEGORIES.has(a.category) ||
@@ -230,9 +231,15 @@ export async function onRequest({request, env}) {
             typeof a.date !== "string" || a.date.length > 80) {
           return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
         }
+        const publishImmediately = a.publishImmediately === true;
+        if (publishImmediately && index !== 0) {
+          return json({error:"يسمح بالنشر الفوري للمقال الأول فقط؛ لم يُحفظ أي مقال."},400);
+        }
         const schedule = String(a.scheduledAt || "");
-        if (!schedule || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
-          return json({error:"كل مقال في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
+        if (publishImmediately) {
+          if (schedule) return json({error:"المقال الأول المعتمد للنشر الفوري لا يحتاج موعدًا مجدولًا؛ لم يُحفظ أي مقال."},400);
+        } else if (!schedule || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(schedule) || !Number.isFinite(Date.parse(schedule)) || Date.parse(schedule) <= Date.now()) {
+          return json({error:"كل مقال غير فوري في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
         }
         const titleKey = normalizeTitle(a.title);
         if (ids.has(String(a.id)) || titles.has(titleKey) || canonicalArticles.some(c => normalizeTitle(c.title) === titleKey)) {
@@ -248,13 +255,19 @@ export async function onRequest({request, env}) {
       }
       const statements = incoming.map(a => env.DB.prepare(
         "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
-      ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,String(a.scheduledAt)));
+      ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt)));
       await env.DB.batch(statements);
       const verification = await Promise.all(incoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
-      if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || row.scheduled_at !== incoming[i].scheduledAt)) {
+      if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || (row.scheduled_at || null) !== (incoming[i].publishImmediately === true ? null : incoming[i].scheduledAt))) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
       }
-      return json({ok:true,saved:incoming.length,ids:incoming.map(a=>a.id),verified:true});
+      return json({
+        ok:true,
+        saved:incoming.length,
+        ids:incoming.map(a=>a.id),
+        immediatePublished:incoming[0]?.publishImmediately === true ? incoming[0].id : null,
+        verified:true
+      });
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
