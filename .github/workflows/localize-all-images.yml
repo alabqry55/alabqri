@@ -37,10 +37,10 @@ jobs:
           OUT = ROOT / "assets" / "images"
           OUT.mkdir(parents=True, exist_ok=True)
           text_exts = {".html", ".htm", ".css", ".js", ".mjs", ".json", ".xml", ".svg", ".md"}
-          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\\0")
+          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
           files = [ROOT / p for p in tracked if p and pathlib.Path(p).suffix.lower() in text_exts and pathlib.Path(p).is_file()]
-          url_re = re.compile(r'https?://[^\\s\\"\'<>]+', re.I)
-          image_context = re.compile(r'(?:src\\s*=|srcset\\s*=|poster\\s*=|url\\s*\\(|og:image|twitter:image|background(?:-image)?|hero|logo|thumbnail|avatar|image)', re.I)
+          url_re = re.compile(r'https?://[^\s\"\'<>]+', re.I)
+          image_context = re.compile(r'(?:src\s*=|srcset\s*=|poster\s*=|url\s*\(|og:image|twitter:image|background(?:-image)?|hero|logo|thumbnail|avatar|image)', re.I)
           replacements = {}
           failed = []
           saved = 0
@@ -102,8 +102,8 @@ jobs:
                   if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".svg", ".bmp", ".tif", ".tiff"}:
                       failed.append((source, f"unsupported image type ({ctype})")); continue
                   # Verify raster signatures; SVG must have an SVG/XML signature.
-                  if ext in {".jpg", ".jpeg"} and not data.startswith(b"\\xff\\xd8\\xff"): raise ValueError("JPEG signature mismatch")
-                  if ext == ".png" and not data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"): raise ValueError("PNG signature mismatch")
+                  if ext in {".jpg", ".jpeg"} and not data.startswith(b"\xff\xd8\xff"): raise ValueError("JPEG signature mismatch")
+                  if ext == ".png" and not data.startswith(b"\x89PNG\r\n\x1a\n"): raise ValueError("PNG signature mismatch")
                   if ext == ".gif" and not data.startswith((b"GIF87a", b"GIF89a")): raise ValueError("GIF signature mismatch")
                   if ext == ".webp" and not (data.startswith(b"RIFF") and data[8:12] == b"WEBP"): raise ValueError("WebP signature mismatch")
                   if ext == ".svg" and b"<svg" not in data[:4096].lower(): raise ValueError("SVG signature mismatch")
