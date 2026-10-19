@@ -1,0 +1,92 @@
+name: Localize recovery images (preview branch only)
+# Restricted to the recovery preview branch; never writes to main.
+
+on:
+  push:
+    branches:
+      - fix/image-fallback-20261019
+    paths:
+      - '.github/workflows/localize-recovery-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: localize-recovery-images-preview
+  cancel-in-progress: false
+
+jobs:
+  localize:
+    if: github.ref == 'refs/heads/fix/image-fallback-20261019'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/image-fallback-20261019
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download and validate source images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/images
+          python3 - <<'PY'
+          import json, pathlib, urllib.request, imghdr
+          manifest = json.loads(pathlib.Path("assets/image-recovery-manifest.json").read_text(encoding="utf-8"))
+          entries = [manifest["logo"], *manifest["images"]]
+          out = pathlib.Path("assets/images")
+          for entry in entries:
+              name = pathlib.Path(entry["filename"]).name
+              url = entry["directUrl"]
+              if not url.startswith("https://i.ibb.co/"):
+                  raise SystemExit(f"Refusing unexpected source host: {url}")
+              req = urllib.request.Request(url, headers={"User-Agent":"ALABQRI-image-migration/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  data = response.read()
+                  ctype = response.headers.get("Content-Type", "")
+              if not data or len(data) > 25 * 1024 * 1024:
+                  raise SystemExit(f"Invalid image size for {name}: {len(data)}")
+              if not ctype.lower().startswith("image/"):
+                  raise SystemExit(f"Source did not return an image for {name}: {ctype}")
+              target = out / name
+              target.write_bytes(data)
+              print(f"Saved {target} ({len(data)} bytes, {ctype})")
+          PY
+
+      - name: Replace HTML image references with local assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib
+          manifest = json.loads(pathlib.Path("assets/image-recovery-manifest.json").read_text(encoding="utf-8"))
+          entries = [manifest["logo"], *manifest["images"]]
+          mapping = {e["directUrl"]: "/assets/images/" + pathlib.Path(e["filename"]).name for e in entries}
+          for p in pathlib.Path(".").rglob("*.html"):
+              if ".git" in p.parts:
+                  continue
+              original = p.read_text(encoding="utf-8")
+              updated = original
+              for source, local in mapping.items():
+                  updated = updated.replace(source, local)
+              if updated != original:
+                  p.write_text(updated, encoding="utf-8")
+                  print("Updated", p)
+          PY
+
+      - name: Commit localized images to preview branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images
+          git add -- '*.html'
+          if git diff --cached --quiet; then
+            echo "No local image changes to commit."
+            exit 0
+          fi
+          git commit -m "fix(images): serve recovery images from local assets"
+          git push origin HEAD:fix/image-fallback-20261019
