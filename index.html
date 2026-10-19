@@ -14666,7 +14666,7 @@ function applyTab(tabId){
     target.style.setProperty('visibility','visible','important');
     target.setAttribute('aria-hidden','false');
 
-    relocateDesktopContactServices();
+    /* No relocation needed: the duplicate desktop contact host was removed. */
 
     const buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
     buttons.forEach(function(btn){
@@ -14728,11 +14728,7 @@ function applyTab(tabId){
 
   function initHistory(){
     readNavState();
-    relocateDesktopContactServices();
-    window.addEventListener('resize', function(){
-      clearTimeout(window.__abqContactRelocateTimer);
-      window.__abqContactRelocateTimer=setTimeout(relocateDesktopContactServices,120);
-    });
+    /* No relocation needed: the duplicate desktop contact host was removed. */
     const hash=(location.hash||'').replace('#','');
     const initial=ABQ_MAIN_TABS.includes(hash)?hash:(ABQ_MAIN_TABS.includes(abqCurrentMainTab)?abqCurrentMainTab:'home');
     applyTab(initial);
