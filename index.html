@@ -14147,6 +14147,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   var automaticRetryUsed=false;
   var autoSpeechStarted=false;
   var autoRetryCount=0;
+  var countWaitComplete=false;
   var welcomeSessionKey='alabqri-welcome-spoken-v1';
   function wasWelcomedThisTab(){
     try{return window.sessionStorage.getItem(welcomeSessionKey)==='1';}catch(e){return false;}
@@ -14190,10 +14191,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
       button.setAttribute('aria-pressed','false');
       return;
     }
-    var total=currentCount();
-    /* لا نربط بدء الترحيب بنجاح عداد الزوار؛ إن تأخر العداد تُقال الرسالة دون رقم الزائر. */
+        var total=currentCount();
+    /* ننتظر وصول عداد الزوار مدة محدودة كي لا يبدو الترحيب مبتورًا عند كلمة «المستقبل»،
+       ثم ننطق خاتمة ثابتة حتى إذا تأخر العداد أو تعذر تحميله. */
+    if(total===null && !manual && !countWaitComplete){
+      waitingForCount=true;
+      var waitStartedAt=Date.now();
+      function continueWelcomeAfterCount(){
+        if(currentCount()!==null || Date.now()-waitStartedAt>=2200){
+          waitingForCount=false;
+          countWaitComplete=true;
+          speakWelcome(false);
+          return;
+        }
+        window.setTimeout(continueWelcomeAfterCount,120);
+      }
+      window.setTimeout(continueWelcomeAfterCount,120);
+      return;
+    }
+    countWaitComplete=false;
     waitingForCount=false;
-    var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشريهْ. تحت إشراف الدكتور أحمد السَّيِّد رَسَّهْ، أحمد الزَمخْشَري. أهلًا بكم في منصة العبقري، حيث نَرتَقي بِالإِنْسان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَلْ.'+(total!==null?' أنت الزائر الكريم رقم '+total+' لمنصة العبقري.':'');
+    total=currentCount();
+    var message='يسرّ مركز العبقري أن يرحّب بكم في منصة العبقري للتدريب والاستشارات والطب التكميلي والتنمية البشريهْ. تحت إشراف الدكتور أحمد السَّيِّد رَسَّهْ، أحمد الزَمخْشَري. أهلًا بكم في منصة العبقري، حيث نَرتَقي بِالإِنْسان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَلْ. أهلًا وسهلًا بكم، ونتمنى لكم رحلة معرفية نافعة ومثمرة.'+(total!==null?' أنت الزائر الكريم رقم '+total+' لمنصة العبقري.':'');
     var utterance=new SpeechSynthesisUtterance(message);
     utterance.lang='ar-EG';
     utterance.rate=0.88;
@@ -14225,7 +14244,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         },500);
         return;
       }
-      button.textContent='🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
+      button.textContent=(lastSpeechError==='not-allowed'||lastSpeechError==='NotAllowedError') ? '🔊 المتصفح منع التشغيل التلقائي — اضغط للاستماع' : '🔊 اضغط لإعادة تشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     };
     try{
@@ -14242,13 +14261,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
           }
         },120);
       }else{
+        try{if(typeof synth.resume==='function') synth.resume();}catch(resumeError){}
         synth.speak(utterance);
       }
       if(manual) button.textContent='🔊 جارٍ تشغيل الترحيب الصوتي…';
     }catch(error){
       lastSpeechError=(error&&error.name)||'exception';
       console.warn('[ALABQRI audio] حدث استثناء أثناء طلب تشغيل الترحيب الصوتي:',error);
-      button.textContent='🔊 اضغط لتشغيل الترحيب الصوتي';
+      button.textContent=lastSpeechError==='NotAllowedError' ? '🔊 المتصفح منع التشغيل التلقائي — اضغط للاستماع' : '🔊 اضغط لتشغيل الترحيب الصوتي';
       button.setAttribute('aria-pressed','false');
     }
   }
@@ -14293,7 +14313,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.addEventListener('keydown',retryFromFirstInteraction,true);
 
   var observer=new MutationObserver(function(){
-    if(waitingForCount&&currentCount()!==null) speakWelcome(true);
+    if(waitingForCount&&currentCount()!==null) waitingForCount=false;
   });
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
 
