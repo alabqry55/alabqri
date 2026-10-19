@@ -54,21 +54,7 @@
       })
       .then(data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
-        const fetchedArticles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
-        // Defensive UI deduplication: emoji, a leading #, and punctuation must not
-        // make the same hijama article appear as two separate cards.
-        const normalizeArticleTitle = value => String(value || "").toLocaleLowerCase("ar")
-          .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-          .replace(/[^\\p{L}\\p{N}]+/gu, "");
-        // Defensive second layer: suppress repeated article titles across all categories.
-        const seenArticleTitles = new Set();
-        const articles = fetchedArticles.filter(article => {
-          const title = normalizeArticleTitle(article.title);
-          if (!title) return true;
-          if (seenArticleTitles.has(title)) return false;
-          seenArticleTitles.add(title);
-          return true;
-        });
+        let articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
         root.replaceChildren();
         if (!articles.length) {
           showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
@@ -112,6 +98,10 @@
             card.appendChild(el("h3", "", a.title));
             const meta = [a.category, a.date].filter(Boolean).join(" • ");
             if (meta) card.appendChild(el("p", "abq-article-meta", meta));
+            if (adminMode && a.scheduled_at) {
+              const publishDate = new Date(a.scheduled_at);
+              card.appendChild(el("p", "abq-article-meta", "موعد النشر: " + (Number.isNaN(publishDate.getTime()) ? a.scheduled_at : publishDate.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"}))));
+            }
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
             const details = el("details");
             details.appendChild(el("summary", "", "قراءة البحث"));
@@ -136,9 +126,17 @@
         const adminBar = el("div", "abq-articles-tools");
         const adminButton = el("button", "", "إدارة محتوى المقالات");
         adminButton.type = "button";
+        const addButton = el("button", "", "إضافة مقال مجدول");
+        addButton.type = "button";
+        const importButton = el("button", "", "تحميل خطة النشر (12 مقالًا)");
+        importButton.type = "button";
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+        addButton.style.cssText = adminButton.style.cssText;
+        importButton.style.cssText = adminButton.style.cssText;
+        addButton.hidden = true;
+        importButton.hidden = true;
         adminBar.style.gridTemplateColumns = "1fr";
-        adminBar.appendChild(adminButton);
+        adminBar.append(adminButton, addButton, importButton);
         root.insertBefore(adminBar, tools);
 
         const editForm = el("form", "abq-article-card");
@@ -173,10 +171,19 @@
         });
         editCategory.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit";
         editCategoryWrap.appendChild(editCategory);
+        const scheduleWrap = el("label");
+        scheduleWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
+        scheduleWrap.appendChild(el("span", "", "موعد النشر المجدول (بتوقيت جهازك / القاهرة)"));
+        const scheduleInput = el("input");
+        scheduleInput.type = "datetime-local";
+        scheduleInput.name = "scheduledAt";
+        scheduleInput.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit";
+        scheduleWrap.appendChild(scheduleInput);
         editForm.append(editTitle, editId,
           field("عنوان المقال","title",""),
           editCategoryWrap,
-          field("التاريخ (سيظل كما هو ما لم تغيّره)","date",""),
+          field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
+          scheduleWrap,
           field("الوصف المختصر","excerpt","",true),
           field("المحتوى الكامل","content","",true));
         const editorActions = el("div");
@@ -190,36 +197,129 @@
         editorActions.append(saveButton,cancelButton);
         const editorStatus = el("p", "abq-article-meta", "");
         editForm.append(editorActions,editorStatus);
+        const adminStatus = el("p", "abq-article-meta", "");
+        adminStatus.setAttribute("role", "status");
+        adminStatus.style.cssText = "padding:.6rem .8rem;border-radius:10px;background:#f8fafc;line-height:1.8";
+        function setAdminStatus(message) {
+          adminStatus.textContent = message;
+          editorStatus.textContent = message;
+        }
+        root.insertBefore(adminStatus, tools);
         root.insertBefore(editForm, tools);
 
+        let creatingArticle = false;
+        function toLocalDateTime(value) {
+          if (!value) return "";
+          const d = new Date(value);
+          if (Number.isNaN(d.getTime())) return "";
+          const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+          return local.toISOString().slice(0,16);
+        }
         function startEditing(article) {
+          creatingArticle = false;
           editForm.elements.id.value = article.id;
           editForm.elements.title.value = article.title || "";
           editCategory.value = article.category || "موضوعات معرفية";
           editForm.elements.date.value = article.date || "";
+          editForm.elements.scheduledAt.value = toLocalDateTime(article.scheduled_at || article.scheduledAt || "");
           editForm.elements.excerpt.value = article.excerpt || "";
           editForm.elements.content.value = article.content || "";
+          editForm.elements.title.required = true;
+          editForm.elements.date.required = true;
+          editForm.elements.scheduledAt.required = false;
           editTitle.textContent = "تعديل: " + (article.title || "مقال");
-          editorStatus.textContent = "التاريخ محفوظ كما هو؛ لا تغيّره إذا أردت الإبقاء عليه.";
+          editorStatus.textContent = "تاريخ المقال الأصلي محفوظ كما هو. موعد النشر المجدول حقل مستقل.";
           editForm.hidden = false;
           editForm.scrollIntoView({behavior:"smooth",block:"start"});
         }
+        function startCreating() {
+          creatingArticle = true;
+          editForm.reset();
+          editForm.elements.id.value = "article-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
+          editCategory.value = "موضوعات معرفية";
+          editTitle.textContent = "إضافة مقال جديد بموعد نشر مستقبلي";
+          editForm.elements.title.required = true;
+          editForm.elements.date.required = true;
+          editForm.elements.scheduledAt.required = true;
+          editorStatus.textContent = "اختر موعدًا مستقبليًا. لن يظهر المقال للزوار قبل الموعد، ولن يُنشأ تلقائيًا أي تكرار.";
+          editForm.hidden = false;
+          editForm.scrollIntoView({behavior:"smooth",block:"start"});
+        }
+        addButton.addEventListener("click", startCreating);
+        importButton.addEventListener("click", async () => {
+          if (!adminKey || !adminMode) {
+            setAdminStatus("فعّل وضع الإدارة أولًا.");
+            return;
+          }
+          if (!window.confirm("سيتم فحص خطة النشر ثم حفظ المقالات الاثني عشر بجدولة مستقبلية. إذا وُجد تعارض في عنوان أو معرّف، سترفض الخدمة الدفعة كلها دون حفظ أي جزء. هل تريد المتابعة؟")) return;
+          importButton.disabled = true;
+          importButton.textContent = "جارٍ فحص الخطة وحفظها...";
+          setAdminStatus("جارٍ فحص خطة النشر ومقارنتها بالمقالات المحفوظة...");
+          try {
+            const response = await fetch("/api/articles", {
+              method:"POST",
+              headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
+              body:JSON.stringify({action:"seedSchedule"}),
+              cache:"no-store"
+            });
+            const result = await response.json().catch(()=>({}));
+            if (!response.ok || !result.ok) {
+              if (response.status === 401) { adminKey = ""; adminMode = false; }
+              throw new Error(result.error || "تعذر حفظ خطة النشر.");
+            }
+            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"});
+            const refreshedData = await refreshed.json().catch(()=>({}));
+            if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
+              throw new Error("تم إرسال الخطة، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
+            }
+            articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+            render();
+            setAdminStatus("تم حفظ "+result.saved+" مقالًا في قاعدة البيانات بجدولة مستقبلية، وتم تأكيد إعادة تحميل القائمة.");
+            importButton.textContent = "تم تحميل خطة النشر";
+          } catch (error) {
+            setAdminStatus(error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.");
+          } finally {
+            importButton.disabled = false;
+            if (importButton.textContent !== "تم تحميل خطة النشر") importButton.textContent = "تحميل خطة النشر (12 مقالًا)";
+          }
+        });
         adminButton.addEventListener("click", () => {
           if (!adminKey) {
             const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
             if (!entered) return;
             adminKey = entered.trim();
           }
-          adminMode = true;
-          render();
-          editorStatus.textContent = "وضع الإدارة مفعّل لهذه الجلسة. اختر «تعديل المقال» من البطاقة المطلوبة.";
-          editForm.hidden = true;
-          adminButton.textContent = "وضع الإدارة مفعّل";
+          fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"})
+            .then(async response => {
+              const data = await response.json().catch(()=>({}));
+              if (!response.ok || !Array.isArray(data.articles) || !data.admin) {
+                if (response.status === 401 || !data.admin) adminKey = "";
+                const message = data.fallback
+                  ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال."
+                  : (!data.admin
+                    ? "لم يتم قبول مفتاح الإدارة أو لم يُضبط ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages."
+                    : (data.error || "تعذر تحميل المقالات المجدولة."));
+                throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : message);
+              }
+              articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+              adminMode = true;
+              addButton.hidden = false;
+              importButton.hidden = false;
+              render();
+              setAdminStatus("تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.");
+              editForm.hidden = true;
+              adminButton.textContent = "وضع الإدارة مفعّل";
+            })
+            .catch(error => { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); });
         });
         cancelButton.addEventListener("click", () => { editForm.hidden = true; });
         editForm.addEventListener("submit", async event => {
           event.preventDefault();
           if (!adminKey) { editorStatus.textContent = "أدخل مفتاح الإدارة أولًا."; return; }
+          if (creatingArticle && (!editForm.elements.scheduledAt.value || Number.isNaN(new Date(editForm.elements.scheduledAt.value).getTime()) || new Date(editForm.elements.scheduledAt.value).getTime() <= Date.now())) {
+            editorStatus.textContent = "حدد موعد نشر في المستقبل قبل حفظ المقال الجديد.";
+            return;
+          }
           saveButton.disabled = true;
           saveButton.textContent = "جارٍ الحفظ...";
           editorStatus.textContent = "جارٍ إرسال التعديلات إلى قاعدة البيانات...";
@@ -229,7 +329,8 @@
             category: editCategory.value,
             date: editForm.elements.date.value.trim(),
             excerpt: editForm.elements.excerpt.value.trim(),
-            content: editForm.elements.content.value
+            content: editForm.elements.content.value,
+            scheduledAt: editForm.elements.scheduledAt.value ? new Date(editForm.elements.scheduledAt.value).toISOString() : null
           };
           try {
             const response = await fetch("/api/articles", {
@@ -242,24 +343,19 @@
             if (!response.ok || !result.ok) {
               if (response.status === 503) throw new Error("الحفظ غير مفعّل على هذه النسخة: راجع ربط D1 وسر ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages.");
               if (response.status === 401) { adminKey = ""; throw new Error("مفتاح الإدارة غير صحيح. افتح إدارة المقالات وأدخل المفتاح الصحيح."); }
+              if (response.status === 409) throw new Error(result.error || "هذا العنوان موجود بالفعل؛ لم يتم إنشاء نسخة مكررة.");
               throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
             }
-            if (!result.verified) throw new Error("لم تُرجع قاعدة البيانات تأكيدًا موثوقًا للحفظ.");
-            editorStatus.textContent = "تم تأكيد الحفظ في قاعدة البيانات. جارٍ إعادة تحميل المكتبة...";
-            const refresh = await fetch("/api/articles", {
-              headers: { "Accept": "application/json" }, cache: "no-store"
-            });
-            if (!refresh.ok) throw new Error("تم الحفظ، لكن تعذّر التحقق من ظهور النسخة المحفوظة في المكتبة.");
-            const refreshed = await refresh.json();
-            if (!Array.isArray(refreshed.articles) ||
-                !refreshed.articles.some(item => String(item.id) === String(article.id) &&
-                  item.title === article.title.trim() && item.content === article.content)) {
-              throw new Error("لم يظهر المقال المحفوظ كما هو في نتيجة المكتبة؛ لم يُعلن اكتمال العملية.");
+            editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ إعادة تحميل القائمة من قاعدة البيانات...";
+            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"});
+            const refreshedData = await refreshed.json().catch(()=>({}));
+            if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
+              throw new Error("تم إرسال الحفظ، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
             }
-            articles.splice(0, articles.length, ...refreshed.articles);
+            articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
             editForm.hidden = true;
             render();
-            editorStatus.textContent = "تم الحفظ والتحقق من ظهور المقال في المكتبة.";
+            editorStatus.textContent = creatingArticle ? "تم حفظ المقال الجديد وجدولته سحابيًا." : "تم حفظ المقال وتأكيد بياناته السحابية.";
           } catch (error) {
             editorStatus.textContent = error?.message || "تعذر تأكيد الحفظ السحابي.";
           } finally {
