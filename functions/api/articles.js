@@ -104,24 +104,24 @@ export async function onRequest({request, env}) {
   }
   try {
     await ensureTable(env.DB);
-    // Keep the newest hijama article and remove only older duplicate rows.
-    // The old cleanup removed every hijama article, including the current editorial entry.
-    const {results: hijamaRows=[]} = await env.DB.prepare(
-      "SELECT id,title FROM articles ORDER BY updated_at DESC, created_at DESC"
+    // Permanently retire the specifically requested article and all legacy copies.
+    // This idempotent cleanup deletes only rows identified by the retired ID or title.
+    const {results: retiredRows=[]} = await env.DB.prepare(
+      "SELECT id,title FROM articles"
     ).all();
-    let keptHijama = false;
-    for (const row of hijamaRows) {
-      if (!isHijamaArticle(row)) continue;
-      if (!keptHijama) {
-        keptHijama = true;
-      } else {
+    for (const row of retiredRows) {
+      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") ||
+          isHijamaArticle(row)) {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
       }
     }
     if (request.method === "GET") {
       const {results=[]} = await env.DB.prepare("SELECT id,title,category,date,excerpt,content FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-      // Keep the newest database hijama entry; never hide it solely because its ID is legacy.
-      let articles = results.filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(article));
+      // The retired hijama article must never be returned by the public API.
+      let articles = results.filter(article =>
+        !String(article.id || "").toLocaleLowerCase("en").includes("hijama") &&
+        !isHijamaArticle(article)
+      );
       // Deduplicate all article titles in the public response, not only hijama.
       // Rows are ordered newest-first above, so the most recently updated copy wins.
       const seenArticleTitles = new Set();
