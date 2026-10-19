@@ -1,7 +1,7 @@
 # ALABQRI image localization report
 
 - Images saved in this run: 1
-- Source files rewritten: 2
+- Source files rewritten: 0
 
 ## External image references that could not be localized
 
