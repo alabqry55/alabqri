@@ -54,7 +54,22 @@
       })
       .then(data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
-        let articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+        const normalizeArticleTitle = value => String(value || "").normalize("NFKC").toLocaleLowerCase("ar")
+          .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
+          .replace(/[^\p{L}\p{N}]+/gu, "");
+        const isRetiredHijamaArticle = article => {
+          const id = String(article?.id || "").toLocaleLowerCase("en");
+          const title = String(article?.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
+          return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
+        };
+        const seenArticleTitles = new Set();
+        let articles = data.articles.filter(article => {
+          if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article)) return false;
+          const title = normalizeArticleTitle(article.title);
+          if (!title || seenArticleTitles.has(title)) return false;
+          seenArticleTitles.add(title);
+          return true;
+        });
         root.replaceChildren();
         if (!articles.length) {
           showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
@@ -274,7 +289,7 @@
             }
             articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
             render();
-            setAdminStatus("تم حفظ "+result.saved+" مقالًا في قاعدة البيانات بجدولة مستقبلية، وتم تأكيد إعادة تحميل القائمة.");
+            setAdminStatus("تم حفظ "+result.saved+" مقالًا والتحقق من سجلات قاعدة البيانات. "+(result.immediatePublished ? "المقال الأول منشور فورًا، وبقية المقالات مجدولة لمواعيدها المحددة. " : "المقالات مجدولة لمواعيدها المحددة. ")+"تم تأكيد إعادة تحميل القائمة.");
             importButton.textContent = "تم تحميل خطة النشر";
           } catch (error) {
             setAdminStatus(error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.");
