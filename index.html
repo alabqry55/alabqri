@@ -14306,7 +14306,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var synth=window.speechSynthesis;
     if(synth&&(synth.speaking||synth.pending)){removeActivationListeners();return;}
     removeActivationListeners();
-    speakWelcome(false);
+    /* بعد رفض التشغيل التلقائي، اجعل أول تفاعل حقيقي من المستخدم مسارًا يدويًا مسموحًا،
+       بدل إعادة إرسال طلب تلقائي قد يرفضه Edge مرة أخرى. */
+    speakWelcome(true);
   }
   document.addEventListener('pointerdown',retryFromFirstInteraction,{capture:true,passive:true});
   document.addEventListener('touchstart',retryFromFirstInteraction,{capture:true,passive:true});
