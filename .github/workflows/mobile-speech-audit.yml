@@ -29,9 +29,11 @@ jobs:
           const vm = require('vm');
           const { chromium, devices } = require('/tmp/mobile-audit/node_modules/playwright');
           const source = fs.readFileSync('index.html', 'utf8');
-          const match = source.match(/<script id="abq-audio-welcome-script">([\\s\\S]*?)<\\/script>/);
-          if (!match) throw new Error('Welcome speech script not found in main/index.html');
-          const welcomeScript = match[1];
+          const openTag = '<script id="abq-audio-welcome-script">';
+          const start = source.indexOf(openTag);
+          const end = source.indexOf('</script>', start);
+          if (start < 0 || end < 0) throw new Error('Welcome speech script not found in index.html');
+          const welcomeScript = source.slice(start + openTag.length, end);
           new vm.Script(welcomeScript);
           async function main() {
             const browser = await chromium.launch({headless:true});
@@ -45,6 +47,7 @@ jobs:
               const el = document.querySelector('#abq-audio-welcome-btn');
               const r = el ? el.getBoundingClientRect() : null;
               const cs = el ? getComputedStyle(el) : null;
+              const welcomeScript = document.querySelector('#abq-audio-welcome-script');
               return {
                 title: document.title,
                 viewportWidth: document.documentElement.clientWidth,
@@ -56,10 +59,9 @@ jobs:
                 welcomeButtonRect: r ? {x:Math.round(r.x),y:Math.round(r.y),width:Math.round(r.width),height:Math.round(r.height)} : null,
                 speechSynthesisAvailable: 'speechSynthesis' in window,
                 speechVoiceCount: ('speechSynthesis' in window) ? speechSynthesis.getVoices().length : 0,
-                fixedGreetingEndingInScript: Array.from(document.scripts).some(s => s.id === 'abq-audio-welcome-script' && s.textContent.includes('رحلة معرفية نافعة ومثمرة'))
+                fixedGreetingEndingInScript: !!welcomeScript && welcomeScript.textContent.includes('رحلة معرفية نافعة ومثمرة')
               };
             });
-            // Execute the production welcome script in an isolated browser harness with a controlled speech engine.
             async function runSpeechCase(delayCounter) {
               const harness = `<!doctype html><html lang="ar" dir="rtl"><body>
                 <button id="abq-audio-welcome-btn">استمع</button><span id="abq-visitor-count">—</span>
@@ -77,11 +79,14 @@ jobs:
                   Object.defineProperty(window,'speechSynthesis',{value:synth,configurable:true});
                 <\/script>
                 <script>${welcomeScript}<\/script>
-                ${delayCounter ? '<script>setTimeout(()=>{document.getElementById("abq-visitor-count").textContent="37";},900);<\\/script>' : ''}
                 </body></html>`;
               const testPage = await ctx.newPage();
               await testPage.setContent(harness, {waitUntil:'load'});
-              await testPage.waitForTimeout(3800);
+              if (delayCounter) {
+                await testPage.waitForTimeout(900);
+                await testPage.evaluate(() => { document.getElementById('abq-visitor-count').textContent = '37'; });
+              }
+              await testPage.waitForTimeout(3000);
               const result = await testPage.evaluate(() => ({
                 speechCallCount: window.__speechLog.length,
                 utterance: window.__speechLog[0] || '',
