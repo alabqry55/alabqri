@@ -1,4 +1,5 @@
 name: Localize recovery images (preview branch only)
+# Restricted to the recovery preview branch; never writes to main.
 
 on:
   push:
