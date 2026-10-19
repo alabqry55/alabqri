@@ -1,0 +1,38 @@
+name: Inspect mobile runtime error without external browser billing
+on:
+  push:
+    branches:
+      - test/mobile-speech-audit-20261019
+    paths:
+      - .github/workflows/mobile-runtime-error-investigate.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find the exact call and function definition
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s = Path('index.html').read_text(encoding='utf-8')
+          lines = s.splitlines()
+          needle = 'relocateDesktopContactServices'
+          hits = [i for i, line in enumerate(lines) if needle in line]
+          print('SOURCE_LINES=' + str(len(lines)))
+          print('OCCURRENCES=' + str(len(hits)))
+          print('DEFINITION_MARKERS=' + repr({
+              'function': 'function relocateDesktopContactServices' in s,
+              'const': 'const relocateDesktopContactServices' in s,
+              'let': 'let relocateDesktopContactServices' in s,
+              'var': 'var relocateDesktopContactServices' in s,
+              'window-property': 'window.relocateDesktopContactServices' in s
+          }))
+          for i in hits:
+              a, b = max(0, i-12), min(len(lines), i+13)
+              print('--- CONTEXT %d-%d ---' % (a+1,b))
+              for j in range(a,b):
+                  print('%5d: %s' % (j+1, lines[j]))
+          PY
