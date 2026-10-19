@@ -14145,6 +14145,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   var voicesRetryUsed=false;
   var lastSpeechError='';
   var automaticRetryUsed=false;
+  var autoSpeechStarted=false;
+  var autoRetryCount=0;
   var welcomeSessionKey='alabqri-welcome-spoken-v1';
   function wasWelcomedThisTab(){
     try{return window.sessionStorage.getItem(welcomeSessionKey)==='1';}catch(e){return false;}
@@ -14200,6 +14202,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     var preferred=chooseVoice(getArabicVoices());
     if(preferred) utterance.voice=preferred;
     utterance.onstart=function(){
+      autoSpeechStarted=true;
       markWelcomedThisTab();
       lastSpeechError='';
       if(typeof removeActivationListeners==='function') removeActivationListeners();
@@ -14294,11 +14297,27 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
   observer.observe(totalEl,{childList:true,characterData:true,subtree:true});
 
+  /* تشغيل الترحيب مبكرًا، ثم إعادة محاولة محدودة إذا لم يبدأ النطق بسبب تأخر تحميل محرك/أصوات الكلام.
+     لا يمكن تجاوز حظر التشغيل التلقائي الذي يفرضه المتصفح؛ يظل زر الاستماع اليدوي متاحًا. */
+  function retryAutomaticWelcome(){
+    if(autoSpeechStarted || wasWelcomedThisTab() || autoRetryCount>=2) return;
+    var synth=window.speechSynthesis;
+    if(synth && (synth.speaking||synth.pending)) return;
+    if(lastSpeechError && ['canceled','interrupted','synthesis-failed','voice-unavailable'].indexOf(lastSpeechError)===-1) return;
+    autoRetryCount++;
+    window.setTimeout(function(){
+      if(!autoSpeechStarted && !wasWelcomedThisTab()) speakWelcome(false);
+    },autoRetryCount===1?900:1800);
+  }
   /* لا ننتظر استجابة API العداد لبدء محاولة الترحيب على الكمبيوتر والهاتف. */
   function attemptAutomaticWelcome(){
     if(autoAttempted) return;
     autoAttempted=true;
-    window.setTimeout(function(){speakWelcome(false);},650);
+    window.setTimeout(function(){
+      speakWelcome(false);
+      window.setTimeout(retryAutomaticWelcome,1400);
+      window.setTimeout(retryAutomaticWelcome,3000);
+    },650);
   }
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',attemptAutomaticWelcome,{once:true});
