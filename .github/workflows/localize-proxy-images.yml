@@ -1,0 +1,120 @@
+name: Localize image-proxy assets (preview only)
+
+on:
+  push:
+    branches:
+      - fix/localize-proxy-images-20261019
+    paths:
+      - '.github/workflows/localize-proxy-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: localize-proxy-images-preview
+  cancel-in-progress: false
+
+jobs:
+  localize:
+    if: github.ref == 'refs/heads/fix/localize-proxy-images-20261019'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/localize-proxy-images-20261019
+
+      - name: Download proxied images and rewrite references
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, mimetypes, pathlib, re, subprocess, urllib.parse, urllib.request
+
+          root = pathlib.Path(".")
+          out = root / "assets" / "images"
+          out.mkdir(parents=True, exist_ok=True)
+          extensions = {".html", ".htm", ".css", ".js", ".mjs", ".json", ".xml", ".svg", ".md"}
+          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
+          files = [root / p for p in tracked if p and pathlib.Path(p).suffix.lower() in extensions and pathlib.Path(p).is_file() and not p.startswith(".github/")]
+          proxy_re = re.compile(r"""(?P<url>(?:https://alabqri\.pages\.dev)?/api/image-proxy\?src=[^\s"'<>)]*)""")
+          references = {}
+          for path in files:
+              try:
+                  text = path.read_text(encoding="utf-8")
+              except (UnicodeDecodeError, OSError):
+                  continue
+              for match in proxy_re.finditer(text):
+                  references.setdefault(match.group("url"), set()).add(str(path))
+
+          replacements = {}
+          failures = []
+          for proxy in sorted(references):
+              absolute = proxy if proxy.startswith("https://") else "https://alabqri.pages.dev" + proxy
+              parsed = urllib.parse.urlsplit(absolute)
+              source = urllib.parse.parse_qs(parsed.query).get("src", [None])[0]
+              if not source or not source.startswith("https://"):
+                  failures.append((proxy, "missing or unsafe source URL"))
+                  continue
+              try:
+                  req = urllib.request.Request(source, headers={"User-Agent":"ALABQRI-image-localizer/1.0", "Accept":"image/avif,image/webp,image/png,image/jpeg,image/gif,image/svg+xml,*/*;q=0.5"})
+                  with urllib.request.urlopen(req, timeout=35) as response:
+                      data = response.read(25 * 1024 * 1024 + 1)
+                      ctype = response.headers.get("Content-Type", "").split(";")[0].strip().lower()
+                  if not data or len(data) > 25 * 1024 * 1024:
+                      raise ValueError(f"invalid size: {len(data)} bytes")
+                  source_path = urllib.parse.urlsplit(source).path
+                  ext = (mimetypes.guess_extension(ctype) or pathlib.PurePosixPath(source_path).suffix.lower()) if ctype.startswith("image/") else pathlib.PurePosixPath(source_path).suffix.lower()
+                  if ext == ".jpe": ext = ".jpg"
+                  if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".svg", ".bmp"}:
+                      raise ValueError(f"unsupported image type: {ctype} ({ext})")
+                  if ext in {".jpg", ".jpeg"} and not data.startswith(b"\xff\xd8\xff"): raise ValueError("JPEG signature mismatch")
+                  if ext == ".png" and not data.startswith(b"\x89PNG\r\n\x1a\n"): raise ValueError("PNG signature mismatch")
+                  if ext == ".gif" and not data.startswith((b"GIF87a", b"GIF89a")): raise ValueError("GIF signature mismatch")
+                  if ext == ".webp" and not (data.startswith(b"RIFF") and data[8:12] == b"WEBP"): raise ValueError("WebP signature mismatch")
+                  if ext == ".svg" and b"<svg" not in data[:4096].lower(): raise ValueError("SVG signature mismatch")
+                  name = "proxy-" + hashlib.sha256(source.encode()).hexdigest()[:16] + ext
+                  (out / name).write_bytes(data)
+                  local = "/assets/images/" + name
+                  replacements[proxy] = local
+                  print(f"LOCALIZED {source} -> {local} ({len(data)} bytes)")
+              except Exception as exc:
+                  failures.append((proxy, str(exc)))
+
+          changed = []
+          for path in files:
+              try:
+                  original = path.read_text(encoding="utf-8")
+              except (UnicodeDecodeError, OSError):
+                  continue
+              updated = original
+              for source, local in sorted(replacements.items(), key=lambda item: len(item[0]), reverse=True):
+                  updated = updated.replace(source, local)
+              if updated != original:
+                  path.write_text(updated, encoding="utf-8")
+                  changed.append(str(path))
+
+          report = root / "docs" / "image-localization-report.md"
+          report.parent.mkdir(parents=True, exist_ok=True)
+          lines = ["# ALABQRI image localization report", "", f"- Proxied image URLs localized: {len(replacements)}", f"- Source files rewritten: {len(changed)}", "", "## Proxied image references that could not be localized", ""]
+          lines += [f"- {url} — {reason}" for url, reason in failures] if failures else ["- None detected."]
+          report.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          print(f"SUMMARY: {len(replacements)} proxied images localized; {len(changed)} files rewritten; {len(failures)} failures.")
+          if changed: print("REWRITTEN FILES:\n" + "\n".join(changed))
+          PY
+
+      - name: Commit localized images to preview branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images docs/image-localization-report.md
+          git add -u -- .
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix(images): localize remaining proxied images"
+          git push origin HEAD:fix/localize-proxy-images-20261019
