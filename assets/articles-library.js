@@ -76,8 +76,7 @@
         const initiallyAdmin = Boolean(data.admin);
         root.replaceChildren();
         if (!articles.length) {
-          showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
-          return;
+          root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
         const tools = el("div", "abq-articles-tools");
         const search = el("input");
