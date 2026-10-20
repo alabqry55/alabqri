@@ -66,10 +66,18 @@
           const title = String(article?.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
           return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
         };
+        const isRetiredSeptemberEnergyCopy = article => {
+          const title = normalizeArticleTitle(article?.title);
+          const date = String(article?.date || "").normalize("NFKC").toLocaleLowerCase("ar")
+            .replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+            .replace(/[إأآ]/g, "ا").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
+          const isEnergy = title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
+          return isEnergy && (date === "20 سبتمبر 2026" || /^2026-09-20(?:$|t)/i.test(String(article?.date || "").trim()));
+        };
         const filterUniqueArticles = items => {
           const seenArticleTitles = new Set();
           return items.filter(article => {
-            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article)) return false;
+            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredSeptemberEnergyCopy(article)) return false;
             const title = normalizeArticleTitle(article.title);
             if (!title || seenArticleTitles.has(title)) return false;
             seenArticleTitles.add(title);
