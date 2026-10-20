@@ -73,7 +73,13 @@ const canonicalAzkarArticle = {
 تنبيه معرفي: ما ورد عن الاجترار والانتباه وتنظيم الاستجابة للضغط وصفٌ لاحتمالات نفسية عامة، وليس إثباتًا لآلية عصبية محددة أو علاجًا مضمونًا. ولا تُنسب نتائج مثل خفض الكورتيزول أو تنشيط مسار عصبي بعينه إلى الذكر على نحو قطعي دون دراسات مباشرة موثوقة.`
 };
 
-const canonicalArticles = [canonicalEnergyArticle, canonicalAzkarArticle];
+const canonicalArticles = [canonicalAzkarArticle];
+// Permanent retirement: never restore or expose this legacy article again.
+const isRetiredEnergyArticle = article => {
+  const id = String(article?.id || "").toLocaleLowerCase("en");
+  const title = normalizeTitle(article?.title);
+  return id === "energy-science-sharia" || title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
+};
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
   .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
@@ -118,7 +124,7 @@ export async function onRequest({request, env}) {
     // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
     const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
     for (const row of retiredRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row)) {
+      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
       }
     }
@@ -149,7 +155,7 @@ export async function onRequest({request, env}) {
         const timestamp = Date.parse(article.scheduled_at);
         return Number.isFinite(timestamp) && timestamp <= now;
       });
-      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article));
+      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article) && !isRetiredEnergyArticle(article));
       for (const canonical of canonicalArticles) {
         const allMatches = allResults.filter(article => sameArticle(article, canonical));
         const visibleMatches = articles.filter(article => sameArticle(article, canonical));
