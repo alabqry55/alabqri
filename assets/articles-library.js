@@ -386,7 +386,39 @@
         category.addEventListener("change", render);
         render();
       })
-      .catch(() => showStatus("تعذر تحميل الأبحاث الآن بسبب خطأ في الاتصال بالخدمة. يرجى المحاولة لاحقًا؛ لم يتم حذف أي بيانات."));
+      .catch(() => {
+        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات، ويمكنك فتح أداة الإدارة للتحقق من اتصال قاعدة البيانات.");
+        const fallbackBar = el("div", "abq-articles-tools");
+        fallbackBar.style.gridTemplateColumns = "1fr";
+        const fallbackAdminButton = el("button", "", "إدارة محتوى المقالات");
+        fallbackAdminButton.type = "button";
+        fallbackAdminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+        const fallbackStatus = el("p", "abq-article-meta", "لم يتم تحميل المكتبة؛ لم يُجرَ أي تعديل على المقالات.");
+        fallbackStatus.setAttribute("role", "status");
+        fallbackBar.appendChild(fallbackAdminButton);
+        root.append(fallbackBar, fallbackStatus);
+        fallbackAdminButton.addEventListener("click", async () => {
+          const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
+          if (!entered || !entered.trim()) return;
+          fallbackAdminButton.disabled = true;
+          fallbackStatus.textContent = "جارٍ التحقق من صلاحية الإدارة واتصال قاعدة البيانات...";
+          try {
+            const response = await fetch("/api/articles", {
+              headers: { "Accept": "application/json", "Authorization": "Bearer " + entered.trim() },
+              cache: "no-store"
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.admin || !Array.isArray(data.articles)) {
+              throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : (data.error || "تعذر الوصول إلى إدارة المقالات (HTTP " + response.status + ")."));
+            }
+            fallbackStatus.textContent = "تم التحقق من المفتاح، لكن واجهة الإدارة الكاملة لم تُحمّل بسبب تعطل طلب المكتبة الأول. أعد تحميل الصفحة وحاول مرة أخرى.";
+          } catch (error) {
+            fallbackStatus.textContent = error?.message || "تعذر التحقق من الإدارة؛ لم يتم تغيير أي بيانات.";
+          } finally {
+            fallbackAdminButton.disabled = false;
+          }
+        });
+      });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
