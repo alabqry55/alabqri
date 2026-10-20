@@ -16,7 +16,9 @@
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
   `;
   function init() {
-    const heading = Array.from(document.querySelectorAll("h1,h2,h3,h4")).find(el =>
+    const articleTab = document.getElementById("articles");
+    const headingScope = articleTab || document;
+    const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
     );
     if (!heading) return;
@@ -31,7 +33,9 @@
     const root = document.createElement("div");
     root.className = "abq-articles-library";
     root.setAttribute("aria-live", "polite");
-    section.appendChild(root);
+    const articleHero = heading.closest(".hero-bg");
+    if (articleHero) articleHero.insertAdjacentElement("afterend", root);
+    else section.appendChild(root);
     const status = document.createElement("div");
     status.className = "abq-articles-status";
     status.textContent = "جارٍ تحميل الأبحاث والمقالات...";
