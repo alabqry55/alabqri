@@ -16,7 +16,9 @@
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
   `;
   function init() {
-    const heading = Array.from(document.querySelectorAll("h1,h2,h3,h4")).find(el =>
+    const articleTab = document.getElementById("articles");
+    const headingScope = articleTab || document;
+    const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
     );
     if (!heading) return;
@@ -31,7 +33,9 @@
     const root = document.createElement("div");
     root.className = "abq-articles-library";
     root.setAttribute("aria-live", "polite");
-    section.appendChild(root);
+    const articleHero = heading.closest(".hero-bg");
+    if (articleHero) articleHero.insertAdjacentElement("afterend", root);
+    else section.appendChild(root);
     const status = document.createElement("div");
     status.className = "abq-articles-status";
     status.textContent = "جارٍ تحميل الأبحاث والمقالات...";
@@ -47,7 +51,7 @@
       root.replaceChildren();
       root.appendChild(el("div", "abq-articles-status", message));
     };
-    fetch("/api/articles", { headers: { "Accept": "application/json" }, cache: "no-store" })
+    fetch("/api/articles", { headers: { "Accept": "application/json", ...(sessionStorage.getItem("abqArticlesAdminKey") ? { "Authorization": "Bearer " + sessionStorage.getItem("abqArticlesAdminKey") } : {}) }, cache: "no-store" })
       .then(response => {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -73,10 +77,10 @@
           });
         };
         let articles = filterUniqueArticles(data.articles);
+        const initiallyAdmin = Boolean(data.admin);
         root.replaceChildren();
         if (!articles.length) {
-          showStatus("لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. ستظهر هنا تلقائيًا عند حفظ محتوى صحيح في قاعدة البيانات.");
-          return;
+          root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
         const tools = el("div", "abq-articles-tools");
         const search = el("input");
@@ -139,7 +143,7 @@
 
         // Secure inline editor: the admin key is entered by the authorized editor and
         // remains only in this page's memory. It is never persisted in localStorage.
-        let adminKey = "";
+        let adminKey = sessionStorage.getItem("abqArticlesAdminKey") || "";
         let adminMode = false;
         const adminBar = el("div", "abq-articles-tools");
         const adminButton = el("button", "", "إدارة محتوى المقالات");
@@ -151,8 +155,9 @@
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
         addButton.style.cssText = adminButton.style.cssText;
         importButton.style.cssText = adminButton.style.cssText;
-        addButton.hidden = true;
-        importButton.hidden = true;
+        addButton.hidden = !initiallyAdmin;
+        importButton.hidden = !initiallyAdmin;
+        if (initiallyAdmin) { adminMode = true; adminButton.textContent = "وضع الإدارة مفعّل"; }
         adminBar.style.gridTemplateColumns = "1fr";
         adminBar.append(adminButton, addButton, importButton);
         root.insertBefore(adminBar, tools);
@@ -386,7 +391,41 @@
         category.addEventListener("change", render);
         render();
       })
-      .catch(() => showStatus("تعذر تحميل الأبحاث الآن بسبب خطأ في الاتصال بالخدمة. يرجى المحاولة لاحقًا؛ لم يتم حذف أي بيانات."));
+      .catch(() => {
+        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات، ويمكنك فتح أداة الإدارة للتحقق من اتصال قاعدة البيانات.");
+        const fallbackBar = el("div", "abq-articles-tools");
+        fallbackBar.style.gridTemplateColumns = "1fr";
+        const fallbackAdminButton = el("button", "", "إدارة محتوى المقالات");
+        fallbackAdminButton.type = "button";
+        fallbackAdminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
+        const fallbackStatus = el("p", "abq-article-meta", "لم يتم تحميل المكتبة؛ لم يُجرَ أي تعديل على المقالات.");
+        fallbackStatus.setAttribute("role", "status");
+        fallbackBar.appendChild(fallbackAdminButton);
+        root.append(fallbackBar, fallbackStatus);
+        fallbackAdminButton.addEventListener("click", async () => {
+          const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
+          if (!entered || !entered.trim()) return;
+          fallbackAdminButton.disabled = true;
+          fallbackStatus.textContent = "جارٍ التحقق من صلاحية الإدارة واتصال قاعدة البيانات...";
+          try {
+            const response = await fetch("/api/articles", {
+              headers: { "Accept": "application/json", "Authorization": "Bearer " + entered.trim() },
+              cache: "no-store"
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.admin || !Array.isArray(data.articles)) {
+              throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : (data.error || "تعذر الوصول إلى إدارة المقالات (HTTP " + response.status + ")."));
+            }
+            sessionStorage.setItem("abqArticlesAdminKey", entered.trim());
+            fallbackStatus.textContent = "تم التحقق من المفتاح. جارٍ إعادة تحميل لوحة الإدارة...";
+            window.location.reload();
+          } catch (error) {
+            fallbackStatus.textContent = error?.message || "تعذر التحقق من الإدارة؛ لم يتم تغيير أي بيانات.";
+          } finally {
+            fallbackAdminButton.disabled = false;
+          }
+        });
+      });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
