@@ -4,38 +4,6 @@ const CATEGORIES = new Set(["التنمية البشرية","الطب التكم
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 const validId = id => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id);
 
-const canonicalEnergyArticle = {
-  id: "energy-science-sharia",
-  title: "الطاقة الحيوية بين العلم والشريعة",
-  category: "التنمية البشرية",
-  date: "20 سبتمبر 2026",
-  excerpt: "قراءة تأصيلية تميّز بين مفاهيم الطاقة في العلوم الطبيعية، والخبرات الذاتية، والادعاءات العلاجية غير المثبتة، مع مراعاة الضوابط الشرعية والأمانة العلمية.",
-  content: `الطاقة الحيوية بين العلم والشريعة
-
-مقدمة
-تتردد عبارة «الطاقة الحيوية» في بعض مجالات التنمية البشرية والطب التكميلي، لكنها لا تُستخدم دائمًا بمعنى علمي واحد. ومن أجل الفهم المنضبط، ينبغي التمييز بين الطاقة بوصفها كمية فيزيائية قابلة للقياس، وبين وصف النشاط والحيوية والشعور النفسي، وبين الادعاءات التي تتحدث عن مجال طاقي خفي أو علاج مضمون من دون أدلة كافية.
-
-أولًا: ماذا تعني الطاقة في العلوم الطبيعية؟
-للطاقة تعريفات محددة في الفيزياء، وتُقاس بوحدات معروفة، وتظهر في صور مثل الطاقة الحرارية والكيميائية والكهربائية والحركية. وتُختبر الفرضيات العلمية بالتعريف الدقيق والقياس القابل للتكرار والمقارنة المستقلة. لذلك لا يكفي استخدام كلمة «طاقة» وحدها لإثبات وجود آلية علاجية أو مجال غير مرئي حول الجسم.
-
-ثانيًا: التجربة الشخصية ليست وحدها دليلًا على الآلية
-قد يشعر بعض الناس بالراحة أثناء الاسترخاء أو التنفس الهادئ أو التدليك أو الممارسات التأملية. ويمكن أن ترتبط هذه الخبرات بالانتباه والتوقع والسياق الداعم والاستجابة للاسترخاء. لكن الشعور بالتحسن — مع احترام صدق صاحبه — لا يثبت بمفرده التفسير المقترح أو أن علاجًا بعينه يعالج مرضًا محددًا. يلزم لذلك اختبار مناسب وأدلة مستقلة تتناسب مع قوة الادعاء.
-
-ثالثًا: ميزان التقييم العلمي
-قبل اعتماد أي ادعاء، اسأل: هل عُرّف المصطلح بدقة؟ هل توجد دراسات بشرية جيدة التصميم؟ هل النتائج قابلة للتكرار؟ هل قورنت الممارسة بالرعاية المعتادة أو بتدخل ضابط؟ وهل ذُكرت المخاطر والحدود وتضارب المصالح؟ كلما كان الادعاء أكبر — مثل علاج مرض خطير أو الاستغناء عن الدواء — وجب أن يكون الدليل أقوى.
-
-رابعًا: الضوابط الشرعية والمسؤولية المهنية
-يُراعى في الممارسات أن تكون خالية من المحظورات الشرعية، وألا تُنسب إلى الدين أحكام أو خصائص بلا دليل معتبر، وألا تتضمن استغلالًا لحاجة الناس أو ادعاء علم الغيب. كما ينبغي الفصل بين النص الشرعي، والاجتهاد، والتفسير الشخصي، والفرضية العلمية. حسن النية لا يغني عن التثبت، واللغة الروحية لا تحول الادعاء غير المثبت إلى حقيقة علمية.
-
-خامسًا: التطبيق المسؤول
-يمكن الاستفادة من الممارسات الآمنة التي تساعد على الاسترخاء أو تنظيم الروتين إذا كانت مناسبة للشخص، مع وصفها بحدودها الحقيقية. ولا ينبغي تأخير التشخيص أو إيقاف علاج موصوف أو ضمان الشفاء بناءً على مفهوم «الطاقة الحيوية». عند وجود أعراض مستمرة أو خطرة، تكون الأولوية للتقييم الطبي المؤهل.
-
-خاتمة
-الجمع بين القيم الإسلامية والمعرفة الحديثة يقتضي وضوح المصطلحات، والتواضع أمام الأدلة، واحترام التجربة الإنسانية دون تحويلها إلى برهان قاطع. المعيار هو ما يمكن بيانه والتحقق منه، مع حفظ كرامة الإنسان وسلامته وحقه في معلومات دقيقة.
-
-تنبيه معرفي: هذا المقال للتثقيف العام، ولا يثبت وجود مجال علاجي حيوي مستقل ولا يقدّم تشخيصًا أو علاجًا طبيًا.`
-};
-
 const canonicalAzkarArticle = {
   id: "azkar-balance",
   title: "🌿 أثر الأذكار في الاتزان النفسي",
@@ -76,9 +44,11 @@ const canonicalAzkarArticle = {
 const canonicalArticles = [canonicalAzkarArticle];
 // Permanent retirement: never restore or expose this legacy article again.
 const isRetiredEnergyArticle = article => {
-  const id = String(article?.id || "").toLocaleLowerCase("en");
   const title = normalizeTitle(article?.title);
-  return id === "energy-science-sharia" || title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
+  const date = normalizeTitle(article?.date);
+  const matchesTitle = title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
+  const matchesSeptemberDate = date === normalizeTitle("20 سبتمبر 2026") || /^2026-09-20(?:$|t)/i.test(String(article?.date || "").trim());
+  return matchesTitle && matchesSeptemberDate;
 };
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
@@ -122,7 +92,7 @@ export async function onRequest({request, env}) {
   try {
     await ensureTable(env.DB);
     // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
-    const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
+    const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
     for (const row of retiredRows) {
       if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
@@ -199,6 +169,7 @@ export async function onRequest({request, env}) {
     if (body.action === "save") {
       await ensureScheduleColumn(env.DB);
       const a = body.article;
+      if (a && isRetiredEnergyArticle(a)) return json({error:"النسخة المؤرخة في 20 سبتمبر 2026 متقاعدة نهائيًا."},409);
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
       if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
@@ -230,6 +201,7 @@ export async function onRequest({request, env}) {
       const titles = new Set();
       for (let index = 0; index < incoming.length; index++) {
         const a = incoming[index];
+        if (a && isRetiredEnergyArticle(a)) return json({error:"تتضمن الدفعة النسخة المتقاعدة المؤرخة في 20 سبتمبر 2026؛ لم يُحفظ أي مقال."},409);
         if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
             a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
             a.content.length > 200000 || !CATEGORIES.has(a.category) ||
