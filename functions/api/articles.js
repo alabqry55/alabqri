@@ -104,9 +104,8 @@ export async function onRequest({request, env}) {
     if (request.method === "GET") {
       const suppliedAuth = (request.headers.get("Authorization") || "");
       const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
-      // An authenticated editor may safely apply the additive migration on first open,
-      // so scheduled items are visible in admin before the first save.
-      if (isAdmin) await ensureScheduleColumn(env.DB);
+      // GET is strictly read-only for both public visitors and authenticated admins.
+      // Schema migrations are performed only by authenticated POST actions.
       let allResults = [];
       let hasScheduleColumn = true;
       try {
