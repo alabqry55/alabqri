@@ -45,7 +45,6 @@ const canonicalArticles = [canonicalAzkarArticle];
 // Permanent retirement: never restore or expose this legacy article again.
 const isRetiredEnergyArticle = article => {
   const title = normalizeTitle(article?.title);
-  const date = normalizeTitle(String(article?.date || "").replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))));
   const matchesTitle = title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
   return matchesTitle;
 };
