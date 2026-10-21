@@ -167,9 +167,9 @@
 
         // Move the existing blue-framed search field into the main toolbar,
         // removing the duplicate generated field while preserving existing listeners.
-        const externalSearchFields = Array.from((articleTab || document).querySelectorAll(
-          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"]'
-        )).filter(field => !root.contains(field) && field !== search);
+        const externalSearchFields = Array.from(document.querySelectorAll(
+          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"], input[name*="search" i], input[id*="search" i]'
+        )).filter(field => !root.contains(field) && field !== search && field.isConnected);
         const blueFramedSearch = externalSearchFields.find(field => {
           const style = window.getComputedStyle(field);
           return [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
