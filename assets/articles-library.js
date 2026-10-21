@@ -520,3 +520,4 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
 })();
+// Production redeploy trigger: preserve behavior; verify Cloudflare Pages publishes main.
