@@ -46,15 +46,16 @@
         if (node.contains(root)) break;
         const text = (node.textContent || "").replace(/\s+/g, " ");
         const hasLegacyHeading = text.includes("البحث في المقالات والأبحاث");
-        const hasLegacyResults = /اقرأ/.test(text) && /الطاقة الحيوية بين العلم والشريعة/.test(text);
-        if (hasLegacyHeading && hasLegacyResults) candidate = node;
+        // The old search renderer is redundant even after the retired article disappears.
+        if (hasLegacyHeading) candidate = node;
         node = node.parentElement;
       }
       if (candidate && !candidate.contains(root)) candidate.remove();
     };
     removeLegacyArticleSearch();
+    // The legacy renderer may live outside #articles and may mount after this library.
     const legacySearchObserver = new MutationObserver(() => removeLegacyArticleSearch());
-    legacySearchObserver.observe(articleTab || document.body, { childList: true, subtree: true });
+    legacySearchObserver.observe(document.body, { childList: true, subtree: true });
     const articleHero = heading.closest(".hero-bg");
     if (articleHero) articleHero.insertAdjacentElement("afterend", root);
     else section.appendChild(root);
