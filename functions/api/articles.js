@@ -87,15 +87,20 @@ export async function onRequest({request, env}) {
     if (request.method === "GET") return json({articles:[canonicalAzkarArticle], fallback:true});
     return json({error:"D1 binding DB is not configured."},500);
   }
-  try {
-    await ensureTable(env.DB);
-    // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
-    const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
-    for (const row of retiredRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
-        await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
-      }
+  // Enforce routing before touching D1: GET must remain strictly read-only.
+  if (request.method !== "GET" && request.method !== "POST") {
+    return json({error:"Method not allowed."},405);
+  }
+  // Every mutating path is POST-only and authenticated before any schema or data operation.
+  if (request.method === "POST") {
+    if (!env.ARTICLES_ADMIN_KEY) return json({error:"Articles admin secret is not configured."},503);
+    if ((request.headers.get("Authorization")||"") !== `Bearer ${env.ARTICLES_ADMIN_KEY}`) {
+      return json({error:"Unauthorized."},401);
     }
+  }
+  try {
+    // Schema setup is a write operation: only run it after POST authentication.
+    if (request.method === "POST") await ensureTable(env.DB);
     if (request.method === "GET") {
       const suppliedAuth = (request.headers.get("Authorization") || "");
       const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
