@@ -174,7 +174,7 @@
           const style = window.getComputedStyle(field);
           return [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
             .some(color => {
-              const rgb = color.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/i);
+              const rgb = color.match(/[0-9]+/g);
               if (!rgb) return /blue/i.test(color);
               const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
               return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
@@ -185,7 +185,7 @@
           const computed = window.getComputedStyle(blueFramedSearch);
           const blueBorder = [computed.borderTopColor, computed.borderRightColor,
             computed.borderBottomColor, computed.borderLeftColor].find(color => {
-              const rgb = color.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/i);
+              const rgb = color.match(/[0-9]+/g);
               if (!rgb) return /blue/i.test(color);
               const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
               return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
