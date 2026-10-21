@@ -45,10 +45,8 @@ const canonicalArticles = [canonicalAzkarArticle];
 // Permanent retirement: never restore or expose this legacy article again.
 const isRetiredEnergyArticle = article => {
   const title = normalizeTitle(article?.title);
-  const date = normalizeTitle(String(article?.date || "").replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))));
   const matchesTitle = title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
-  const matchesSeptemberDate = date === normalizeTitle("20 سبتمبر 2026") || /^2026-09-20(?:$|t)/i.test(String(article?.date || "").trim());
-  return matchesTitle && matchesSeptemberDate;
+  return matchesTitle;
 };
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
@@ -169,7 +167,7 @@ export async function onRequest({request, env}) {
     if (body.action === "save") {
       await ensureScheduleColumn(env.DB);
       const a = body.article;
-      if (a && isRetiredEnergyArticle(a)) return json({error:"النسخة المؤرخة في 20 سبتمبر 2026 متقاعدة نهائيًا."},409);
+      if (a && isRetiredEnergyArticle(a)) return json({error:"مقال الطاقة الحيوية متقاعد نهائيًا ولا يمكن إعادة حفظه."},409);
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
       if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
@@ -201,7 +199,7 @@ export async function onRequest({request, env}) {
       const titles = new Set();
       for (let index = 0; index < incoming.length; index++) {
         const a = incoming[index];
-        if (a && isRetiredEnergyArticle(a)) return json({error:"تتضمن الدفعة النسخة المتقاعدة المؤرخة في 20 سبتمبر 2026؛ لم يُحفظ أي مقال."},409);
+        if (a && isRetiredEnergyArticle(a)) return json({error:"تتضمن الدفعة مقال الطاقة الحيوية المتقاعد نهائيًا؛ لم يُحفظ أي مقال."},409);
         if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
             a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
             a.content.length > 200000 || !CATEGORIES.has(a.category) ||
