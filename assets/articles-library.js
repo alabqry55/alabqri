@@ -150,7 +150,7 @@
           root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
         const tools = el("div", "abq-articles-tools");
-        const search = el("input");
+        let search = el("input");
         search.type = "search";
         search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
         search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
@@ -164,6 +164,40 @@
           option.value = value;
           category.appendChild(option);
         });
+
+        // Move the existing blue-framed search field into the main toolbar,
+        // removing the duplicate generated field while preserving existing listeners.
+        const externalSearchFields = Array.from((articleTab || document).querySelectorAll(
+          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"]'
+        )).filter(field => !root.contains(field) && field !== search);
+        const blueFramedSearch = externalSearchFields.find(field => {
+          const style = window.getComputedStyle(field);
+          return [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
+            .some(color => {
+              const rgb = color.match(/[0-9]+/g);
+              if (!rgb) return /blue/i.test(color);
+              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
+            });
+        }) || externalSearchFields[0];
+
+        if (blueFramedSearch) {
+          const computed = window.getComputedStyle(blueFramedSearch);
+          const blueBorder = [computed.borderTopColor, computed.borderRightColor,
+            computed.borderBottomColor, computed.borderLeftColor].find(color => {
+              const rgb = color.match(/[0-9]+/g);
+              if (!rgb) return /blue/i.test(color);
+              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
+            });
+          search.remove();
+          search = blueFramedSearch;
+          search.type = "search";
+          search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
+          search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
+          if (blueBorder) search.style.borderColor = blueBorder;
+        }
+
         tools.append(search, category);
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
