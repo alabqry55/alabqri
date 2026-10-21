@@ -165,9 +165,9 @@
           category.appendChild(option);
         });
 
-        // Move the existing blue-framed search field into the main toolbar,
-        // removing the duplicate generated field while preserving existing listeners.
-        const externalSearchFields = Array.from(document.querySelectorAll(
+        // Remove the obsolete blue-framed search field from this articles tab.
+        // Keep the library's own search input above the results as the single search control.
+        const externalSearchFields = Array.from(section.querySelectorAll(
           'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"], input[name*="search" i], input[id*="search" i]'
         )).filter(field => !root.contains(field) && field !== search && field.isConnected);
         const blueFramedSearch = externalSearchFields.find(field => {
@@ -179,23 +179,12 @@
               const red = Number(rgb[0]), green = Number(rgb[1]), blue = Number(rgb[2]);
               return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
             });
-        }) || externalSearchFields[0];
-
+        });
         if (blueFramedSearch) {
-          const computed = window.getComputedStyle(blueFramedSearch);
-          const blueBorder = [computed.borderTopColor, computed.borderRightColor,
-            computed.borderBottomColor, computed.borderLeftColor].find(color => {
-              const rgb = color.match(/[0-9]+/g);
-              if (!rgb) return /blue/i.test(color);
-              const red = Number(rgb[0]), green = Number(rgb[1]), blue = Number(rgb[2]);
-              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
-            });
-          search.remove();
-          search = blueFramedSearch;
-          search.type = "search";
-          search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
-          search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
-          if (blueBorder) search.style.borderColor = blueBorder;
+          const obsoleteWrapper = blueFramedSearch.closest("label") || blueFramedSearch.parentElement;
+          blueFramedSearch.remove();
+          if (obsoleteWrapper && obsoleteWrapper !== section && !obsoleteWrapper.querySelector("input,button,select,textarea") &&
+              !obsoleteWrapper.textContent.trim()) obsoleteWrapper.remove();
         }
 
         tools.append(search, category);
