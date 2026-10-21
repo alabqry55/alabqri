@@ -66,18 +66,14 @@
           const title = String(article?.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
           return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
         };
-        const isRetiredSeptemberEnergyCopy = article => {
+        const isRetiredEnergyArticle = article => {
           const title = normalizeArticleTitle(article?.title);
-          const date = String(article?.date || "").normalize("NFKC").toLocaleLowerCase("ar")
-            .replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
-            .replace(/[إأآ]/g, "ا").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
-          const isEnergy = title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
-          return isEnergy && (date === "20 سبتمبر 2026" || /^2026-09-20(?:$|t)/i.test(String(article?.date || "").trim()));
+          return title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
         };
         const filterUniqueArticles = items => {
           const seenArticleTitles = new Set();
           return items.filter(article => {
-            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredSeptemberEnergyCopy(article)) return false;
+            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredEnergyArticle(article)) return false;
             const title = normalizeArticleTitle(article.title);
             if (!title || seenArticleTitles.has(title)) return false;
             seenArticleTitles.add(title);
@@ -332,7 +328,7 @@
                     : (data.error || "تعذر تحميل المقالات المجدولة."));
                 throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : message);
               }
-              articles = data.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+              articles = filterUniqueArticles(data.articles);
               adminMode = true;
               addButton.hidden = false;
               importButton.hidden = false;
@@ -383,7 +379,7 @@
             if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
               throw new Error("تم إرسال الحفظ، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
             }
-            articles = refreshedData.articles.filter(a => a && typeof a.title === "string" && typeof a.content === "string");
+            articles = filterUniqueArticles(refreshedData.articles);
             editForm.hidden = true;
             render();
             editorStatus.textContent = creatingArticle ? "تم حفظ المقال الجديد وجدولته سحابيًا." : "تم حفظ المقال وتأكيد بياناته السحابية.";
