@@ -34,27 +34,67 @@
     root.className = "abq-articles-library";
     root.setAttribute("aria-live", "polite");
 
-    // Retire the older, parallel article-search renderer. It used a separate
-    // list/API path and could re-expose legacy articles beneath this library.
-    const removeLegacyArticleSearch = () => {
-      const legacyInput = Array.from(document.querySelectorAll("input[placeholder]"))
-        .find(input => /ابحث في عنوان المقال أو محتواه/.test(input.placeholder || ""));
-      if (!legacyInput) return;
-      let node = legacyInput.parentElement;
-      let candidate = null;
-      while (node && node !== document.body && node !== articleTab) {
-        if (node.contains(root)) break;
-        const text = (node.textContent || "").replace(/\s+/g, " ");
-        const hasLegacyHeading = text.includes("البحث في المقالات والأبحاث");
-        // The old search renderer is redundant even after the retired article disappears.
-        if (hasLegacyHeading) candidate = node;
-        node = node.parentElement;
+    // Remove legacy duplicate cards by title, not by relying on a particular
+    // old search input/heading: the legacy renderer can mount independently.
+    const normalizeDomTitle = value => String(value || "").normalize("NFKC").toLocaleLowerCase("ar")
+      .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
+      .replace(/[^\p{L}\p{N}]+/gu, "");
+    const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
+    const cleanupLegacyArticleCards = () => {
+      const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
+      const seen = new Set();
+      for (const titleNode of headings) {
+        const title = normalizeDomTitle(titleNode.textContent);
+        const isEnergy = title.includes(retiredEnergyTitle);
+        const isKnownArticle = title.includes(normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية")) ||
+          title.includes(normalizeDomTitle("أثر الأذكار في الإتزان النفسي"));
+        if (!isEnergy && !isKnownArticle) continue;
+        const inLibrary = Boolean(titleNode.closest(".abq-articles-library"));
+        if (inLibrary && !isEnergy) {
+          seen.add(title);
+          continue;
+        }
+        if (!isEnergy && seen.has(title)) {
+          let node = titleNode.parentElement;
+          let candidate = null;
+          while (node && node !== document.body && node !== articleTab) {
+            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
+            const text = normalizeDomTitle(node.textContent);
+            const otherKnownTitle = [
+              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
+              normalizeDomTitle("أثر الأذكار في الإتزان النفسي"),
+              retiredEnergyTitle
+            ].some(other => other !== title && text.includes(other));
+            if (otherKnownTitle) break;
+            candidate = node;
+            node = node.parentElement;
+          }
+          if (candidate && !candidate.contains(root)) candidate.remove();
+          continue;
+        }
+        if (isEnergy) {
+          let node = titleNode.parentElement;
+          let candidate = null;
+          while (node && node !== document.body && node !== articleTab) {
+            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
+            const text = normalizeDomTitle(node.textContent);
+            const otherKnownTitle = [
+              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
+              normalizeDomTitle("أثر الأذكار في الإتزان النفسي")
+            ].some(other => text.includes(other));
+            if (otherKnownTitle) break;
+            candidate = node;
+            node = node.parentElement;
+          }
+          if (candidate && !candidate.contains(root)) candidate.remove();
+        } else {
+          seen.add(title);
+        }
       }
-      if (candidate && !candidate.contains(root)) candidate.remove();
     };
-    removeLegacyArticleSearch();
-    // The legacy renderer may live outside #articles and may mount after this library.
-    const legacySearchObserver = new MutationObserver(() => removeLegacyArticleSearch());
+    cleanupLegacyArticleCards();
+    // The older renderer may appear after the library or after a tab switch.
+    const legacySearchObserver = new MutationObserver(() => cleanupLegacyArticleCards());
     legacySearchObserver.observe(document.body, { childList: true, subtree: true });
     const articleHero = heading.closest(".hero-bg");
     if (articleHero) articleHero.insertAdjacentElement("afterend", root);
