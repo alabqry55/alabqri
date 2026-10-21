@@ -167,16 +167,16 @@
 
         // Move the existing blue-framed search field into the main toolbar,
         // removing the duplicate generated field while preserving existing listeners.
-        const externalSearchFields = Array.from((articleTab || document).querySelectorAll(
-          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"]'
-        )).filter(field => !root.contains(field) && field !== search);
+        const externalSearchFields = Array.from(document.querySelectorAll(
+          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"], input[name*="search" i], input[id*="search" i]'
+        )).filter(field => !root.contains(field) && field !== search && field.isConnected);
         const blueFramedSearch = externalSearchFields.find(field => {
           const style = window.getComputedStyle(field);
           return [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
             .some(color => {
               const rgb = color.match(/[0-9]+/g);
               if (!rgb) return /blue/i.test(color);
-              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              const red = Number(rgb[0]), green = Number(rgb[1]), blue = Number(rgb[2]);
               return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
             });
         }) || externalSearchFields[0];
@@ -187,7 +187,7 @@
             computed.borderBottomColor, computed.borderLeftColor].find(color => {
               const rgb = color.match(/[0-9]+/g);
               if (!rgb) return /blue/i.test(color);
-              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              const red = Number(rgb[0]), green = Number(rgb[1]), blue = Number(rgb[2]);
               return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
             });
           search.remove();
