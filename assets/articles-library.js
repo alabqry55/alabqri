@@ -172,15 +172,32 @@
         )).filter(field => !root.contains(field) && field !== search);
         const blueFramedSearch = externalSearchFields.find(field => {
           const style = window.getComputedStyle(field);
-          const border = [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor].join(" ");
-          return /rgb\(\s*(?:0,\s*\d{1,3},\s*\d{1,3}|\d{1,3},\s*\d{1,3},\s*(?:1\d\d|2\d\d))\s*\)/i.test(border) ||
-            /blue|#(?:0[0-9a-f]{5}|1[0-9a-f]{5}|2[0-9a-f]{5})/i.test(border);
+          const borderColors = [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor];
+          return borderColors.some(color => {
+            const rgb = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+            if (rgb) {
+              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
+            }
+            return /blue|#(?:00[3-9a-f][0-9a-f]{3}|0[1-9a-f][0-9a-f]{4})/i.test(color);
+          });
         }) || externalSearchFields[0];
         if (blueFramedSearch) {
+          const blueBorder = [window.getComputedStyle(blueFramedSearch).borderTopColor,
+            window.getComputedStyle(blueFramedSearch).borderRightColor,
+            window.getComputedStyle(blueFramedSearch).borderBottomColor,
+            window.getComputedStyle(blueFramedSearch).borderLeftColor]
+            .find(color => {
+              const rgb = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+              if (!rgb) return /blue|#(?:00[3-9a-f][0-9a-f]{3}|0[1-9a-f][0-9a-f]{4})/i.test(color);
+              const red = Number(rgb[1]), green = Number(rgb[2]), blue = Number(rgb[3]);
+              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
+            });
           search.remove();
           search = blueFramedSearch;
           search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
           search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
+          if (blueBorder) search.style.borderColor = blueBorder;
         }
         tools.append(search, category);
         const grid = el("div", "abq-articles-grid");
