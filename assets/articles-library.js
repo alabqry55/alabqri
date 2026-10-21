@@ -44,7 +44,7 @@
       let candidate = null;
       while (node && node !== document.body && node !== articleTab) {
         if (node.contains(root)) break;
-        const text = (node.textContent || "").replace(/\\s+/g, " ");
+        const text = (node.textContent || "").replace(/\s+/g, " ");
         const hasLegacyHeading = text.includes("البحث في المقالات والأبحاث");
         const hasLegacyResults = /اقرأ/.test(text) && /الطاقة الحيوية بين العلم والشريعة/.test(text);
         if (hasLegacyHeading && hasLegacyResults) candidate = node;
