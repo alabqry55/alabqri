@@ -150,7 +150,7 @@
           root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
         const tools = el("div", "abq-articles-tools");
-        const search = el("input");
+        let search = el("input");
         search.type = "search";
         search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
         search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
@@ -164,6 +164,24 @@
           option.value = value;
           category.appendChild(option);
         });
+
+        // Reuse the existing blue-framed search field and move it into the toolbar
+        // above the results count, so visitors see only one search field.
+        const externalSearchFields = Array.from((articleTab || document).querySelectorAll(
+          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"]'
+        )).filter(field => !root.contains(field) && field !== search);
+        const blueFramedSearch = externalSearchFields.find(field => {
+          const style = window.getComputedStyle(field);
+          const border = [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor].join(" ");
+          return /rgb\(\s*(?:0,\s*\d{1,3},\s*\d{1,3}|\d{1,3},\s*\d{1,3},\s*(?:1\d\d|2\d\d))\s*\)/i.test(border) ||
+            /blue|#(?:0[0-9a-f]{5}|1[0-9a-f]{5}|2[0-9a-f]{5})/i.test(border);
+        }) || externalSearchFields[0];
+        if (blueFramedSearch) {
+          search.remove();
+          search = blueFramedSearch;
+          search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
+          search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
+        }
         tools.append(search, category);
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
