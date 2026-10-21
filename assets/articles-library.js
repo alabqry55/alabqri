@@ -22,7 +22,8 @@
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
     );
     if (!heading) return;
-    const section = heading.closest("section") || heading.parentElement;
+    // Keep the library and its admin controls inside the same articles tab on every viewport.
+    const section = articleTab || heading.closest("section") || heading.parentElement;
     if (!section || section.querySelector(".abq-articles-library")) return;
     if (!document.getElementById("abq-articles-library-style")) {
       const style = document.createElement("style");
@@ -97,8 +98,8 @@
     const legacySearchObserver = new MutationObserver(() => cleanupLegacyArticleCards());
     legacySearchObserver.observe(document.body, { childList: true, subtree: true });
     const articleHero = heading.closest(".hero-bg");
-    if (articleHero) articleHero.insertAdjacentElement("afterend", root);
-    else section.appendChild(root);
+    if (articleHero && section.contains(articleHero)) articleHero.insertAdjacentElement("afterend", root);
+    else heading.insertAdjacentElement("afterend", root);
     const status = document.createElement("div");
     status.className = "abq-articles-status";
     status.textContent = "جارٍ تحميل الأبحاث والمقالات...";
@@ -135,10 +136,13 @@
         };
         const filterUniqueArticles = items => {
           const seenArticleTitles = new Set();
+          const seenArticleIds = new Set();
           return items.filter(article => {
             if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredEnergyArticle(article)) return false;
             const title = normalizeArticleTitle(article.title);
-            if (!title || seenArticleTitles.has(title)) return false;
+            const id = String(article.id || "").trim();
+            if (!id || !title || seenArticleIds.has(id) || seenArticleTitles.has(title)) return false;
+            seenArticleIds.add(id);
             seenArticleTitles.add(title);
             return true;
           });
