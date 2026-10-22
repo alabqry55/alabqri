@@ -8,7 +8,7 @@ const validId = id => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id)
 const isRetiredEnergyArticle = article => {
   const id = String(article?.id || "").toLocaleLowerCase("en");
   const title = normalizeTitle(article?.title);
-  return id === "energy-science" || title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
+  return id === "energy-science" || title.includes(normalizeTitle("الطاقة الحيوية"));
 };
 const isRetiredAzkarArticle = article => {
   const id = String(article?.id || "").toLocaleLowerCase("en");
