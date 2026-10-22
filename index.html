@@ -20954,6 +20954,8 @@ load();
 /* إصلاح احتياطي معزول: ضمان إظهار التبويب عند فشل المسار الأساسي، دون استبدال محتوى الأقسام. */
 (function () {
   'use strict';
+  /* لا يُنفّذ هذا الإصلاح على الشاشات الصغيرة؛ سلوك الموبايل يبقى كما هو. */
+  if (!window.matchMedia || !window.matchMedia('(min-width: 769px)').matches) return;
   var ids = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
 
   function getSections() {
