@@ -15882,99 +15882,6 @@ window.AbqToast = (function(){
 })();
 </script>
 
-<script id="abq-desktop-tabs-visibility-guard-20261022">
-(function(){
-  'use strict';
-  if(!window.matchMedia || !window.matchMedia('(min-width: 769px)').matches) return;
-  var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-  var desired='', repairing=false, queued=false;
-  function host(){return document.querySelector('.main-tabs-content');}
-  function normalize(){
-    var h=host(); if(!h) return false;
-    IDS.forEach(function(id){
-      var el=document.getElementById(id);
-      if(el && el.parentElement!==h) h.appendChild(el);
-    });
-    return true;
-  }
-  function activeId(){
-    for(var i=0;i<IDS.length;i++){
-      var el=document.getElementById(IDS[i]);
-      if(el && el.classList.contains('tab-active') && getComputedStyle(el).display!=='none' && getComputedStyle(el).visibility!=='hidden') return IDS[i];
-    }
-    return '';
-  }
-  function forceVisible(id){
-    if(IDS.indexOf(id)<0 || !normalize()) return false;
-    var h=host(), target=document.getElementById(id);
-    if(!h || !target || target.parentElement!==h) return false;
-    repairing=true;
-    h.querySelectorAll(':scope > section.tab-content').forEach(function(el){
-      var on=el===target;
-      el.classList.toggle('tab-active',on);
-      el.style.setProperty('display',on?'block':'none','important');
-      el.style.setProperty('visibility',on?'visible':'hidden','important');
-      el.setAttribute('aria-hidden',on?'false':'true');
-    });
-    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
-      var m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-      var on=!!m && m[1]===id;
-      btn.classList.toggle('active',on);
-      btn.setAttribute('aria-selected',on?'true':'false');
-    });
-    repairing=false;
-    return true;
-  }
-  function repairIfLost(){
-    if(repairing) return;
-    var current=activeId();
-    if(current){ if(!desired) desired=current; return; }
-    forceVisible(desired || 'home');
-  }
-  function scheduleRepair(){
-    if(queued) return;
-    queued=true;
-    requestAnimationFrame(function(){queued=false;repairIfLost();});
-  }
-  function init(){
-    if(!normalize()) return;
-    var hash=(location.hash||'').replace(/^#/,'');
-    desired=IDS.indexOf(hash)>=0?hash:(activeId()||'home');
-    forceVisible(desired);
-    var nav=document.querySelector('.main-tabs-nav');
-    if(nav && !nav.dataset.abqVisibilityGuard){
-      nav.dataset.abqVisibilityGuard='1';
-      nav.addEventListener('click',function(e){
-        var btn=e.target.closest('.nav-btn'); if(!btn) return;
-        var m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-        if(!m || IDS.indexOf(m[1])<0) return;
-        desired=m[1];
-        setTimeout(function(){
-          if(activeId()!==desired) {
-            if(typeof window.switchTab==='function'){
-              try{window.switchTab(desired,true);}catch(err){}
-            }
-            if(activeId()!==desired) forceVisible(desired);
-          }
-        },0);
-        setTimeout(scheduleRepair,80);
-      },true);
-    }
-    var h=host();
-    if(h){
-      new MutationObserver(scheduleRepair).observe(h,{subtree:true,attributes:true,attributeFilter:['class','style','aria-hidden']});
-    }
-    window.addEventListener('hashchange',function(){
-      var id=(location.hash||'').replace(/^#/,'');
-      if(IDS.indexOf(id)>=0){desired=id;scheduleRepair();}
-    });
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
-})();
-</script>
-
-
 <!-- =========================================================
      ALABQRI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
      يحافظ على التمرير الطبيعي باللمس ويزيد استجابة عجلة الماوس
@@ -16397,39 +16304,6 @@ html *,body *{
   }
 }
 </style>
-<script id="abq-final-main-tab-click-controller">
-(function(){
-'use strict';
-var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-function getTabId(el){
- if(!el)return '';
- var raw=el.getAttribute('onclick')||'';
- var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
- return m?m[1]:'';
-}
-function syncActiveButton(id){
- var buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
- buttons.forEach(function(button){
-   var buttonId=getTabId(button);
-   var active=buttonId===id;
-   button.classList.toggle('active',active);
-   button.setAttribute('aria-selected',active?'true':'false');
- });
-}
-document.addEventListener('click',function(event){
- var target=event.target;
- if(!target||!target.closest)return;
- var btn=target.closest('.main-tabs-nav .nav-btn');
- if(!btn)return;
- var id=getTabId(btn);
- if(!IDS.includes(id)||typeof window.switchTab!=='function')return;
- event.preventDefault();
- event.stopImmediatePropagation();
- var switched=window.switchTab(id,false);
- if(switched!==false) syncActiveButton(id);
-},true);
-})();
-</script>
 <style id="abq-mobile-hero-width-fix">
 /* ===== الموبايل فقط: الصورة وحدها بعرض الشاشة بالكامل بدون حواف أو هوامش ===== */
 @media (max-width:768px){
