@@ -24706,3 +24706,34 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   }
 }
 </style>
+
+
+<!-- ALABQRI: remove only stray standalone punctuation near page footer; preserve four-way navigation -->
+<script id="abq-remove-stray-footer-punctuation-20261022">
+(function(){
+  'use strict';
+  function removeStrayFooterPunctuation(){
+    var nav=document.getElementById('abq-unified-4way-nav');
+    var roots=[];
+    if(document.body) roots.push(document.body);
+    document.querySelectorAll('footer,[role="contentinfo"]').forEach(function(el){roots.push(el);});
+    roots.forEach(function(root){
+      var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+      var nodes=[];
+      while(walker.nextNode()){
+        var node=walker.currentNode;
+        if(nav && nav.contains(node)) continue;
+        var value=(node.nodeValue||'').replace(/\u00a0/g,' ').trim();
+        if(!value || !/^(?:\(|\)|،|,|؛|\(\s*[،,؛]\s*\))$/.test(value)) continue;
+        var parent=node.parentElement;
+        if(!parent || parent.closest('script,style,textarea,input,button,pre,code')) continue;
+        if(root===document.body && parent!==document.body && !parent.closest('footer,[role="contentinfo"]')) continue;
+        nodes.push(node);
+      }
+      nodes.forEach(function(node){if(node.parentNode) node.parentNode.removeChild(node);});
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',removeStrayFooterPunctuation,{once:true});
+  else removeStrayFooterPunctuation();
+})();
+</script>
