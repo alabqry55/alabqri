@@ -14628,33 +14628,33 @@ function applyTab(tabId){
     const mainTabsContainer = document.querySelector('.main-tabs-content');
     if(!mainTabsContainer) return false;
 
-    /* إصلاح أساسي لفتح التبويب من أول ضغطة: تثبيت جميع التبويبات الرئيسية داخل الحاوية قبل الإظهار. */
+    // Validate the destination before touching the visibility of any section.
+    const target = document.getElementById(tabId);
+    if(!target) return false;
+
+    // Normalize the eight main sections synchronously, before changing visibility.
     const mainTabIds = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-    mainTabIds.forEach(function(id){
+    for(const id of mainTabIds){
       const section = document.getElementById(id);
       if(section && section.parentElement !== mainTabsContainer){
         mainTabsContainer.appendChild(section);
       }
-    });
+    }
 
-    // إدارة التبويبات الرئيسية فقط: لا نلمس أي تبويب داخلي داخل الأذكار أو المرصد.
+    // If the target could not be placed in the canonical container, leave the
+    // currently visible section untouched rather than blanking the whole page.
+    if(target.parentElement !== mainTabsContainer) return false;
     const mainSections = mainTabsContainer.querySelectorAll(':scope > section.tab-content');
+    if(!Array.from(mainSections).includes(target)) return false;
+
+    // Only after destination validation is successful do we switch visibility.
     mainSections.forEach(function(section){
-      section.classList.remove('tab-active');
-      section.style.setProperty('display','none','important');
-      section.style.setProperty('visibility','hidden','important');
-      section.setAttribute('aria-hidden','true');
+      const isTarget = section === target;
+      section.classList.toggle('tab-active', isTarget);
+      section.style.setProperty('display', isTarget ? 'block' : 'none', 'important');
+      section.style.setProperty('visibility', isTarget ? 'visible' : 'hidden', 'important');
+      section.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
     });
-
-    const target=document.getElementById(tabId);
-    if(!target || target.parentElement !== mainTabsContainer) return false;
-
-    target.classList.add('tab-active');
-    target.style.setProperty('display','block','important');
-    target.style.setProperty('visibility','visible','important');
-    target.setAttribute('aria-hidden','false');
-
-    /* No relocation needed: the duplicate desktop contact host was removed. */
 
     const buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
     buttons.forEach(function(btn){
