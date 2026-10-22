@@ -39,7 +39,7 @@
     const normalizeDomTitle = value => String(value || "").normalize("NFKC").toLocaleLowerCase("ar")
       .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
       .replace(/[^\p{L}\p{N}]+/gu, "");
-    const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
+    const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية");
     const retiredAzkarTitle = normalizeDomTitle("أثر الأذكار في الاتزان النفسي");
     const cleanupLegacyArticleCards = () => {
       const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
@@ -96,7 +96,7 @@
         const isRetiredEnergyArticle = article => {
           const id = String(article?.id || "").toLocaleLowerCase("en");
           const title = normalizeArticleTitle(article?.title);
-          return id === "energy-science" || title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
+          return id === "energy-science" || title.includes(normalizeArticleTitle("الطاقة الحيوية"));
         };
         const isRetiredAzkarArticle = article => {
           const id = String(article?.id || "").toLocaleLowerCase("en");
