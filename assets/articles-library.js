@@ -40,56 +40,20 @@
       .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
       .replace(/[^\p{L}\p{N}]+/gu, "");
     const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
+    const retiredAzkarTitle = normalizeDomTitle("أثر الأذكار في الاتزان النفسي");
     const cleanupLegacyArticleCards = () => {
       const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
-      const seen = new Set();
       for (const titleNode of headings) {
         const title = normalizeDomTitle(titleNode.textContent);
-        const isEnergy = title.includes(retiredEnergyTitle);
-        const isKnownArticle = title.includes(normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية")) ||
-          title.includes(normalizeDomTitle("أثر الأذكار في الإتزان النفسي"));
-        if (!isEnergy && !isKnownArticle) continue;
-        const inLibrary = Boolean(titleNode.closest(".abq-articles-library"));
-        if (inLibrary && !isEnergy) {
-          seen.add(title);
-          continue;
+        if (!title.includes(retiredEnergyTitle) && !title.includes(retiredAzkarTitle)) continue;
+        let node = titleNode.parentElement;
+        let candidate = null;
+        while (node && node !== document.body && node !== articleTab) {
+          if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
+          candidate = node;
+          node = node.parentElement;
         }
-        if (!isEnergy && seen.has(title)) {
-          let node = titleNode.parentElement;
-          let candidate = null;
-          while (node && node !== document.body && node !== articleTab) {
-            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
-            const text = normalizeDomTitle(node.textContent);
-            const otherKnownTitle = [
-              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
-              normalizeDomTitle("أثر الأذكار في الإتزان النفسي"),
-              retiredEnergyTitle
-            ].some(other => other !== title && text.includes(other));
-            if (otherKnownTitle) break;
-            candidate = node;
-            node = node.parentElement;
-          }
-          if (candidate && !candidate.contains(root)) candidate.remove();
-          continue;
-        }
-        if (isEnergy) {
-          let node = titleNode.parentElement;
-          let candidate = null;
-          while (node && node !== document.body && node !== articleTab) {
-            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
-            const text = normalizeDomTitle(node.textContent);
-            const otherKnownTitle = [
-              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
-              normalizeDomTitle("أثر الأذكار في الإتزان النفسي")
-            ].some(other => text.includes(other));
-            if (otherKnownTitle) break;
-            candidate = node;
-            node = node.parentElement;
-          }
-          if (candidate && !candidate.contains(root)) candidate.remove();
-        } else {
-          seen.add(title);
-        }
+        if (candidate && !candidate.contains(root)) candidate.remove();
       }
     };
     cleanupLegacyArticleCards();
@@ -130,13 +94,19 @@
           return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
         };
         const isRetiredEnergyArticle = article => {
+          const id = String(article?.id || "").toLocaleLowerCase("en");
           const title = normalizeArticleTitle(article?.title);
-          return title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
+          return id === "energy-science" || title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
+        };
+        const isRetiredAzkarArticle = article => {
+          const id = String(article?.id || "").toLocaleLowerCase("en");
+          const title = normalizeArticleTitle(article?.title);
+          return id === "azkar-balance" || title.includes(normalizeArticleTitle("أثر الأذكار في الاتزان النفسي"));
         };
         const filterUniqueArticles = items => {
           const seenArticleTitles = new Set();
           return items.filter(article => {
-            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredEnergyArticle(article)) return false;
+            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredEnergyArticle(article) || isRetiredAzkarArticle(article)) return false;
             const title = normalizeArticleTitle(article.title);
             if (!title || seenArticleTitles.has(title)) return false;
             seenArticleTitles.add(title);
