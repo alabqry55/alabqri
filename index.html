@@ -20949,6 +20949,96 @@ load();
 })();
 </script>
   <script src="/assets/articles-library.js?v=admin-fallback-20261020" defer></script>
+
+<script id="abq-main-tabs-recovery-20261022">
+/* إصلاح احتياطي معزول: ضمان إظهار التبويب عند فشل المسار الأساسي، دون استبدال محتوى الأقسام. */
+(function () {
+  'use strict';
+  /* لا يُنفّذ هذا الإصلاح على الشاشات الصغيرة؛ سلوك الموبايل يبقى كما هو. */
+  if (!window.matchMedia || !window.matchMedia('(min-width: 769px)').matches) return;
+  var ids = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+
+  function getSections() {
+    return ids.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+  }
+
+  function ensureContainer() {
+    var container = document.querySelector('.main-tabs-content');
+    var sections = getSections();
+    if (!container && sections.length) {
+      container = document.createElement('main');
+      container.className = 'main-tabs-content flex-grow container mx-auto px-6 py-0';
+      sections[0].parentNode.insertBefore(container, sections[0]);
+    }
+    if (!container) return null;
+    sections.forEach(function (section) {
+      if (section.parentElement !== container) container.appendChild(section);
+    });
+    return container;
+  }
+
+  function showTab(id) {
+    if (ids.indexOf(id) === -1) return false;
+    var container = ensureContainer();
+    var target = document.getElementById(id);
+    if (!container || !target) return false;
+
+    container.querySelectorAll(':scope > section.tab-content').forEach(function (section) {
+      section.classList.remove('tab-active');
+      section.style.setProperty('display', 'none', 'important');
+      section.style.setProperty('visibility', 'hidden', 'important');
+      section.setAttribute('aria-hidden', 'true');
+    });
+
+    target.classList.add('tab-active');
+    target.style.setProperty('display', 'block', 'important');
+    target.style.setProperty('visibility', 'visible', 'important');
+    target.setAttribute('aria-hidden', 'false');
+
+    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function (button) {
+      var action = button.getAttribute('onclick') || '';
+      var selected = action.indexOf("switchTab('" + id + "')") !== -1 ||
+        action.indexOf('switchTab("' + id + '")') !== -1;
+      button.classList.toggle('active', selected);
+      button.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+
+    if (id === 'azkar' && typeof window.azkarInit === 'function') {
+      try { window.azkarInit(); } catch (e) {}
+    }
+    return true;
+  }
+
+  function init() {
+    ensureContainer();
+    var nav = document.querySelector('.main-tabs-nav');
+    if (nav) {
+      nav.querySelectorAll('.nav-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+          var action = button.getAttribute('onclick') || '';
+          var match = action.match(/switchTab\(['"]([^'"]+)['"]\)/);
+          if (!match || ids.indexOf(match[1]) === -1) return;
+          var id = match[1];
+          var target = document.getElementById(id);
+          if (!target || !target.classList.contains('tab-active') ||
+              window.getComputedStyle(target).display === 'none') {
+            showTab(id);
+          }
+        });
+      });
+    }
+
+    var active = document.querySelector('.main-tabs-content > section.tab-content.tab-active');
+    if (!active || window.getComputedStyle(active).display === 'none') showTab('home');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
