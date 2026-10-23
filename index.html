@@ -20802,6 +20802,18 @@ load();
   <script src="/assets/articles-library.js?v=admin-fallback-20261020" defer></script>
 
 
+
+<style id="abq-active-tab-reveal-visibility-fix-20261023">
+/* إصلاح اختفاء محتوى التبويبات: لا نترك عناصر reveal شفافة داخل تبويب رئيسي نشط.
+   مراقب الظهور يُهيأ مرة واحدة بينما بقية التبويبات مخفية، لذلك قد تبقى بعض العناصر opacity:0. */
+.main-tabs-content > section.tab-content.tab-active .reveal,
+.main-tabs-content > section.tab-content.tab-active .reveal:not(.in) {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+</style>
+
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
