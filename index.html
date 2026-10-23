@@ -14837,7 +14837,47 @@ body > .azkar-inner-tab {
 }
 </style>
 
+<script id="abq-azkar-isolation-fix-js">
+(function () {
+    'use strict';
 
+    const MAIN_TABS = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+
+    function isolateMainTabs(activeId) {
+        const container = document.querySelector('.main-tabs-content');
+        if (!container) return;
+
+        const sections = container.querySelectorAll(':scope > section.tab-content');
+        sections.forEach(function (section) {
+            const isActive = section.id === activeId;
+            section.classList.toggle('tab-active', isActive);
+            section.style.setProperty('display', isActive ? 'block' : 'none', 'important');
+        });
+    }
+
+    /* نعترض فقط على الانتقال بين التبويبات الرئيسية، دون تغيير محتواها */
+    const originalSwitchTab = window.switchTab;
+    if (typeof originalSwitchTab === 'function') {
+        window.switchTab = function (tabId) {
+            // الحفاظ على جميع الوسائط، خصوصًا internalNavigation في نظام الرجوع/التقدم.
+            const result = originalSwitchTab.apply(this, arguments);
+            if (MAIN_TABS.includes(tabId)) isolateMainTabs(tabId);
+            return result;
+        };
+    }
+
+    function enforceCurrentMainTab() {
+        const active = document.querySelector('.main-tabs-content > section.tab-content.tab-active');
+        if (active && MAIN_TABS.includes(active.id)) isolateMainTabs(active.id);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enforceCurrentMainTab);
+    } else {
+        enforceCurrentMainTab();
+    }
+})();
+</script>
 
 <!-- ============== سكريبت محراب العبقري التفاعلي ============== -->
 <script>
@@ -15882,6 +15922,84 @@ window.AbqToast = (function(){
 })();
 </script>
 
+<script id="abq-eight-main-tabs-final-controller">
+(function(){
+  'use strict';
+  const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+  const main=()=>document.querySelector('.main-tabs-content');
+  function normalize(){
+    const host=main(); if(!host) return false;
+    IDS.forEach(function(id){
+      const el=document.getElementById(id);
+      if(el && el.parentElement!==host) host.appendChild(el);
+    });
+    return true;
+  }
+  function sections(){
+    const host=main(); if(!host) return [];
+    return IDS.map(id=>document.getElementById(id)).filter(function(el){return el && el.parentElement===host;});
+  }
+  function show(id){
+    if(!normalize()) return;
+    const host=main(), target=document.getElementById(id);
+    if(!target || target.parentElement!==host) return;
+    sections().forEach(function(sec){
+      const active=sec===target;
+      sec.classList.toggle('tab-active',active);
+      sec.style.setProperty('display',active?'block':'none','important');
+      sec.style.setProperty('visibility',active?'visible':'hidden','important');
+      sec.setAttribute('aria-hidden',active?'false':'true');
+       });
+     if(id==='qualifications'){
+       requestAnimationFrame(function(){ prioritizeQualificationsImage(); });
+     }
+    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
+      const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
+      const active=!!m && m[1]===id;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-selected',active?'true':'false');
+    });
+  }
+  function prioritizeQualificationsImage(){
+    var img=document.querySelector('#qualifications img[src*="1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c"]');
+    if(!img) return;
+    img.setAttribute('loading','eager');
+    img.setAttribute('decoding','async');
+    img.setAttribute('fetchpriority','high');
+    img.setAttribute('referrerpolicy','no-referrer');
+     if(!img.dataset.abqImgRetryBound){
+       img.dataset.abqImgRetryBound='1';
+       img.addEventListener('error',function(){
+         if(img.dataset.abqImgRetried) return;
+         img.dataset.abqImgRetried='1';
+         img.removeAttribute('referrerpolicy');
+         var current=img.getAttribute('src');
+         if(current) img.setAttribute('src',current);
+       },{once:false});
+     }
+     if(img.complete && img.naturalWidth>0) return;
+     }
+  window.abqShowMainTab=show;
+  function hook(){
+    if(!normalize()) return;
+    const nav=document.querySelector('.main-tabs-nav');
+    if(nav && !nav.dataset.abqEightHooked){
+      nav.dataset.abqEightHooked='1';
+      nav.addEventListener('click',function(e){
+        const btn=e.target.closest('.nav-btn'); if(!btn) return;
+        const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
+        if(m) setTimeout(function(){show(m[1]);},0);
+      },true);
+    }
+    const active=document.querySelector('.main-tabs-nav .nav-btn.active');
+    const m=active && (active.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
+    show(m?m[1]:'home');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',hook,{once:true}); else hook();
+})();
+</script>
+
+
 <!-- =========================================================
      ALABQRI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
      يحافظ على التمرير الطبيعي باللمس ويزيد استجابة عجلة الماوس
@@ -16304,6 +16422,39 @@ html *,body *{
   }
 }
 </style>
+<script id="abq-final-main-tab-click-controller">
+(function(){
+'use strict';
+var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
+function getTabId(el){
+ if(!el)return '';
+ var raw=el.getAttribute('onclick')||'';
+ var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
+ return m?m[1]:'';
+}
+function syncActiveButton(id){
+ var buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
+ buttons.forEach(function(button){
+   var buttonId=getTabId(button);
+   var active=buttonId===id;
+   button.classList.toggle('active',active);
+   button.setAttribute('aria-selected',active?'true':'false');
+ });
+}
+document.addEventListener('click',function(event){
+ var target=event.target;
+ if(!target||!target.closest)return;
+ var btn=target.closest('.main-tabs-nav .nav-btn');
+ if(!btn)return;
+ var id=getTabId(btn);
+ if(!IDS.includes(id)||typeof window.switchTab!=='function')return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ var switched=window.switchTab(id,false);
+ if(switched!==false) syncActiveButton(id);
+},true);
+})();
+</script>
 <style id="abq-mobile-hero-width-fix">
 /* ===== الموبايل فقط: الصورة وحدها بعرض الشاشة بالكامل بدون حواف أو هوامش ===== */
 @media (max-width:768px){
@@ -20798,8 +20949,6 @@ load();
 })();
 </script>
   <script src="/assets/articles-library.js?v=admin-fallback-20261020" defer></script>
-
-
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
