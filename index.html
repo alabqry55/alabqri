@@ -217,6 +217,15 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     transform: none !important;
 }
 
+/* إصلاح سبب اختفاء محتوى التبويبات غير الرئيسية: لا تترك عناصر reveal مخفية
+   إذا كان IntersectionObserver قد راقبها بينما كان التبويب display:none. */
+.main-tabs-content > section.tab-content.tab-active .reveal,
+.main-tabs-content > section.tab-content.tab-active .reveal:not(.in) {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
     display: none !important;
