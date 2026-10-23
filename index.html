@@ -14637,6 +14637,9 @@ function applyTab(tabId){
       }
     });
 
+    const target=document.getElementById(tabId);
+    if(!target || target.parentElement !== mainTabsContainer) return false;
+
     // إدارة التبويبات الرئيسية فقط: لا نلمس أي تبويب داخلي داخل الأذكار أو المرصد.
     const mainSections = mainTabsContainer.querySelectorAll(':scope > section.tab-content');
     mainSections.forEach(function(section){
@@ -14646,8 +14649,7 @@ function applyTab(tabId){
       section.setAttribute('aria-hidden','true');
     });
 
-    const target=document.getElementById(tabId);
-    if(!target || target.parentElement !== mainTabsContainer) return false;
+
 
     target.classList.add('tab-active');
     target.style.setProperty('display','block','important');
