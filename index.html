@@ -217,6 +217,7 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     transform: none !important;
 }
 
+
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
     display: none !important;
@@ -14722,16 +14723,9 @@ function applyTab(tabId){
     applyTab(initial);
     abqCurrentMainTab=initial;
 
-    // استعادة آخر تبويب + آخر موضع تمرير محفوظ للزائر عند العودة للمنصة.
-    try {
-      const raw = JSON.parse(localStorage.getItem(ABQ_HISTORY_KEY) || '{}');
-      if (raw.current === initial && (Number(raw.x) || Number(raw.y))) {
-        const savedPoint = { tab: initial, x: Number(raw.x) || 0, y: Number(raw.y) || 0 };
-        window.requestAnimationFrame(function(){
-          window.requestAnimationFrame(function(){ restoreSnapshot(savedPoint); });
-        });
-      }
-    } catch(e) {}
+    // لا تستعد موضع تمرير قديم تلقائيًا عند فتح الصفحة؛ قد يقفز العرض بعيدًا
+    // عن محتوى التبويب بعد ظهوره. يظل حفظ المواضع واستعادتها عبر أزرار الرجوع/التقدم فعالًا.
+    // عند وجود رابط مباشر بمرساة، يظل مسار الرابط مسؤولًا عن الوصول إلى القسم المطلوب.
 
     abqUpdateHistoryButtons();
   }
@@ -21654,7 +21648,10 @@ load();
         var el=document.getElementById(id); if(!el) return;
         el.classList.toggle('tab-active',id===item.tab);
         el.setAttribute('aria-hidden',id===item.tab?'false':'true');
+        /* Keep display and visibility in sync with applyTab(); otherwise a tab
+           hidden by applyTab() can be reopened with display:block but remain invisible. */
         el.style.setProperty('display',id===item.tab?'block':'none','important');
+        el.style.setProperty('visibility',id===item.tab?'visible':'hidden','important');
       });
     }
     window.requestAnimationFrame(function(){
