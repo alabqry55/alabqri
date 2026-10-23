@@ -21655,6 +21655,7 @@ load();
         el.classList.toggle('tab-active',id===item.tab);
         el.setAttribute('aria-hidden',id===item.tab?'false':'true');
         el.style.setProperty('display',id===item.tab?'block':'none','important');
+        el.style.setProperty('visibility',id===item.tab?'visible':'hidden','important');
       });
     }
     window.requestAnimationFrame(function(){
