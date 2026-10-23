@@ -217,14 +217,6 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     transform: none !important;
 }
 
-/* إصلاح سبب اختفاء محتوى التبويبات غير الرئيسية: لا تترك عناصر reveal مخفية
-   إذا كان IntersectionObserver قد راقبها بينما كان التبويب display:none. */
-.main-tabs-content > section.tab-content.tab-active .reveal,
-.main-tabs-content > section.tab-content.tab-active .reveal:not(.in) {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-}
 
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
@@ -21663,7 +21655,10 @@ load();
         var el=document.getElementById(id); if(!el) return;
         el.classList.toggle('tab-active',id===item.tab);
         el.setAttribute('aria-hidden',id===item.tab?'false':'true');
+        /* Keep display and visibility in sync with applyTab(); otherwise a tab
+           hidden by applyTab() can be reopened with display:block but remain invisible. */
         el.style.setProperty('display',id===item.tab?'block':'none','important');
+        el.style.setProperty('visibility',id===item.tab?'visible':'hidden','important');
       });
     }
     window.requestAnimationFrame(function(){
