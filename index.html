@@ -217,6 +217,16 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     transform: none !important;
 }
 
+/* ===== إصلاح اختفاء عناصر reveal على الكمبيوتر فقط داخل التبويب النشط ===== */
+@media (min-width: 768px) {
+  .main-tabs-content > section.tab-content.tab-active .reveal,
+  .main-tabs-content > section.tab-content.tab-active .reveal.in {
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+  }
+}
+
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
     display: none !important;
@@ -11158,20 +11168,6 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
             </div>
         </div>
     </div>
-    <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-3 mb-5">
-        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-            <div class="flex-1">
-                <label for="abq-article-search" class="sr-only">البحث في المقالات والأبحاث</label>
-                <input id="abq-article-search" type="search" oninput="renderAbqArticles()" placeholder="🔎 ابحث في عنوان المقال أو محتواه..." class="w-full bg-white border border-blue-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-300">
-            </div>
-            <select id="abq-article-category" onchange="renderAbqArticles()" class="bg-white border border-blue-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700">
-                <option value="">كل التصنيفات</option>
-                <option value="التنمية البشرية">التنمية البشرية</option>
-                <option value="الطب التكميلي">الطب التكميلي</option>
-                <option value="الأذكار والاتزان">الأذكار والاتزان</option>
-            </select>
-        </div>
-    </div>
     <div id="abq-articles-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     <div id="abq-articles-empty" class="hidden text-center bg-white border border-slate-200 rounded-2xl p-8 text-slate-500 font-bold">لا توجد نتائج مطابقة حاليًا.</div>
 </section>
@@ -14651,6 +14647,13 @@ function applyTab(tabId){
       }
     });
 
+    // Desktop-only safety: validate the destination before hiding any main section.
+    // Keep the existing mobile tab-switching path unchanged.
+    if (window.matchMedia && window.matchMedia('(min-width: 768px)').matches) {
+      const desktopTarget = document.getElementById(tabId);
+      if (!desktopTarget || desktopTarget.parentElement !== mainTabsContainer) return false;
+    }
+
     // إدارة التبويبات الرئيسية فقط: لا نلمس أي تبويب داخلي داخل الأذكار أو المرصد.
     const mainSections = mainTabsContainer.querySelectorAll(':scope > section.tab-content');
     mainSections.forEach(function(section){
@@ -14851,47 +14854,7 @@ body > .azkar-inner-tab {
 }
 </style>
 
-<script id="abq-azkar-isolation-fix-js">
-(function () {
-    'use strict';
 
-    const MAIN_TABS = ['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-
-    function isolateMainTabs(activeId) {
-        const container = document.querySelector('.main-tabs-content');
-        if (!container) return;
-
-        const sections = container.querySelectorAll(':scope > section.tab-content');
-        sections.forEach(function (section) {
-            const isActive = section.id === activeId;
-            section.classList.toggle('tab-active', isActive);
-            section.style.setProperty('display', isActive ? 'block' : 'none', 'important');
-        });
-    }
-
-    /* نعترض فقط على الانتقال بين التبويبات الرئيسية، دون تغيير محتواها */
-    const originalSwitchTab = window.switchTab;
-    if (typeof originalSwitchTab === 'function') {
-        window.switchTab = function (tabId) {
-            // الحفاظ على جميع الوسائط، خصوصًا internalNavigation في نظام الرجوع/التقدم.
-            const result = originalSwitchTab.apply(this, arguments);
-            if (MAIN_TABS.includes(tabId)) isolateMainTabs(tabId);
-            return result;
-        };
-    }
-
-    function enforceCurrentMainTab() {
-        const active = document.querySelector('.main-tabs-content > section.tab-content.tab-active');
-        if (active && MAIN_TABS.includes(active.id)) isolateMainTabs(active.id);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', enforceCurrentMainTab);
-    } else {
-        enforceCurrentMainTab();
-    }
-})();
-</script>
 
 <!-- ============== سكريبت محراب العبقري التفاعلي ============== -->
 <script>
@@ -15757,7 +15720,6 @@ window.AbqToast = (function(){
 <script id="abq-home-enhancement-script">
 (function(){
     const ABQ_STATIC_ARTICLES = [
-      {id:'energy-science',title:'الطاقة الحيوية بين العلم والشريعة',category:'التنمية البشرية',date:'20 سبتمبر 2026',excerpt:'قراءة تأصيلية في مفاهيم الطاقة والتعافي ضمن الضوابط المنهجية والقيمية.',content:'مقال تعريفي تمهيدي يوضح أهمية التفريق بين المصطلحات والممارسات، وضرورة التثبت والتأصيل قبل اعتماد أي مفهوم أو تطبيقه.\n\nهذا المحتوى يمثل قالب المقال داخل المنصة، ويمكن استبداله لاحقًا بالنص البحثي الكامل عند إضافة المقال من نظام إدارة المحتوى.'},
       {id:'azkar-balance',title:'🌿 أثر الأذكار في الاتزان النفسي',category:'الأذكار والاتزان',date:'15 سبتمبر 2026',excerpt:'قراءة معرفية في صلة المداومة على الذكر بالانتباه والسكينة وتنظيم الاستجابة للضغوط، ضمن الإطار الإيماني، مع التمييز بين المعنى الروحي والفرضيات العلمية.',content:"🌿 أثر الأذكار في الاتزان النفسي\n\nمقدمة\nيمثّل الذكر في حياة المسلم ممارسة إيمانية ذات معنى، وقد يساعد الانتظام فيه بعض الأشخاص على استعادة الانتباه، وتذكّر القيم التي يستندون إليها، والتعامل مع الضغوط بقدر أكبر من الوعي والطمأنينة. ويمكن وصف هذا الدور — على سبيل التقريب لا بوصفه مصطلحًا تشخيصيًا — بأنه «ارتكاز إدراكي» (Cognitive Anchoring): أي إعادة توجيه الانتباه إلى معنى ثابت ومقصود بدل الانجراف المستمر وراء الأفكار المقلقة.\n\nأولًا: الحدّ من الاجترار الفكري (Mental Rumination)\nالاجترار هو الدوران المتكرر حول فكرة أو تجربة مزعجة دون الوصول إلى حل عملي. وقد تمنح المداومة على الذكر الشخص نقطة انتباه مقصودة يعود إليها عندما يلاحظ أنه عالق في دائرة التفكير. وتكرار الألفاظ مع استحضار معناها قد يساعد على تحويل الانتباه مؤقتًا من تكرار الفكرة إلى نشاط ذهني أكثر تنظيمًا، كما قد يدعم الإحلال الإدراكي؛ أي اختيار استجابة أكثر نفعًا بدل الاسترسال التلقائي مع كل خاطر.\n\nولا يعني ذلك أن الذكر يمحو الأفكار الصعبة أو يمنع عودتها، بل يمكن أن يكون وسيلة للتعامل معها برفق: ملاحظة الفكرة دون التسليم بأنها حقيقة مطلقة، ثم العودة إلى الحاضر واتخاذ خطوة عملية مناسبة عند الحاجة.\n\nثانيًا: تعزيز الشعور بالأمان وتنظيم الاستجابة للضغط\nترتبط الطمأنينة لدى المؤمن بمعنى التوكل والرجاء والاتصال بالله، وقد تساعد الممارسة الهادئة المنتظمة بعض الناس على تهدئة التوتر واستعادة الشعور بالثبات. ومن الناحية النفسية، يمكن للتركيز الهادئ وتكرار عبارة ذات معنى أن يدعما الاسترخاء وتنظيم الانتباه. أما الجهاز العصبي الودّي ونظير الودّي فيشاركان في تنظيم الاستجابة للضغط والراحة، لكن لا يصح الجزم بأن كل ذكر يفعّل مسارًا عصبيًا محددًا أو يخفض هرمون الكورتيزول لدى كل شخص؛ فالتأثيرات تختلف بحسب الفرد والسياق، وتحتاج الادعاءات الفسيولوجية المحددة إلى أدلة مباشرة.\n\nالطمأنينة هنا ليست إنكارًا للمشكلة أو بديلًا عن طلب المساعدة، وإنما مورد معنوي يمكن أن يجتمع مع التفكير الواقعي، والتواصل الداعم، والعلاج المتخصص إذا استدعت الحالة ذلك.\n\nثالثًا: بناء إيقاع يومي أكثر استقرارًا\nتوزيع الأذكار على أوقات اليوم قد يهيئ محطات منتظمة للتوقف القصير واستعادة القصد. ويساعد الروتين الواضح بعض الأشخاص على تقليل التشتت وتذكّر الأولويات، كما يمكن أن يتيح مساحة لمراجعة المشاعر قبل الاستجابة لها. ومع الاستمرار، قد يصبح هذا التوقف فرصة للتدرّب على الثبات الانفعالي والمرونة النفسية؛ أي القدرة على التكيف مع التغير والعودة إلى السلوك المتزن بعد المواقف الصعبة.\n\nولا تُقاس جودة الممارسة بعدد الألفاظ وحده، بل بحضور القلب وفهم المعنى قدر المستطاع، وبما ينعكس على السلوك من رحمة ومسؤولية واتزان، من غير تحميل النفس ما لا تطيق أو تحويل العبادة إلى مصدر ضغط إضافي.\n\nمسار السكينة: ثلاثة أبعاد متكاملة\n• الإدراك والوعي: ملاحظة الخواطر والمشاعر، والتمييز بين الفكرة والواقع، وإعادة توجيه الانتباه إلى ما يمكن فعله الآن.\n• الشعور بالأمان: استحضار معاني التوكل والرجاء، والاستفادة من لحظات الذكر لاستعادة الهدوء دون إنكار أسباب القلق.\n• التكيف والقبول: التعامل مع ما لا يمكن تغييره بوعي، والعمل على ما يمكن تغييره بخطوات عملية، وطلب المساندة عند الحاجة.\n\nخاتمة\nيمكن النظر إلى الذكر بوصفه ممارسة إيمانية واعية تجمع بين المعنى الروحي والحضور الذهني. وقد يجد فيه الإنسان موردًا للسكينة وتنظيم الانتباه ومراجعة الاستجابة للمواقف، مع اختلاف التجربة من شخص إلى آخر. وهو لا يغني عن معالجة الأسباب الواقعية للضيق أو الاستعانة بالمختصين عند الحاجة، بل يمكن أن يتكامل معهما ضمن حياة متوازنة ومسؤولة.\n\nتنبيه معرفي: ما ورد عن الاجترار والانتباه وتنظيم الاستجابة للضغط وصفٌ لاحتمالات نفسية عامة، وليس إثباتًا لآلية عصبية محددة أو علاجًا مضمونًا. ولا تُنسب نتائج مثل خفض الكورتيزول أو تنشيط مسار عصبي بعينه إلى الذكر على نحو قطعي دون دراسات مباشرة موثوقة."}
     ];
     function isRetiredHijamaArticle(article){
@@ -15793,11 +15755,9 @@ window.AbqToast = (function(){
     }
     window.renderAbqArticles=function(){
       const list=document.getElementById('abq-articles-list'),empty=document.getElementById('abq-articles-empty'),home=document.getElementById('home-latest-articles');
-      const q=(document.getElementById('abq-article-search')?.value||'').trim().toLowerCase(),cat=document.getElementById('abq-article-category')?.value||'';
       const allArticles=getAllArticles(); window.ABQ_ARTICLES=allArticles;
-      const filtered=allArticles.filter(a=>(!cat||a.category===cat)&&(!q||(a.title+' '+a.excerpt+' '+a.content).toLowerCase().includes(q)));
-      if(list) list.innerHTML=filtered.map(articleCard).join('');
-      if(empty) empty.classList.toggle('hidden',filtered.length>0);
+      if(list) list.innerHTML=allArticles.map(articleCard).join('');
+      if(empty) empty.classList.toggle('hidden',allArticles.length>0);
       if(home) home.innerHTML=allArticles.slice(0,3).map(articleCard).join('');
       if(typeof window.renderAbqArticleAdminList==='function') window.renderAbqArticleAdminList();
     };
@@ -15938,84 +15898,6 @@ window.AbqToast = (function(){
   });
 })();
 </script>
-
-<script id="abq-eight-main-tabs-final-controller">
-(function(){
-  'use strict';
-  const IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-  const main=()=>document.querySelector('.main-tabs-content');
-  function normalize(){
-    const host=main(); if(!host) return false;
-    IDS.forEach(function(id){
-      const el=document.getElementById(id);
-      if(el && el.parentElement!==host) host.appendChild(el);
-    });
-    return true;
-  }
-  function sections(){
-    const host=main(); if(!host) return [];
-    return IDS.map(id=>document.getElementById(id)).filter(function(el){return el && el.parentElement===host;});
-  }
-  function show(id){
-    if(!normalize()) return;
-    const host=main(), target=document.getElementById(id);
-    if(!target || target.parentElement!==host) return;
-    sections().forEach(function(sec){
-      const active=sec===target;
-      sec.classList.toggle('tab-active',active);
-      sec.style.setProperty('display',active?'block':'none','important');
-      sec.style.setProperty('visibility',active?'visible':'hidden','important');
-      sec.setAttribute('aria-hidden',active?'false':'true');
-       });
-     if(id==='qualifications'){
-       requestAnimationFrame(function(){ prioritizeQualificationsImage(); });
-     }
-    document.querySelectorAll('.main-tabs-nav .nav-btn').forEach(function(btn){
-      const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-      const active=!!m && m[1]===id;
-      btn.classList.toggle('active',active);
-      btn.setAttribute('aria-selected',active?'true':'false');
-    });
-  }
-  function prioritizeQualificationsImage(){
-    var img=document.querySelector('#qualifications img[src*="1790464611727-933a37a3-1647-463f-bea7-9392f4c5ae2c"]');
-    if(!img) return;
-    img.setAttribute('loading','eager');
-    img.setAttribute('decoding','async');
-    img.setAttribute('fetchpriority','high');
-    img.setAttribute('referrerpolicy','no-referrer');
-     if(!img.dataset.abqImgRetryBound){
-       img.dataset.abqImgRetryBound='1';
-       img.addEventListener('error',function(){
-         if(img.dataset.abqImgRetried) return;
-         img.dataset.abqImgRetried='1';
-         img.removeAttribute('referrerpolicy');
-         var current=img.getAttribute('src');
-         if(current) img.setAttribute('src',current);
-       },{once:false});
-     }
-     if(img.complete && img.naturalWidth>0) return;
-     }
-  window.abqShowMainTab=show;
-  function hook(){
-    if(!normalize()) return;
-    const nav=document.querySelector('.main-tabs-nav');
-    if(nav && !nav.dataset.abqEightHooked){
-      nav.dataset.abqEightHooked='1';
-      nav.addEventListener('click',function(e){
-        const btn=e.target.closest('.nav-btn'); if(!btn) return;
-        const m=(btn.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-        if(m) setTimeout(function(){show(m[1]);},0);
-      },true);
-    }
-    const active=document.querySelector('.main-tabs-nav .nav-btn.active');
-    const m=active && (active.getAttribute('onclick')||'').match(/switchTab\(['"]([^'"]+)['"]\)/);
-    show(m?m[1]:'home');
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',hook,{once:true}); else hook();
-})();
-</script>
-
 
 <!-- =========================================================
      ALABQRI — FAST SCROLL PC / MOBILE FINAL ENHANCEMENT
@@ -16439,39 +16321,6 @@ html *,body *{
   }
 }
 </style>
-<script id="abq-final-main-tab-click-controller">
-(function(){
-'use strict';
-var IDS=['home','qualifications','doors','courses','articles','matrix','azkar','contact'];
-function getTabId(el){
- if(!el)return '';
- var raw=el.getAttribute('onclick')||'';
- var m=raw.match(/switchTab\s*\(\s*['"]([^'"]+)['"]/);
- return m?m[1]:'';
-}
-function syncActiveButton(id){
- var buttons=document.querySelectorAll('.main-tabs-nav .nav-btn');
- buttons.forEach(function(button){
-   var buttonId=getTabId(button);
-   var active=buttonId===id;
-   button.classList.toggle('active',active);
-   button.setAttribute('aria-selected',active?'true':'false');
- });
-}
-document.addEventListener('click',function(event){
- var target=event.target;
- if(!target||!target.closest)return;
- var btn=target.closest('.main-tabs-nav .nav-btn');
- if(!btn)return;
- var id=getTabId(btn);
- if(!IDS.includes(id)||typeof window.switchTab!=='function')return;
- event.preventDefault();
- event.stopImmediatePropagation();
- var switched=window.switchTab(id,false);
- if(switched!==false) syncActiveButton(id);
-},true);
-})();
-</script>
 <style id="abq-mobile-hero-width-fix">
 /* ===== الموبايل فقط: الصورة وحدها بعرض الشاشة بالكامل بدون حواف أو هوامش ===== */
 @media (max-width:768px){
@@ -17300,7 +17149,7 @@ table{max-width:100%;display:block;overflow-x:auto}
   }
 }
 </style>
-\n<style id="abq-contact-pc-single-frame-final-20261006">
+<style id="abq-contact-pc-single-frame-final-20261006">
 @media (min-width:901px){
 #contact .abq-contact-single-frame{border:3px solid #2563eb!important;border-radius:1.5rem!important;padding:1.25rem!important;background:linear-gradient(135deg,#eff6ff 0%,#ffffff 55%,#f8fafc 100%)!important;box-shadow:0 16px 34px -22px rgba(30,64,175,.42)!important;}
 #contact .abq-contact-single-frame .abq-center-v2 > div:nth-child(3){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:1.25rem!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
@@ -20966,6 +20815,8 @@ load();
 })();
 </script>
   <script src="/assets/articles-library.js?v=admin-fallback-20261020" defer></script>
+
+
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
@@ -23501,7 +23352,6 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   display: none !important;
 }
 </style>
-\n
 <style id="alabqri-title-single-line-all-devices-20261011">
 /* ALABQRI: keep the real platform title on one line on desktop, tablet and mobile. */
 html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-brand-area h1 > span.abq-header-title-main {
@@ -23539,7 +23389,6 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
   }
 }
 </style>
-\n
 <style id="alabqri-header-compact-fit-logo-border-20261011">
 /* Isolated final override: compact header identity frame and a 3px logo border on all devices. */
 html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame {
