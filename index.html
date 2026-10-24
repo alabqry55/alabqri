@@ -20965,6 +20965,55 @@ load();
 })();
 </script>
   <script src="/assets/articles-library.js?v=admin-fallback-20261020" defer></script>
+
+<!-- ALABQRI: فصل إطار التواصل والخدمات عن إطار محتويات الرئيسية — 2026-10-24 -->
+<style id="abq-home-contact-independent-frame-20261024">
+  #home > #abq-home-contact-services,
+  #home #abq-home-contact-services.abq-home-contact-exact-copy{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    margin:1.1rem 0 1.4rem!important;
+    padding:1rem!important;
+    border:3px solid #2563eb!important;
+    border-radius:1.35rem!important;
+    background:linear-gradient(135deg,#eff6ff 0%,#fff 55%,#f8fafc 100%)!important;
+    box-shadow:0 14px 32px -22px rgba(30,64,175,.42)!important;
+    overflow:hidden!important;
+    direction:rtl!important;
+  }
+  #home > #abq-home-contact-services > .abq-home-contact-exact-inner{
+    width:100%!important;max-width:100%!important;margin:0 auto!important;
+    padding:0!important;box-sizing:border-box!important;
+  }
+  #home > #abq-home-contact-services .abq-contact-premium-card{
+    width:100%!important;max-width:100%!important;box-sizing:border-box!important;
+  }
+  @media(max-width:900px){
+    #home > #abq-home-contact-services,
+    #home #abq-home-contact-services.abq-home-contact-exact-copy{
+      margin:1rem 0!important;padding:.65rem!important;border-radius:1.1rem!important;
+    }
+  }
+</style>
+<script id="abq-home-contact-independent-frame-move-20261024">
+(function(){
+  function separateHomeContact(){
+    var home=document.getElementById('home');
+    if(!home) return;
+    var contact=home.querySelector('#abq-home-contact-services');
+    var mainFrame=home.querySelector('.abq-home-actions-stats-frame');
+    if(!contact || !mainFrame || !mainFrame.contains(contact)) return;
+    mainFrame.insertAdjacentElement('afterend',contact);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',separateHomeContact,{once:true});
+  }else{
+    separateHomeContact();
+  }
+})();
+</script>
 </body>
 
 <style id="abq-live-heartbeat-subscribers-20261007">
