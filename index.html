@@ -9417,10 +9417,42 @@ header .text-center.md\:text-left > p.text-blue-700.bg-sky-50{
 </style>
 
 
-<style id="abq-header-title-line-spacing-20261025">
-/* زيادة بسيطة للمسافة بين سطري عنوان المنصة فقط */
+<style id="abq-header-typography-unified-20261025">
+/* توحيد أحجام وخطوط عنوان المنصة وبيانات المركز دون تغيير بقية التصميم */
+html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-platform-title {
+  line-height: 1.4 !important;
+}
+html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main {
+  font-size: 22px !important;
+  line-height: 1.4 !important;
+}
 html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub {
-  margin-top: 5px !important;
+  display: block !important;
+  font-size: 20px !important;
+  line-height: 1.4 !important;
+  margin-top: 0 !important;
+}
+html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-center-name {
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+}
+html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-text {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+@media (max-width: 767px) {
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-main {
+    font-size: 14px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-sub {
+    font-size: 13px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-center-name {
+    font-size: 13px !important;
+  }
+  html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-text {
+    font-size: 12px !important;
+  }
 }
 </style>
 </head>
