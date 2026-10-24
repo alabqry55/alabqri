@@ -121,8 +121,7 @@ function renderVerse(n){
  const a=(state.texts||[]).find(x=>Number(x.numberInSurah??x.number)===Number(n));
  const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));
  const r=selectedReciter();
- $("abq-qp-verse-head").textContent=a?(s?.name||"")+" — الآية "+n:"";
- $("abq-qp-verse").textContent=a?(a.text||""):"";
+ $("abq-qp-verse-head").textContent=a?(s?.name||"")+" — الآية "+n:""; $("abq-qp-verse").textContent=a?(a.text||""):"";
  $("abq-qp-meta").textContent=r?(r.name+" • "+(r.readName||"تلاوة آية بآية")):"";
 }
 function queueBuild(){
@@ -130,7 +129,7 @@ function queueBuild(){
  state.queue=[];for(let n=f;n<=t;n++)state.queue.push(n);state.current=0;
  renderVerse(state.queue[0]||1);
 }
-function setStatus(t){$("abq-qp-status").textContent=t}
+function setStatus(t){const el=$("abq-qp-status");if(el)el.textContent=t}
 function setPlayButton(mode){
  const b=$("abq-qp-play");if(!b)return;
  b.classList.toggle("waiting",mode==="waiting");
