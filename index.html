@@ -14637,6 +14637,13 @@ function applyTab(tabId){
       }
     });
 
+    // Desktop-only safety: validate the destination before hiding any main section.
+    // Keep the existing mobile tab-switching path unchanged.
+    if (window.matchMedia && window.matchMedia('(min-width: 768px)').matches) {
+      const desktopTarget = document.getElementById(tabId);
+      if (!desktopTarget || desktopTarget.parentElement !== mainTabsContainer) return false;
+    }
+
     // إدارة التبويبات الرئيسية فقط: لا نلمس أي تبويب داخلي داخل الأذكار أو المرصد.
     const mainSections = mainTabsContainer.querySelectorAll(':scope > section.tab-content');
     mainSections.forEach(function(section){
