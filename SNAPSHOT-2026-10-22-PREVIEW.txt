@@ -1,0 +1,3 @@
+Preview-only marker for the repository snapshot dated 2026-10-22.
+Historical code base: ec3f4e2a3d7686c971d82d6a56f5f15b229d7877.
+Do not merge this snapshot into main. D1 data is not restored by this file.
