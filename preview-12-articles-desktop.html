@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>معاينة الكمبيوتر — مقالات ALABQRI الاثنا عشر</title>
+<style>
+:root{color-scheme:light;--navy:#12345a;--blue:#2563eb;--gold:#c59b38;--line:#d9e2ee;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#172033;font-family:Tahoma,Arial,sans-serif;line-height:1.8}
+header{background:linear-gradient(120deg,#12345a,#1d4e89);color:#fff;padding:28px max(24px,calc((100% - 1240px)/2));border-bottom:4px solid var(--gold)}
+header h1{margin:0 0 6px;font-size:clamp(22px,3vw,32px)}header p{margin:0;color:#e6eef9}
+main{max-width:1240px;margin:24px auto;padding:0 20px}.notice{padding:14px 18px;border:1px solid #e6cb81;background:#fff9e9;border-radius:12px;margin-bottom:20px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:18px 0}
+button{font:inherit;cursor:pointer;border:1px solid var(--blue);border-radius:10px;padding:9px 14px;background:#fff;color:var(--blue);font-weight:700}button.primary{background:var(--blue);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 16px #0f172a0b;min-width:0}
+.preview-image{width:100%;height:205px;display:block;object-fit:cover;background:#e9eef5;border-bottom:1px solid var(--line)}
+.no-image{height:205px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background:linear-gradient(135deg,#e8eef7,#f7f9fc);color:#64748b;border-bottom:1px solid var(--line)}
+.body{padding:16px}.category{font-size:12px;color:#2563eb;font-weight:700}.body h2{font-size:18px;line-height:1.7;margin:6px 0 10px}.body p{margin:0 0 12px;color:#475569;font-size:14px}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}select,input{font:inherit;width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:9px;background:white;color:#172033}
+.image-note{font-size:12px;color:#9a6700;margin-top:6px}
+.gallery{margin-top:32px;background:white;border:1px solid var(--line);border-radius:16px;padding:18px}.gallery h2{margin-top:0}.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.candidate{border:1px solid var(--line);border-radius:10px;overflow:hidden}.candidate img{width:100%;height:130px;object-fit:cover;display:block;background:#edf2f7}.candidate div{padding:8px;font-size:12px;overflow-wrap:anywhere}
+footer{max-width:1240px;margin:0 auto;padding:12px 20px 30px;color:var(--muted);font-size:12px}
+.mobile-block{display:none}
+@media(max-width:899px){main,header,footer,.mobile-block{display:none!important}body{background:#fff}.mobile-block{display:block!important;padding:30px;line-height:2}.mobile-block h1{font-size:22px;color:var(--navy)}}
+@media(min-width:900px) and (max-width:1050px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="mobile-block"><h1>هذه صفحة معاينة مخصصة للكمبيوتر</h1><p>لم يتم تعديل نسخة الموبايل أو سلوك المنصة. افتح رابط المعاينة من الكمبيوتر بعرض نافذة لا يقل عن 900 بكسل لمراجعة بطاقات المقالات واختيار الصور الأصلية.</p></div>
+<header><h1>📰 معاينة الكمبيوتر — مقالات ALABQRI الاثنا عشر</h1><p>نموذج بصري مستقل لمراجعة البطاقات وتعيين الصور قبل أي تعديل على المنصة.</p></header>
+<main>
+<div class="notice"><strong>تنبيه للمراجعة:</strong> الصور أدناه من سجل الصور المستعادة، لكن ربطها بالمقالات غير مؤكد. اختر صورة لكل مقال يدويًا بعد التحقق من محتواها. الاختيارات هنا مؤقتة داخل الصفحة ولا تُحفظ في قاعدة البيانات أو المنصة.</div>
+<div class="toolbar"><div><strong id="progress">الصور المعينة: 0 من 12</strong> <span style="color:#64748b">— يمكنك اختيار «بدون صورة» حتى يكتمل التحقق.</span></div><div><button id="reset">إعادة ضبط الاختيارات</button> <button class="primary" id="export">تصدير جدول التعيين للمراجعة</button></div></div>
+<section class="grid" id="articles"></section>
+<section class="gallery"><h2>معرض الصور الأصلية المتاحة</h2><p>افحص الصور هنا ثم اختر الصورة المطابقة من قائمة المقال المقابل. أسماء الملفات محفوظة كما وردت في سجل الاستعادة.</p><div class="gallery-grid" id="gallery"></div></section>
+</main>
+<footer>معاينة منفصلة للكمبيوتر فقط. لا تغيّر بيانات الإنتاج ولا تُجري أي تعديل على واجهة الموبايل. لا تُعتمد التعيينات إلا بعد المراجعة البشرية.</footer>
+<script>
+(function(){
+const articles=[
+["thinking-loop-2026","التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية","التنمية البشرية","دليل عملي للتمييز بين التفكير المنتج والاجترار، وتقليل دوران الأفكار، ومعرفة متى تطلب مساعدة متخصصة."],
+["family-dialogue-2026","الخلافات الأسرية: مهارات الحوار التي تقلل التصعيد","التنمية البشرية","خطوات للتعبير عن الاحتياجات والاستماع بإنصاف وإدارة الخلاف دون إهانة أو تعميم، مع مراعاة السلامة."],
+["self-discipline-habits-2026","الانضباط الذاتي وبناء العادات: كيف تستمر بعد تراجع الحماس؟","التنمية البشرية","منهج واقعي لبناء العادات عبر تصغير المهمة وربطها بإشارة ثابتة ومراجعة التقدم دون انتظار الدافع المثالي."],
+["healthy-boundaries-2026","الحدود الصحية في العلاقات: قول لا باحترام ووضوح","التنمية البشرية","كيف توضح حدود الوقت والخصوصية والمسؤوليات، وتعبّر عن الرفض دون عدوان، وتفرق بين التفاهم والإكراه."],
+["effective-trainer-2026","المدرب الفعّال: من تقديم المعلومات إلى إحداث تعلّم قابل للتطبيق","التنمية البشرية","معايير لتصميم تدريب يبدأ باحتياج واضح وينتهي بممارسة وتقييم، بدل الاكتفاء بكثرة الشرائح أو الحماس."],
+["sleep-mental-health-2026","النوم والصحة النفسية: عادات يومية تدعم الراحة والتركيز","موضوعات معرفية","مبادئ عامة لتحسين روتين النوم وفهم علاقته بالمزاج، ومتى تستدعي المشكلات استشارة طبية."],
+["decisions-under-pressure-2026","اتخاذ القرارات الصعبة: إطار عملي للموازنة بين الخيارات","التنمية البشرية","طريقة منظمة لتحديد المشكلة والمعايير والبدائل والمخاطر وتقليل أثر الانفعال دون ادعاء قرار مضمون."],
+["lifelong-learning-2026","التعلم المستمر: خطة واقعية لتطوير المهارات في عصر التغيير","التنمية البشرية","كيف تختار مهارة ذات قيمة وتتعلم بالممارسة والاسترجاع وتبني دليلًا ملموسًا على التقدم."],
+["thirty-day-change-2026","التغيير يبدأ بخطوات صغيرة: برنامج عملي لمدة 30 يومًا","التنمية البشرية","برنامج مرن من أربعة أسابيع لاختيار عادة صغيرة وتسهيل تنفيذها ومراجعة العوائق وبناء خطة للاستمرار."],
+["anxiety-support-2026","القلق النفسي: علامات تستحق الانتباه وطرق طلب المساعدة","موضوعات معرفية","معلومات تثقيفية للتعرف على علامات القلق ومتى يكون طلب المساعدة المتخصصة مناسبًا."],
+["time-priorities-2026","إدارة الوقت وترتيب الأولويات: خطة أسبوعية تقلل التشتت","التنمية البشرية","خطة عملية لتحديد المهم، وتقسيم العمل، وتخفيف التشتت، ومراجعة الأسبوع بواقعية."],
+["evidence-health-claims-2026","كيف نقيّم الادعاءات العلاجية؟ دليل للتفكير العلمي المسؤول","البحث العلمي","أسئلة للتحقق من الدليل، ومصدر الادعاء، وجودة الدراسات، والتمييز بين الشهادة الشخصية والبرهان العلمي."]
+];
+const images=[
+["1784964606622-935938158.jpg","https://i.ibb.co/ymNRXYxq/1784964606622-935938158.jpg"],
+["1784966636433-381851652.jpg","https://i.ibb.co/99N8fSTb/1784966636433-381851652.jpg"],
+["1784967146989-694363147.jpg","https://i.ibb.co/ynDwv8zC/1784967146989-694363147.jpg"],
+["1784968329236-631753140.jpg","https://i.ibb.co/TMNk678Y/1784968329236-631753140.jpg"],
+["1784973509953-741305071.jpg","https://i.ibb.co/gbLv47nY/1784973509953-741305071.jpg"],
+["1784974522593-280592293.jpg","https://i.ibb.co/q4cPzwb/1784974522593-280592293.jpg"],
+["1785903905721-331718337.png","https://i.ibb.co/XfnXw5Lq/1785903905721-331718337.png"],
+["1786432854203-46900508.png","https://i.ibb.co/vCSTFkHT/1786432854203-46900508.png"],
+["1786482193941-317355681.png","https://i.ibb.co/4gCNzyGv/1786482193941-317355681.png"],
+["1786487795656-505690665.png","https://i.ibb.co/Q7yV2gTr/1786487795656-505690665.png"],
+["1786487882266-486296257.png","https://i.ibb.co/5gtXPWBH/1786487882266-486296257.png"],
+["1786488046920-88086953.png","https://i.ibb.co/d0hbSsHJ/1786488046920-88086953.png"],
+["1786495109942-210787351.png","https://i.ibb.co/JFHf2kvn/1786495109942-210787351.png"],
+["1786495985624-383609155.png","https://i.ibb.co/n8Dk3dgc/1786495985624-383609155.png"],
+["1786496134748-997425396.png","https://i.ibb.co/S7KLSvTb/1786496134748-997425396.png"],
+["1786687984651-642430563.png","https://i.ibb.co/hxSthVNc/1786687984651-642430563.png"],
+["1786688593001-76479016.png","https://i.ibb.co/RGJhnQ27/1786688593001-76479016.png"]
+];
+const choices=new Map();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){
+const root=document.getElementById("articles");root.innerHTML="";
+articles.forEach(a=>{
+const selected=choices.get(a[0])||"";
+const found=images.find(i=>i[0]===selected);
+const card=document.createElement("article");card.className="card";
+card.innerHTML=(found?'<img class="preview-image" alt="" src="'+found[1]+'">':'<div class="no-image">صورة المقال لم تُعتمد بعد<br>اختر صورة من القائمة أدناه</div>')+
+'<div class="body"><span class="category">'+esc(a[2])+'</span><h2>'+esc(a[1])+'</h2><p>'+esc(a[3])+'</p><label for="pick-'+esc(a[0])+'">الصورة المطابقة للمقال</label><select id="pick-'+esc(a[0])+'" data-id="'+esc(a[0])+'"><option value="">— بدون صورة / لم يُتحقق —</option>'+images.map(i=>'<option value="'+esc(i[0])+'" '+(i[0]===selected?'selected':'')+'>'+esc(i[0])+'</option>').join("")+'</select><div class="image-note">اختيار مؤقت للمعاينة فقط؛ لا يُحفظ على المنصة.</div></div>';
+root.appendChild(card);
+});
+document.getElementById("progress").textContent="الصور المعينة: "+choices.size+" من "+articles.length;
+}
+document.getElementById("gallery").innerHTML=images.map(i=>'<div class="candidate"><img loading="lazy" alt="" src="'+i[1]+'"><div>'+esc(i[0])+'</div></div>').join("");
+document.getElementById("articles").addEventListener("change",e=>{if(!e.target.matches("select[data-id]"))return;const id=e.target.dataset.id;if(e.target.value)choices.set(id,e.target.value);else choices.delete(id);render();});
+document.getElementById("reset").addEventListener("click",()=>{choices.clear();render();});
+document.getElementById("export").addEventListener("click",()=>{const data=articles.map(a=>({id:a[0],title:a[1],image:choices.get(a[0])||null,verified:false}));const blob=new Blob([JSON.stringify({purpose:"desktop preview only; assignments require human verification",articles:data},null,2)],{type:"application/json;charset=utf-8"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download="ALABQRI-desktop-image-mapping-review.json";link.click();URL.revokeObjectURL(url);});
+render();
+})();
+</script>
+</body>
+</html>
