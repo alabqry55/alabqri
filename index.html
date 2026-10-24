@@ -217,6 +217,14 @@ body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #1e29
     transform: none !important;
 }
 
+/* ===== إصلاح اختفاء عناصر reveal داخل كل تبويب رئيسي نشط ===== */
+.main-tabs-content > section.tab-content.tab-active .reveal,
+.main-tabs-content > section.tab-content.tab-active .reveal.in {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
+
 /* ===== نظام إظهار وإخفاء تبويبات المنصة ===== */
 .tab-content {
     display: none !important;
