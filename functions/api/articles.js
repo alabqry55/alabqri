@@ -4,49 +4,16 @@ const CATEGORIES = new Set(["التنمية البشرية","الطب التكم
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 const validId = id => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id);
 
-const canonicalAzkarArticle = {
-  id: "azkar-balance",
-  title: "🌿 أثر الأذكار في الاتزان النفسي",
-  category: "الأذكار والاتزان",
-  date: "15 سبتمبر 2026",
-  excerpt: "قراءة معرفية في صلة المداومة على الذكر بالانتباه والسكينة وتنظيم الاستجابة للضغوط، ضمن الإطار الإيماني، مع التمييز بين المعنى الروحي والفرضيات العلمية.",
-  content: `🌿 أثر الأذكار في الاتزان النفسي
-
-مقدمة
-يمثّل الذكر في حياة المسلم ممارسة إيمانية ذات معنى، وقد يساعد الانتظام فيه بعض الأشخاص على استعادة الانتباه، وتذكّر القيم التي يستندون إليها، والتعامل مع الضغوط بقدر أكبر من الوعي والطمأنينة. ويمكن وصف هذا الدور — على سبيل التقريب لا بوصفه مصطلحًا تشخيصيًا — بأنه «ارتكاز إدراكي» (Cognitive Anchoring): أي إعادة توجيه الانتباه إلى معنى ثابت ومقصود بدل الانجراف المستمر وراء الأفكار المقلقة.
-
-أولًا: الحدّ من الاجترار الفكري (Mental Rumination)
-الاجترار هو الدوران المتكرر حول فكرة أو تجربة مزعجة دون الوصول إلى حل عملي. وقد تمنح المداومة على الذكر الشخص نقطة انتباه مقصودة يعود إليها عندما يلاحظ أنه عالق في دائرة التفكير. وتكرار الألفاظ مع استحضار معناها قد يساعد على تحويل الانتباه مؤقتًا من تكرار الفكرة إلى نشاط ذهني أكثر تنظيمًا، كما قد يدعم الإحلال الإدراكي؛ أي اختيار استجابة أكثر نفعًا بدل الاسترسال التلقائي مع كل خاطر.
-
-ولا يعني ذلك أن الذكر يمحو الأفكار الصعبة أو يمنع عودتها، بل يمكن أن يكون وسيلة للتعامل معها برفق: ملاحظة الفكرة دون التسليم بأنها حقيقة مطلقة، ثم العودة إلى الحاضر واتخاذ خطوة عملية مناسبة عند الحاجة.
-
-ثانيًا: تعزيز الشعور بالأمان وتنظيم الاستجابة للضغط
-ترتبط الطمأنينة لدى المؤمن بمعنى التوكل والرجاء والاتصال بالله، وقد تساعد الممارسة الهادئة المنتظمة بعض الناس على تهدئة التوتر واستعادة الشعور بالثبات. ومن الناحية النفسية، يمكن للتركيز الهادئ وتكرار عبارة ذات معنى أن يدعما الاسترخاء وتنظيم الانتباه. أما الجهاز العصبي الودّي ونظير الودّي فيشاركان في تنظيم الاستجابة للضغط والراحة، لكن لا يصح الجزم بأن كل ذكر يفعّل مسارًا عصبيًا محددًا أو يخفض هرمون الكورتيزول لدى كل شخص؛ فالتأثيرات تختلف بحسب الفرد والسياق، وتحتاج الادعاءات الفسيولوجية المحددة إلى أدلة مباشرة.
-
-الطمأنينة هنا ليست إنكارًا للمشكلة أو بديلًا عن طلب المساعدة، وإنما مورد معنوي يمكن أن يجتمع مع التفكير الواقعي، والتواصل الداعم، والعلاج المتخصص إذا استدعت الحالة ذلك.
-
-ثالثًا: بناء إيقاع يومي أكثر استقرارًا
-توزيع الأذكار على أوقات اليوم قد يهيئ محطات منتظمة للتوقف القصير واستعادة القصد. ويساعد الروتين الواضح بعض الأشخاص على تقليل التشتت وتذكّر الأولويات، كما يمكن أن يتيح مساحة لمراجعة المشاعر قبل الاستجابة لها. ومع الاستمرار، قد يصبح هذا التوقف فرصة للتدرّب على الثبات الانفعالي والمرونة النفسية؛ أي القدرة على التكيف مع التغير والعودة إلى السلوك المتزن بعد المواقف الصعبة.
-
-ولا تُقاس جودة الممارسة بعدد الألفاظ وحده، بل بحضور القلب وفهم المعنى قدر المستطاع، وبما ينعكس على السلوك من رحمة ومسؤولية واتزان، من غير تحميل النفس ما لا تطيق أو تحويل العبادة إلى مصدر ضغط إضافي.
-
-مسار السكينة: ثلاثة أبعاد متكاملة
-• الإدراك والوعي: ملاحظة الخواطر والمشاعر، والتمييز بين الفكرة والواقع، وإعادة توجيه الانتباه إلى ما يمكن فعله الآن.
-• الشعور بالأمان: استحضار معاني التوكل والرجاء، والاستفادة من لحظات الذكر لاستعادة الهدوء دون إنكار أسباب القلق.
-• التكيف والقبول: التعامل مع ما لا يمكن تغييره بوعي، والعمل على ما يمكن تغييره بخطوات عملية، وطلب المساندة عند الحاجة.
-
-خاتمة
-يمكن النظر إلى الذكر بوصفه ممارسة إيمانية واعية تجمع بين المعنى الروحي والحضور الذهني. وقد يجد فيه الإنسان موردًا للسكينة وتنظيم الانتباه ومراجعة الاستجابة للمواقف، مع اختلاف التجربة من شخص إلى آخر. وهو لا يغني عن معالجة الأسباب الواقعية للضيق أو الاستعانة بالمختصين عند الحاجة، بل يمكن أن يتكامل معهما ضمن حياة متوازنة ومسؤولة.
-
-تنبيه معرفي: ما ورد عن الاجترار والانتباه وتنظيم الاستجابة للضغط وصفٌ لاحتمالات نفسية عامة، وليس إثباتًا لآلية عصبية محددة أو علاجًا مضمونًا. ولا تُنسب نتائج مثل خفض الكورتيزول أو تنشيط مسار عصبي بعينه إلى الذكر على نحو قطعي دون دراسات مباشرة موثوقة.`
-};
-
-const canonicalArticles = [canonicalAzkarArticle];
 // Permanent retirement: never restore or expose this legacy article again.
 const isRetiredEnergyArticle = article => {
+  const id = String(article?.id || "").toLocaleLowerCase("en");
   const title = normalizeTitle(article?.title);
-  const matchesTitle = title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
-  return matchesTitle;
+  return id === "energy-science" || title.includes(normalizeTitle("الطاقة الحيوية"));
+};
+const isRetiredAzkarArticle = article => {
+  const id = String(article?.id || "").toLocaleLowerCase("en");
+  const title = normalizeTitle(article?.title);
+  return id === "azkar-balance" || title.includes(normalizeTitle("أثر الأذكار في الاتزان النفسي"));
 };
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
@@ -56,12 +23,6 @@ const isHijamaArticle = article => {
   const title = normalizeTitle(article?.title);
   return title.includes(normalizeTitle("الحجامة")) && title.includes(normalizeTitle("الطب النبوي"));
 };
-const sameArticle = (article, canonical) =>
-  String(article?.id || "") === canonical.id ||
-  normalizeTitle(article?.title) === normalizeTitle(canonical.title) ||
-  (canonical.id === canonicalAzkarArticle.id &&
-    normalizeTitle(article?.title).includes("اثر الاذكار في الاتزان النفسي"));
-
 async function ensureTable(db) {
   await db.prepare(`CREATE TABLE IF NOT EXISTS articles (
     id TEXT PRIMARY KEY, title TEXT NOT NULL, category TEXT NOT NULL,
@@ -84,7 +45,7 @@ export async function onRequest({request, env}) {
   // Read-only fallback keeps the canonical article visible in preview environments
   // where the D1 binding is not attached. Writes still require a configured database.
   if (!env.DB) {
-    if (request.method === "GET") return json({articles:[canonicalAzkarArticle], fallback:true});
+    if (request.method === "GET") return json({articles:[], fallback:true});
     return json({error:"D1 binding DB is not configured."},500);
   }
   try {
@@ -92,7 +53,7 @@ export async function onRequest({request, env}) {
     // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
     const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
     for (const row of retiredRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
+      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row) || isRetiredAzkarArticle(row)) {
         await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
       }
     }
@@ -123,29 +84,7 @@ export async function onRequest({request, env}) {
         const timestamp = Date.parse(article.scheduled_at);
         return Number.isFinite(timestamp) && timestamp <= now;
       });
-      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article) && !isRetiredEnergyArticle(article));
-      for (const canonical of canonicalArticles) {
-        const allMatches = allResults.filter(article => sameArticle(article, canonical));
-        const visibleMatches = articles.filter(article => sameArticle(article, canonical));
-        // A canonical record that exists but is scheduled for the future must remain hidden.
-        if (!visibleMatches.length && allMatches.length) continue;
-        if (!visibleMatches.length) {
-          articles.push(canonical);
-          continue;
-        }
-        const selected = visibleMatches.find(article => String(article.id || "") === canonical.id) || visibleMatches[0];
-        const alreadyCanonical = String(selected.id || "") === canonical.id;
-        const normalized = {
-          ...selected,
-          id: canonical.id,
-          title: alreadyCanonical ? selected.title : canonical.title,
-          date: String(selected.date || "").trim() ? selected.date : canonical.date,
-          excerpt: alreadyCanonical ? selected.excerpt : canonical.excerpt,
-          content: alreadyCanonical ? selected.content : canonical.content
-        };
-        articles = articles.filter(article => !sameArticle(article, canonical));
-        articles.push(normalized);
-      }
+      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article) && !isRetiredEnergyArticle(article) && !isRetiredAzkarArticle(article));
       // Final guard against legacy duplicates: keep the newest record for each normalized title and ID.
       const seenIds = new Set();
       const seenTitles = new Set();
@@ -167,7 +106,7 @@ export async function onRequest({request, env}) {
     if (body.action === "save") {
       await ensureScheduleColumn(env.DB);
       const a = body.article;
-      if (a && isRetiredEnergyArticle(a)) return json({error:"مقال الطاقة الحيوية متقاعد نهائيًا ولا يمكن إعادة حفظه."},409);
+      if (a && (isRetiredEnergyArticle(a) || isRetiredAzkarArticle(a))) return json({error:"هذا المقال محذوف نهائيًا ولا يمكن إعادة حفظه."},409);
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
       if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
@@ -177,8 +116,6 @@ export async function onRequest({request, env}) {
       const normalizedNewTitle = normalizeTitle(a.title);
       const duplicate = existingRows.find(row => normalizeTitle(row.title) === normalizedNewTitle);
       if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
-      const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
-      if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
       await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
         VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
         ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
@@ -199,7 +136,7 @@ export async function onRequest({request, env}) {
       const titles = new Set();
       for (let index = 0; index < incoming.length; index++) {
         const a = incoming[index];
-        if (a && isRetiredEnergyArticle(a)) return json({error:"تتضمن الدفعة مقال الطاقة الحيوية المتقاعد نهائيًا؛ لم يُحفظ أي مقال."},409);
+        if (a && (isRetiredEnergyArticle(a) || isRetiredAzkarArticle(a))) return json({error:"تتضمن الدفعة مقالًا محذوفًا نهائيًا؛ لم يُحفظ أي مقال."},409);
         if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
             a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
             a.content.length > 200000 || !CATEGORIES.has(a.category) ||
@@ -218,7 +155,7 @@ export async function onRequest({request, env}) {
           return json({error:"كل مقال غير فوري في الدفعة يحتاج موعد نشر مستقبليًا صالحًا؛ لم يُحفظ أي مقال."},400);
         }
         const titleKey = normalizeTitle(a.title);
-        if (ids.has(String(a.id)) || titles.has(titleKey) || canonicalArticles.some(c => normalizeTitle(c.title) === titleKey)) {
+        if (ids.has(String(a.id)) || titles.has(titleKey) || false) {
           return json({error:"توجد هوية أو عناوين مكررة داخل الدفعة أو بين المقالات المرجعية؛ لم يُحفظ أي مقال."},409);
         }
         ids.add(String(a.id));
