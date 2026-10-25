@@ -154,49 +154,22 @@
         search.type = "search";
         search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
         search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
-        const category = el("select");
-        category.setAttribute("aria-label", "تصفية الأبحاث حسب التصنيف");
-        const allOption = el("option", "", "جميع التصنيفات");
-        allOption.value = "";
-        category.appendChild(allOption);
-        Array.from(new Set(articles.map(a => String(a.category || "").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"ar")).forEach(value => {
-          const option = el("option", "", value);
-          option.value = value;
-          category.appendChild(option);
-        });
-
-        // Remove the obsolete blue-framed search field from this articles tab.
-        // Keep the library's own search input above the results as the single search control.
-        const externalSearchFields = Array.from(section.querySelectorAll(
-          'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"], input[name*="search" i], input[id*="search" i]'
-        )).filter(field => !root.contains(field) && field !== search && field.isConnected);
-        // The library's own search field is the one that must remain.
-        // Remove every legacy/external search field in this tab, regardless of
-        // its styling, so desktop and mobile cannot retain a second search box.
-        for (const externalField of externalSearchFields) {
-          const obsoleteWrapper = externalField.closest("label") || externalField.parentElement;
-          externalField.remove();
-          if (obsoleteWrapper && obsoleteWrapper !== section && !root.contains(obsoleteWrapper) &&
-              !obsoleteWrapper.querySelector("input,button,select,textarea") &&
-              !obsoleteWrapper.textContent.trim()) obsoleteWrapper.remove();
-        }
-
-        tools.append(search, category);
+        // Keep the main text-search field. The category-only dropdown is intentionally removed.
+        tools.append(search);
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
         root.append(tools, count, grid);
 
         function render() {
           const term = search.value.trim().toLocaleLowerCase("ar");
-          const selected = category.value;
           const visible = articles.filter(a => {
             const haystack = [a.title,a.category,a.excerpt,a.content,a.author].map(v=>String(v||"")).join(" ").toLocaleLowerCase("ar");
-            return (!term || haystack.includes(term)) && (!selected || a.category === selected);
+            return !term || haystack.includes(term);
           });
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
           if (!visible.length) {
-            grid.appendChild(el("div", "abq-articles-status", "لا توجد نتائج مطابقة. جرّب كلمات بحث أخرى أو غيّر التصنيف."));
+            grid.appendChild(el("div", "abq-articles-status", "لا توجد نتائج مطابقة. جرّب كلمات بحث أخرى."));
             return;
           }
           visible.forEach(a => {
