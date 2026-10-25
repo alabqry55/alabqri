@@ -40,7 +40,37 @@
       .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
       .replace(/[^\p{L}\p{N}]+/gu, "");
     const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
+    const cleanupLegacySearchArea = () => {
+      if (!articleTab) return;
+      // Remove only the retired visitor-facing search/filter area from the articles tab.
+      // Keep the new article library, article cards, and every admin/editor field intact.
+      const legacySearchInputs = Array.from(articleTab.querySelectorAll('input[type="search"], input[placeholder*="ابحث"], input[aria-label*="البحث"]'))
+        .filter(input => !input.closest(".abq-articles-library") && !input.closest("form"));
+      for (const input of legacySearchInputs) {
+        let area = input.parentElement;
+        while (area && area !== articleTab && area.parentElement !== articleTab) {
+          const cls = String(area.className || "").toLowerCase();
+          if (/search|filter|tools|بحث|تصنيف|category/.test(cls)) break;
+          area = area.parentElement;
+        }
+        if (area && area !== articleTab && !area.closest(".abq-articles-library") && !area.closest("form")) area.remove();
+        else input.remove();
+      }
+      // A legacy category-only filter may have no text input. Remove its dedicated
+      // search/filter wrapper, never a select inside the article editor/admin form.
+      const legacyFilterAreas = Array.from(articleTab.querySelectorAll(
+        '[class*="search"],[class*="filter"],[class*="Search"],[class*="Filter"],[aria-label*="تصنيف"],[aria-label*="بحث"]'
+      )).filter(node =>
+        !node.closest(".abq-articles-library") &&
+        !node.closest("form") &&
+        (node.matches("select") || node.querySelector("select"))
+      );
+      for (const area of legacyFilterAreas) {
+        if (area !== articleTab && area.parentElement && !area.closest(".abq-articles-library")) area.remove();
+      }
+    };
     const cleanupLegacyArticleCards = () => {
+      cleanupLegacySearchArea();
       const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
       const seen = new Set();
       for (const titleNode of headings) {
