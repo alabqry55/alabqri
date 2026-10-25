@@ -170,20 +170,14 @@
         const externalSearchFields = Array.from(section.querySelectorAll(
           'input[type="search"], input[placeholder*="بحث"], input[aria-label*="بحث"], input[name*="search" i], input[id*="search" i]'
         )).filter(field => !root.contains(field) && field !== search && field.isConnected);
-        const blueFramedSearch = externalSearchFields.find(field => {
-          const style = window.getComputedStyle(field);
-          return [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
-            .some(color => {
-              const rgb = color.match(/[0-9]+/g);
-              if (!rgb) return /blue/i.test(color);
-              const red = Number(rgb[0]), green = Number(rgb[1]), blue = Number(rgb[2]);
-              return blue >= 100 && blue > red * 1.25 && blue > green * 1.08;
-            });
-        });
-        if (blueFramedSearch) {
-          const obsoleteWrapper = blueFramedSearch.closest("label") || blueFramedSearch.parentElement;
-          blueFramedSearch.remove();
-          if (obsoleteWrapper && obsoleteWrapper !== section && !obsoleteWrapper.querySelector("input,button,select,textarea") &&
+        // The library's own search field is the one that must remain.
+        // Remove every legacy/external search field in this tab, regardless of
+        // its styling, so desktop and mobile cannot retain a second search box.
+        for (const externalField of externalSearchFields) {
+          const obsoleteWrapper = externalField.closest("label") || externalField.parentElement;
+          externalField.remove();
+          if (obsoleteWrapper && obsoleteWrapper !== section && !root.contains(obsoleteWrapper) &&
+              !obsoleteWrapper.querySelector("input,button,select,textarea") &&
               !obsoleteWrapper.textContent.trim()) obsoleteWrapper.remove();
         }
 
