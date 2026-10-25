@@ -149,23 +149,15 @@
         if (!articles.length) {
           root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
-        const tools = el("div", "abq-articles-tools");
-        let search = el("input");
-        search.type = "search";
-        search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
-        search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
-        // Keep the main text-search field. The category-only dropdown is intentionally removed.
-        tools.append(search);
+        // Hidden anchor preserves the existing placement of administration controls without rendering any search field.
+        const tools = el("div");
+        tools.hidden = true;
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
         root.append(tools, count, grid);
 
         function render() {
-          const term = search.value.trim().toLocaleLowerCase("ar");
-          const visible = articles.filter(a => {
-            const haystack = [a.title,a.category,a.excerpt,a.content,a.author].map(v=>String(v||"")).join(" ").toLocaleLowerCase("ar");
-            return !term || haystack.includes(term);
-          });
+          const visible = articles;
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
           if (!visible.length) {
@@ -444,7 +436,6 @@
           }
         });
 
-        search.addEventListener("input", render);
         // Category filter was removed; keep the main text-search field only.
         render();
       })
