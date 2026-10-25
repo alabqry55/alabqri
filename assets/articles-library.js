@@ -42,31 +42,39 @@
     const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
     const cleanupLegacySearchArea = () => {
       if (!articleTab) return;
-      // Remove only the retired visitor-facing search/filter area from the articles tab.
-      // Keep the new article library, article cards, and every admin/editor field intact.
-      const legacySearchInputs = Array.from(articleTab.querySelectorAll('input[type="search"], input[placeholder*="ابحث"], input[aria-label*="البحث"]'))
-        .filter(input => !input.closest(".abq-articles-library") && !input.closest("form"));
-      for (const input of legacySearchInputs) {
-        let area = input.parentElement;
+      // The legacy search/filter controls live outside the new article library.
+      // Remove their whole legacy wrapper while preserving the library and its admin editor.
+      const legacyForms = Array.from(articleTab.querySelectorAll("form"))
+        .filter(form => !form.closest(".abq-articles-library") &&
+          (form.querySelector("input,select,textarea") ||
+           /بحث|ابحث|تصنيف|فلتر|تصفية|search|filter|category/i.test(form.textContent || "")));
+      for (const form of legacyForms) {
+        if (form.isConnected && !form.closest(".abq-articles-library")) form.remove();
+      }
+      const legacyControls = Array.from(articleTab.querySelectorAll("input,select,textarea"))
+        .filter(control => !control.closest(".abq-articles-library") &&
+          !control.closest("form"));
+      for (const control of legacyControls) {
+        if (!control.isConnected || control.closest(".abq-articles-library")) continue;
+        let area = control.parentElement;
         while (area && area !== articleTab && area.parentElement !== articleTab) {
+          if (area.closest(".abq-articles-library")) break;
           const cls = String(area.className || "").toLowerCase();
-          if (/search|filter|tools|بحث|تصنيف|category/.test(cls)) break;
+          const text = String(area.textContent || "");
+          if (/search|filter|category|بحث|ابحث|تصنيف|فلتر|تصفية/.test(cls) ||
+              /بحث|ابحث|تصنيف|فلتر|تصفية/.test(text)) break;
           area = area.parentElement;
         }
-        if (area && area !== articleTab && !area.closest(".abq-articles-library") && !area.closest("form")) area.remove();
-        else input.remove();
+        if (area && area !== articleTab && !area.closest(".abq-articles-library")) area.remove();
+        else control.remove();
       }
-      // A legacy category-only filter may have no text input. Remove its dedicated
-      // search/filter wrapper, never a select inside the article editor/admin form.
+      // Also remove standalone legacy filter wrappers (including select-only category filters).
       const legacyFilterAreas = Array.from(articleTab.querySelectorAll(
-        '[class*="search"],[class*="filter"],[class*="Search"],[class*="Filter"],[aria-label*="تصنيف"],[aria-label*="بحث"]'
-      )).filter(node =>
-        !node.closest(".abq-articles-library") &&
-        !node.closest("form") &&
-        (node.matches("select") || node.querySelector("select"))
-      );
+        '[class*="search"],[class*="filter"],[class*="category"],[class*="Search"],[class*="Filter"],[aria-label*="تصنيف"],[aria-label*="بحث"]'
+      )).filter(node => !node.closest(".abq-articles-library") && node !== articleTab);
       for (const area of legacyFilterAreas) {
-        if (area !== articleTab && area.parentElement && !area.closest(".abq-articles-library")) area.remove();
+        if (!area.isConnected || area.closest(".abq-articles-library")) continue;
+        if (area.matches("select,input,textarea") || area.querySelector("input,select,textarea")) area.remove();
       }
     };
     const cleanupLegacyArticleCards = () => {
