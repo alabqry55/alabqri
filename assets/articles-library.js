@@ -436,7 +436,7 @@
           }
         });
 
-        // Category filter was removed; keep the main text-search field only.
+        // All article-list search controls have been removed.
         render();
       })
       .catch(() => {
