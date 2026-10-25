@@ -445,7 +445,7 @@
         });
 
         search.addEventListener("input", render);
-        category.addEventListener("change", render);
+        // Category filter was removed; keep the main text-search field only.
         render();
       })
       .catch(() => {
