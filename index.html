@@ -9459,6 +9459,37 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
 <style id="abq-pc-header-stable-typography-20261025">
 @media screen and (min-width:1024px){html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section h1.abq-header-platform-title .abq-header-title-main{font-size:20px!important;line-height:1.35!important}html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-title-section h1.abq-header-platform-title .abq-header-title-sub{font-size:20px!important;line-height:1.35!important}html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-area .abq-header-center-name{font-size:20px!important;line-height:1.35!important}html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license-frame .abq-header-license-area .abq-header-license-text{font-size:14px!important;line-height:1.35!important}}
 </style>
+
+<style id="abq-footer-unified-blue-frame-20261025">
+/* إطار أزرق موحّد حول تذييل الصفحة، مع الحفاظ على محتوى التذييل ووظائفه */
+html body footer.abq-footer-unified-frame{
+  display:block!important;
+  width:calc(100% - 2rem)!important;
+  max-width:100%!important;
+  margin:1rem auto 1.25rem!important;
+  padding:.85rem .75rem!important;
+  box-sizing:border-box!important;
+  border:3px solid #2563eb!important;
+  border-radius:1.25rem!important;
+  background:linear-gradient(135deg,#eff6ff 0%,#ffffff 55%,#f8fafc 100%)!important;
+  box-shadow:0 16px 34px -22px rgba(30,64,175,.42)!important;
+  overflow:hidden!important;
+}
+html body footer.abq-footer-unified-frame > .container{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:768px){
+  html body footer.abq-footer-unified-frame{
+    width:calc(100% - 1rem)!important;
+    margin:.75rem auto 1rem!important;
+    padding:.65rem .45rem!important;
+    border-width:2px!important;
+    border-radius:1.1rem!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -12835,7 +12866,7 @@ function azkarInit() {
     </main>
 
     <!-- تذييل الصفحة -->
-    <footer class="bg-white text-slate-500 py-0 text-center text-sm border-t border-slate-200">
+    <footer class="abq-footer-unified-frame bg-white text-slate-500 py-0 text-center text-sm border-t border-slate-200">
         <div class="container mx-auto px-0">
             <p class="font-extrabold text-slate-800 mb-2">مركز العبقري للتدريب والإستشارات (س.ت.92527)</p>
             <p class="font-bold text-sky-500 mb-2">تحت إشراف الدكتور / أحمد السيد رَسَّه</p>
