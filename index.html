@@ -11232,20 +11232,6 @@ html body footer.abq-footer-unified-frame > .container{
             </div>
         </div>
     </div>
-    <div class="bg-blue-50/60 rounded-2xl border border-blue-700 p-3 mb-5">
-        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-            <div class="flex-1">
-                <label for="abq-article-search" class="sr-only">البحث في المقالات والأبحاث</label>
-                <input id="abq-article-search" type="search" oninput="renderAbqArticles()" placeholder="🔎 ابحث في عنوان المقال أو محتواه..." class="w-full bg-white border border-blue-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-300">
-            </div>
-            <select id="abq-article-category" onchange="renderAbqArticles()" class="bg-white border border-blue-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700">
-                <option value="">كل التصنيفات</option>
-                <option value="التنمية البشرية">التنمية البشرية</option>
-                <option value="الطب التكميلي">الطب التكميلي</option>
-                <option value="الأذكار والاتزان">الأذكار والاتزان</option>
-            </select>
-        </div>
-    </div>
     <div id="abq-articles-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     <div id="abq-articles-empty" class="hidden text-center bg-white border border-slate-200 rounded-2xl p-8 text-slate-500 font-bold">لا توجد نتائج مطابقة حاليًا.</div>
 </section>
@@ -15866,11 +15852,10 @@ window.AbqToast = (function(){
     }
     window.renderAbqArticles=function(){
       const list=document.getElementById('abq-articles-list'),empty=document.getElementById('abq-articles-empty'),home=document.getElementById('home-latest-articles');
-      const q=(document.getElementById('abq-article-search')?.value||'').trim().toLowerCase(),cat=document.getElementById('abq-article-category')?.value||'';
       const allArticles=getAllArticles(); window.ABQ_ARTICLES=allArticles;
-      const filtered=allArticles.filter(a=>(!cat||a.category===cat)&&(!q||(a.title+' '+a.excerpt+' '+a.content).toLowerCase().includes(q)));
-      if(list) list.innerHTML=filtered.map(articleCard).join('');
-      if(empty) empty.classList.toggle('hidden',filtered.length>0);
+      // The legacy search and category-filter UI has been removed. Render the full library directly.
+      if(list) list.innerHTML=allArticles.map(articleCard).join('');
+      if(empty) empty.classList.toggle('hidden',allArticles.length>0);
       if(home) home.innerHTML=allArticles.slice(0,3).map(articleCard).join('');
       if(typeof window.renderAbqArticleAdminList==='function') window.renderAbqArticleAdminList();
     };
