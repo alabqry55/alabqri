@@ -159,9 +159,32 @@
       }
     };
     cleanupLegacyArticleCards();
-    // The older renderer may appear after the library or after a tab switch.
-    const legacySearchObserver = new MutationObserver(() => cleanupLegacyArticleCards());
-    legacySearchObserver.observe(document.body, { childList: true, subtree: true });
+    // Observe only mutations that may reintroduce retired legacy article UI.
+    // Ignore the new library and unrelated page/tab mutations to avoid repeatedly
+    // walking or removing content across the entire platform.
+    const legacySearchObserver = new MutationObserver(mutations => {
+      const mayContainLegacyArticleUi = mutations.some(mutation =>
+        Array.from(mutation.addedNodes || []).some(node => {
+          if (node.nodeType !== 1 || node.closest?.(".abq-articles-library")) return false;
+          const text = normalizeDomTitle(node.textContent || "");
+          return node.matches?.(
+            '[id="abq-article-search"],[id="abq-article-category"],' +
+            'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],' +
+            'select[aria-label*="تصنيف"],select[aria-label*="فلتر"]'
+          ) ||
+          Boolean(node.querySelector?.(
+            '[id="abq-article-search"],[id="abq-article-category"],' +
+            'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],' +
+            'select[aria-label*="تصنيف"],select[aria-label*="فلتر"]'
+          )) ||
+          text.includes(retiredEnergyTitle) ||
+          text.includes(normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية")) ||
+          text.includes(normalizeDomTitle("أثر الأذكار في الإتزان النفسي"));
+        })
+      );
+      if (mayContainLegacyArticleUi) cleanupLegacyArticleCards();
+    });
+    if (articleTab) legacySearchObserver.observe(articleTab, { childList: true, subtree: true });
     const articleHero = heading.closest(".hero-bg");
     if (articleHero) articleHero.insertAdjacentElement("afterend", root);
     else section.appendChild(root);
