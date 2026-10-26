@@ -47,9 +47,17 @@
       const legacySearchControls = Array.from(document.querySelectorAll(
         '[id="abq-article-search"],[id="abq-article-category"],' +
         'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],input[aria-label*="ابحث"],' +
+        'input[placeholder*="عنوان البحث"],input[placeholder*="المؤلف"],' +
         'input[placeholder*="search" i],input[aria-label*="search" i],' +
         'select[aria-label*="تصنيف"],select[aria-label*="فلتر"],select[aria-label*="category" i]'
       ));
+      // Catch legacy category dropdowns without aria-label by their visible option text.
+      const legacyCategorySelects = Array.from(document.querySelectorAll("select")).filter(select =>
+        Array.from(select.options || []).some(option => /جميع التصنيفات|كل التصنيفات|all categories/i.test(option.textContent || ""))
+      );
+      for (const select of legacyCategorySelects) {
+        if (!legacySearchControls.includes(select)) legacySearchControls.push(select);
+      }
       for (const control of legacySearchControls) {
         if (!control.isConnected) continue;
         const wrapper = control.closest(
