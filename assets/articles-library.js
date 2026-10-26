@@ -45,10 +45,13 @@
       // duplicate IDs and controls mounted outside the expected tab wrapper.
       // Keep the article library and all admin-editor fields untouched.
       const legacySearchControls = Array.from(document.querySelectorAll(
-        '[id="abq-article-search"],[id="abq-article-category"]'
-      )).filter(control => !control.closest(".abq-articles-library"));
+        '[id="abq-article-search"],[id="abq-article-category"],' +
+        'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],input[aria-label*="ابحث"],' +
+        'input[placeholder*="search" i],input[aria-label*="search" i],' +
+        'select[aria-label*="تصنيف"],select[aria-label*="فلتر"],select[aria-label*="category" i]'
+      ));
       for (const control of legacySearchControls) {
-        if (!control.isConnected || control.closest(".abq-articles-library")) continue;
+        if (!control.isConnected) continue;
         const wrapper = control.closest(
           "[class*='bg-blue-50/60'][class*='border-blue-700'], [class*='border-blue-700'][class*='rounded-2xl']"
         );
@@ -88,7 +91,7 @@
       // Also remove standalone legacy filter wrappers (including select-only category filters).
       const legacyFilterAreas = Array.from(articleTab.querySelectorAll(
         '[class*="search"],[class*="filter"],[class*="category"],[class*="Search"],[class*="Filter"],[aria-label*="تصنيف"],[aria-label*="بحث"]'
-      )).filter(node => !node.closest(".abq-articles-library") && node !== articleTab);
+      )).filter(node => node !== articleTab);
       for (const area of legacyFilterAreas) {
         if (!area.isConnected || area.closest(".abq-articles-library")) continue;
         if (area.matches("select,input,textarea") || area.querySelector("input,select,textarea")) area.remove();
