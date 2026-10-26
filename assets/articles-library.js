@@ -40,7 +40,62 @@
       .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
       .replace(/[^\p{L}\p{N}]+/gu, "");
     const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
+    const cleanupLegacySearchArea = () => {
+      // Remove every retired search/filter control by its legacy IDs, including
+      // duplicate IDs and controls mounted outside the expected tab wrapper.
+      // Keep the article library and all admin-editor fields untouched.
+      const legacySearchControls = Array.from(document.querySelectorAll(
+        '[id="abq-article-search"],[id="abq-article-category"]'
+      )).filter(control => !control.closest(".abq-articles-library"));
+      for (const control of legacySearchControls) {
+        if (!control.isConnected || control.closest(".abq-articles-library")) continue;
+        const wrapper = control.closest(
+          "[class*='bg-blue-50/60'][class*='border-blue-700'], [class*='border-blue-700'][class*='rounded-2xl']"
+        );
+        if (wrapper && !wrapper.closest(".abq-articles-library")) {
+          wrapper.remove();
+        } else {
+          control.remove();
+        }
+      }
+      if (!articleTab) return;
+      // The legacy search/filter controls live outside the new article library.
+      // Remove their whole legacy wrapper while preserving the library and its admin editor.
+      const legacyForms = Array.from(articleTab.querySelectorAll("form"))
+        .filter(form => !form.closest(".abq-articles-library") &&
+          (form.querySelector("input,select,textarea") ||
+           /بحث|ابحث|تصنيف|فلتر|تصفية|search|filter|category/i.test(form.textContent || "")));
+      for (const form of legacyForms) {
+        if (form.isConnected && !form.closest(".abq-articles-library")) form.remove();
+      }
+      const legacyControls = Array.from(articleTab.querySelectorAll("input,select,textarea"))
+        .filter(control => !control.closest(".abq-articles-library") &&
+          !control.closest("form"));
+      for (const control of legacyControls) {
+        if (!control.isConnected || control.closest(".abq-articles-library")) continue;
+        let area = control.parentElement;
+        while (area && area !== articleTab && area.parentElement !== articleTab) {
+          if (area.closest(".abq-articles-library")) break;
+          const cls = String(area.className || "").toLowerCase();
+          const text = String(area.textContent || "");
+          if (/search|filter|category|بحث|ابحث|تصنيف|فلتر|تصفية/.test(cls) ||
+              /بحث|ابحث|تصنيف|فلتر|تصفية/.test(text)) break;
+          area = area.parentElement;
+        }
+        if (area && area !== articleTab && !area.closest(".abq-articles-library")) area.remove();
+        else control.remove();
+      }
+      // Also remove standalone legacy filter wrappers (including select-only category filters).
+      const legacyFilterAreas = Array.from(articleTab.querySelectorAll(
+        '[class*="search"],[class*="filter"],[class*="category"],[class*="Search"],[class*="Filter"],[aria-label*="تصنيف"],[aria-label*="بحث"]'
+      )).filter(node => !node.closest(".abq-articles-library") && node !== articleTab);
+      for (const area of legacyFilterAreas) {
+        if (!area.isConnected || area.closest(".abq-articles-library")) continue;
+        if (area.matches("select,input,textarea") || area.querySelector("input,select,textarea")) area.remove();
+      }
+    };
     const cleanupLegacyArticleCards = () => {
+      cleanupLegacySearchArea();
       const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
       const seen = new Set();
       for (const titleNode of headings) {
@@ -149,23 +204,15 @@
         if (!articles.length) {
           root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
-        const tools = el("div", "abq-articles-tools");
-        let search = el("input");
-        search.type = "search";
-        search.placeholder = "ابحث بعنوان البحث أو المؤلف أو الكلمات...";
-        search.setAttribute("aria-label", "البحث في الأبحاث والمقالات");
-        // Keep the main text-search field. The category-only dropdown is intentionally removed.
-        tools.append(search);
+        // Hidden anchor preserves the existing placement of administration controls without rendering any search field.
+        const tools = el("div");
+        tools.hidden = true;
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
         root.append(tools, count, grid);
 
         function render() {
-          const term = search.value.trim().toLocaleLowerCase("ar");
-          const visible = articles.filter(a => {
-            const haystack = [a.title,a.category,a.excerpt,a.content,a.author].map(v=>String(v||"")).join(" ").toLocaleLowerCase("ar");
-            return !term || haystack.includes(term);
-          });
+          const visible = articles;
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
           if (!visible.length) {
@@ -444,8 +491,7 @@
           }
         });
 
-        search.addEventListener("input", render);
-        category.addEventListener("change", render);
+        // All article-list search controls have been removed.
         render();
       })
       .catch(() => {
