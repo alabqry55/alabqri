@@ -41,6 +41,23 @@
       .replace(/[^\p{L}\p{N}]+/gu, "");
     const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
     const cleanupLegacySearchArea = () => {
+      // Remove every retired search/filter control by its legacy IDs, including
+      // duplicate IDs and controls mounted outside the expected tab wrapper.
+      // Keep the article library and all admin-editor fields untouched.
+      const legacySearchControls = Array.from(document.querySelectorAll(
+        '[id="abq-article-search"],[id="abq-article-category"]'
+      )).filter(control => !control.closest(".abq-articles-library"));
+      for (const control of legacySearchControls) {
+        if (!control.isConnected || control.closest(".abq-articles-library")) continue;
+        const wrapper = control.closest(
+          ".bg-blue-50\\/60.border-blue-700, [class*='border-blue-700'][class*='rounded-2xl']"
+        );
+        if (wrapper && !wrapper.closest(".abq-articles-library")) {
+          wrapper.remove();
+        } else {
+          control.remove();
+        }
+      }
       if (!articleTab) return;
       // The legacy search/filter controls live outside the new article library.
       // Remove their whole legacy wrapper while preserving the library and its admin editor.
