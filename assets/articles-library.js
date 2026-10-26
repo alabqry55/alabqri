@@ -6,7 +6,7 @@
   document.addEventListener("click", async event => {
     const target = event.target?.closest?.("button, a, [role='button']");
     if (!target) return;
-    const label = String(target.innerText || target.textContent || "").replace(.replace(/\s+/g, " ")/\\s+/g, " ").trim();
+    const label = String(target.innerText || target.textContent || "").replace(/\s+/g, " ").trim();
     if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
     if (window.__abqArticlesAdminGateReplay === target) {
       window.__abqArticlesAdminGateReplay = null;
