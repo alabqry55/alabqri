@@ -1,5 +1,40 @@
 (() => {
   "use strict";
+
+  // Protect the separate articles admin panel with the same server-validated key
+  // used by the existing "إدارة محتوى المقالات" control. Never embed the secret.
+  document.addEventListener("click", async event => {
+    const target = event.target?.closest?.("button, a, [role='button']");
+    if (!target) return;
+    const label = String(target.innerText || target.textContent || "").replace(/\s+/g, " ").trim();
+    if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
+    if (window.__abqArticlesAdminGateReplay === target) {
+      window.__abqArticlesAdminGateReplay = null;
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    let key = sessionStorage.getItem("abqArticlesAdminKey") || "";
+    if (!key) key = String(window.prompt("أدخل نفس مفتاح «إدارة محتوى المقالات» للمتابعة. لن يُحفظ المفتاح إلا في جلسة المتصفح.") || "").trim();
+    if (!key) return;
+    try {
+      const response = await fetch("/api/articles", {
+        headers: { "Accept": "application/json", "Authorization": "Bearer " + key },
+        cache: "no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.admin || !Array.isArray(data.articles)) {
+        sessionStorage.removeItem("abqArticlesAdminKey");
+        window.alert(response.status === 401 ? "مفتاح الإدارة غير صحيح." : "تعذر التحقق من صلاحية الإدارة؛ لم يتم فتح اللوحة.");
+        return;
+      }
+      sessionStorage.setItem("abqArticlesAdminKey", key);
+      window.__abqArticlesAdminGateReplay = target;
+      target.click();
+    } catch (_) {
+      window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
+    }
+  }, true);
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
