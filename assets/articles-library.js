@@ -50,7 +50,7 @@
       for (const control of legacySearchControls) {
         if (!control.isConnected || control.closest(".abq-articles-library")) continue;
         const wrapper = control.closest(
-          ".bg-blue-50\\/60.border-blue-700, [class*='border-blue-700'][class*='rounded-2xl']"
+          "[class*='bg-blue-50/60'][class*='border-blue-700'], [class*='border-blue-700'][class*='rounded-2xl']"
         );
         if (wrapper && !wrapper.closest(".abq-articles-library")) {
           wrapper.remove();
