@@ -1,4 +1,5 @@
 const OWNER_LOGIN = "alabqry55";
+const OWNER_GITHUB_ID = "312770372";
 const SESSION_COOKIE = "__Host-abq_admin";
 const b64url = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const decode = value => atob(value.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-value.length%4)%4));
@@ -20,7 +21,7 @@ export async function readOwnerSession(request, env) {
   if(!await safeEqual(await sign(payload,env.ADMIN_SESSION_SECRET),signature)) return null;
   try {
     const session=JSON.parse(decode(payload)), now=Math.floor(Date.now()/1000);
-    if(session.login!==OWNER_LOGIN || !session.id || !Number.isInteger(session.exp) || !Number.isInteger(session.iat) ||
+    if(session.login!==OWNER_LOGIN || String(session.id)!==OWNER_GITHUB_ID || !Number.isInteger(session.exp) || !Number.isInteger(session.iat) ||
        session.exp<=now || session.iat>now+60 || session.exp-session.iat>3600) return null;
     return {login:OWNER_LOGIN,id:String(session.id),expiresAt:session.exp};
   } catch { return null; }
