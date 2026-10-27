@@ -117,7 +117,11 @@ export async function onRequest({request, env}) {
       const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
       for (const row of retiredRows) {
         if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
-          await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
+          await env.DB.batch([
+            env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)),
+            env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+              .bind(ownerSession.login,"legacy_retirement",String(row.id),String(row.title||"legacy article").slice(0,500))
+          ]);
         }
       }
     }
