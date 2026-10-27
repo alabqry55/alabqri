@@ -468,7 +468,6 @@
               articles = filterUniqueArticles(data.articles);
               adminMode = true;
               addButton.hidden = false;
-              importButton.hidden = false;
               render();
               setAdminStatus("تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.");
               editForm.hidden = true;
