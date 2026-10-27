@@ -72,7 +72,10 @@ export async function onRequest({request,env}) {
     const now=Math.floor(Date.now()/1000);
     const payload=encode(JSON.stringify({id:String(user.id),login:OWNER_LOGIN,iat:now,exp:now+3600}));
     const session=payload+"."+await sign(payload,env.ADMIN_SESSION_SECRET);
-    return new Response(null,{status:302,headers:{Location:"/","Cache-Control":"no-store","Set-Cookie":[setCookie(SESSION_COOKIE,session,3600),setCookie(STATE_COOKIE,"",0)].join(", ")}});
+    const headers=new Headers({"Location":"/","Cache-Control":"no-store","Referrer-Policy":"no-referrer"});
+    headers.append("Set-Cookie",setCookie(SESSION_COOKIE,session,3600));
+    headers.append("Set-Cookie",setCookie(STATE_COOKIE,"",0));
+    return new Response(null,{status:302,headers});
   }
   return json({error:"Unsupported action."},400);
 }
