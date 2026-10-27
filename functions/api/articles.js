@@ -72,6 +72,21 @@ async function ensureTable(db) {
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`).run();
 }
+async function ensureAuditTable(db) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS article_admin_audit (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor TEXT NOT NULL,
+    action TEXT NOT NULL,
+    article_id TEXT,
+    details TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+  await db.prepare("CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created ON article_admin_audit(created_at DESC)").run();
+}
+async function writeAudit(db, actor, action, articleId, details="") {
+  await db.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+    .bind(actor,action,articleId==null?null:String(articleId),String(details).slice(0,500)).run();
+}
 async function ensureScheduleColumn(db) {
   // Run only after an authenticated admin save, never during a public read.
   try {
@@ -87,6 +102,11 @@ export async function onRequest({request, env}) {
   // Reject every write before touching the database unless the owner session is valid.
   if (request.method !== "GET" && request.method !== "POST") return json({error:"Method not allowed."},405);
   if (request.method === "POST" && !isAdmin) return json({error:"Unauthorized."},401);
+  if (request.method === "POST") {
+    const origin = request.headers.get("Origin");
+    if (origin && origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
+    if (!(request.headers.get("Content-Type")||"").toLowerCase().startsWith("application/json")) return json({error:"Content-Type must be application/json."},415);
+  }
   // Read-only fallback keeps the canonical article visible in preview environments
   // where the D1 binding is not attached. Writes still require a configured database.
   if (!env.DB) {
@@ -95,6 +115,7 @@ export async function onRequest({request, env}) {
   }
   try {
     await ensureTable(env.DB);
+    if (isAdmin) await ensureAuditTable(env.DB);
     // Legacy retirement is destructive, so it runs only in the authenticated owner's session.
     if (request.method === "GET" && isAdmin) {
       const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
@@ -191,6 +212,7 @@ export async function onRequest({request, env}) {
       if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt) {
         return json({error:"Article save could not be verified in D1."},503);
       }
+      await writeAudit(env.DB, ownerSession.login, scheduledAt ? "schedule_or_update" : "publish_or_update", a.id, scheduledAt || "published");
       return json({ok:true,id:a.id,scheduledAt,verified:true});
     }
     if (body.action === "saveMany" || body.action === "seedSchedule") {
@@ -241,6 +263,7 @@ export async function onRequest({request, env}) {
       if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || (row.scheduled_at || null) !== (incoming[i].publishImmediately === true ? null : incoming[i].scheduledAt))) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
       }
+      for (const a of incoming) await writeAudit(env.DB, ownerSession.login, a.publishImmediately === true ? "publish" : "schedule", a.id, a.scheduledAt || "immediate");
       return json({
         ok:true,
         saved:incoming.length,
@@ -251,7 +274,9 @@ export async function onRequest({request, env}) {
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
+      const targetArticle = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(String(body.id)).first();
       await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)).run();
+      await writeAudit(env.DB, ownerSession.login, "permanent_delete", body.id, targetArticle?.title || "not_found");
       return json({ok:true,id:body.id});
     }
     return json({error:"Unsupported action."},400);
