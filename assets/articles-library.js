@@ -31,6 +31,13 @@
       sessionStorage.setItem("abqArticlesAdminKey", key);
       window.__abqArticlesAdminGateReplay = target;
       target.click();
+
+      // The outer dashboard button can open its container without enabling the
+      // inline article editor that was initialized before authentication.
+      // Activate that editor after the same server-side key check succeeds.
+      const libraryAdminButton = [...document.querySelectorAll(".abq-articles-library .abq-articles-tools button")]
+        .find(button => String(button.textContent || "").trim() === "إدارة محتوى المقالات");
+      if (libraryAdminButton) libraryAdminButton.click();
     } catch (_) {
       window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
     }
@@ -480,6 +487,8 @@
           }
         });
         adminButton.addEventListener("click", () => {
+          // The key may have been validated and stored after this library loaded.
+          adminKey = sessionStorage.getItem("abqArticlesAdminKey") || adminKey;
           if (!adminKey) {
             const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
             if (!entered) return;
