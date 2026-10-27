@@ -104,7 +104,7 @@ export async function onRequest({request, env}) {
   if (request.method === "POST" && !isAdmin) return json({error:"Unauthorized."},401);
   if (request.method === "POST") {
     const origin = request.headers.get("Origin");
-    if (origin && origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
+    if (!origin || origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
     if (!(request.headers.get("Content-Type")||"").toLowerCase().startsWith("application/json")) return json({error:"Content-Type must be application/json."},415);
   }
   // Read-only fallback keeps the canonical article visible in preview environments
