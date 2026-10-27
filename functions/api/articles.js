@@ -1,4 +1,5 @@
 import { scheduledArticles } from "../_lib/articles-schedule-2026.js";
+import { readOwnerSession } from "../_lib/admin-auth.js";
 /** Cloudflare Pages Function: D1-backed articles library. */
 const CATEGORIES = new Set(["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
@@ -81,6 +82,11 @@ async function ensureScheduleColumn(db) {
 }
 
 export async function onRequest({request, env}) {
+  const ownerSession = await readOwnerSession(request, env);
+  const isAdmin = Boolean(ownerSession);
+  // Reject every write before touching the database unless the owner session is valid.
+  if (request.method !== "GET" && request.method !== "POST") return json({error:"Method not allowed."},405);
+  if (request.method === "POST" && !isAdmin) return json({error:"Unauthorized."},401);
   // Read-only fallback keeps the canonical article visible in preview environments
   // where the D1 binding is not attached. Writes still require a configured database.
   if (!env.DB) {
@@ -89,16 +95,16 @@ export async function onRequest({request, env}) {
   }
   try {
     await ensureTable(env.DB);
-    // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
-    const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
-    for (const row of retiredRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
-        await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
+    // Legacy retirement is destructive, so it runs only in the authenticated owner's session.
+    if (request.method === "GET" && isAdmin) {
+      const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
+      for (const row of retiredRows) {
+        if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
+          await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
+        }
       }
     }
     if (request.method === "GET") {
-      const suppliedAuth = (request.headers.get("Authorization") || "");
-      const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
       // An authenticated editor may safely apply the additive migration on first open,
       // so scheduled items are visible in admin before the first save.
       if (isAdmin) await ensureScheduleColumn(env.DB);
@@ -159,9 +165,7 @@ export async function onRequest({request, env}) {
       });
       return json({articles, admin:isAdmin});
     }
-    if (request.method !== "POST") return json({error:"Method not allowed."},405);
-    if (!env.ARTICLES_ADMIN_KEY) return json({error:"Articles admin secret is not configured."},503);
-    if ((request.headers.get("Authorization")||"") !== `Bearer ${env.ARTICLES_ADMIN_KEY}`) return json({error:"Unauthorized."},401);
+    // All POST actions are owner-authorized above by a signed, HttpOnly GitHub OAuth session.
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
