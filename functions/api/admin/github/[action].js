@@ -1,4 +1,5 @@
 const OWNER_LOGIN = "alabqry55";
+const OWNER_GITHUB_ID = "312770372";
 const SESSION_COOKIE = "__Host-abq_admin";
 const STATE_COOKIE = "__Host-abq_github_state";
 const json = (data, status=200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff","referrer-policy":"no-referrer"}});
@@ -66,7 +67,7 @@ export async function onRequest({request,env}) {
     if(!tokenResponse.ok || !tokenData.access_token) return json({error:"GitHub OAuth token exchange failed."},502);
     const userResponse=await fetch("https://api.github.com/user",{headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+tokenData.access_token,"X-GitHub-Api-Version":"2022-11-28","User-Agent":"ALABQRI-Owner-Admin"}});
     const user=await userResponse.json().catch(()=>({}));
-    if(!userResponse.ok || String(user.login||"").toLowerCase()!==OWNER_LOGIN) {
+    if(!userResponse.ok || String(user.login||"").toLowerCase()!==OWNER_LOGIN || String(user.id)!==OWNER_GITHUB_ID) {
       return new Response("غير مصرح بالدخول. لوحة الإدارة مخصصة لحساب GitHub alabqry55 فقط.",{status:403,headers:{"content-type":"text/plain; charset=utf-8","cache-control":"no-store","Set-Cookie":setCookie(STATE_COOKIE,"",0)}});
     }
     const now=Math.floor(Date.now()/1000);
