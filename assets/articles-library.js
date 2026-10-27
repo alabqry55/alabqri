@@ -469,7 +469,7 @@
               throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
             }
             editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ إعادة تحميل القائمة من قاعدة البيانات...";
-            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json",},cache:"no-store"});
+            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
             const refreshedData = await refreshed.json().catch(()=>({}));
             if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
               throw new Error("تم إرسال الحفظ، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
