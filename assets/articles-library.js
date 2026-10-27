@@ -330,16 +330,12 @@
         adminButton.type = "button";
         const addButton = el("button", "", "إضافة مقال مجدول");
         addButton.type = "button";
-        const importButton = el("button", "", "تحميل خطة النشر (12 مقالًا)");
-        importButton.type = "button";
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
         addButton.style.cssText = adminButton.style.cssText;
-        importButton.style.cssText = adminButton.style.cssText;
         addButton.hidden = !initiallyAdmin;
-        importButton.hidden = !initiallyAdmin;
         if (initiallyAdmin) { adminMode = true; adminButton.textContent = "وضع الإدارة مفعّل"; }
         adminBar.style.gridTemplateColumns = "1fr";
-        adminBar.append(adminButton, addButton, importButton);
+        adminBar.append(adminButton, addButton);
         root.insertBefore(adminBar, tools);
 
         const editForm = el("form", "abq-article-card");
@@ -449,43 +445,6 @@
           editForm.scrollIntoView({behavior:"smooth",block:"start"});
         }
         addButton.addEventListener("click", startCreating);
-        importButton.addEventListener("click", async () => {
-          if (!adminKey || !adminMode) {
-            setAdminStatus("فعّل وضع الإدارة أولًا.");
-            return;
-          }
-          if (!window.confirm("سيتم فحص خطة النشر ثم حفظ المقالات الاثني عشر بجدولة مستقبلية. إذا وُجد تعارض في عنوان أو معرّف، سترفض الخدمة الدفعة كلها دون حفظ أي جزء. هل تريد المتابعة؟")) return;
-          importButton.disabled = true;
-          importButton.textContent = "جارٍ فحص الخطة وحفظها...";
-          setAdminStatus("جارٍ فحص خطة النشر ومقارنتها بالمقالات المحفوظة...");
-          try {
-            const response = await fetch("/api/articles", {
-              method:"POST",
-              headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
-              body:JSON.stringify({action:"seedSchedule"}),
-              cache:"no-store"
-            });
-            const result = await response.json().catch(()=>({}));
-            if (!response.ok || !result.ok) {
-              if (response.status === 401) { adminKey = ""; adminMode = false; }
-              throw new Error(result.error || "تعذر حفظ خطة النشر.");
-            }
-            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"});
-            const refreshedData = await refreshed.json().catch(()=>({}));
-            if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
-              throw new Error("تم إرسال الخطة، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
-            }
-            articles = filterUniqueArticles(refreshedData.articles);
-            render();
-            setAdminStatus("تم حفظ "+result.saved+" مقالًا والتحقق من سجلات قاعدة البيانات. "+(result.immediatePublished ? "المقال الأول منشور فورًا، وبقية المقالات مجدولة لمواعيدها المحددة. " : "المقالات مجدولة لمواعيدها المحددة. ")+"تم تأكيد إعادة تحميل القائمة.");
-            importButton.textContent = "تم تحميل خطة النشر";
-          } catch (error) {
-            setAdminStatus(error?.message || "تعذر حفظ خطة النشر؛ لم يتم تأكيد النتيجة.");
-          } finally {
-            importButton.disabled = false;
-            if (importButton.textContent !== "تم تحميل خطة النشر") importButton.textContent = "تحميل خطة النشر (12 مقالًا)";
-          }
-        });
         adminButton.addEventListener("click", () => {
           // The key may have been validated and stored after this library loaded.
           adminKey = sessionStorage.getItem("abqArticlesAdminKey") || adminKey;
