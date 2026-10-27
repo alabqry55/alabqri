@@ -16,7 +16,7 @@
       else window.location.assign("/api/admin/github/login");
     } catch (_) { window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم."); }
   }, true);
-  const headingText = "أحدث المقالات والأبحاث";  const headingText = "أحدث المقالات والأبحاث";
+  const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
     .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.42fr);gap:.65rem;margin:1rem 0}
@@ -456,7 +456,8 @@
           try {
             const response = await fetch("/api/articles", {
               method:"POST",
-              headers:{"Content-Type":"application/json","Accept":"application/json",},
+              headers:{"Content-Type":"application/json","Accept":"application/json"},
+              credentials:"same-origin",
               body:JSON.stringify({action:"save",article}),
               cache:"no-store"
             });
