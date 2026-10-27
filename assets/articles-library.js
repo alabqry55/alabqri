@@ -1,48 +1,22 @@
 (() => {
   "use strict";
 
-  // Protect the separate articles admin panel with the same server-validated key
-  // used by the existing "إدارة محتوى المقالات" control. Never embed the secret.
+  // Owner authentication is handled by GitHub OAuth; no shared key is stored client-side.
   document.addEventListener("click", async event => {
     const target = event.target?.closest?.("button, a, [role='button']");
     if (!target) return;
     const label = String(target.innerText || target.textContent || "").replace(/\s+/g, " ").trim();
     if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
-    if (window.__abqArticlesAdminGateReplay === target) {
-      window.__abqArticlesAdminGateReplay = null;
-      return;
-    }
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    let key = sessionStorage.getItem("abqArticlesAdminKey") || "";
-    if (!key) key = String(window.prompt("أدخل نفس مفتاح «إدارة محتوى المقالات» للمتابعة. لن يُحفظ المفتاح إلا في جلسة المتصفح.") || "").trim();
-    if (!key) return;
+    if (window.__abqArticlesAdminGateReplay === target) { window.__abqArticlesAdminGateReplay = null; return; }
+    event.preventDefault(); event.stopImmediatePropagation();
     try {
-      const response = await fetch("/api/articles", {
-        headers: { "Accept": "application/json", "Authorization": "Bearer " + key },
-        cache: "no-store"
-      });
+      const response = await fetch("/api/admin/github/session", {credentials:"same-origin",cache:"no-store"});
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.admin || !Array.isArray(data.articles)) {
-        sessionStorage.removeItem("abqArticlesAdminKey");
-        window.alert(response.status === 401 ? "مفتاح الإدارة غير صحيح." : "تعذر التحقق من صلاحية الإدارة؛ لم يتم فتح اللوحة.");
-        return;
-      }
-      sessionStorage.setItem("abqArticlesAdminKey", key);
-      window.__abqArticlesAdminGateReplay = target;
-      target.click();
-
-      // The outer dashboard button can open its container without enabling the
-      // inline article editor that was initialized before authentication.
-      // Activate that editor after the same server-side key check succeeds.
-      const libraryAdminButton = [...document.querySelectorAll(".abq-articles-library .abq-articles-tools button")]
-        .find(button => String(button.textContent || "").trim() === "إدارة محتوى المقالات");
-      if (libraryAdminButton) libraryAdminButton.click();
-    } catch (_) {
-      window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
-    }
+      if (response.ok && data.admin && data.owner === "alabqry55") { window.__abqArticlesAdminGateReplay = target; target.click(); }
+      else window.location.assign("/api/admin/github/login");
+    } catch (_) { window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم."); }
   }, true);
-  const headingText = "أحدث المقالات والأبحاث";
+  const headingText = "أحدث المقالات والأبحاث";  const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
     .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.42fr);gap:.65rem;margin:1rem 0}
@@ -245,7 +219,7 @@
       root.replaceChildren();
       root.appendChild(el("div", "abq-articles-status", message));
     };
-    fetch("/api/articles", { headers: { "Accept": "application/json", ...(sessionStorage.getItem("abqArticlesAdminKey") ? { "Authorization": "Bearer " + sessionStorage.getItem("abqArticlesAdminKey") } : {}) }, cache: "no-store" })
+    fetch("/api/articles", { headers: { "Accept": "application/json" }, credentials:"same-origin", cache: "no-store" })
       .then(response => {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -323,7 +297,7 @@
 
         // Secure inline editor: the admin key is entered by the authorized editor and
         // remains only in this page's memory. It is never persisted in localStorage.
-        let adminKey = sessionStorage.getItem("abqArticlesAdminKey") || "";
+        let adminAuthenticated = Boolean(initiallyAdmin);
         let adminMode = false;
         const adminBar = el("div", "abq-articles-tools");
         const adminButton = el("button", "", "إدارة محتوى المقالات");
@@ -445,40 +419,24 @@
           editForm.scrollIntoView({behavior:"smooth",block:"start"});
         }
         addButton.addEventListener("click", startCreating);
-        adminButton.addEventListener("click", () => {
-          // The key may have been validated and stored after this library loaded.
-          adminKey = sessionStorage.getItem("abqArticlesAdminKey") || adminKey;
-          if (!adminKey) {
-            const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
-            if (!entered) return;
-            adminKey = entered.trim();
-          }
-          fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"})
-            .then(async response => {
-              const data = await response.json().catch(()=>({}));
-              if (!response.ok || !Array.isArray(data.articles) || !data.admin) {
-                if (response.status === 401 || !data.admin) adminKey = "";
-                const message = data.fallback
-                  ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال."
-                  : (!data.admin
-                    ? "لم يتم قبول مفتاح الإدارة أو لم يُضبط ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages."
-                    : (data.error || "تعذر تحميل المقالات المجدولة."));
-                throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : message);
-              }
-              articles = filterUniqueArticles(data.articles);
-              adminMode = true;
-              addButton.hidden = false;
-              render();
-              setAdminStatus("تم تحميل المقالات المنشورة والمسودات المجدولة من قاعدة البيانات.");
-              editForm.hidden = true;
-              adminButton.textContent = "وضع الإدارة مفعّل";
-            })
-            .catch(error => { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); });
+        adminButton.addEventListener("click", async () => {
+          try {
+            const sessionResponse = await fetch("/api/admin/github/session", {credentials:"same-origin",cache:"no-store"});
+            const session = await sessionResponse.json().catch(()=>({}));
+            if (!sessionResponse.ok || !session.admin || session.owner !== "alabqry55") { window.location.assign("/api/admin/github/login"); return; }
+            const response = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
+            const data = await response.json().catch(()=>({}));
+            if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
+            adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
+            addButton.hidden = false; render();
+            setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
+            editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
+          } catch (error) { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); }
         });
         cancelButton.addEventListener("click", () => { editForm.hidden = true; });
         editForm.addEventListener("submit", async event => {
           event.preventDefault();
-          if (!adminKey) { editorStatus.textContent = "أدخل مفتاح الإدارة أولًا."; return; }
+          if (!adminAuthenticated) { editorStatus.textContent = "سجّل الدخول بحساب GitHub المالك أولًا."; return; }
           if (creatingArticle && (!editForm.elements.scheduledAt.value || Number.isNaN(new Date(editForm.elements.scheduledAt.value).getTime()) || new Date(editForm.elements.scheduledAt.value).getTime() <= Date.now())) {
             editorStatus.textContent = "حدد موعد نشر في المستقبل قبل حفظ المقال الجديد.";
             return;
@@ -498,19 +456,19 @@
           try {
             const response = await fetch("/api/articles", {
               method:"POST",
-              headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+adminKey},
+              headers:{"Content-Type":"application/json","Accept":"application/json",},
               body:JSON.stringify({action:"save",article}),
               cache:"no-store"
             });
             const result = await response.json().catch(()=>({}));
             if (!response.ok || !result.ok) {
-              if (response.status === 503) throw new Error("الحفظ غير مفعّل على هذه النسخة: راجع ربط D1 وسر ARTICLES_ADMIN_KEY في إعدادات Cloudflare Pages.");
-              if (response.status === 401) { adminKey = ""; throw new Error("مفتاح الإدارة غير صحيح. افتح إدارة المقالات وأدخل المفتاح الصحيح."); }
+              if (response.status === 503) throw new Error("الحفظ غير مفعّل على هذه النسخة: راجع ربط D1 وسر GitHub OAuth في إعدادات Cloudflare Pages.");
+              if (response.status === 401) { adminAuthenticated = false; throw new Error("انتهت جلسة المالك. سجّل الدخول مجددًا بحساب GitHub alabqry55."); }
               if (response.status === 409) throw new Error(result.error || "هذا العنوان موجود بالفعل؛ لم يتم إنشاء نسخة مكررة.");
               throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
             }
             editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ إعادة تحميل القائمة من قاعدة البيانات...";
-            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json","Authorization":"Bearer "+adminKey},cache:"no-store"});
+            const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json",},cache:"no-store"});
             const refreshedData = await refreshed.json().catch(()=>({}));
             if (!refreshed.ok || !refreshedData.admin || !Array.isArray(refreshedData.articles)) {
               throw new Error("تم إرسال الحفظ، لكن تعذر تأكيد القائمة المحدثة. أعد تحميل الإدارة للتحقق.");
@@ -541,29 +499,7 @@
         fallbackStatus.setAttribute("role", "status");
         fallbackBar.appendChild(fallbackAdminButton);
         root.append(fallbackBar, fallbackStatus);
-        fallbackAdminButton.addEventListener("click", async () => {
-          const entered = window.prompt("أدخل مفتاح إدارة المقالات المخصص من إعدادات Cloudflare Pages. لن يُحفظ المفتاح على الجهاز.");
-          if (!entered || !entered.trim()) return;
-          fallbackAdminButton.disabled = true;
-          fallbackStatus.textContent = "جارٍ التحقق من صلاحية الإدارة واتصال قاعدة البيانات...";
-          try {
-            const response = await fetch("/api/articles", {
-              headers: { "Accept": "application/json", "Authorization": "Bearer " + entered.trim() },
-              cache: "no-store"
-            });
-            const data = await response.json().catch(() => ({}));
-            if (!response.ok || !data.admin || !Array.isArray(data.articles)) {
-              throw new Error(response.status === 401 ? "مفتاح الإدارة غير صحيح." : (data.error || "تعذر الوصول إلى إدارة المقالات (HTTP " + response.status + ")."));
-            }
-            sessionStorage.setItem("abqArticlesAdminKey", entered.trim());
-            fallbackStatus.textContent = "تم التحقق من المفتاح. جارٍ إعادة تحميل لوحة الإدارة...";
-            window.location.reload();
-          } catch (error) {
-            fallbackStatus.textContent = error?.message || "تعذر التحقق من الإدارة؛ لم يتم تغيير أي بيانات.";
-          } finally {
-            fallbackAdminButton.disabled = false;
-          }
-        });
+        fallbackAdminButton.addEventListener("click", () => { window.location.assign("/api/admin/github/login"); });
       });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
