@@ -83,10 +83,6 @@ async function ensureAuditTable(db) {
   )`).run();
   await db.prepare("CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created ON article_admin_audit(created_at DESC)").run();
 }
-async function writeAudit(db, actor, action, articleId, details="") {
-  await db.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
-    .bind(actor,action,articleId==null?null:String(articleId),String(details).slice(0,500)).run();
-}
 async function ensureScheduleColumn(db) {
   // Run only after an authenticated admin save, never during a public read.
   try {
