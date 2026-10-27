@@ -300,16 +300,21 @@
         let adminAuthenticated = Boolean(initiallyAdmin);
         let adminMode = false;
         const adminBar = el("div", "abq-articles-tools");
-        const adminButton = el("button", "", "إدارة محتوى المقالات");
+        const adminButton = el("button", "", "تفعيل أدوات الإدارة");
         adminButton.type = "button";
         const addButton = el("button", "", "إضافة مقال مجدول");
+        const logoutButton = el("button", "", "تسجيل الخروج");
+        logoutButton.type = "button";
         addButton.type = "button";
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
         addButton.style.cssText = adminButton.style.cssText;
+        logoutButton.style.cssText = adminButton.style.cssText;
+        logoutButton.hidden = !initiallyAdmin;
+        logoutButton.addEventListener("click", () => { window.location.assign("/api/admin/github/logout"); });
         addButton.hidden = !initiallyAdmin;
         if (initiallyAdmin) { adminMode = true; adminButton.textContent = "وضع الإدارة مفعّل"; }
         adminBar.style.gridTemplateColumns = "1fr";
-        adminBar.append(adminButton, addButton);
+        adminBar.append(adminButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
 
         const editForm = el("form", "abq-article-card");
@@ -428,7 +433,7 @@
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
             adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
-            addButton.hidden = false; render();
+            addButton.hidden = false; logoutButton.hidden = false; render();
             setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
             editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
           } catch (error) { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); }
