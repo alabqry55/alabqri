@@ -204,15 +204,18 @@ export async function onRequest({request, env}) {
       if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
       const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
       if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
-      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
-        VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
-        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt).run();
+      await env.DB.batch([
+        env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
+          VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
+          ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
+          .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt),
+        env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+          .bind(ownerSession.login,scheduledAt ? "schedule_or_update" : "publish_or_update",String(a.id),String(scheduledAt || "published").slice(0,500))
+      ]);
       const saved = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE id=?1").bind(String(a.id)).first();
       if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt) {
         return json({error:"Article save could not be verified in D1."},503);
       }
-      await writeAudit(env.DB, ownerSession.login, scheduledAt ? "schedule_or_update" : "publish_or_update", a.id, scheduledAt || "published");
       return json({ok:true,id:a.id,scheduledAt,verified:true});
     }
     if (body.action === "saveMany" || body.action === "seedSchedule") {
@@ -258,12 +261,14 @@ export async function onRequest({request, env}) {
       const statements = incoming.map(a => env.DB.prepare(
         "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
       ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt)));
-      await env.DB.batch(statements);
+      const auditStatements = incoming.map(a => env.DB.prepare(
+        "INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)"
+      ).bind(ownerSession.login,a.publishImmediately === true ? "publish" : "schedule",String(a.id),String(a.scheduledAt || "immediate").slice(0,500)));
+      await env.DB.batch([...statements,...auditStatements]);
       const verification = await Promise.all(incoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
       if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || (row.scheduled_at || null) !== (incoming[i].publishImmediately === true ? null : incoming[i].scheduledAt))) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
       }
-      for (const a of incoming) await writeAudit(env.DB, ownerSession.login, a.publishImmediately === true ? "publish" : "schedule", a.id, a.scheduledAt || "immediate");
       return json({
         ok:true,
         saved:incoming.length,
@@ -275,8 +280,11 @@ export async function onRequest({request, env}) {
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
       const targetArticle = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(String(body.id)).first();
-      await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)).run();
-      await writeAudit(env.DB, ownerSession.login, "permanent_delete", body.id, targetArticle?.title || "not_found");
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)),
+        env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+          .bind(ownerSession.login,"permanent_delete",String(body.id),String(targetArticle?.title || "not_found").slice(0,500))
+      ]);
       return json({ok:true,id:body.id});
     }
     return json({error:"Unsupported action."},400);
