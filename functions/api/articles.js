@@ -1,4 +1,5 @@
 import { scheduledArticles } from "../_lib/articles-schedule-2026.js";
+import { readOwnerSession } from "../_lib/admin-auth.js";
 /** Cloudflare Pages Function: D1-backed articles library. */
 const CATEGORIES = new Set(["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
@@ -71,6 +72,17 @@ async function ensureTable(db) {
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`).run();
 }
+async function ensureAuditTable(db) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS article_admin_audit (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor TEXT NOT NULL,
+    action TEXT NOT NULL,
+    article_id TEXT,
+    details TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+  await db.prepare("CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created ON article_admin_audit(created_at DESC)").run();
+}
 async function ensureScheduleColumn(db) {
   // Run only after an authenticated admin save, never during a public read.
   try {
@@ -81,6 +93,16 @@ async function ensureScheduleColumn(db) {
 }
 
 export async function onRequest({request, env}) {
+  const ownerSession = await readOwnerSession(request, env);
+  const isAdmin = Boolean(ownerSession);
+  // Reject every write before touching the database unless the owner session is valid.
+  if (request.method !== "GET" && request.method !== "POST") return json({error:"Method not allowed."},405);
+  if (request.method === "POST" && !isAdmin) return json({error:"Unauthorized."},401);
+  if (request.method === "POST") {
+    const origin = request.headers.get("Origin");
+    if (!origin || origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
+    if (!(request.headers.get("Content-Type")||"").toLowerCase().startsWith("application/json")) return json({error:"Content-Type must be application/json."},415);
+  }
   // Read-only fallback keeps the canonical article visible in preview environments
   // where the D1 binding is not attached. Writes still require a configured database.
   if (!env.DB) {
@@ -89,16 +111,21 @@ export async function onRequest({request, env}) {
   }
   try {
     await ensureTable(env.DB);
-    // Retire legacy copies of the explicitly removed hijama article; do not recreate them.
-    const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
-    for (const row of retiredRows) {
-      if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
-        await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)).run();
+    if (isAdmin) await ensureAuditTable(env.DB);
+    // Legacy retirement is destructive, so it runs only in the authenticated owner's session.
+    if (request.method === "GET" && isAdmin) {
+      const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
+      for (const row of retiredRows) {
+        if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
+          await env.DB.batch([
+            env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)),
+            env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+              .bind(ownerSession.login,"legacy_retirement",String(row.id),String(row.title||"legacy article").slice(0,500))
+          ]);
+        }
       }
     }
     if (request.method === "GET") {
-      const suppliedAuth = (request.headers.get("Authorization") || "");
-      const isAdmin = Boolean(env.ARTICLES_ADMIN_KEY) && suppliedAuth === `Bearer ${env.ARTICLES_ADMIN_KEY}`;
       // An authenticated editor may safely apply the additive migration on first open,
       // so scheduled items are visible in admin before the first save.
       if (isAdmin) await ensureScheduleColumn(env.DB);
@@ -159,9 +186,7 @@ export async function onRequest({request, env}) {
       });
       return json({articles, admin:isAdmin});
     }
-    if (request.method !== "POST") return json({error:"Method not allowed."},405);
-    if (!env.ARTICLES_ADMIN_KEY) return json({error:"Articles admin secret is not configured."},503);
-    if ((request.headers.get("Authorization")||"") !== `Bearer ${env.ARTICLES_ADMIN_KEY}`) return json({error:"Unauthorized."},401);
+    // All POST actions are owner-authorized above by a signed, HttpOnly GitHub OAuth session.
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
@@ -179,10 +204,14 @@ export async function onRequest({request, env}) {
       if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
       const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
       if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
-      await env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
-        VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
-        .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt).run();
+      await env.DB.batch([
+        env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
+          VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
+          ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
+          .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt),
+        env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+          .bind(ownerSession.login,scheduledAt ? "schedule_or_update" : "publish_or_update",String(a.id),String(scheduledAt || "published").slice(0,500))
+      ]);
       const saved = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE id=?1").bind(String(a.id)).first();
       if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt) {
         return json({error:"Article save could not be verified in D1."},503);
@@ -232,7 +261,10 @@ export async function onRequest({request, env}) {
       const statements = incoming.map(a => env.DB.prepare(
         "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
       ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt)));
-      await env.DB.batch(statements);
+      const auditStatements = incoming.map(a => env.DB.prepare(
+        "INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)"
+      ).bind(ownerSession.login,a.publishImmediately === true ? "publish" : "schedule",String(a.id),String(a.scheduledAt || "immediate").slice(0,500)));
+      await env.DB.batch([...statements,...auditStatements]);
       const verification = await Promise.all(incoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
       if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || (row.scheduled_at || null) !== (incoming[i].publishImmediately === true ? null : incoming[i].scheduledAt))) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
@@ -247,7 +279,12 @@ export async function onRequest({request, env}) {
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
-      await env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)).run();
+      const targetArticle = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(String(body.id)).first();
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)),
+        env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
+          .bind(ownerSession.login,"permanent_delete",String(body.id),String(targetArticle?.title || "not_found").slice(0,500))
+      ]);
       return json({ok:true,id:body.id});
     }
     return json({error:"Unsupported action."},400);
