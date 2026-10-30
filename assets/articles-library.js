@@ -2,19 +2,46 @@
   "use strict";
 
   // Owner authentication is handled by GitHub OAuth; no shared key is stored client-side.
-  document.addEventListener("click", async event => {
+  // Capture at window level so desktop/mobile wrappers and earlier document listeners
+  // cannot bypass or swallow the owner-session gate.
+  const replayedAdminTriggers = new WeakSet();
+  const pendingAdminTriggers = new WeakSet();
+  window.addEventListener("click", async event => {
     const target = event.target?.closest?.("button, a, [role='button']");
     if (!target) return;
-    const label = String(target.innerText || target.textContent || "").replace(/\s+/g, " ").trim();
+    if (replayedAdminTriggers.has(target)) {
+      replayedAdminTriggers.delete(target);
+      return;
+    }
+    const label = [
+      target.innerText,
+      target.textContent,
+      target.getAttribute("aria-label"),
+      target.getAttribute("title")
+    ].filter(Boolean).join(" ").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
     if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
-    if (window.__abqArticlesAdminGateReplay === target) { window.__abqArticlesAdminGateReplay = null; return; }
-    event.preventDefault(); event.stopImmediatePropagation();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (pendingAdminTriggers.has(target)) return;
+    pendingAdminTriggers.add(target);
     try {
-      const response = await fetch("/api/admin/github/session", {credentials:"same-origin",cache:"no-store"});
+      const response = await fetch("/api/admin/github/session", {
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {"Accept":"application/json"}
+      });
       const data = await response.json().catch(() => ({}));
-      if (response.ok && data.admin && data.owner === "alabqry55") { window.__abqArticlesAdminGateReplay = target; target.click(); }
-      else window.location.assign("/api/admin/github/login");
-    } catch (_) { window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم."); }
+      if (response.ok && data.authenticated === true && data.admin === true && data.owner === "alabqry55") {
+        replayedAdminTriggers.add(target);
+        target.click();
+      } else {
+        window.location.assign("/api/admin/github/login");
+      }
+    } catch (_) {
+      window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
+    } finally {
+      pendingAdminTriggers.delete(target);
+    }
   }, true);
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
