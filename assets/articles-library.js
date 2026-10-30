@@ -18,7 +18,7 @@
       target.textContent,
       target.getAttribute("aria-label"),
       target.getAttribute("title")
-    ].filter(Boolean).join(" ").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
+    ].filter(Boolean).join(" ").replace(/[\u200B-\u200F\uFEFF]/g, " ").replace(/\s+/g, " ").trim();
     if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
     event.preventDefault();
     event.stopImmediatePropagation();
