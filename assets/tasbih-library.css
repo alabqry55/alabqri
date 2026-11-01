@@ -1,0 +1,54 @@
+#tab-subha #abq-tasbih-library{width:100%;margin:1.25rem auto 0}
+.abq-tl-shell{color:#172554;text-align:right;max-width:1200px;margin-inline:auto}
+.abq-tl-hero{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem;border:1px solid #cbdccf;border-radius:1.2rem;background:linear-gradient(135deg,#f0fdf4,#eff6ff 58%,#fffbeb)}
+.abq-tl-kicker{display:inline-block;padding:.28rem .7rem;border-radius:999px;background:#dcfce7;color:#166534;font-size:.72rem;font-weight:900}
+.abq-tl-hero h3{margin:.5rem 0;color:#123b2b;font-size:1.3rem;font-weight:900}
+.abq-tl-hero p,.abq-tl-note{color:#475569;font-size:.8rem;line-height:1.9;margin:.25rem 0}
+.abq-tl-summary{min-width:150px;text-align:center;padding:.8rem;border:1px solid #d1fae5;border-radius:1rem;background:#ffffffc9}
+.abq-tl-summary strong{display:block;font-size:1.8rem;color:#166534;font-variant-numeric:tabular-nums}
+.abq-tl-summary span{font-size:.67rem;color:#64748b}
+.abq-tl-tools{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.abq-tl-search{display:flex;align-items:center;gap:.5rem;flex:1 1 300px;min-width:180px;padding:.55rem .8rem;border:1px solid #cbd5e1;border-radius:.8rem;background:#fff}
+.abq-tl-search span{font-size:1.2rem;color:#64748b}
+.abq-tl-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#172554;font:inherit;font-size:.78rem}
+.abq-tl-tools>button,.abq-tl-categories button{border:1px solid #d1d5db;border-radius:999px;padding:.5rem .8rem;background:#fff;color:#334155;font-size:.7rem;font-weight:800;cursor:pointer}
+.abq-tl-tools>button.is-active,.abq-tl-categories button.is-active{background:#166534;border-color:#166534;color:#fff}
+.abq-tl-categories{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0 1rem}
+.abq-tl-categories button{border-color:#d1e5d6;color:#166534}
+.abq-tl-workspace{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.5fr);gap:.85rem;align-items:start}
+.abq-tl-list-panel,.abq-tl-detail{border:1px solid #dbe5df;border-radius:1rem;background:#fff;min-width:0}
+.abq-tl-list-heading{display:flex;justify-content:space-between;align-items:center;padding:.8rem .9rem;border-bottom:1px solid #e2e8f0;color:#1e3a2c;font-size:.78rem}
+.abq-tl-list-heading span{color:#64748b;font-size:.68rem}
+.abq-tl-list{display:grid;gap:.4rem;max-height:570px;overflow:auto;padding:.6rem}
+.abq-tl-item{display:flex;align-items:center;justify-content:space-between;gap:.5rem;width:100%;text-align:right;padding:.7rem .75rem;border:1px solid #e2e8f0;border-radius:.75rem;background:#fff;color:#1e3a2c;cursor:pointer}
+.abq-tl-item>span:first-child{display:flex;flex-direction:column;gap:.2rem;min-width:0}
+.abq-tl-item strong{font-size:.76rem;font-weight:900}
+.abq-tl-item small{font-size:.64rem;color:#64748b}
+.abq-tl-item-mark{font-size:1rem;color:#a16207}
+.abq-tl-item.is-selected{border-color:#b08d38;background:#fffbeb}
+.abq-tl-detail{padding:1rem;min-height:420px}
+.abq-tl-detail-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem;color:#64748b;font-size:.68rem;font-weight:800}
+.abq-tl-fav{border:1px solid #eab308;border-radius:999px;padding:.35rem .65rem;background:#fffbeb;color:#854d0e;font-size:.68rem;font-weight:800;cursor:pointer}
+.abq-tl-meta{margin-top:.8rem;color:#166534;font-size:.7rem;font-weight:900}
+.abq-tl-detail h4{margin:.35rem 0 .8rem;color:#123b2b;font-size:1.12rem;font-weight:900}
+.abq-tl-dhikr{padding:1.1rem;border:1px solid #e2e8f0;border-radius:.9rem;background:#f8fafc;color:#172554;font-family:'Amiri','Traditional Arabic',serif;font-size:1.28rem;line-height:2.15;text-align:center;white-space:normal}
+.abq-tl-source{margin-top:.8rem;padding:.7rem .8rem;border-right:3px solid #b08d38;border-radius:.35rem;background:#fffbeb;color:#78350f;font-size:.7rem;line-height:1.9}
+.abq-tl-counter{display:flex;flex-direction:column;align-items:center;margin:.8rem auto .25rem}
+.abq-tl-counter strong{font-size:2.1rem;color:#166534;font-variant-numeric:tabular-nums}
+.abq-tl-counter span,.abq-tl-target{color:#64748b;font-size:.7rem;text-align:center}
+.abq-tl-actions{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-top:.75rem}
+.abq-tl-actions button{border:1px solid #cbd5e1;border-radius:.7rem;padding:.62rem .85rem;background:#f8fafc;color:#334155;font-size:.72rem;font-weight:900;cursor:pointer}
+.abq-tl-actions button.primary{border-color:#166534;background:#166534;color:#fff}
+.abq-tl-progress{height:7px;margin-top:.85rem;overflow:hidden;border-radius:99px;background:#e2e8f0}
+.abq-tl-progress span{display:block;height:100%;background:linear-gradient(90deg,#166534,#b08d38)}
+.abq-tl-personal-goal{display:grid;gap:.35rem;margin-top:1rem;padding:.75rem;border:1px dashed #cbd5e1;border-radius:.8rem;background:#fafafa}
+.abq-tl-personal-goal label{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;color:#334155;font-size:.7rem;font-weight:800}
+.abq-tl-personal-goal input{width:110px;padding:.4rem;border:1px solid #cbd5e1;border-radius:.5rem;background:#fff;color:#172554}
+.abq-tl-personal-goal small{color:#64748b;font-size:.64rem}
+.abq-tl-empty{padding:1.2rem;text-align:center;color:#64748b;font-size:.75rem}
+.abq-tl-footer{display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;color:#64748b;font-size:.65rem}
+.abq-tl-status{min-height:1.2rem;color:#166534;font-size:.68rem}
+.abq-tl-shell button:focus-visible,.abq-tl-shell input:focus-visible{outline:3px solid #d4af37;outline-offset:2px}
+@media(max-width:760px){.abq-tl-workspace{grid-template-columns:1fr}.abq-tl-list{max-height:300px;grid-template-columns:repeat(2,minmax(0,1fr))}.abq-tl-detail{min-height:0}.abq-tl-hero{align-items:stretch;flex-direction:column}.abq-tl-summary{display:flex;align-items:center;justify-content:center;gap:.7rem}.abq-tl-summary strong{font-size:1.3rem}.abq-tl-footer{flex-direction:column}}
+@media(max-width:420px){.abq-tl-list{grid-template-columns:1fr}.abq-tl-tools{align-items:stretch}.abq-tl-tools>button{flex:1}.abq-tl-dhikr{font-size:1.12rem;padding:.8rem}.abq-tl-detail{padding:.8rem}}
+@media(prefers-reduced-motion:reduce){.abq-tl-shell *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
