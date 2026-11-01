@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "wrangler pages dev .",
     "deploy": "wrangler pages deploy . --project-name alabqri",
-    "check": "wrangler deploy --dry-run"
+    "check": "wrangler deploy --dry-run",
+    "test:security": "node --experimental-default-type=module --test tests/security/*.test.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.40.0"
