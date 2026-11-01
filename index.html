@@ -15784,6 +15784,7 @@ window.AbqToast = (function(){
         <input type="hidden" id="abq-article-edit-id">
         <div><label class="block text-xs font-black text-blue-700 mb-1">عنوان المقال / البحث</label><input id="abq-admin-title-input" type="text" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-300" placeholder="اكتب عنوان المقال أو البحث"></div>
         <div><label class="block text-xs font-black text-blue-700 mb-1">التصنيف</label><select id="abq-admin-category-input" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-bold"><option>التنمية البشرية</option><option>الطب التكميلي</option><option>الأذكار والاتزان</option><option>البحث العلمي</option><option>موضوعات معرفية</option></select></div>
+        <div><label class="block text-xs font-black text-blue-700 mb-1">موعد النشر (اختياري — اتركه فارغًا للنشر الفوري)</label><input id="abq-admin-scheduled-at" type="datetime-local" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-bold"></div>
         <div><label class="block text-xs font-black text-blue-700 mb-1">مقدمة مختصرة / ملخص</label><textarea id="abq-admin-excerpt-input" rows="3" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-300" placeholder="ملخص يظهر على بطاقة المقال"></textarea></div>
         <div><label class="block text-xs font-black text-blue-700 mb-1">النص الكامل للمقال أو البحث</label><textarea id="abq-admin-content-input" rows="10" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-semibold leading-8 outline-none focus:ring-2 focus:ring-blue-300" placeholder="اكتب النص الكامل هنا..."></textarea></div>
         <div class="flex flex-wrap gap-2 pt-1">
@@ -15881,7 +15882,7 @@ window.AbqToast = (function(){
       document.body.classList.remove('overflow-hidden');
     };
     window.resetAbqArticleForm=function(){
-      ['abq-article-edit-id','abq-admin-title-input','abq-admin-excerpt-input','abq-admin-content-input'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+      ['abq-article-edit-id','abq-admin-title-input','abq-admin-scheduled-at','abq-admin-excerpt-input','abq-admin-content-input'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
       const c=document.getElementById('abq-admin-category-input'); if(c)c.selectedIndex=0;
       const b=document.getElementById('abq-article-save-btn'); if(b)b.textContent='💾 حفظ المقال ونشره';
     };
@@ -15896,7 +15897,7 @@ window.AbqToast = (function(){
     window.saveAbqArticle=async function(){
       const title=document.getElementById('abq-admin-title-input')?.value.trim(),category=document.getElementById('abq-admin-category-input')?.value,excerpt=document.getElementById('abq-admin-excerpt-input')?.value.trim(),content=document.getElementById('abq-admin-content-input')?.value.trim(),editId=document.getElementById('abq-article-edit-id')?.value;
       if(!title||!content){AbqToast?.show?.('⚠️ يرجى كتابة عنوان المقال والنص الكامل قبل الحفظ.','error');return;}
-      const item={id:editId||('article_'+Date.now()),title,category,date:new Date().toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}),excerpt:excerpt||content.slice(0,140)+'…',content};
+      const scheduledValue=document.getElementById('abq-admin-scheduled-at')?.value||'';const scheduledAt=scheduledValue?new Date(scheduledValue).toISOString():null;const item={id:editId||('article_'+Date.now()),title,category,date:new Date().toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}),excerpt:excerpt||content.slice(0,140)+'…',content,scheduledAt};
       const result=await requestArticleAdmin({action:'save',article:item});
       if(!result.ok){AbqToast?.show?.(result.unauthorized?'❌ جلسة GitHub غير صالحة؛ لم يُحفظ المقال سحابيًا.':result.cancelled?'تم إلغاء الحفظ؛ لم يتغير المحتوى.':'❌ تعذر الحفظ السحابي؛ لم يتم تأكيد حفظ المقال.', 'error');return;}
       const i=ABQ_DYNAMIC_ARTICLES.findIndex(a=>String(a.id)===String(item.id));if(i>=0)ABQ_DYNAMIC_ARTICLES[i]=item;else ABQ_DYNAMIC_ARTICLES.unshift(item);saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();renderAbqArticles();resetAbqArticleForm();renderAbqArticleAdminList();AbqToast?.show?.('✅ تم حفظ المقال في قاعدة البيانات السحابية ويمكن عرضه من الأجهزة الأخرى.','success');
@@ -15910,7 +15911,7 @@ window.AbqToast = (function(){
     };
     window.editAbqArticle=function(id){
       const a=ABQ_DYNAMIC_ARTICLES.find(x=>x.id===id); if(!a)return;
-      document.getElementById('abq-article-edit-id').value=a.id; document.getElementById('abq-admin-title-input').value=a.title; document.getElementById('abq-admin-category-input').value=a.category; document.getElementById('abq-admin-excerpt-input').value=a.excerpt||''; document.getElementById('abq-admin-content-input').value=a.content||''; document.getElementById('abq-article-save-btn').textContent='💾 حفظ التعديلات';
+      document.getElementById('abq-article-edit-id').value=a.id; document.getElementById('abq-admin-title-input').value=a.title; document.getElementById('abq-admin-category-input').value=a.category; document.getElementById('abq-admin-excerpt-input').value=a.excerpt||''; document.getElementById('abq-admin-content-input').value=a.content||''; const scheduleInput=document.getElementById('abq-admin-scheduled-at');const scheduleValue=a.scheduled_at||a.scheduledAt||'';if(scheduleInput){if(scheduleValue){const d=new Date(scheduleValue);scheduleInput.value=Number.isNaN(d.getTime())?'':new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}else scheduleInput.value='';} document.getElementById('abq-article-save-btn').textContent='💾 حفظ التعديلات';
       document.getElementById('abq-admin-preview-wrap').classList.add('hidden');
     };
     window.reviewAbqArticle=function(id){
