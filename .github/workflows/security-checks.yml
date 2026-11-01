@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - security-hardening-20261101
+      - 'fix/**'
     paths:
       - "functions/api/admin/github/**"
       - "functions/_lib/admin-auth.js"
