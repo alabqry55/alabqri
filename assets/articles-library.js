@@ -2,9 +2,11 @@
   "use strict";
 
   // Owner authentication is handled by GitHub OAuth; no shared key is stored client-side.
-  document.addEventListener("click", async event => {
+  if (!window.__abqArticlesAdminGateInstalled) {
+    window.__abqArticlesAdminGateInstalled = true;
+    document.addEventListener("click", async event => {
     const target = event.target?.closest?.("button, a, [role='button']");
-    if (!target) return;
+    if (!target || !target.closest("#articles")) return;
     const label = String(target.innerText || target.textContent || "").replace(/\s+/g, " ").trim();
     if (!label.includes("لوحة تحكم المقالات والأبحاث") || !label.includes("إضافة ومراجعة")) return;
     if (window.__abqArticlesAdminGateReplay === target) { window.__abqArticlesAdminGateReplay = null; return; }
@@ -15,7 +17,8 @@
       if (response.ok && data.admin && data.owner === "alabqry55") { window.__abqArticlesAdminGateReplay = target; target.click(); }
       else window.location.assign("/api/admin/github/login");
     } catch (_) { window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم."); }
-  }, true);
+    }, true);
+  }
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
@@ -32,14 +35,18 @@
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
   `;
   function init() {
+    if (window.__abqArticlesLibraryInitialized) return;
     const articleTab = document.getElementById("articles");
-    const headingScope = articleTab || document;
+    if (!articleTab) return;
+    const headingScope = articleTab;
     const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
     );
     if (!heading) return;
     const section = heading.closest("section") || heading.parentElement;
-    if (!section || section.querySelector(".abq-articles-library")) return;
+    if (!section) return;
+    if (section.querySelector(".abq-articles-library")) { window.__abqArticlesLibraryInitialized = true; return; }
+    window.__abqArticlesLibraryInitialized = true;
     if (!document.getElementById("abq-articles-library-style")) {
       const style = document.createElement("style");
       style.id = "abq-articles-library-style";
@@ -60,7 +67,7 @@
       // Remove every retired search/filter control by its legacy IDs, including
       // duplicate IDs and controls mounted outside the expected tab wrapper.
       // Keep the article library and all admin-editor fields untouched.
-      const legacySearchControls = Array.from(document.querySelectorAll(
+      const legacySearchControls = Array.from(articleTab.querySelectorAll(
         '[id="abq-article-search"],[id="abq-article-category"],' +
         'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],input[aria-label*="ابحث"],' +
         'input[placeholder*="عنوان البحث"],input[placeholder*="المؤلف"],' +
@@ -68,7 +75,7 @@
         'select[aria-label*="تصنيف"],select[aria-label*="فلتر"],select[aria-label*="category" i]'
       ));
       // Catch legacy category dropdowns without aria-label by their visible option text.
-      const legacyCategorySelects = Array.from(document.querySelectorAll("select")).filter(select =>
+      const legacyCategorySelects = Array.from(articleTab.querySelectorAll("select")).filter(select =>
         Array.from(select.options || []).some(option => /جميع التصنيفات|كل التصنيفات|all categories/i.test(option.textContent || ""))
       );
       for (const select of legacyCategorySelects) {
@@ -123,7 +130,7 @@
     };
     const cleanupLegacyArticleCards = () => {
       cleanupLegacySearchArea();
-      const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"));
+      const headings = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4,h5,h6"));
       const seen = new Set();
       for (const titleNode of headings) {
         const title = normalizeDomTitle(titleNode.textContent);
@@ -295,8 +302,7 @@
           });
         }
 
-        // Secure inline editor: the admin key is entered by the authorized editor and
-        // remains only in this page's memory. It is never persisted in localStorage.
+        // Owner authorization is verified server-side through the signed GitHub OAuth session.
         let adminAuthenticated = Boolean(initiallyAdmin);
         let adminMode = false;
         const adminBar = el("div", "abq-articles-tools");
