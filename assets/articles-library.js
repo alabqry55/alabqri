@@ -38,6 +38,8 @@
     if (window.__abqArticlesLibraryInitialized) return;
     const articleTab = document.getElementById("articles");
     if (!articleTab) return;
+    // The legacy in-tab renderer is the single canonical list; do not mount a second grid.
+    if (articleTab.querySelector("#abq-articles-list")) { window.__abqArticlesLibraryInitialized = true; return; }
     const headingScope = articleTab;
     const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
