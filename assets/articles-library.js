@@ -310,7 +310,22 @@
         addButton.style.cssText = adminButton.style.cssText;
         logoutButton.style.cssText = adminButton.style.cssText;
         logoutButton.hidden = !initiallyAdmin;
-        logoutButton.addEventListener("click", () => { window.location.assign("/api/admin/github/logout"); });
+        logoutButton.addEventListener("click", async () => {
+          logoutButton.disabled = true;
+          try {
+            const response = await fetch("/api/admin/github/logout", {
+              method: "POST",
+              credentials: "same-origin",
+              cache: "no-store",
+              headers: {"Accept":"application/json"}
+            });
+            if (!response.ok) throw new Error("تعذر إنهاء جلسة الإدارة.");
+            window.location.assign("/");
+          } catch (error) {
+            logoutButton.disabled = false;
+            setAdminStatus(error?.message || "تعذر تسجيل الخروج؛ حاول مرة أخرى.");
+          }
+        });
         addButton.hidden = !initiallyAdmin;
         if (initiallyAdmin) { adminMode = true; adminButton.textContent = "وضع الإدارة مفعّل"; }
         adminBar.style.gridTemplateColumns = "1fr";
