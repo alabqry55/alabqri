@@ -58,7 +58,7 @@ for (const authenticated of [false, true]) {
     assert.equal(payload.admin, authenticated);
     assert.ok(Array.isArray(payload.articles));
     assert.ok(db.statements.length > 0);
-    assert.ok(db.statements.every(sql => /^SELECT\\b/i.test(sql)), db.statements.join("\\n"));
+    assert.ok(db.statements.every(sql => sql.toUpperCase().startsWith("SELECT ")), db.statements.join("\n"));
   });
 }
 
@@ -66,8 +66,8 @@ test("article UI uses GitHub OAuth and contains no shared admin-key transport", 
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
   assert.equal(source.includes("ARTICLES_ADMIN_KEY"), false);
   assert.equal(source.includes("X-Admin-Key"), false);
-  assert.match(source, /api\\/admin\\/github\\/session/);
-  assert.match(source, /api\\/admin\\/github\\/login/);
+  assert.ok(source.includes("/api/admin/github/session"));
+  assert.ok(source.includes("/api/admin/github/login"));
 });
 
 test("legacy search cleanup is scoped to the articles tab", async () => {
