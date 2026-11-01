@@ -1,3 +1,4 @@
+import { readOwnerSession } from "../../../_lib/admin-auth.js";
 const OWNER_LOGIN = "alabqry55";
 const OWNER_GITHUB_ID = "312770372";
 const SESSION_COOKIE = "__Host-abq_admin";
@@ -12,37 +13,26 @@ async function sign(value, secret) {
   const key = await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
   return b64url(await crypto.subtle.sign("HMAC",key,new TextEncoder().encode(value)));
 }
-async function verifySignature(value, signature, secret) {
-  const expected = await sign(value,secret);
-  if (expected.length !== signature.length) return false;
-  let diff=0; for(let i=0;i<expected.length;i++) diff |= expected.charCodeAt(i)^signature.charCodeAt(i);
-  return diff===0;
-}
-export async function readOwnerSession(request, env) {
-  if (!env.ADMIN_SESSION_SECRET || env.ADMIN_SESSION_SECRET.length < 32) return null;
-  const raw=cookie(request,SESSION_COOKIE);
-  const dot=raw.lastIndexOf(".");
-  if(dot<1) return null;
-  const payload=raw.slice(0,dot), signature=raw.slice(dot+1);
-  if(!await verifySignature(payload,signature,env.ADMIN_SESSION_SECRET)) return null;
-  try {
-    const session=JSON.parse(decode(payload));
-    const now=Math.floor(Date.now()/1000);
-    if(session.login!==OWNER_LOGIN || !session.id || !Number.isInteger(session.exp) || session.exp<=now || session.iat>now+60 || session.exp-session.iat>3600) return null;
-    return {login:OWNER_LOGIN,id:String(session.id),expiresAt:session.exp};
-  } catch { return null; }
-}
 export async function onRequest({request,env}) {
   const url=new URL(request.url);
   const action=url.pathname.split("/").filter(Boolean).pop();
   if(!["login","callback","session","logout"].includes(action)) return json({error:"Not found."},404);
   if(action==="session") {
+    if (request.method !== "GET") return json({error:"Method not allowed."},405);
     const owner=await readOwnerSession(request,env);
     return json({authenticated:Boolean(owner),admin:Boolean(owner),owner:owner?OWNER_LOGIN:null,expiresAt:owner?.expiresAt||null},owner?200:401);
   }
   if(action==="logout") {
-    return new Response(null,{status:302,headers:{Location:"/", "Cache-Control":"no-store","Set-Cookie":setCookie(SESSION_COOKIE,"",0)}});
+    if (request.method !== "POST") return json({error:"Method not allowed."},405);
+    const origin=request.headers.get("Origin");
+    if (!origin || origin !== url.origin) return json({error:"Cross-origin request rejected."},403);
+    const headers=new Headers({"Cache-Control":"no-store","Content-Length":"0"});
+    headers.append("Set-Cookie",setCookie(SESSION_COOKIE,"",0));
+    headers.append("Set-Cookie",setCookie(STATE_COOKIE,"",0));
+    return new Response(null,{status:204,headers});
   }
+  if(action==="login" && request.method !== "GET") return json({error:"Method not allowed."},405);
+  if(action==="callback" && request.method !== "GET") return json({error:"Method not allowed."},405);
   if(!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET || env.ADMIN_SESSION_SECRET.length<32) {
     return json({error:"GitHub OAuth is not configured. Set GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET and a 32+ character ADMIN_SESSION_SECRET in Cloudflare Pages secrets."},503);
   }
@@ -64,7 +54,11 @@ export async function onRequest({request,env}) {
     const callback=url.origin+"/api/admin/github/callback";
     const tokenResponse=await fetch("https://github.com/login/oauth/access_token",{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json","User-Agent":"ALABQRI-Owner-Admin"},body:JSON.stringify({client_id:env.GITHUB_CLIENT_ID,client_secret:env.GITHUB_CLIENT_SECRET,code,redirect_uri:callback})});
     const tokenData=await tokenResponse.json().catch(()=>({}));
-    if(!tokenResponse.ok || !tokenData.access_token) return json({error:"GitHub OAuth token exchange failed."},502);
+    if(!tokenResponse.ok || !tokenData.access_token) {
+      const knownErrors=new Set(["incorrect_client_credentials","redirect_uri_mismatch","bad_verification_code","unverified_user_email"]);
+      const providerError=knownErrors.has(tokenData.error) ? tokenData.error : "unknown";
+      return json({error:"GitHub OAuth token exchange failed.",providerError,providerStatus:tokenResponse.status},502);
+    }
     const userResponse=await fetch("https://api.github.com/user",{headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+tokenData.access_token,"X-GitHub-Api-Version":"2022-11-28","User-Agent":"ALABQRI-Owner-Admin"}});
     const user=await userResponse.json().catch(()=>({}));
     if(!userResponse.ok || String(user.login||"").toLowerCase()!==OWNER_LOGIN || String(user.id)!==OWNER_GITHUB_ID) {
