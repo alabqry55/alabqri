@@ -1,0 +1,47 @@
+name: ALABQRI security checks
+
+on:
+  push:
+    branches:
+      - security-hardening-20261101
+    paths:
+      - "functions/api/admin/github/**"
+      - "functions/_lib/admin-auth.js"
+      - "functions/api/articles.js"
+      - "assets/articles-library.js"
+      - "tests/security/**"
+      - "package.json"
+      - ".github/workflows/security-checks.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "functions/api/admin/github/**"
+      - "functions/_lib/admin-auth.js"
+      - "functions/api/articles.js"
+      - "assets/articles-library.js"
+      - "tests/security/**"
+      - "package.json"
+      - ".github/workflows/security-checks.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alabqri-security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-tests:
+    name: Owner session and API authorization tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run security tests
+        run: npm run test:security
