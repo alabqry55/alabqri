@@ -61,9 +61,10 @@ test("accepts a correctly signed, unexpired owner session", async () => {
 
 test("rejects a session with a modified signature", async () => {
   const cookie = await ownerCookie();
-  const request = new Request(SITE, {
-    headers: { Cookie: cookie.slice(0, -1) + (cookie.endsWith("a") ? "b" : "a") }
-  });
+  const separator = cookie.lastIndexOf(".");
+  const signature = cookie.slice(separator + 1);
+  const tampered = cookie.slice(0, separator + 1) + (signature[0] === "A" ? "B" : "A") + signature.slice(1);
+  const request = new Request(SITE, { headers: { Cookie: tampered } });
   assert.equal(await readOwnerSession(request, { ADMIN_SESSION_SECRET: SECRET }), null);
 });
 
