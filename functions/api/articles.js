@@ -110,25 +110,13 @@ export async function onRequest({request, env}) {
     return json({error:"D1 binding DB is not configured."},500);
   }
   try {
-    await ensureTable(env.DB);
-    if (isAdmin) await ensureAuditTable(env.DB);
-    // Legacy retirement is destructive, so it runs only in the authenticated owner's session.
-    if (request.method === "GET" && isAdmin) {
-      const {results: retiredRows=[]} = await env.DB.prepare("SELECT id,title,date,excerpt,content FROM articles").all();
-      for (const row of retiredRows) {
-        if (String(row.id || "").toLocaleLowerCase("en").includes("hijama") || isHijamaArticle(row) || isRetiredEnergyArticle(row)) {
-          await env.DB.batch([
-            env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(row.id)),
-            env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
-              .bind(ownerSession.login,"legacy_retirement",String(row.id),String(row.title||"legacy article").slice(0,500))
-          ]);
-        }
-      }
+    // GET requests are strictly read-only: no DDL, migrations, audit writes, or row deletion.
+    // Prepare the schema only when an authenticated owner submits a write.
+    if (request.method === "POST") {
+      await ensureTable(env.DB);
+      await ensureAuditTable(env.DB);
     }
     if (request.method === "GET") {
-      // An authenticated editor may safely apply the additive migration on first open,
-      // so scheduled items are visible in admin before the first save.
-      if (isAdmin) await ensureScheduleColumn(env.DB);
       let allResults = [];
       let hasScheduleColumn = true;
       try {
