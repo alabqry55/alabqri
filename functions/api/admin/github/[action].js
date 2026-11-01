@@ -54,7 +54,11 @@ export async function onRequest({request,env}) {
     const callback=url.origin+"/api/admin/github/callback";
     const tokenResponse=await fetch("https://github.com/login/oauth/access_token",{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json","User-Agent":"ALABQRI-Owner-Admin"},body:JSON.stringify({client_id:env.GITHUB_CLIENT_ID,client_secret:env.GITHUB_CLIENT_SECRET,code,redirect_uri:callback})});
     const tokenData=await tokenResponse.json().catch(()=>({}));
-    if(!tokenResponse.ok || !tokenData.access_token) return json({error:"GitHub OAuth token exchange failed."},502);
+    if(!tokenResponse.ok || !tokenData.access_token) {
+      const knownErrors=new Set(["incorrect_client_credentials","redirect_uri_mismatch","bad_verification_code","unverified_user_email"]);
+      const providerError=knownErrors.has(tokenData.error) ? tokenData.error : "unknown";
+      return json({error:"GitHub OAuth token exchange failed.",providerError,providerStatus:tokenResponse.status},502);
+    }
     const userResponse=await fetch("https://api.github.com/user",{headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+tokenData.access_token,"X-GitHub-Api-Version":"2022-11-28","User-Agent":"ALABQRI-Owner-Admin"}});
     const user=await userResponse.json().catch(()=>({}));
     if(!userResponse.ok || String(user.login||"").toLowerCase()!==OWNER_LOGIN || String(user.id)!==OWNER_GITHUB_ID) {
