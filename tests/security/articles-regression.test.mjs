@@ -85,3 +85,21 @@ test("duplicate script loading cannot initialize a second article renderer or OA
   assert.ok(source.includes("window.__abqArticlesLibraryInitialized"));
   assert.ok(source.includes("window.__abqArticlesAdminGateInstalled"));
 });
+
+test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KEY", async () => {
+  const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+  assert.equal(html.includes("ARTICLES_ADMIN_KEY"), false);
+  assert.equal(html.includes("ABQ_ARTICLE_TOKEN_KEY"), false);
+  assert.equal(html.includes("getArticleAdminToken"), false);
+  assert.ok(html.includes("/api/admin/github/session"));
+  assert.ok(html.includes("credentials:'same-origin'"));
+});
+
+test("the legacy article list remains the only list renderer and has no legacy search IDs", async () => {
+  const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+  const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
+  assert.ok(html.includes('id="abq-articles-list"'));
+  assert.equal(html.includes('id="abq-article-search"'), false);
+  assert.equal(html.includes('id="abq-article-category"'), false);
+  assert.ok(source.includes('articleTab.querySelector("#abq-articles-list")'));
+});
