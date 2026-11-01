@@ -176,3 +176,38 @@ test("logout clears both owner and OAuth state cookies only on a same-origin POS
   assert.ok(cookies.some(value => value.startsWith("__Host-abq_admin=") && value.includes("Max-Age=0")));
   assert.ok(cookies.some(value => value.startsWith("__Host-abq_github_state=") && value.includes("Max-Age=0")));
 });
+
+test("exposes only an allow-listed OAuth provider error code, never its description", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    error: "incorrect_client_credentials",
+    error_description: "This detail must not be exposed."
+  }), {
+    status: 401,
+    headers: { "Content-Type": "application/json" }
+  });
+
+  try {
+    const state = "test-state-token";
+    const request = new Request(
+      SITE + "/api/admin/github/callback?code=one-time-test-code&state=" + state,
+      { headers: { Cookie: "__Host-abq_github_state=" + state } }
+    );
+    const response = await githubAdminRequest({
+      request,
+      env: {
+        GITHUB_CLIENT_ID: "test-client-id",
+        GITHUB_CLIENT_SECRET: "test-client-secret",
+        ADMIN_SESSION_SECRET: SECRET
+      }
+    });
+    const body = await response.json();
+    assert.equal(response.status, 502);
+    assert.equal(body.providerError, "incorrect_client_credentials");
+    assert.equal(body.providerStatus, 401);
+    assert.equal("error_description" in body, false);
+    assert.equal(JSON.stringify(body).includes("test-client-secret"), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
