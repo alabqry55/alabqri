@@ -93,6 +93,7 @@ test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KE
   assert.equal(html.includes("getArticleAdminToken"), false);
   assert.ok(html.includes("/api/admin/github/session"));
   assert.ok(html.includes("credentials:'same-origin'"));
+  assert.ok(html.includes("/assets/articles-library.js?v=oauth-single-render-20261101"));
 });
 
 test("the legacy article list remains the only list renderer and has no legacy search IDs", async () => {
