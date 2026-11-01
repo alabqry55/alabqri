@@ -33,12 +33,18 @@ export async function onRequest({request,env}) {
   }
   if(action==="login" && request.method !== "GET") return json({error:"Method not allowed."},405);
   if(action==="callback" && request.method !== "GET") return json({error:"Method not allowed."},405);
+  const callbackUri=env.GITHUB_REDIRECT_URI || (url.origin+"/api/admin/github/callback");
+  let callbackUrl;
+  try { callbackUrl=new URL(callbackUri); } catch { return json({error:"GITHUB_REDIRECT_URI must be a valid absolute URL."},503); }
+  if(callbackUrl.origin!==url.origin || callbackUrl.pathname!=="/api/admin/github/callback" || callbackUrl.search || callbackUrl.hash) {
+    return json({error:"GITHUB_REDIRECT_URI must match this deployment origin and /api/admin/github/callback."},503);
+  }
   if(!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET || env.ADMIN_SESSION_SECRET.length<32) {
     return json({error:"GitHub OAuth is not configured. Set GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET and a 32+ character ADMIN_SESSION_SECRET in Cloudflare Pages secrets."},503);
   }
   if(action==="login") {
     const state=b64url(crypto.getRandomValues(new Uint8Array(32)));
-    const callback=url.origin+"/api/admin/github/callback";
+    const callback=callbackUrl.toString();
     const authorize=new URL("https://github.com/login/oauth/authorize");
     authorize.searchParams.set("client_id",env.GITHUB_CLIENT_ID);
     authorize.searchParams.set("redirect_uri",callback);
@@ -51,7 +57,7 @@ export async function onRequest({request,env}) {
     const returned=url.searchParams.get("state")||"";
     const code=url.searchParams.get("code")||"";
     if(!state || !returned || state!==returned || !code) return json({error:"OAuth state validation failed."},400);
-    const callback=url.origin+"/api/admin/github/callback";
+    const callback=callbackUrl.toString();
     const tokenResponse=await fetch("https://github.com/login/oauth/access_token",{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json","User-Agent":"ALABQRI-Owner-Admin"},body:JSON.stringify({client_id:env.GITHUB_CLIENT_ID,client_secret:env.GITHUB_CLIENT_SECRET,code,redirect_uri:callback})});
     const tokenData=await tokenResponse.json().catch(()=>({}));
     if(!tokenResponse.ok || !tokenData.access_token) {
