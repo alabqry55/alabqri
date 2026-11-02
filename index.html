@@ -15844,7 +15844,7 @@ window.AbqToast = (function(){
       });
     }
     function saveLocalArticles(){try{localStorage.setItem(ABQ_ARTICLE_STORAGE,JSON.stringify(ABQ_DYNAMIC_ARTICLES));return true;}catch(e){return false;}}
-    async function requestArticleAdmin(payload){try{const sessionResponse=await fetch('/api/admin/github/session',{credentials:'same-origin',cache:'no-store'});const session=await sessionResponse.json().catch(()=>({}));if(!sessionResponse.ok||!session.admin||session.owner!=='alabqry55'){window.location.assign('/api/admin/github/login');return {ok:false,unauthorized:true,data:session};}const r=await fetch('/api/articles',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},credentials:'same-origin',cache:'no-store',body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(r.status===401)return {ok:false,unauthorized:true,data};return {ok:r.ok,data};}catch(e){return {ok:false,offline:true};}}
+    async function requestArticleAdmin(payload){try{const sessionResponse=await fetch('/api/admin/github/session',{credentials:'same-origin',cache:'no-store'});const session=await sessionResponse.json().catch(()=>({}));if(!sessionResponse.ok||!session.admin||session.owner!=='alabqry55'){window.location.assign('/api/admin/github/login');return {ok:false,unauthorized:true,status:sessionResponse.status,data:session};}const r=await fetch('/api/articles',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},credentials:'same-origin',cache:'no-store',body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(r.status===401)return {ok:false,unauthorized:true,status:r.status,data};return {ok:r.ok,status:r.status,data};}catch(e){return {ok:false,offline:true,error:String(e?.message||e)};}}
     async function loadRemoteArticles(){try{const r=await fetch('/api/articles',{headers:{'Accept':'application/json'},cache:'no-store'});if(!r.ok)return;const data=await r.json();if(!Array.isArray(data.articles))return;const merged=new Map();data.articles.filter(a=>!isRetiredHijamaArticle(a)).forEach(a=>merged.set(String(a.id),a));ABQ_DYNAMIC_ARTICLES.forEach(a=>{if(!merged.has(String(a.id)))merged.set(String(a.id),a);});ABQ_DYNAMIC_ARTICLES=Array.from(merged.values());saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();if(typeof window.renderAbqArticles==='function')window.renderAbqArticles();}catch(e){/* local content remains available */}}
     window.ABQ_ARTICLES=getAllArticles();
     function articleCard(a){
@@ -15905,11 +15905,62 @@ window.AbqToast = (function(){
       const i=ABQ_DYNAMIC_ARTICLES.findIndex(a=>String(a.id)===String(item.id));if(i>=0)ABQ_DYNAMIC_ARTICLES[i]=item;else ABQ_DYNAMIC_ARTICLES.unshift(item);saveLocalArticles();window.ABQ_ARTICLES=getAllArticles();renderAbqArticles();resetAbqArticleForm();renderAbqArticleAdminList();AbqToast?.show?.('✅ تم حفظ المقال في قاعدة البيانات السحابية ويمكن عرضه من الأجهزة الأخرى.','success');
     };
     window.syncAbqArticlesToCloud=async function(){
+      if(window.__abqArticleCloudSyncRunning){AbqToast?.show?.('المزامنة قيد التنفيذ بالفعل.','error');return;}
       if(!ABQ_DYNAMIC_ARTICLES.length){AbqToast?.show?.('لا توجد مقالات مضافة يدويًا لمزامنتها.','error');return;}
-      if(!confirm('سيتم نسخ المقالات المضافة على هذا المتصفح إلى قاعدة البيانات السحابية. هل تريد المتابعة؟'))return;
-      let done=0;
-      for(const article of ABQ_DYNAMIC_ARTICLES){const result=await requestArticleAdmin({action:'save',article});if(!result.ok){AbqToast?.show?.('توقفت المزامنة بعد حفظ '+done+' مقالًا. تحقق من جلسة GitHub OAuth وربط الخدمة ثم أعد المحاولة.','error');return;}done++;}
-      AbqToast?.show?.('✅ تمت مزامنة '+done+' مقالًا مع قاعدة البيانات السحابية.','success');
+      if(!confirm('سيتم فحص المقالات المحلية ومزامنة الناقص أو المختلف فقط مع قاعدة البيانات السحابية، دون إنشاء نسخ مكررة. هل تريد المتابعة؟'))return;
+      window.__abqArticleCloudSyncRunning=true;
+      let saved=0,alreadySynced=0;
+      const fail=(message)=>AbqToast?.show?.(message,'error');
+      const normalizeTitle=value=>String(value||'').normalize('NFKC').toLocaleLowerCase('ar')
+        .replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/[\u064B-\u065F\u0670ـ]/g,'')
+        .replace(/[\s:：،؛,.!?؟]+/g,' ').trim();
+      const scheduleKey=value=>{if(!value)return '';const time=Date.parse(value);return Number.isFinite(time)?new Date(time).toISOString():String(value);};
+      const sameArticle=(local,remote)=>{
+        const localSchedule=local.scheduledAt??local.scheduled_at??null;
+        const remoteSchedule=remote.scheduledAt??remote.scheduled_at??null;
+        return String(local.title||'').trim()===String(remote.title||'').trim() &&
+          String(local.category||'')===String(remote.category||'') &&
+          String(local.date||'')===String(remote.date||'') &&
+          String(local.excerpt||'')===String(remote.excerpt||'') &&
+          String(local.content||'')===String(remote.content||'') &&
+          scheduleKey(localSchedule)===scheduleKey(remoteSchedule);
+      };
+      try{
+        const remoteResponse=await fetch('/api/articles',{headers:{'Accept':'application/json'},credentials:'same-origin',cache:'no-store'});
+        const remoteData=await remoteResponse.json().catch(()=>({}));
+        if(!remoteResponse.ok||!Array.isArray(remoteData.articles)){
+          fail('تعذر قراءة المكتبة السحابية قبل المزامنة. HTTP '+remoteResponse.status+' — '+(remoteData.error||'استجابة غير صالحة')+'. لم يبدأ أي حفظ.');
+          return;
+        }
+        const remoteArticles=remoteData.articles.filter(article=>article&&!isRetiredHijamaArticle(article));
+        const remoteById=new Map(remoteArticles.map(article=>[String(article.id),article]));
+        for(const article of ABQ_DYNAMIC_ARTICLES){
+          if(!article||!article.id||!article.title){fail('توقفت المزامنة بسبب مقال محلي ينقصه المعرّف أو العنوان. تم حفظ '+saved+' مقالًا في هذه المحاولة.');return;}
+          const existing=remoteById.get(String(article.id));
+          if(existing&&sameArticle(article,existing)){alreadySynced++;continue;}
+          const titleKey=normalizeTitle(article.title);
+          const titleConflict=remoteArticles.find(remote=>String(remote.id)!==String(article.id)&&normalizeTitle(remote.title)===titleKey);
+          if(titleConflict){
+            fail('توقفت المزامنة بعد حفظ '+saved+' مقالًا. يوجد عنوان مكرر: «'+article.title+'» محفوظ سحابيًا بمعرّف مختلف ('+titleConflict.id+'). لم يتم إنشاء نسخة جديدة.');
+            return;
+          }
+          const normalizedArticle={...article,scheduledAt:article.scheduledAt??article.scheduled_at??null};
+          const result=await requestArticleAdmin({action:'save',article:normalizedArticle});
+          if(!result.ok){
+            const reason=result.data?.error||result.error||(result.status?'HTTP '+result.status:'تعذر الاتصال بالخدمة');
+            fail('توقفت المزامنة بعد حفظ '+saved+' مقالًا. المقال التالي: «'+article.title+'». السبب الذي أعاده الخادم: '+reason+'.');
+            return;
+          }
+          saved++;
+          remoteById.set(String(article.id),{...normalizedArticle,scheduled_at:normalizedArticle.scheduledAt});
+          remoteArticles.push(remoteById.get(String(article.id)));
+        }
+        AbqToast?.show?.('✅ اكتملت المزامنة: حُفظ '+saved+' مقالًا جديدًا أو محدّثًا، وتم تجاوز '+alreadySynced+' مقالًا مطابقًا موجودًا بالفعل.','success');
+      }catch(error){
+        fail('توقفت المزامنة بعد حفظ '+saved+' مقالًا بسبب خطأ اتصال: '+String(error?.message||error)+'.');
+      }finally{
+        window.__abqArticleCloudSyncRunning=false;
+      }
     };
     window.editAbqArticle=function(id){
       const a=ABQ_DYNAMIC_ARTICLES.find(x=>x.id===id); if(!a)return;

@@ -106,3 +106,13 @@ test("the legacy article list remains the only list renderer and has no legacy s
   assert.equal(html.includes('id="abq-article-category"'), false);
   assert.ok(source.includes('articleTab.querySelector("#abq-articles-list")'));
 });
+
+test("homepage cloud sync skips identical remote articles and reports the real API failure", async () => {
+  const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+  assert.ok(html.includes("window.__abqArticleCloudSyncRunning"));
+  assert.ok(html.includes("const remoteById=new Map"));
+  assert.ok(html.includes("sameArticle(article,existing)"));
+  assert.ok(html.includes("result.data?.error"));
+  assert.ok(html.includes("titleConflict"));
+  assert.ok(html.includes("تم تجاوز '+alreadySynced+' مقالًا مطابقًا"));
+});
