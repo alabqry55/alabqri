@@ -254,7 +254,7 @@ export async function onRequest({request, env}) {
         titles.add(titleKey);
       }
       const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
-      for (const a of incoming) {
+      for (const a of activeIncoming) {
         const conflict = existingRows.find(row => String(row.id) === String(a.id) || normalizeTitle(row.title) === normalizeTitle(a.title));
         if (conflict) return json({error:"يوجد مقال محفوظ مسبقًا يتعارض مع «" + a.title + "». لم يُحفظ أي مقال من الدفعة؛ راجع المقالات الحالية أولًا.",duplicateId:conflict.id},409);
       }
