@@ -237,7 +237,7 @@ export async function onRequest({request, env}) {
           return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
         }
         const publishImmediately = a.publishImmediately === true;
-        if (publishImmediately && index !== 0) {
+        if (publishImmediately && incoming.indexOf(a) !== 0) {
           return json({error:"يسمح بالنشر الفوري للمقال الأول فقط؛ لم يُحفظ أي مقال."},400);
         }
         const schedule = String(a.scheduledAt || "");
