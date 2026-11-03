@@ -214,6 +214,7 @@ function bind(){
   if(audio.src&&!audio.paused){
    audio.pause();state.playing=false;setPlayButton("waiting");setStatus("تم إيقاف الاستماع مؤقتًا — اضغط تشغيل للمتابعة");return;
   }
+  if(audio.ended){state.current=0;state.playing=true;setPlayButton("waiting");await loadCurrent(true);return}
   if(audio.src&&audio.paused&&state.source){state.playing=true;setPlayButton("playing");try{await audio.play()}catch{state.playing=false;setPlayButton("waiting")}}
   else {state.playing=true;await loadCurrent(true)}
  };
