@@ -4,7 +4,9 @@
   // Owner authentication is handled by GitHub OAuth; no shared key is stored client-side.
   // Capture at window level so desktop/mobile wrappers and earlier document listeners
   // cannot bypass or swallow the owner-session gate.
-  const replayedAdminTriggers = new WeakSet();
+  if (!window.__abqArticlesAdminGateInstalled) {
+    window.__abqArticlesAdminGateInstalled = true;
+    const replayedAdminTriggers = new WeakSet();
   const pendingAdminTriggers = new WeakSet();
   window.addEventListener("click", async event => {
     const target = event.target?.closest?.("button, a, [role='button']");
@@ -42,7 +44,8 @@
     } finally {
       pendingAdminTriggers.delete(target);
     }
-  }, true);
+    }, true);
+  }
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
