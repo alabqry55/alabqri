@@ -37,7 +37,7 @@ export async function onRequest({request,env}) {
   let callbackUrl;
   try { callbackUrl=new URL(callbackUri); } catch { return json({error:"GITHUB_REDIRECT_URI must be a valid absolute URL."},503); }
   if(callbackUrl.origin!==url.origin || callbackUrl.pathname!=="/api/admin/github/callback" || callbackUrl.search || callbackUrl.hash) {
-    return json({error:"GITHUB_REDIRECT_URI must match this deployment origin and /api/admin/github/callback."},503);
+    return json({error:"GITHUB_REDIRECT_URI must match this deployment origin and /api/admin/github/callback.",deploymentOrigin:url.origin,configuredOrigin:callbackUrl.origin,configuredPath:callbackUrl.pathname},503);
   }
   if(!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET || env.ADMIN_SESSION_SECRET.length<32) {
     return json({error:"GitHub OAuth is not configured. Set GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET and a 32+ character ADMIN_SESSION_SECRET in Cloudflare Pages secrets."},503);
