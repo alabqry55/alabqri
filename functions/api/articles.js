@@ -212,11 +212,23 @@ export async function onRequest({request, env}) {
         return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
       }
       await ensureScheduleColumn(env.DB);
+      // Permanently retired content is a tombstone: skip it in bulk sync without
+      // restoring it or aborting unrelated valid articles in the same batch.
+      const skippedRetired = incoming.filter(isRetiredEnergyArticle).map(a => ({
+        id: String(a?.id || ""),
+        title: String(a?.title || "")
+      }));
+      const activeIncoming = incoming.filter(a => !isRetiredEnergyArticle(a));
+      if (!activeIncoming.length) {
+        return json({
+          ok:true, saved:0, skipped:skippedRetired.length,
+          skippedRetired, ids:[], immediatePublished:null, verified:true
+        });
+      }
       const ids = new Set();
       const titles = new Set();
-      for (let index = 0; index < incoming.length; index++) {
-        const a = incoming[index];
-        if (a && isRetiredEnergyArticle(a)) return json({error:"تتضمن الدفعة مقال الطاقة الحيوية المتقاعد نهائيًا؛ لم يُحفظ أي مقال."},409);
+      for (let index = 0; index < activeIncoming.length; index++) {
+        const a = activeIncoming[index];
         if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() ||
             a.title.length > 240 || typeof a.content !== "string" || !a.content.trim() ||
             a.content.length > 200000 || !CATEGORIES.has(a.category) ||
@@ -225,7 +237,7 @@ export async function onRequest({request, env}) {
           return json({error:"توجد بيانات غير صالحة في دفعة المقالات؛ لم يُحفظ أي مقال."},400);
         }
         const publishImmediately = a.publishImmediately === true;
-        if (publishImmediately && index !== 0) {
+        if (publishImmediately && incoming.indexOf(a) !== 0) {
           return json({error:"يسمح بالنشر الفوري للمقال الأول فقط؛ لم يُحفظ أي مقال."},400);
         }
         const schedule = String(a.scheduledAt || "");
@@ -242,26 +254,28 @@ export async function onRequest({request, env}) {
         titles.add(titleKey);
       }
       const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles").all();
-      for (const a of incoming) {
+      for (const a of activeIncoming) {
         const conflict = existingRows.find(row => String(row.id) === String(a.id) || normalizeTitle(row.title) === normalizeTitle(a.title));
         if (conflict) return json({error:"يوجد مقال محفوظ مسبقًا يتعارض مع «" + a.title + "». لم يُحفظ أي مقال من الدفعة؛ راجع المقالات الحالية أولًا.",duplicateId:conflict.id},409);
       }
-      const statements = incoming.map(a => env.DB.prepare(
+      const statements = activeIncoming.map(a => env.DB.prepare(
         "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
       ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt)));
-      const auditStatements = incoming.map(a => env.DB.prepare(
+      const auditStatements = activeIncoming.map(a => env.DB.prepare(
         "INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)"
       ).bind(ownerSession.login,a.publishImmediately === true ? "publish" : "schedule",String(a.id),String(a.scheduledAt || "immediate").slice(0,500)));
       await env.DB.batch([...statements,...auditStatements]);
-      const verification = await Promise.all(incoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
-      if (verification.some((row,i) => !row || row.title !== incoming[i].title.trim() || row.content !== incoming[i].content || (row.scheduled_at || null) !== (incoming[i].publishImmediately === true ? null : incoming[i].scheduledAt))) {
+      const verification = await Promise.all(activeIncoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
+      if (verification.some((row,i) => !row || row.title !== activeIncoming[i].title.trim() || row.content !== activeIncoming[i].content || (row.scheduled_at || null) !== (activeIncoming[i].publishImmediately === true ? null : activeIncoming[i].scheduledAt))) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
       }
       return json({
         ok:true,
-        saved:incoming.length,
-        ids:incoming.map(a=>a.id),
-        immediatePublished:incoming[0]?.publishImmediately === true ? incoming[0].id : null,
+        saved:activeIncoming.length,
+        skipped:skippedRetired.length,
+        skippedRetired,
+        ids:activeIncoming.map(a=>a.id),
+        immediatePublished:activeIncoming[0]?.publishImmediately === true ? activeIncoming[0].id : null,
         verified:true
       });
     }
