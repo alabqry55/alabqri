@@ -5,7 +5,7 @@ window.__ABQ_QURAN_PLAYER__=true;
 
 const API="/api/quran";
 const $=id=>document.getElementById(id);
-const state={reciters:[],surahs:[],texts:null,current:0,queue:[],playing:false,repeat:false,source:null,segmentEnd:null,favorites:[]};
+const state={reciters:[],surahs:[],texts:null,current:0,queue:[],playing:false,repeat:false,source:null,segmentEnd:null,favorites:[],playMode:"range",requestId:0};
 const PREF="abq_quran_player_v2";
 
 function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[c]));}
@@ -28,49 +28,50 @@ function inject(){
  const wrap=document.createElement("div");wrap.id="abq-quran-player";wrap.dir="rtl";
  wrap.innerHTML=`
 <style id="abq-qp-style">
-#abq-quran-player{font-family:Cairo,sans-serif;margin:1rem auto;max-width:980px}
-#abq-quran-player .abq-qp-card{background:linear-gradient(145deg,#fffdf7,#f8fafc);border:3px solid #2563eb;border-radius:18px;padding:18px;box-shadow:0 10px 28px -18px rgba(37,99,235,.42)}
-#abq-quran-player .abq-qp-title{text-align:center;font-size:1.15rem;font-weight:900;color:#1e3a8a;margin:0 0 14px}
-#abq-quran-player .abq-qp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-#abq-quran-player label{display:block;font-size:.78rem;font-weight:800;color:#334155;margin:0 0 5px}
-#abq-quran-player select,#abq-quran-player input[type=search]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:.65rem .7rem;background:#fff;color:#0f172a;font:inherit;font-weight:700}
-#abq-quran-player .abq-qp-ayahs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-#abq-quran-player .abq-qp-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:14px 0 10px}
-#abq-quran-player .abq-qp-btn{border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:999px;padding:.55rem .8rem;font:inherit;font-weight:900;cursor:pointer}
-#abq-quran-player .abq-qp-btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-color:#2563eb}
-#abq-quran-player .abq-qp-btn.waiting{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#172554;border-color:#f59e0b;animation:abqQpWait 1.4s ease-in-out infinite}
-@keyframes abqQpWait{50%{transform:scale(1.025);opacity:.82}}
+#abq-quran-player{font-family:Cairo,sans-serif;margin:1.1rem auto;max-width:1040px;color:#173c32}#abq-quran-player *{box-sizing:border-box}
+#abq-quran-player .abq-qp-card{position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -30%,rgba(205,169,91,.17),transparent 55%),linear-gradient(155deg,#fffdf6,#f6f3e8);border:1px solid #c8b477;border-radius:24px;padding:clamp(14px,2.5vw,26px);box-shadow:0 18px 44px -30px rgba(8,55,43,.48)}
+#abq-quran-player .abq-qp-card:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;background-image:radial-gradient(#b99b54 .7px,transparent .7px);background-size:18px 18px;mask-image:linear-gradient(to bottom,black,transparent 48%)}
+#abq-quran-player .abq-qp-head{position:relative;text-align:center;margin:-2px 0 18px;padding:20px 12px 17px;border-radius:18px;color:#fff9e8;background:linear-gradient(135deg,#073f32,#0b6048 58%,#164b3d);border:1px solid rgba(215,187,117,.7)}
+#abq-quran-player .abq-qp-head:after{content:"۞";display:block;color:#d9bd79;font-family:Amiri,serif;font-size:1.25rem;margin-top:5px;opacity:.9}
+#abq-quran-player .abq-qp-kicker{font-size:.72rem;color:#e6d4a3;font-weight:800;letter-spacing:.04em}
+#abq-quran-player .abq-qp-title{text-align:center;font-size:clamp(1.12rem,2.4vw,1.5rem);font-weight:900;color:#fff9e8;margin:4px 0}
+#abq-quran-player .abq-qp-subtitle{font-size:.78rem;color:#e9e2cf;margin:0}
+#abq-quran-player .abq-qp-grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#abq-quran-player .abq-qp-field{min-width:0}
+#abq-quran-player label{display:block;font-size:.8rem;font-weight:900;color:#31594b;margin:0 0 6px}
+#abq-quran-player select,#abq-quran-player input[type=search]{width:100%;min-height:44px;border:1px solid #d7c99e;border-radius:12px;padding:.65rem .75rem;background:#fffefa;color:#173c32;font:inherit;font-weight:700;outline:none}
+#abq-quran-player select:focus,#abq-quran-player input:focus{border-color:#a98a42;box-shadow:0 0 0 3px rgba(183,151,76,.16)}
+#abq-quran-player .abq-qp-range{position:relative;margin-top:13px;padding:13px;border:1px solid #ddcfaa;border-radius:16px;background:rgba(255,255,255,.62)}
+#abq-quran-player .abq-qp-range-title{font-size:.86rem;font-weight:900;color:#765e2d;margin:0 0 9px}
+#abq-quran-player .abq-qp-ayahs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#abq-quran-player .abq-qp-actions{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0 9px}
+#abq-quran-player .abq-qp-controls{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:9px 0 12px}
+#abq-quran-player .abq-qp-btn{border:1px solid #cdbb89;background:#fffdf5;color:#31594b;border-radius:999px;padding:.65rem .9rem;min-height:42px;font:inherit;font-size:.82rem;font-weight:900;cursor:pointer;transition:background .16s,border-color .16s}
+#abq-quran-player .abq-qp-btn:hover{background:#f4ecd5;border-color:#aa8d4b}
+#abq-quran-player .abq-qp-btn.primary{background:linear-gradient(135deg,#0a6048,#0b7958);color:#fff;border-color:#0a6048}
+#abq-quran-player .abq-qp-btn.gold{background:linear-gradient(135deg,#b18c3e,#d4b66c);color:#243c30;border-color:#b18c3e}
 #abq-quran-player .abq-qp-btn:disabled{opacity:.45;cursor:not-allowed}
-#abq-quran-player .abq-qp-status{text-align:center;color:#475569;min-height:1.4rem;font-size:.78rem}
-#abq-quran-player .abq-qp-verse-head{text-align:center;color:#1d4ed8;font-size:.75rem;font-weight:900;margin-top:12px}
-#abq-quran-player .abq-qp-verse{margin-top:6px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:15px;min-height:90px;text-align:center;font-family:Amiri,serif;font-size:1.45rem;line-height:2.15;color:#1e293b}
-#abq-quran-player .abq-qp-meta{text-align:center;color:#64748b;font-size:.72rem;margin-top:8px}
-#abq-quran-player .abq-qp-progress{width:100%;accent-color:#2563eb}
-@media(max-width:640px){#abq-quran-player .abq-qp-grid{grid-template-columns:1fr}#abq-quran-player .abq-qp-card{padding:12px}#abq-quran-player .abq-qp-verse{font-size:1.3rem;line-height:2}}
+#abq-quran-player .abq-qp-status{text-align:center;color:#536d60;min-height:1.5rem;font-size:.8rem;font-weight:700;padding:5px}
+#abq-quran-player .abq-qp-progress{position:relative;width:100%;accent-color:#0c674d;margin:9px 0}
+#abq-quran-player .abq-qp-verse-panel{position:relative;margin-top:13px;padding:14px;border:1px solid #d8c89b;border-radius:18px;background:linear-gradient(145deg,#fffefa,#f7f0dc)}
+#abq-quran-player .abq-qp-verse-head{text-align:center;color:#8a6b2e;font-size:.8rem;font-weight:900;margin:0 0 6px}
+#abq-quran-player .abq-qp-verse{background:transparent;min-height:92px;text-align:center;font-family:Amiri,serif;font-size:clamp(1.45rem,3vw,1.9rem);line-height:2.1;color:#173c32}
+#abq-quran-player .abq-qp-meta{text-align:center;color:#6d786e;font-size:.74rem;margin-top:8px}#abq-quran-player audio{display:none}
+@media(max-width:640px){#abq-quran-player .abq-qp-grid{grid-template-columns:1fr}#abq-quran-player .abq-qp-card{padding:11px;border-radius:18px}#abq-quran-player .abq-qp-head{padding:16px 9px}#abq-quran-player .abq-qp-actions{grid-template-columns:1fr}#abq-quran-player .abq-qp-controls{gap:6px}#abq-quran-player .abq-qp-btn{padding:.58rem .72rem;font-size:.77rem}}
+@media(prefers-reduced-motion:reduce){#abq-quran-player .abq-qp-btn{transition:none}}
 </style>
 <div class="abq-qp-card">
-<h3 class="abq-qp-title">🎧 مشغل القرآن الكريم — التلاوة آيةً بآية</h3>
+<header class="abq-qp-head"><div class="abq-qp-kicker">مَجْلِسُ العَبْقَرِيِّ لِلذِّكْرِ وَالتَّسْبِيح</div><h3 class="abq-qp-title">المصحف الصوتي — تلاوة وخشوع</h3><p class="abq-qp-subtitle">استمع إلى القرآن الكريم بصوت القراء وبالروايات المتاحة</p></header>
 <div class="abq-qp-grid">
-<div><label for="abq-qp-reciter-search">🔎 بحث في القراء</label><input id="abq-qp-reciter-search" type="search" placeholder="اكتب اسم القارئ..." autocomplete="off"></div>
-<div><label for="abq-qp-reciter">🎙️ القارئ</label><select id="abq-qp-reciter"></select></div>
-<div><label for="abq-qp-surah">📖 السورة</label><select id="abq-qp-surah"></select></div>
-<div><label for="abq-qp-read">📚 الرواية / المصدر</label><select id="abq-qp-read"></select></div>
-<div><label>🎯 نطاق الآيات</label><div class="abq-qp-ayahs"><select id="abq-qp-from" aria-label="من الآية"></select><select id="abq-qp-to" aria-label="إلى الآية"></select></div></div>
-</div>
-<div class="abq-qp-controls">
-<button class="abq-qp-btn primary" id="abq-qp-play">▶️ تشغيل</button>
-<button class="abq-qp-btn" id="abq-qp-prev">⏮️ السابقة</button>
-<button class="abq-qp-btn" id="abq-qp-next">⏭️ التالية</button>
-<button class="abq-qp-btn" id="abq-qp-repeat">🔁 تكرار</button>
-<button class="abq-qp-btn" id="abq-qp-favorite">☆ المفضلة</button>
-</div>
-<input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="تقدم التلاوة">
-<div id="abq-qp-status" class="abq-qp-status">جاري تجهيز القراء والسور...</div>
-<div id="abq-qp-verse-head" class="abq-qp-verse-head">—</div>
-<div id="abq-qp-verse">—</div>
-<div id="abq-qp-meta" class="abq-qp-meta">—</div>
-<audio id="abq-qp-audio" preload="metadata"></audio>
-</div>`;
+<div class="abq-qp-field"><label for="abq-qp-reciter-search">⌕ البحث عن قارئ</label><input id="abq-qp-reciter-search" type="search" placeholder="اكتب اسم القارئ..." autocomplete="off"></div>
+<div class="abq-qp-field"><label for="abq-qp-reciter">القارئ</label><select id="abq-qp-reciter"></select></div>
+<div class="abq-qp-field"><label for="abq-qp-surah">السورة</label><select id="abq-qp-surah"></select></div>
+<div class="abq-qp-field"><label for="abq-qp-read">الرواية / مصدر التلاوة</label><select id="abq-qp-read"></select></div></div>
+<section class="abq-qp-range"><div class="abq-qp-range-title">تحديد نطاق الآيات — يُستخدم مع زر تشغيل الآيات المحددة فقط</div><div class="abq-qp-ayahs"><div><label for="abq-qp-from">من الآية</label><select id="abq-qp-from" aria-label="من الآية"></select></div><div><label for="abq-qp-to">إلى الآية</label><select id="abq-qp-to" aria-label="إلى الآية"></select></div></div></section>
+<div class="abq-qp-actions"><button class="abq-qp-btn primary" id="abq-qp-play-full" type="button">▶ تشغيل السورة كاملة</button><button class="abq-qp-btn gold" id="abq-qp-play-range" type="button">▶ تشغيل الآيات المحددة</button></div>
+<div class="abq-qp-controls"><button class="abq-qp-btn" id="abq-qp-play" type="button">⏸ إيقاف مؤقت</button><button class="abq-qp-btn" id="abq-qp-prev" type="button">⏮ السابقة</button><button class="abq-qp-btn" id="abq-qp-next" type="button">التالية ⏭</button><button class="abq-qp-btn" id="abq-qp-repeat" type="button">🔁 تكرار</button><button class="abq-qp-btn" id="abq-qp-favorite" type="button">☆ المفضلة</button></div>
+<input id="abq-qp-progress" class="abq-qp-progress" type="range" min="0" max="100" value="0" step=".1" aria-label="تقدم التلاوة"><div id="abq-qp-status" class="abq-qp-status">جاري تجهيز القراء والسور...</div>
+<section class="abq-qp-verse-panel"><div id="abq-qp-verse-head" class="abq-qp-verse-head">—</div><div id="abq-qp-verse" class="abq-qp-verse">—</div><div id="abq-qp-meta" class="abq-qp-meta">—</div></section><audio id="abq-qp-audio" preload="metadata"></audio></div>`;
  target.insertBefore(wrap,target.firstChild);
  return true;
 }
@@ -96,12 +97,12 @@ function populateReads(){
  rs.forEach(r=>merged.push({value:r.id,label:(r.readName?r.readName+" — ":"")+(r.source==="alqurancloud"?"Al Quran Cloud":"MP3Quran")}));
  fill($("abq-qp-read"),merged,"اختر الرواية / المصدر");
  const p=loadPrefs();if(p.read&&[...$("abq-qp-read").options].some(o=>o.value===p.read))$("abq-qp-read").value=p.read;
- updateAyahs();savePrefs();
+ updateAyahs();queueBuild("range",true);savePrefs();
 }
 function populateSurahs(){
  fill($("abq-qp-surah"),state.surahs.map(s=>({value:s.id,label:s.id+" — "+s.name+" ("+s.ayahs+")"})));
  const p=loadPrefs();$("abq-qp-surah").value=p.surah&&[...$("abq-qp-surah").options].some(o=>o.value===p.surah)?p.surah:"1";
- $("abq-qp-surah").onchange=()=>{updateAyahs();savePrefs()};
+ $("abq-qp-surah").onchange=()=>{updateAyahs();queueBuild("range",true);loadText();savePrefs()};
 }
 function updateAyahs(){
  const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));if(!s)return;
@@ -114,8 +115,8 @@ function updateAyahs(){
 }
 async function loadText(){
  const surah=Number($("abq-qp-surah").value);if(!surah)return;
- try{const d=await getJSON(API+"/text?surah="+surah);state.texts=(d.surah?.ayahs||d.data?.ayahs||[]).map(a=>({numberInSurah:Number(a.numberInSurah??a.number),text:String(a.text||"")}));renderVerse(1)}
- catch{state.texts=[];renderVerse(1)}
+ try{const d=await getJSON(API+"/text?surah="+surah);state.texts=(d.surah?.ayahs||d.data?.ayahs||[]).map(a=>({numberInSurah:Number(a.numberInSurah??a.number),text:String(a.text||"")}));renderVerse(state.queue[state.current]||1)}
+ catch{state.texts=[];renderVerse(state.queue[state.current]||1)}
 }
 function renderVerse(n){
  const a=(state.texts||[]).find(x=>Number(x.numberInSurah??x.number)===Number(n));
@@ -125,18 +126,23 @@ function renderVerse(n){
  $("abq-qp-verse").textContent=a?(a.text||""):"";
  $("abq-qp-meta").textContent=r?(r.name+" • "+(r.readName||"تلاوة آية بآية")):"";
 }
-function queueBuild(){
- const f=Number($("abq-qp-from").value),t=Number($("abq-qp-to").value);
- state.queue=[];for(let n=f;n<=t;n++)state.queue.push(n);state.current=0;
+function queueBuild(mode="range",reset=true){
+ const s=state.surahs.find(x=>Number(x.id)===Number($("abq-qp-surah")?.value));if(!s)return;
+ const f=Math.max(1,Number($("abq-qp-from")?.value)||1),t=Math.min(s.ayahs,Math.max(f,Number($("abq-qp-to")?.value)||s.ayahs));
+ state.playMode=mode==="full"?"full":"range";const start=state.playMode==="full"?1:f,end=state.playMode==="full"?s.ayahs:t;
+ state.queue=Array.from({length:end-start+1},(_,i)=>start+i);
+ if(reset){state.requestId++;const audio=$("abq-qp-audio");if(audio){audio.pause();audio.removeAttribute("src");audio.load()}state.playing=false;state.source=null;state.segmentEnd=null;state.current=0;setPlayButton("idle");$("abq-qp-progress").value=0}
  renderVerse(state.queue[0]||1);
 }
+function startMode(mode){if(!selectedRead()){setStatus("اختر القارئ والرواية أولًا");return}queueBuild(mode,true);if(!state.queue.length)return;state.playing=true;setPlayButton("waiting");setStatus(mode==="full"?"جاري بدء السورة كاملة من أول آية...":"جاري بدء نطاق الآيات المحدد...");loadCurrent(true)}
+
 function setStatus(t){$("abq-qp-status").textContent=t}
 function setPlayButton(mode){
  const b=$("abq-qp-play");if(!b)return;
  b.classList.toggle("waiting",mode==="waiting");
- if(mode==="playing"){b.textContent="⏸️ إيقاف";b.title="إيقاف الاستماع مؤقتًا"}
- else if(mode==="waiting"){b.textContent="⏳ جاري تجهيز التلاوة...";b.title="جاري تجهيز التلاوة"}
- else {b.textContent="▶️ تشغيل";b.title="تشغيل التلاوة"}
+ if(mode==="playing"){b.textContent="⏸ إيقاف مؤقت";b.title="إيقاف الاستماع مؤقتًا"}
+ else if(mode==="waiting"){b.textContent="⏳ جاري التجهيز";b.title="جاري تجهيز التلاوة"}
+ else {b.textContent="▶ متابعة الاستماع";b.title="متابعة التلاوة"}
 }
 async function sourceFor(r,surah,ayah){
  const p=new URLSearchParams({source:r.source,surah:String(surah),ayah:String(ayah)});
@@ -145,17 +151,19 @@ async function sourceFor(r,surah,ayah){
  return getJSON(API+"/audio?"+p.toString());
 }
 async function loadCurrent(autoplay){
+ const requestId=++state.requestId;
  const r=selectedRead(),surah=Number($("abq-qp-surah").value),ayah=state.queue[state.current];
  if(!r||!surah||!ayah)return;
  const audio=$("abq-qp-audio");state.source=null;state.segmentEnd=null;
  setPlayButton("waiting");setStatus("جاري تجهيز الآية "+ayah+"...");
  try{
   const d=await sourceFor(r,surah,ayah);
+  if(requestId!==state.requestId)return;
   state.source=d;state.segmentEnd=d.end==null?null:Number(d.end);
   renderVerse(ayah);
   let mediaReady=false;
   const startReady=()=>{
-   if(mediaReady)return;
+   if(requestId!==state.requestId||mediaReady)return;
    mediaReady=true;
    if(d.start>0&&Number.isFinite(audio.duration))audio.currentTime=Math.min(Number(d.start),Math.max(0,audio.duration-.05));
    if(autoplay){
@@ -173,6 +181,7 @@ async function loadCurrent(autoplay){
   audio.load();
   setTimeout(()=>{if(!mediaReady&&audio.readyState>=2)startReady()},2500);
   audio.onerror=async()=>{
+   if(requestId!==state.requestId)return;
    if(r.source==="mp3quran"&&r.fallbackEdition){
     try{
      const fb={...r,source:"alqurancloud",edition:r.fallbackEdition};
@@ -186,19 +195,22 @@ async function loadCurrent(autoplay){
    state.playing=false;setPlayButton("waiting");setStatus("تعذر تشغيل هذه التلاوة مؤقتًا — جرّب قارئًا آخر");
   };
  }catch(e){
-  state.playing=false;setPlayButton("waiting");setStatus("تعذر تجهيز التلاوة — جرّب القارئ أو المصدر الآخر");
+  if(requestId!==state.requestId)return;
+  state.playing=false;setPlayButton("idle");setStatus("تعذر تجهيز التلاوة — جرّب القارئ أو المصدر الآخر");
  }
 }
 function next(){
  if(state.current<state.queue.length-1){state.current++;loadCurrent(true)}
  else if(state.repeat){state.current=0;loadCurrent(true)}
- else {state.playing=false;setPlayButton("idle");setStatus("انتهى نطاق الاستماع المحدد")}
+ else {state.playing=false;setPlayButton("idle");setStatus(state.playMode==="full"?"انتهت السورة كاملة":"انتهى نطاق الآيات المحدد")}
 }
 function prev(){state.current=Math.max(0,state.current-1);loadCurrent(state.playing)}
 function bind(){
  const audio=$("abq-qp-audio");
+ $("abq-qp-play-full").onclick=()=>startMode("full");
+ $("abq-qp-play-range").onclick=()=>startMode("range");
  $("abq-qp-play").onclick=async()=>{
-  if(!state.queue.length)queueBuild();
+  if(!state.queue.length)queueBuild("range",true);
   if(audio.src&&!audio.paused){
    audio.pause();state.playing=false;setPlayButton("waiting");setStatus("تم إيقاف الاستماع مؤقتًا — اضغط تشغيل للمتابعة");return;
   }
@@ -211,7 +223,8 @@ function bind(){
  $("abq-qp-reciter-search").oninput=e=>populateReciters(e.target.value);
  $("abq-qp-read").onchange=()=>{queueBuild();savePrefs()};
  $("abq-qp-progress").oninput=()=>{if(audio.duration)audio.currentTime=Number($("abq-qp-progress").value)/100*audio.duration};
- audio.ontimeupdate=()=>{if(audio.duration)$("abq-qp-progress").value=audio.currentTime/audio.duration*100;if(state.segmentEnd!=null&&audio.currentTime>=state.segmentEnd-.08){audio.pause();next()}};
+ audio.ontimeupdate=()=>{if(audio.duration)$("abq-qp-progress").value=audio.currentTime/audio.duration*100;
+ audio.onended=()=>{if(state.playing)next()};if(state.segmentEnd!=null&&audio.currentTime>=state.segmentEnd-.08){audio.pause();next()}};
  audio.onplay=()=>{state.playing=true;setPlayButton("playing")};audio.onpause=()=>{if(state.playing===false)return;state.playing=false;setPlayButton("waiting")};
 }
 function updateFavorite(){const r=selectedReciter();const b=$("abq-qp-favorite");if(!b||!r)return;b.textContent=isFav(r.id)?"★ المفضلة":"☆ المفضلة"}
@@ -226,7 +239,7 @@ async function init(){
   if(p.reciter&&[...$("abq-qp-reciter").options].some(o=>o.value===p.reciter))$("abq-qp-reciter").value=p.reciter;
   populateReads();
   if(p.surah)$("abq-qp-surah").value=p.surah;
-  updateAyahs();queueBuild();await loadText();updateFavorite();
+  updateAyahs();queueBuild("range",true);await loadText();updateFavorite();
   setStatus("تم تجهيز جميع القراء المتاحين للتشغيل");
  }catch(e){setStatus("تعذر تحميل قائمة القراء مؤقتًا — أعد المحاولة")}
 }
