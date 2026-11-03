@@ -36,8 +36,18 @@ export async function onRequest({request,env}) {
   const callbackUri=env.GITHUB_REDIRECT_URI || (url.origin+"/api/admin/github/callback");
   let callbackUrl;
   try { callbackUrl=new URL(callbackUri); } catch { return json({error:"GITHUB_REDIRECT_URI must be a valid absolute URL."},503); }
-  if(callbackUrl.origin!==url.origin || callbackUrl.pathname!=="/api/admin/github/callback" || callbackUrl.search || callbackUrl.hash) {
-    return json({error:"GITHUB_REDIRECT_URI must match this deployment origin and /api/admin/github/callback.",deploymentOrigin:url.origin,configuredOrigin:callbackUrl.origin,configuredPath:callbackUrl.pathname},503);
+  const callbackHost=callbackUrl.hostname.toLowerCase();
+  const allowedCallbackHost=callbackHost==="alabqri.pages.dev" || callbackHost.endsWith(".alabqri.pages.dev");
+  if(callbackUrl.protocol!=="https:" || !allowedCallbackHost || callbackUrl.username || callbackUrl.password || callbackUrl.pathname!=="/api/admin/github/callback" || callbackUrl.search || callbackUrl.hash) {
+    return json({error:"GITHUB_REDIRECT_URI must be an HTTPS ALABQRI Pages URL ending in /api/admin/github/callback.",configuredOrigin:callbackUrl.origin,configuredPath:callbackUrl.pathname},503);
+  }
+  // Immutable Cloudflare deployment URLs change on every build. Run the complete
+  // OAuth flow on the configured stable branch/production hostname instead.
+  if(action==="login" && callbackUrl.origin!==url.origin) {
+    return new Response(null,{status:302,headers:{Location:new URL("/api/admin/github/login",callbackUrl.origin).toString(),"Cache-Control":"no-store","Referrer-Policy":"no-referrer"}});
+  }
+  if(action==="callback" && callbackUrl.origin!==url.origin) {
+    return json({error:"OAuth callback must be handled on the configured canonical ALABQRI hostname."},403);
   }
   if(!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET || env.ADMIN_SESSION_SECRET.length<32) {
     return json({error:"GitHub OAuth is not configured. Set GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET and a 32+ character ADMIN_SESSION_SECRET in Cloudflare Pages secrets."},503);
