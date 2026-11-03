@@ -106,3 +106,68 @@ test("the legacy article list remains the only list renderer and has no legacy s
   assert.equal(html.includes('id="abq-article-category"'), false);
   assert.ok(source.includes('articleTab.querySelector("#abq-articles-list")'));
 });
+
+test("homepage cloud sync skips identical remote articles and reports the real API failure", async () => {
+  const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+  assert.ok(html.includes("window.__abqArticleCloudSyncRunning"));
+  assert.ok(html.includes("const remoteById=new Map"));
+  assert.ok(html.includes("sameArticle(article,existing)"));
+  assert.ok(html.includes("result.data?.error"));
+  assert.ok(html.includes("titleConflict"));
+  assert.ok(html.includes("تم تجاوز '+alreadySynced+' مقالًا مطابقًا"));
+});
+
+
+import { onRequest as githubOAuthRequest } from "../../functions/api/admin/github/[action].js";
+
+const OAUTH_ENV = {
+  GITHUB_CLIENT_ID: "test-client-id",
+  GITHUB_CLIENT_SECRET: "test-client-secret",
+  GITHUB_REDIRECT_URI: "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+  ADMIN_SESSION_SECRET: "test-session-secret-that-is-at-least-32-characters-long"
+};
+
+test("immutable Cloudflare preview login redirects to the configured stable branch hostname", async () => {
+  const response = await githubOAuthRequest({
+    request: new Request("https://8d94ca1d.alabqri.pages.dev/api/admin/github/login"),
+    env: OAUTH_ENV
+  });
+  assert.equal(response.status, 302);
+  assert.equal(response.headers.get("location"), "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login");
+  assert.equal(response.headers.get("set-cookie"), null);
+});
+
+test("OAuth callback rejects requests on a non-canonical preview hostname", async () => {
+  const response = await githubOAuthRequest({
+    request: new Request("https://8d94ca1d.alabqri.pages.dev/api/admin/github/callback?code=x&state=y"),
+    env: OAUTH_ENV
+  });
+  assert.equal(response.status, 403);
+  assert.match((await response.json()).error, /canonical ALABQRI hostname/);
+});
+
+test("canonical branch login uses the exact configured GitHub callback URI", async () => {
+  const response = await githubOAuthRequest({
+    request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+    env: OAUTH_ENV
+  });
+  assert.equal(response.status, 302);
+  const authorize = new URL(response.headers.get("location"));
+  assert.equal(authorize.origin, "https://github.com");
+  assert.equal(authorize.pathname, "/login/oauth/authorize");
+  assert.equal(authorize.searchParams.get("redirect_uri"), OAUTH_ENV.GITHUB_REDIRECT_URI);
+  assert.ok(response.headers.get("set-cookie")?.includes("__Host-abq_github_state="));
+});
+
+test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async () => {
+  for (const redirect of [
+    "http://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+    "https://attacker.example/api/admin/github/callback"
+  ]) {
+    const response = await githubOAuthRequest({
+      request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+      env: { ...OAUTH_ENV, GITHUB_REDIRECT_URI: redirect }
+    });
+    assert.equal(response.status, 503);
+  }
+});
