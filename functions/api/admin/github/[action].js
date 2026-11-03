@@ -37,7 +37,7 @@ export async function onRequest({request,env}) {
   let callbackUrl;
   try { callbackUrl=new URL(callbackUri); } catch { return json({error:"GITHUB_REDIRECT_URI must be a valid absolute URL."},503); }
   const callbackHost=callbackUrl.hostname.toLowerCase();
-  const allowedCallbackHost=callbackHost==="alabqri.pages.dev" || callbackHost.endsWith(".alabqri.pages.dev");
+  const allowedCallbackHost=callbackHost===url.hostname.toLowerCase() || callbackHost==="alabqri.pages.dev" || callbackHost.endsWith(".alabqri.pages.dev");
   if(callbackUrl.protocol!=="https:" || !allowedCallbackHost || callbackUrl.username || callbackUrl.password || callbackUrl.pathname!=="/api/admin/github/callback" || callbackUrl.search || callbackUrl.hash) {
     return json({error:"GITHUB_REDIRECT_URI must be an HTTPS ALABQRI Pages URL ending in /api/admin/github/callback.",configuredOrigin:callbackUrl.origin,configuredPath:callbackUrl.pathname},503);
   }
