@@ -224,8 +224,8 @@ function bind(){
  $("abq-qp-reciter-search").oninput=e=>populateReciters(e.target.value);
  $("abq-qp-read").onchange=()=>{queueBuild();savePrefs()};
  $("abq-qp-progress").oninput=()=>{if(audio.duration)audio.currentTime=Number($("abq-qp-progress").value)/100*audio.duration};
- audio.ontimeupdate=()=>{if(audio.duration)$("abq-qp-progress").value=audio.currentTime/audio.duration*100;
- audio.onended=()=>{if(state.playing)next()};if(state.segmentEnd!=null&&audio.currentTime>=state.segmentEnd-.08){audio.pause();next()}};
+ audio.ontimeupdate=()=>{if(audio.duration)$("abq-qp-progress").value=audio.currentTime/audio.duration*100;if(state.segmentEnd!=null&&audio.currentTime>=state.segmentEnd-.08){audio.pause();next()}};
+ audio.onended=()=>{if(state.playing)next()};
  audio.onplay=()=>{state.playing=true;setPlayButton("playing")};audio.onpause=()=>{if(state.playing===false)return;state.playing=false;setPlayButton("waiting")};
 }
 function updateFavorite(){const r=selectedReciter();const b=$("abq-qp-favorite");if(!b||!r)return;b.textContent=isFav(r.id)?"★ المفضلة":"☆ المفضلة"}
