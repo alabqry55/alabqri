@@ -223,8 +223,6 @@ export async function onRequest({request, env}) {
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
-      await ensureScheduleColumn(env.DB);
-      await ensureArticleMetadataColumns(env.DB);
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       let metadata;
@@ -258,8 +256,6 @@ export async function onRequest({request, env}) {
       if (!Array.isArray(incoming) || incoming.length < 1 || incoming.length > 30) {
         return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
       }
-      await ensureScheduleColumn(env.DB);
-      await ensureArticleMetadataColumns(env.DB);
       const activeIncoming = incoming;
       const ids = new Set();
       const titles = new Set();
