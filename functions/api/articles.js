@@ -49,7 +49,7 @@ const isEnergyRelatedArticle = article => {
   return ["الطاقة الحيوية","الفلسفات الشرقية","العلوم الزائفة","الطاقة الكونية","الريكي","الشاكرات","البرانا"].some(term => text.includes(normalizeTitle(term)));
 };
 const normalizeTags = value => {
-  const source = Array.isArray(value) ? value : String(value || "").split(/[،,\n]+/);
+  const source = Array.isArray(value) ? value : String(value || "").split(/[،,\n]+|(?=#)/);
   return [...new Set(source.map(tag => String(tag || "").trim().replace(/^#+/,"").replace(/\s+/g,"_"))
     .filter(tag => tag && tag.length <= 80))].slice(0,20);
 };
