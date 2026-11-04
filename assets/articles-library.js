@@ -489,7 +489,7 @@
             date: editForm.elements.date.value.trim(),
             excerpt: editForm.elements.excerpt.value.trim(),
             content: editForm.elements.content.value,
-            tags: editForm.elements.tags.value.split(/[،,\n]+/).map(tag => tag.trim()).filter(Boolean),
+            tags: editForm.elements.tags.value.split(/[،,\n]+|(?=#)/).map(tag => tag.trim()).filter(Boolean),
             seoTitle: editForm.elements.seoTitle.value.trim(),
             seoDescription: editForm.elements.seoDescription.value.trim(),
             seoKeywords: editForm.elements.seoKeywords.value.trim(),
