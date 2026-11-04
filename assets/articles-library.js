@@ -184,7 +184,7 @@
         if (candidate && !candidate.contains(root)) candidate.remove();
       }
     };
-    // Observe only mutations that may reintroduce retired legacy article UI.
+    // Observe only mutations that may reintroduce duplicate legacy cards or search controls.
     // Ignore the new library and unrelated page/tab mutations to avoid repeatedly
     // walking or removing content across the entire platform.
     const legacySearchObserver = new MutationObserver(mutations => {
