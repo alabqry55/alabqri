@@ -293,6 +293,6 @@ export async function onRequest({request, env}) {
   } catch (error) {
     const requestId = crypto.randomUUID();
     console.error("[articles-api] request failed", requestId, error);
-    return json({error:"Articles API failed.",requestId},500);
+    return json({error:"تعذر تنفيذ طلب المقالات في قاعدة البيانات. راجع سجل Cloudflare باستخدام رقم التتبع.",requestId},500);
   }
 }
