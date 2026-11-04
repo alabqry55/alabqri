@@ -497,6 +497,7 @@
             ogImage: editForm.elements.ogImage.value.trim(),
             scheduledAt: editForm.elements.scheduledAt.value ? new Date(editForm.elements.scheduledAt.value).toISOString() : null
           };
+          let saveResponseStatus = 0;
           try {
             const response = await fetch("/api/articles", {
               method:"POST",
@@ -505,12 +506,13 @@
               body:JSON.stringify({action:"save",article}),
               cache:"no-store"
             });
+            saveResponseStatus = response.status;
             const result = await response.json().catch(()=>({}));
             if (!response.ok || !result.ok) {
-              if (response.status === 503) throw new Error("الحفظ غير مفعّل على هذه النسخة: راجع ربط D1 وسر GitHub OAuth في إعدادات Cloudflare Pages.");
               if (response.status === 401) { adminAuthenticated = false; throw new Error("انتهت جلسة المالك. سجّل الدخول مجددًا بحساب GitHub alabqry55."); }
               if (response.status === 409) throw new Error(result.error || "هذا العنوان موجود بالفعل؛ لم يتم إنشاء نسخة مكررة.");
-              throw new Error(result.error || ("فشل الحفظ (HTTP "+response.status+")."));
+              const detail = result.error || ("فشل الحفظ (HTTP "+response.status+").");
+              throw new Error(result.requestId ? detail + " رقم التتبع: " + result.requestId : detail);
             }
             editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ إعادة تحميل القائمة من قاعدة البيانات...";
             const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
@@ -523,6 +525,38 @@
             render();
             editorStatus.textContent = creatingArticle ? (article.scheduledAt ? "تم حفظ المقال وجدولة نشره سحابيًا." : "تم حفظ المقال الجديد ونشره فورًا، مع تأكيد الحفظ في قاعدة البيانات.") : "تم حفظ المقال وتأكيد بياناته السحابية.";
           } catch (error) {
+            // A failed response does not prove that D1 rejected the write. Read the row back
+            // before reporting failure, so a committed save is not needlessly submitted again.
+            if ((saveResponseStatus >= 500 || error instanceof TypeError ||
+                 String(error?.message || "").includes("تعذر تأكيد القائمة المحدثة")) && adminAuthenticated) {
+              try {
+                const checkResponse = await fetch("/api/articles", {
+                  headers:{"Accept":"application/json"},
+                  credentials:"same-origin",
+                  cache:"no-store"
+                });
+                const checkData = await checkResponse.json().catch(()=>({}));
+                const confirmed = checkResponse.ok && checkData.admin === true &&
+                  Array.isArray(checkData.articles) && checkData.articles.some(saved =>
+                    String(saved.id) === String(article.id) &&
+                    saved.title === article.title &&
+                    saved.category === article.category &&
+                    saved.date === article.date &&
+                    saved.excerpt === article.excerpt &&
+                    saved.content === article.content &&
+                    (saved.scheduled_at || null) === (article.scheduledAt || null)
+                  );
+                if (confirmed) {
+                  articles = filterUniqueArticles(checkData.articles);
+                  editForm.hidden = true;
+                  render();
+                  editorStatus.textContent = "تم العثور على المقال في قاعدة البيانات والتحقق من بياناته بعد تعذر تأكيد استجابة الحفظ.";
+                  return;
+                }
+              } catch (_) {
+                // Preserve the original save error when read-back is unavailable.
+              }
+            }
             editorStatus.textContent = error?.message || "تعذر تأكيد الحفظ السحابي.";
           } finally {
             saveButton.disabled = false;
