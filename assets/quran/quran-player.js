@@ -186,9 +186,32 @@ async function loadCurrent(autoplay){
     try{
      const fb={...r,source:"alqurancloud",edition:r.fallbackEdition};
      const d2=await sourceFor(fb,surah,ayah);
-     state.source=d2;state.segmentEnd=null;
+     if(requestId!==state.requestId)return;
+     state.source=d2;state.segmentEnd=d2.end==null?null:Number(d2.end);
+     let fallbackReady=false;
+     const startFallback=()=>{
+      if(requestId!==state.requestId||fallbackReady)return;
+      fallbackReady=true;
+      if(d2.start>0&&Number.isFinite(audio.duration))audio.currentTime=Math.min(Number(d2.start),Math.max(0,audio.duration-.05));
+      if(autoplay){
+       state.playing=true;setPlayButton("playing");
+       audio.play().catch(()=>{state.playing=false;setPlayButton("waiting");setStatus("اضغط تشغيل مرة أخرى للسماح بالتشغيل في المتصفح")});
+      }else{
+       setPlayButton("idle");
+       setStatus("جاهز للتشغيل من المصدر الاحتياطي • الآية "+ayah);
+      }
+     };
+     audio.onloadedmetadata=startFallback;
+     audio.oncanplay=startFallback;
+     audio.onloadeddata=startFallback;
+     audio.onerror=()=>{
+      if(requestId!==state.requestId)return;
+      state.playing=false;setPlayButton("idle");
+      setStatus("تعذر تشغيل المصدر الأساسي والاحتياطي — جرّب قارئًا آخر");
+     };
      audio.src=d2.audioUrl;audio.load();
      setStatus("تم التحويل تلقائيًا لمصدر احتياطي موثوق • الآية "+ayah);
+     setTimeout(()=>{if(!fallbackReady&&audio.readyState>=2)startFallback()},2500);
      return;
     }catch{}
    }
