@@ -127,7 +127,7 @@ async function ensureArticleMetadataColumns(db) {
     catch (error) { if (!/duplicate column name/i.test(String(error?.message || error))) throw error; }
   }
   const tagsJson = JSON.stringify(ENERGY_TAGS.map(tag => tag.slice(1)));
-  await db.prepare("UPDATE articles SET tags_json=?1,seo_title=COALESCE(NULLIF(seo_title,''),title),seo_description=COALESCE(NULLIF(seo_description,''),excerpt),seo_keywords=COALESCE(NULLIF(seo_keywords,''),?2) WHERE (title LIKE '%الطاقة الحيوية%' OR excerpt LIKE '%الطاقة الحيوية%' OR content LIKE '%الطاقة الحيوية%' OR title LIKE '%الفلسفات الشرقية%' OR content LIKE '%الفلسفات الشرقية%' OR title LIKE '%العلوم الزائفة%' OR content LIKE '%العلوم الزائفة%') AND (tags_json IS NULL OR tags_json='[]' OR tags_json='')").bind(tagsJson,ENERGY_TAGS.join(", ")).run();
+  await db.prepare("UPDATE articles SET tags_json=CASE WHEN tags_json IS NULL OR tags_json='[]' OR tags_json='' THEN ?1 ELSE tags_json END,seo_title=COALESCE(NULLIF(seo_title,''),title),seo_description=COALESCE(NULLIF(seo_description,''),excerpt),seo_keywords=COALESCE(NULLIF(seo_keywords,''),?2) WHERE (title LIKE '%الطاقة الحيوية%' OR excerpt LIKE '%الطاقة الحيوية%' OR content LIKE '%الطاقة الحيوية%' OR title LIKE '%الفلسفات الشرقية%' OR content LIKE '%الفلسفات الشرقية%' OR title LIKE '%العلوم الزائفة%' OR content LIKE '%العلوم الزائفة%' OR title LIKE '%الريكي%' OR content LIKE '%الريكي%' OR title LIKE '%الشاكرات%' OR content LIKE '%الشاكرات%' OR title LIKE '%البرانا%' OR content LIKE '%البرانا%' OR title LIKE '%الطاقة الكونية%' OR content LIKE '%الطاقة الكونية%')").bind(tagsJson,ENERGY_TAGS.join(", ")).run();
 }
 
 export async function onRequest({request, env}) {
