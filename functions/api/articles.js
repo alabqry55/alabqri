@@ -46,7 +46,7 @@ const canonicalArticles = [canonicalAzkarArticle];
 const ENERGY_TAGS = ["#الطاقة_الحيوية","#العلم_والشريعة","#الطب_التكميلي","#العقيدة_والفكر","#الصحة_النفسية","#التداوي_الشرعي","#العلوم_الزائفة","#الفلسفات_الشرقية"];
 const isEnergyRelatedArticle = article => {
   const text = normalizeTitle([article?.title,article?.excerpt,article?.content].filter(Boolean).join(" "));
-  return ["الطاقة الحيوية","الفلسفات الشرقية","العلوم الزائفة"].some(term => text.includes(normalizeTitle(term)));
+  return ["الطاقة الحيوية","الفلسفات الشرقية","العلوم الزائفة","الطاقة الكونية","الريكي","الشاكرات","البرانا"].some(term => text.includes(normalizeTitle(term)));
 };
 const normalizeTags = value => {
   const source = Array.isArray(value) ? value : String(value || "").split(/[،,\n]+/);
