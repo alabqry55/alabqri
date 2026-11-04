@@ -91,7 +91,6 @@
     const normalizeDomTitle = value => String(value || "").normalize("NFKC").toLocaleLowerCase("ar")
       .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
       .replace(/[^\p{L}\p{N}]+/gu, "");
-    const retiredEnergyTitle = normalizeDomTitle("الطاقة الحيوية بين العلم والشريعة");
     const cleanupLegacySearchArea = () => {
       // Remove every retired search/filter control by its legacy IDs, including
       // duplicate IDs and controls mounted outside the expected tab wrapper.
@@ -159,58 +158,32 @@
     };
     const cleanupLegacyArticleCards = () => {
       cleanupLegacySearchArea();
+      // Preserve all article subjects, including energy-bio research. Only collapse
+      // duplicate copies of the two legacy cards that remain intentionally managed here.
       const headings = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4,h5,h6"));
       const seen = new Set();
+      const knownTitles = [
+        normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
+        normalizeDomTitle("أثر الأذكار في الإتزان النفسي")
+      ];
       for (const titleNode of headings) {
         const title = normalizeDomTitle(titleNode.textContent);
-        const isEnergy = title.includes(retiredEnergyTitle);
-        const isKnownArticle = title.includes(normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية")) ||
-          title.includes(normalizeDomTitle("أثر الأذكار في الإتزان النفسي"));
-        if (!isEnergy && !isKnownArticle) continue;
+        if (!knownTitles.some(known => title.includes(known))) continue;
         const inLibrary = Boolean(titleNode.closest(".abq-articles-library"));
-        if (inLibrary && !isEnergy) {
-          seen.add(title);
-          continue;
+        if (inLibrary) { seen.add(title); continue; }
+        if (!seen.has(title)) { seen.add(title); continue; }
+        let node = titleNode.parentElement;
+        let candidate = null;
+        while (node && node !== document.body && node !== articleTab) {
+          if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
+          const text = normalizeDomTitle(node.textContent);
+          if (knownTitles.some(other => other !== title && text.includes(other))) break;
+          candidate = node;
+          node = node.parentElement;
         }
-        if (!isEnergy && seen.has(title)) {
-          let node = titleNode.parentElement;
-          let candidate = null;
-          while (node && node !== document.body && node !== articleTab) {
-            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
-            const text = normalizeDomTitle(node.textContent);
-            const otherKnownTitle = [
-              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
-              normalizeDomTitle("أثر الأذكار في الإتزان النفسي"),
-              retiredEnergyTitle
-            ].some(other => other !== title && text.includes(other));
-            if (otherKnownTitle) break;
-            candidate = node;
-            node = node.parentElement;
-          }
-          if (candidate && !candidate.contains(root)) candidate.remove();
-          continue;
-        }
-        if (isEnergy) {
-          let node = titleNode.parentElement;
-          let candidate = null;
-          while (node && node !== document.body && node !== articleTab) {
-            if (node.contains(root) || node.querySelector(".abq-articles-library")) break;
-            const text = normalizeDomTitle(node.textContent);
-            const otherKnownTitle = [
-              normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية"),
-              normalizeDomTitle("أثر الأذكار في الإتزان النفسي")
-            ].some(other => text.includes(other));
-            if (otherKnownTitle) break;
-            candidate = node;
-            node = node.parentElement;
-          }
-          if (candidate && !candidate.contains(root)) candidate.remove();
-        } else {
-          seen.add(title);
-        }
+        if (candidate && !candidate.contains(root)) candidate.remove();
       }
     };
-    cleanupLegacyArticleCards();
     // Observe only mutations that may reintroduce retired legacy article UI.
     // Ignore the new library and unrelated page/tab mutations to avoid repeatedly
     // walking or removing content across the entire platform.
@@ -229,7 +202,6 @@
             'input[placeholder*="بحث"],input[aria-label*="بحث"],input[placeholder*="ابحث"],' +
             'select[aria-label*="تصنيف"],select[aria-label*="فلتر"]'
           )) ||
-          text.includes(retiredEnergyTitle) ||
           text.includes(normalizeDomTitle("التفكير الزائد: كيف تكسر دائرة الاجترار بخطوات عملية")) ||
           text.includes(normalizeDomTitle("أثر الأذكار في الإتزان النفسي"));
         })
@@ -270,14 +242,10 @@
           const title = String(article?.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
           return id.includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"));
         };
-        const isRetiredEnergyArticle = article => {
-          const title = normalizeArticleTitle(article?.title);
-          return title.includes(normalizeArticleTitle("الطاقة الحيوية بين العلم والشريعة"));
-        };
         const filterUniqueArticles = items => {
           const seenArticleTitles = new Set();
           return items.filter(article => {
-            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article) || isRetiredEnergyArticle(article)) return false;
+            if (!article || typeof article.title !== "string" || typeof article.content !== "string" || isRetiredHijamaArticle(article)) return false;
             const title = normalizeArticleTitle(article.title);
             if (!title || seenArticleTitles.has(title)) return false;
             seenArticleTitles.add(title);
@@ -310,6 +278,7 @@
             card.appendChild(el("h3", "", a.title));
             const meta = [a.category, a.date].filter(Boolean).join(" • ");
             if (meta) card.appendChild(el("p", "abq-article-meta", meta));
+            if (Array.isArray(a.tags) && a.tags.length) card.appendChild(el("p", "abq-article-meta", a.tags.join(" • ")));
             if (adminMode && a.scheduled_at) {
               const publishDate = new Date(a.scheduled_at);
               card.appendChild(el("p", "abq-article-meta", "موعد النشر: " + (Number.isNaN(publishDate.getTime()) ? a.scheduled_at : publishDate.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"}))));
@@ -379,9 +348,11 @@
           input.value = value || "";
           input.required = ["title","date","excerpt","content"].includes(name);
           input.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit;line-height:1.8";
-          if (multiline) { input.rows = name === "content" ? 14 : 3; input.maxLength = name === "content" ? 200000 : 2000; }
+          if (multiline) { input.rows = name === "content" ? 14 : 3; input.maxLength = name === "content" ? 200000 : (name === "seoDescription" ? 500 : (name === "seoKeywords" ? 1000 : 2000)); }
           else if (name === "date") input.maxLength = 80;
-          else if (name === "title") input.maxLength = 240;
+          else if (name === "title" || name === "seoTitle") input.maxLength = 240;
+          else if (name === "tags") input.maxLength = 1600;
+          else if (name === "canonicalUrl" || name === "ogImage") input.maxLength = 1000;
           wrap.appendChild(input);
           return wrap;
         };
@@ -413,7 +384,13 @@
           field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
           scheduleWrap,
           field("الوصف المختصر","excerpt","",true),
-          field("المحتوى الكامل","content","",true));
+          field("المحتوى الكامل","content","",true),
+          field("الوسوم (افصل بينها بفاصلة)","tags",""),
+          field("عنوان SEO","seoTitle",""),
+          field("وصف SEO","seoDescription","",true),
+          field("كلمات SEO المفتاحية","seoKeywords","",true),
+          field("الرابط الأساسي Canonical URL (اختياري)","canonicalUrl",""),
+          field("رابط صورة المشاركة Open Graph (اختياري)","ogImage",""));
         const editorActions = el("div");
         editorActions.style.cssText = "display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem";
         const saveButton = el("button", "", "حفظ التعديلات");
@@ -452,6 +429,12 @@
           editForm.elements.scheduledAt.value = toLocalDateTime(article.scheduled_at || article.scheduledAt || "");
           editForm.elements.excerpt.value = article.excerpt || "";
           editForm.elements.content.value = article.content || "";
+          editForm.elements.tags.value = Array.isArray(article.tags) ? article.tags.join(", ") : "";
+          editForm.elements.seoTitle.value = article.seo_title || article.title || "";
+          editForm.elements.seoDescription.value = article.seo_description || article.excerpt || "";
+          editForm.elements.seoKeywords.value = article.seo_keywords || "";
+          editForm.elements.canonicalUrl.value = article.canonical_url || "";
+          editForm.elements.ogImage.value = article.og_image || "";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
           editForm.elements.scheduledAt.required = false;
@@ -506,6 +489,12 @@
             date: editForm.elements.date.value.trim(),
             excerpt: editForm.elements.excerpt.value.trim(),
             content: editForm.elements.content.value,
+            tags: editForm.elements.tags.value.split(/[،,\n]+/).map(tag => tag.trim()).filter(Boolean),
+            seoTitle: editForm.elements.seoTitle.value.trim(),
+            seoDescription: editForm.elements.seoDescription.value.trim(),
+            seoKeywords: editForm.elements.seoKeywords.value.trim(),
+            canonicalUrl: editForm.elements.canonicalUrl.value.trim(),
+            ogImage: editForm.elements.ogImage.value.trim(),
             scheduledAt: editForm.elements.scheduledAt.value ? new Date(editForm.elements.scheduledAt.value).toISOString() : null
           };
           try {
