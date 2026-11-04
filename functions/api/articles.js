@@ -291,6 +291,8 @@ export async function onRequest({request, env}) {
     }
     return json({error:"Unsupported action."},400);
   } catch (error) {
-    return json({error:"Articles API failed."},500);
+    const requestId = crypto.randomUUID();
+    console.error("[articles-api] request failed", requestId, error);
+    return json({error:"Articles API failed.",requestId},500);
   }
 }
