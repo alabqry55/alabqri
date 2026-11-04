@@ -465,11 +465,11 @@
           editForm.reset();
           editForm.elements.id.value = "article-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
           editCategory.value = "موضوعات معرفية";
-          editTitle.textContent = "إضافة مقال جديد بموعد نشر مستقبلي";
+          editTitle.textContent = "إضافة مقال جديد أو نشره فورًا";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
-          editForm.elements.scheduledAt.required = true;
-          editorStatus.textContent = "اختر موعدًا مستقبليًا. لن يظهر المقال للزوار قبل الموعد، ولن يُنشأ تلقائيًا أي تكرار.";
+          editForm.elements.scheduledAt.required = false;
+          editorStatus.textContent = "يمكن حفظ المقال ونشره فورًا بترك موعد النشر فارغًا، أو جدولة نشره باختيار موعد مستقبلي.";
           editForm.hidden = false;
           editForm.scrollIntoView({behavior:"smooth",block:"start"});
         }
@@ -492,8 +492,8 @@
         editForm.addEventListener("submit", async event => {
           event.preventDefault();
           if (!adminAuthenticated) { editorStatus.textContent = "سجّل الدخول بحساب GitHub المالك أولًا."; return; }
-          if (creatingArticle && (!editForm.elements.scheduledAt.value || Number.isNaN(new Date(editForm.elements.scheduledAt.value).getTime()) || new Date(editForm.elements.scheduledAt.value).getTime() <= Date.now())) {
-            editorStatus.textContent = "حدد موعد نشر في المستقبل قبل حفظ المقال الجديد.";
+          if (editForm.elements.scheduledAt.value && (Number.isNaN(new Date(editForm.elements.scheduledAt.value).getTime()) || new Date(editForm.elements.scheduledAt.value).getTime() <= Date.now())) {
+            editorStatus.textContent = "موعد النشر المحدد غير صالح أو ليس في المستقبل. اتركه فارغًا للنشر الفوري أو اختر موعدًا لاحقًا.";
             return;
           }
           saveButton.disabled = true;
@@ -532,7 +532,7 @@
             articles = filterUniqueArticles(refreshedData.articles);
             editForm.hidden = true;
             render();
-            editorStatus.textContent = creatingArticle ? "تم حفظ المقال الجديد وجدولته سحابيًا." : "تم حفظ المقال وتأكيد بياناته السحابية.";
+            editorStatus.textContent = creatingArticle ? (article.scheduledAt ? "تم حفظ المقال وجدولة نشره سحابيًا." : "تم حفظ المقال الجديد ونشره فورًا، مع تأكيد الحفظ في قاعدة البيانات.") : "تم حفظ المقال وتأكيد بياناته السحابية.";
           } catch (error) {
             editorStatus.textContent = error?.message || "تعذر تأكيد الحفظ السحابي.";
           } finally {
