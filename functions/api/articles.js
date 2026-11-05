@@ -43,11 +43,41 @@ const canonicalAzkarArticle = {
 };
 
 const canonicalArticles = [canonicalAzkarArticle];
-// Permanent retirement: never restore or expose this legacy article again.
-const isRetiredEnergyArticle = article => {
-  const title = normalizeTitle(article?.title);
-  const matchesTitle = title.includes(normalizeTitle("الطاقة الحيوية بين العلم والشريعة"));
-  return matchesTitle;
+const ENERGY_TAGS = ["#الطاقة_الحيوية","#العلم_والشريعة","#الطب_التكميلي","#العقيدة_والفكر","#الصحة_النفسية","#التداوي_الشرعي","#العلوم_الزائفة","#الفلسفات_الشرقية"];
+const isEnergyRelatedArticle = article => {
+  const text = normalizeTitle([article?.title,article?.excerpt,article?.content].filter(Boolean).join(" "));
+  return ["الطاقة الحيوية","الفلسفات الشرقية","العلوم الزائفة","الطاقة الكونية","الريكي","الشاكرات","البرانا"].some(term => text.includes(normalizeTitle(term)));
+};
+const normalizeTags = value => {
+  const source = Array.isArray(value) ? value : String(value || "").split(/[،,\n]+|(?=#)/);
+  return [...new Set(source.map(tag => String(tag || "").trim().replace(/^#+/,"").replace(/\s+/g,"_"))
+    .filter(tag => tag && tag.length <= 80))].slice(0,20);
+};
+const articleMetadata = article => {
+  let storedTags = [];
+  try { storedTags = article?.tags_json ? JSON.parse(article.tags_json) : article?.tags || []; } catch (_) {}
+  const tags = normalizeTags(storedTags);
+  const finalTags = isEnergyRelatedArticle(article) ? [...new Set([...ENERGY_TAGS.map(tag => tag.slice(1)),...tags])] : tags;
+  return {
+    tags: finalTags.map(tag => "#" + tag),
+    seo_title: String(article?.seo_title || article?.title || "").slice(0,240),
+    seo_description: String(article?.seo_description || article?.excerpt || "").slice(0,500),
+    seo_keywords: String(article?.seo_keywords || finalTags.join(", ")).slice(0,1000),
+    canonical_url: String(article?.canonical_url || "").slice(0,500),
+    og_image: String(article?.og_image || "").slice(0,1000)
+  };
+};
+const metadataForSave = article => {
+  const providedTags = normalizeTags(article?.tags);
+  const tags = isEnergyRelatedArticle(article) ? [...new Set([...ENERGY_TAGS.map(tag => tag.slice(1)),...providedTags])] : providedTags;
+  const seoTitle = String(article?.seoTitle || article?.seo_title || article?.title || "").trim().slice(0,240);
+  const seoDescription = String(article?.seoDescription || article?.seo_description || article?.excerpt || "").trim().slice(0,500);
+  const seoKeywords = String(article?.seoKeywords || article?.seo_keywords || tags.join(", ")).trim().slice(0,1000);
+  const canonicalUrl = String(article?.canonicalUrl || article?.canonical_url || "").trim().slice(0,500);
+  const ogImage = String(article?.ogImage || article?.og_image || "").trim().slice(0,1000);
+  if (canonicalUrl && !/^https:\/\//i.test(canonicalUrl)) throw new Error("رابط canonical يجب أن يبدأ بـ https://");
+  if (ogImage && !/^https:\/\//i.test(ogImage)) throw new Error("رابط صورة المشاركة يجب أن يبدأ بـ https://");
+  return {tags,seoTitle,seoDescription,seoKeywords,canonicalUrl,ogImage};
 };
 const normalizeTitle = value => String(value || "").toLocaleLowerCase("ar")
   .replace(/\p{Extended_Pictographic}/gu, "").replace(/[#*_~]/g, "")
@@ -84,12 +114,20 @@ async function ensureAuditTable(db) {
   await db.prepare("CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created ON article_admin_audit(created_at DESC)").run();
 }
 async function ensureScheduleColumn(db) {
-  // Run only after an authenticated admin save, never during a public read.
   try {
     await db.prepare("ALTER TABLE articles ADD COLUMN scheduled_at TEXT").run();
   } catch (error) {
     if (!/duplicate column name/i.test(String(error?.message || error))) throw error;
   }
+}
+async function ensureArticleMetadataColumns(db) {
+  const columns = [["tags_json","TEXT NOT NULL DEFAULT '[]'"],["seo_title","TEXT"],["seo_description","TEXT"],["seo_keywords","TEXT"],["canonical_url","TEXT"],["og_image","TEXT"]];
+  for (const [name,definition] of columns) {
+    try { await db.prepare("ALTER TABLE articles ADD COLUMN " + name + " " + definition).run(); }
+    catch (error) { if (!/duplicate column name/i.test(String(error?.message || error))) throw error; }
+  }
+  const tagsJson = JSON.stringify(ENERGY_TAGS.map(tag => tag.slice(1)));
+  await db.prepare("UPDATE articles SET tags_json=CASE WHEN tags_json IS NULL OR tags_json='[]' OR tags_json='' THEN ?1 ELSE tags_json END,seo_title=COALESCE(NULLIF(seo_title,''),title),seo_description=COALESCE(NULLIF(seo_description,''),excerpt),seo_keywords=COALESCE(NULLIF(seo_keywords,''),?2) WHERE (title LIKE '%الطاقة الحيوية%' OR excerpt LIKE '%الطاقة الحيوية%' OR content LIKE '%الطاقة الحيوية%' OR title LIKE '%الفلسفات الشرقية%' OR content LIKE '%الفلسفات الشرقية%' OR title LIKE '%العلوم الزائفة%' OR content LIKE '%العلوم الزائفة%' OR title LIKE '%الريكي%' OR content LIKE '%الريكي%' OR title LIKE '%الشاكرات%' OR content LIKE '%الشاكرات%' OR title LIKE '%البرانا%' OR content LIKE '%البرانا%' OR title LIKE '%الطاقة الكونية%' OR content LIKE '%الطاقة الكونية%')").bind(tagsJson,ENERGY_TAGS.join(", ")).run();
 }
 
 export async function onRequest({request, env}) {
@@ -115,20 +153,26 @@ export async function onRequest({request, env}) {
     if (request.method === "POST") {
       await ensureTable(env.DB);
       await ensureAuditTable(env.DB);
+      await ensureScheduleColumn(env.DB);
+      await ensureArticleMetadataColumns(env.DB);
     }
     if (request.method === "GET") {
       let allResults = [];
       let hasScheduleColumn = true;
       try {
-        const response = await env.DB.prepare(
-          "SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC"
-        ).all();
+        const response = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
         allResults = response.results || [];
       } catch (error) {
-        if (!/no such column: scheduled_at/i.test(String(error?.message || error))) throw error;
-        hasScheduleColumn = false;
-        const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
-        allResults = legacy.results || [];
+        if (!/no such column:/i.test(String(error?.message || error))) throw error;
+        try {
+          const legacy = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+          allResults = legacy.results || [];
+        } catch (legacyError) {
+          if (!/no such column: scheduled_at/i.test(String(legacyError?.message || legacyError))) throw legacyError;
+          hasScheduleColumn = false;
+          const oldest = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,created_at,updated_at FROM articles ORDER BY updated_at DESC, created_at DESC").all();
+          allResults = oldest.results || [];
+        }
       }
       // Filter public output only after retaining the full row set for canonical matching.
       // Otherwise a future-dated canonical article could accidentally reappear via fallback.
@@ -138,7 +182,8 @@ export async function onRequest({request, env}) {
         const timestamp = Date.parse(article.scheduled_at);
         return Number.isFinite(timestamp) && timestamp <= now;
       });
-      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article) && !isRetiredEnergyArticle(article));
+      let articles = [...results].filter(article => !String(article.id || "").toLocaleLowerCase("en").includes("hijama") && !isHijamaArticle(article))
+        .map(article => ({...article,...articleMetadata(article)}));
       for (const canonical of canonicalArticles) {
         const allMatches = allResults.filter(article => sameArticle(article, canonical));
         const visibleMatches = articles.filter(article => sameArticle(article, canonical));
@@ -178,10 +223,10 @@ export async function onRequest({request, env}) {
     const body = await request.json().catch(()=>null);
     if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
-      await ensureScheduleColumn(env.DB);
       const a = body.article;
-      if (a && isRetiredEnergyArticle(a)) return json({error:"مقال الطاقة الحيوية متقاعد نهائيًا ولا يمكن إعادة حفظه."},409);
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
+      let metadata;
+      try { metadata = metadataForSave(a); } catch (error) { return json({error:error.message},400); }
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
       if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
         return json({error:"Invalid scheduled publication date."},400);
@@ -193,15 +238,15 @@ export async function onRequest({request, env}) {
       const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
       if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
       await env.DB.batch([
-        env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at)
-          VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)
-          ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,updated_at=CURRENT_TIMESTAMP`)
-          .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt),
+        env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,updated_at)
+          VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,CURRENT_TIMESTAMP)
+          ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,tags_json=excluded.tags_json,seo_title=excluded.seo_title,seo_description=excluded.seo_description,seo_keywords=excluded.seo_keywords,canonical_url=excluded.canonical_url,og_image=excluded.og_image,updated_at=CURRENT_TIMESTAMP`)
+          .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt,JSON.stringify(metadata.tags),metadata.seoTitle,metadata.seoDescription,metadata.seoKeywords,metadata.canonicalUrl,metadata.ogImage),
         env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
           .bind(ownerSession.login,scheduledAt ? "schedule_or_update" : "publish_or_update",String(a.id),String(scheduledAt || "published").slice(0,500))
       ]);
-      const saved = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE id=?1").bind(String(a.id)).first();
-      if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt) {
+      const saved = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image FROM articles WHERE id=?1").bind(String(a.id)).first();
+      if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt || saved.tags_json !== JSON.stringify(metadata.tags) || saved.seo_title !== metadata.seoTitle || saved.seo_description !== metadata.seoDescription || saved.seo_keywords !== metadata.seoKeywords || (saved.canonical_url || "") !== metadata.canonicalUrl || (saved.og_image || "") !== metadata.ogImage) {
         return json({error:"Article save could not be verified in D1."},503);
       }
       return json({ok:true,id:a.id,scheduledAt,verified:true});
@@ -211,20 +256,7 @@ export async function onRequest({request, env}) {
       if (!Array.isArray(incoming) || incoming.length < 1 || incoming.length > 30) {
         return json({error:"يجب إرسال من مقال إلى 30 مقالًا في الدفعة الواحدة."},400);
       }
-      await ensureScheduleColumn(env.DB);
-      // Permanently retired content is a tombstone: skip it in bulk sync without
-      // restoring it or aborting unrelated valid articles in the same batch.
-      const skippedRetired = incoming.filter(isRetiredEnergyArticle).map(a => ({
-        id: String(a?.id || ""),
-        title: String(a?.title || "")
-      }));
-      const activeIncoming = incoming.filter(a => !isRetiredEnergyArticle(a));
-      if (!activeIncoming.length) {
-        return json({
-          ok:true, saved:0, skipped:skippedRetired.length,
-          skippedRetired, ids:[], immediatePublished:null, verified:true
-        });
-      }
+      const activeIncoming = incoming;
       const ids = new Set();
       const titles = new Set();
       for (let index = 0; index < activeIncoming.length; index++) {
@@ -258,22 +290,31 @@ export async function onRequest({request, env}) {
         const conflict = existingRows.find(row => String(row.id) === String(a.id) || normalizeTitle(row.title) === normalizeTitle(a.title));
         if (conflict) return json({error:"يوجد مقال محفوظ مسبقًا يتعارض مع «" + a.title + "». لم يُحفظ أي مقال من الدفعة؛ راجع المقالات الحالية أولًا.",duplicateId:conflict.id},409);
       }
-      const statements = activeIncoming.map(a => env.DB.prepare(
-        "INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,CURRENT_TIMESTAMP)"
-      ).bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt)));
+      const statements = activeIncoming.map(a => {
+        const metadata = metadataForSave(a);
+        return env.DB.prepare("INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,updated_at) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,CURRENT_TIMESTAMP)")
+          .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,a.publishImmediately === true ? null : String(a.scheduledAt),JSON.stringify(metadata.tags),metadata.seoTitle,metadata.seoDescription,metadata.seoKeywords,metadata.canonicalUrl,metadata.ogImage);
+      });
       const auditStatements = activeIncoming.map(a => env.DB.prepare(
         "INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)"
       ).bind(ownerSession.login,a.publishImmediately === true ? "publish" : "schedule",String(a.id),String(a.scheduledAt || "immediate").slice(0,500)));
       await env.DB.batch([...statements,...auditStatements]);
-      const verification = await Promise.all(activeIncoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content FROM articles WHERE id=?1").bind(String(a.id)).first()));
-      if (verification.some((row,i) => !row || row.title !== activeIncoming[i].title.trim() || row.content !== activeIncoming[i].content || (row.scheduled_at || null) !== (activeIncoming[i].publishImmediately === true ? null : activeIncoming[i].scheduledAt))) {
+      const verification = await Promise.all(activeIncoming.map(a => env.DB.prepare("SELECT id,title,scheduled_at,content,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image FROM articles WHERE id=?1").bind(String(a.id)).first()));
+      if (verification.some((row,i) => {
+        const metadata = metadataForSave(activeIncoming[i]);
+        return !row || row.title !== activeIncoming[i].title.trim() || row.content !== activeIncoming[i].content ||
+          (row.scheduled_at || null) !== (activeIncoming[i].publishImmediately === true ? null : activeIncoming[i].scheduledAt) ||
+          row.tags_json !== JSON.stringify(metadata.tags) || row.seo_title !== metadata.seoTitle ||
+          row.seo_description !== metadata.seoDescription || row.seo_keywords !== metadata.seoKeywords ||
+          (row.canonical_url || "") !== metadata.canonicalUrl || (row.og_image || "") !== metadata.ogImage;
+      })) {
         return json({error:"لم يتم تأكيد حفظ جميع المقالات الاثني عشر في قاعدة البيانات."},503);
       }
       return json({
         ok:true,
         saved:activeIncoming.length,
-        skipped:skippedRetired.length,
-        skippedRetired,
+        skipped:0,
+        skippedRetired:[],
         ids:activeIncoming.map(a=>a.id),
         immediatePublished:activeIncoming[0]?.publishImmediately === true ? activeIncoming[0].id : null,
         verified:true
@@ -291,6 +332,8 @@ export async function onRequest({request, env}) {
     }
     return json({error:"Unsupported action."},400);
   } catch (error) {
-    return json({error:"Articles API failed."},500);
+    const requestId = crypto.randomUUID();
+    console.error("[articles-api] request failed", requestId, error);
+    return json({error:"تعذر تنفيذ طلب المقالات في قاعدة البيانات. راجع سجل Cloudflare باستخدام رقم التتبع.",requestId},500);
   }
 }
