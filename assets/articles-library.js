@@ -60,7 +60,11 @@
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-editorial-article{direction:rtl;text-align:right;line-height:2;color:#243247}
     .abq-editorial-byline{margin:0 0 1rem;padding:.8rem 1rem;border-right:3px solid #b88a2b;background:#f8fafc;border-radius:10px;font-weight:700}
-    .abq-editorial-body{white-space:pre-wrap;overflow-wrap:anywhere}
+    .abq-editorial-body{white-space:normal;overflow-wrap:anywhere}
+.abq-editorial-body p{margin:.55rem 0;line-height:2}
+.abq-editorial-body h4{margin:1.2rem 0 .5rem;padding:.45rem .7rem;border-right:3px solid #b88a2b;background:#f8fafc;border-radius:8px;line-height:1.8}
+.abq-editorial-body ul{padding-right:1.5rem;margin:.5rem 0}
+.abq-editorial-body li{margin:.35rem 0;line-height:1.9}
     .abq-editorial-cta{margin:1.25rem 0;padding:1rem;border:1px solid #dbe3ee;border-radius:12px;background:#f8fafc}
     .abq-editorial-cta a{color:#075985;font-weight:700;text-decoration:underline}
     .abq-editorial-footer{margin-top:1.25rem;padding-top:1rem;border-top:1px solid #e2e8f0;font-size:.92rem;color:#475569}
@@ -294,9 +298,9 @@
             details.appendChild(el("summary", "", "قراءة البحث"));
             const editorial = el("article", "abq-editorial-article");
             const contentText = String(a.content || "");
-            const hasCenterCredit = /مركز العبقري|أحمد السيد رَسَّه|أحمد الزمخشري/.test(contentText);
-            const hasObservatoryInvite = /مرصد العبقري|الإتزان الشامل/.test(contentText);
-            const hasRegistration = /92527/.test(contentText);
+            const hasCenterCredit = /(?:تأليف وإشراف|بإشراف وتأليف)[\\s\\S]{0,180}(?:أحمد السيد|أحمد الزمخشري)/.test(contentText);
+            const hasObservatoryInvite = /(?:استكشف|اكتشف|تعرّف|تعرف)[\\s\\S]{0,100}(?:مرصد العبقري|الإتزان الشامل)/.test(contentText);
+            const hasRegistration = /مركز العبقري/.test(contentText) && /92527/.test(contentText) && /نَبْنِي الإِنْسَان/.test(contentText);
             if (!hasCenterCredit) {
               editorial.appendChild(el("p", "abq-editorial-byline",
                 "تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري) • مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية"));
