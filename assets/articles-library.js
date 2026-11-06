@@ -58,6 +58,16 @@
     .abq-article-meta{font-size:.82rem;color:#64748b;margin:.3rem 0 .65rem}
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
+    .abq-editorial-article{direction:rtl;text-align:right;line-height:2;color:#243247}
+    .abq-editorial-byline{margin:0 0 1rem;padding:.8rem 1rem;border-right:3px solid #b88a2b;background:#f8fafc;border-radius:10px;font-weight:700}
+    .abq-editorial-body{white-space:normal;overflow-wrap:anywhere}
+.abq-editorial-body p{margin:.55rem 0;line-height:2}
+.abq-editorial-body h4{margin:1.2rem 0 .5rem;padding:.45rem .7rem;border-right:3px solid #b88a2b;background:#f8fafc;border-radius:8px;line-height:1.8}
+.abq-editorial-body ul{padding-right:1.5rem;margin:.5rem 0}
+.abq-editorial-body li{margin:.35rem 0;line-height:1.9}
+    .abq-editorial-cta{margin:1.25rem 0;padding:1rem;border:1px solid #dbe3ee;border-radius:12px;background:#f8fafc}
+    .abq-editorial-cta a{color:#075985;font-weight:700;text-decoration:underline}
+    .abq-editorial-footer{margin-top:1.25rem;padding-top:1rem;border-top:1px solid #e2e8f0;font-size:.92rem;color:#475569}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
   `;
@@ -286,7 +296,78 @@
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
             const details = el("details");
             details.appendChild(el("summary", "", "قراءة البحث"));
-            details.appendChild(el("div", "abq-article-content", a.content));
+            const editorial = el("article", "abq-editorial-article");
+            const contentText = String(a.content || "");
+            const hasCenterCredit = /(?:تأليف وإشراف|بإشراف وتأليف)[\s\S]{0,180}(?:أحمد السيد|أحمد الزمخشري)/.test(contentText);
+            const hasObservatoryInvite = /(?:استكشف|اكتشف|تعرّف|تعرف)[\s\S]{0,100}(?:مرصد العبقري|الإتزان الشامل)/.test(contentText);
+            const hasRegistration = /مركز العبقري/.test(contentText) && /92527/.test(contentText) && /نَبْنِي الإِنْسَان/.test(contentText);
+            if (!hasCenterCredit) {
+              editorial.appendChild(el("p", "abq-editorial-byline",
+                "تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري) • مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية"));
+            }
+            const body = el("div", "abq-editorial-body abq-article-content");
+            body.setAttribute("dir", "rtl");
+            const normalizedContent = contentText.replace(/\r\n?/g, "\n");
+            const headingPattern = /(📌\s*المقدمة|🔬\s*المحور[^:：]*|⚖️\s*المحور[^:：]*|📜\s*المحور[^:：]*|🎯\s*الخاتمة[^:：]*|🏷️\s*بيانات النشر[^:：]*)/gu;
+            const headingMatches = Array.from(normalizedContent.matchAll(headingPattern));
+            const appendReadableBlocks = (container, rawText) => {
+              const chunks = rawText
+                .split(/\n+|\s{2,}|(?<=[.!؟])\s+(?=[\p{L}«“"(])/u)
+                .map(value => value.trim())
+                .filter(Boolean);
+              let list = null;
+              chunks.forEach(chunk => {
+                const bulletParts = chunk.split(/\s+(?=✅|❌|•|[-–]\s)/u).filter(Boolean);
+                bulletParts.forEach(part => {
+                  const isBullet = /^(?:✅|❌|•|[-–])\s*/u.test(part);
+                  if (isBullet) {
+                    if (!list) {
+                      list = document.createElement("ul");
+                      container.appendChild(list);
+                    }
+                    const item = document.createElement("li");
+                    item.textContent = part.replace(/^(?:✅|❌|•|[-–])\s*/u, "");
+                    list.appendChild(item);
+                  } else {
+                    list = null;
+                    const paragraph = document.createElement("p");
+                    paragraph.textContent = part;
+                    container.appendChild(paragraph);
+                  }
+                });
+              });
+            };
+            if (headingMatches.length) {
+              let cursor = 0;
+              headingMatches.forEach((match, index) => {
+                appendReadableBlocks(body, normalizedContent.slice(cursor, match.index));
+                const heading = document.createElement("h4");
+                heading.textContent = match[0].replace(/[:：]\s*$/, "").trim();
+                body.appendChild(heading);
+                const nextIndex = index + 1 < headingMatches.length
+                  ? headingMatches[index + 1].index
+                  : normalizedContent.length;
+                appendReadableBlocks(body, normalizedContent.slice(match.index + match[0].length, nextIndex));
+                cursor = nextIndex;
+              });
+            } else {
+              appendReadableBlocks(body, normalizedContent);
+            }
+            editorial.appendChild(body);
+            if (!hasObservatoryInvite) {
+              const invitation = el("p", "abq-editorial-cta");
+              invitation.appendChild(el("span", "", "هل تود قراءة اتجاهاتك وتحديد موقعك بدقة وفق منهجية العبقري للإتزان الشامل؟ "));
+              const explore = el("a", "", "استكشف منصة العبقري");
+              explore.href = "/";
+              explore.setAttribute("aria-label", "استكشف منصة العبقري للإتزان الشامل");
+              invitation.appendChild(explore);
+              editorial.appendChild(invitation);
+            }
+            if (!hasRegistration) {
+              editorial.appendChild(el("footer", "abq-editorial-footer",
+                "مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية • السجل التجاري: 92527\nالدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)\n« نَبْنِي الإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل »"));
+            }
+            details.appendChild(editorial);
             card.appendChild(details);
             if (adminMode) {
               const btn = el("button", "", "تعديل المقال");
