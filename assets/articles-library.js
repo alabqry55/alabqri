@@ -298,8 +298,8 @@
             details.appendChild(el("summary", "", "قراءة البحث"));
             const editorial = el("article", "abq-editorial-article");
             const contentText = String(a.content || "");
-            const hasCenterCredit = /(?:تأليف وإشراف|بإشراف وتأليف)[\\s\\S]{0,180}(?:أحمد السيد|أحمد الزمخشري)/.test(contentText);
-            const hasObservatoryInvite = /(?:استكشف|اكتشف|تعرّف|تعرف)[\\s\\S]{0,100}(?:مرصد العبقري|الإتزان الشامل)/.test(contentText);
+            const hasCenterCredit = /(?:تأليف وإشراف|بإشراف وتأليف)[\s\S]{0,180}(?:أحمد السيد|أحمد الزمخشري)/.test(contentText);
+            const hasObservatoryInvite = /(?:استكشف|اكتشف|تعرّف|تعرف)[\s\S]{0,100}(?:مرصد العبقري|الإتزان الشامل)/.test(contentText);
             const hasRegistration = /مركز العبقري/.test(contentText) && /92527/.test(contentText) && /نَبْنِي الإِنْسَان/.test(contentText);
             if (!hasCenterCredit) {
               editorial.appendChild(el("p", "abq-editorial-byline",
@@ -307,26 +307,26 @@
             }
             const body = el("div", "abq-editorial-body abq-article-content");
             body.setAttribute("dir", "rtl");
-            const sections = contentText.replace(/\\r\\n?/g, "\\n").split(/(?=[📌🔬⚖️📜🎯🏷️])/u).filter(part => part.trim());
+            const sections = contentText.replace(/\r\n?/g, "\n").split(/(?=[📌🔬⚖️📜🎯🏷️])/u).filter(part => part.trim());
             sections.forEach(section => {
-              const headingMatch = section.match(/^(📌\\s*المقدمة|🔬\\s*المحور[^:：]*|⚖️\\s*المحور[^:：]*|📜\\s*المحور[^:：]*|🎯\\s*الخاتمة[^:：]*|🏷️\\s*بيانات النشر[^:：]*)/u);
+              const headingMatch = section.match(/^(📌\s*المقدمة|🔬\s*المحور[^:：]*|⚖️\s*المحور[^:：]*|📜\s*المحور[^:：]*|🎯\s*الخاتمة[^:：]*|🏷️\s*بيانات النشر[^:：]*)/u);
               let remaining = section;
               if (headingMatch) {
                 const heading = document.createElement("h4");
                 heading.textContent = headingMatch[1].replace(/[:：]$/, "");
                 body.appendChild(heading);
-                remaining = section.slice(headingMatch[0].length).replace(/^[:：]\\s*/, "");
+                remaining = section.slice(headingMatch[0].length).replace(/^[:：]\s*/, "");
               }
-              const blocks = remaining.split(/\\n+|\\s{2,}/u).map(value => value.trim()).filter(Boolean);
+              const blocks = remaining.split(/\n+|\s{2,}/u).map(value => value.trim()).filter(Boolean);
               let list = null;
               blocks.forEach(block => {
-                if (/^(?:✅|❌|•|[-–])\\s*/u.test(block)) {
+                if (/^(?:✅|❌|•|[-–])\s*/u.test(block)) {
                   if (!list) {
                     list = document.createElement("ul");
                     body.appendChild(list);
                   }
                   const item = document.createElement("li");
-                  item.textContent = block.replace(/^(?:✅|❌|•|[-–])\\s*/u, "");
+                  item.textContent = block.replace(/^(?:✅|❌|•|[-–])\s*/u, "");
                   list.appendChild(item);
                 } else {
                   list = null;
