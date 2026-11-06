@@ -58,6 +58,12 @@
     .abq-article-meta{font-size:.82rem;color:#64748b;margin:.3rem 0 .65rem}
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
+    .abq-editorial-article{direction:rtl;text-align:right;line-height:2;color:#243247}
+    .abq-editorial-byline{margin:0 0 1rem;padding:.8rem 1rem;border-right:3px solid #b88a2b;background:#f8fafc;border-radius:10px;font-weight:700}
+    .abq-editorial-body{white-space:pre-wrap;overflow-wrap:anywhere}
+    .abq-editorial-cta{margin:1.25rem 0;padding:1rem;border:1px solid #dbe3ee;border-radius:12px;background:#f8fafc}
+    .abq-editorial-cta a{color:#075985;font-weight:700;text-decoration:underline}
+    .abq-editorial-footer{margin-top:1.25rem;padding-top:1rem;border-top:1px solid #e2e8f0;font-size:.92rem;color:#475569}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
   `;
@@ -286,7 +292,33 @@
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
             const details = el("details");
             details.appendChild(el("summary", "", "قراءة البحث"));
-            details.appendChild(el("div", "abq-article-content", a.content));
+            const editorial = el("article", "abq-editorial-article");
+            const contentText = String(a.content || "");
+            const normalizedContent = contentText.normalize("NFKC").toLocaleLowerCase("ar");
+            const hasCenterCredit = /مركز العبقري|أحمد السيد رَسَّه|أحمد الزمخشري/.test(contentText);
+            const hasObservatoryInvite = /مرصد العبقري|الإتزان الشامل/.test(contentText);
+            const hasRegistration = /92527/.test(contentText);
+            if (!hasCenterCredit) {
+              editorial.appendChild(el("p", "abq-editorial-byline",
+                "تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري) • مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية"));
+            }
+            const body = el("div", "abq-editorial-body abq-article-content", contentText);
+            body.setAttribute("dir", "rtl");
+            editorial.appendChild(body);
+            if (!hasObservatoryInvite) {
+              const invitation = el("p", "abq-editorial-cta");
+              invitation.appendChild(el("span", "", "هل تود قراءة اتجاهاتك وتحديد موقعك بدقة وفق منهجية العبقري للإتزان الشامل؟ "));
+              const explore = el("a", "", "استكشف منصة العبقري");
+              explore.href = "/";
+              explore.setAttribute("aria-label", "استكشف منصة العبقري للإتزان الشامل");
+              invitation.appendChild(explore);
+              editorial.appendChild(invitation);
+            }
+            if (!hasRegistration) {
+              editorial.appendChild(el("footer", "abq-editorial-footer",
+                "مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية • السجل التجاري: 92527\nالدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري)\n« نَبْنِي الإِنْسَان • نَصْنَعُ الْمَعْرِفَة • وَنَقُودُ الْمُسْتَقْبَل »"));
+            }
+            details.appendChild(editorial);
             card.appendChild(details);
             if (adminMode) {
               const btn = el("button", "", "تعديل المقال");
