@@ -171,3 +171,19 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
     assert.equal(response.status, 503);
   }
 });
+
+
+test("published article reading view applies editorial attribution, observatory invitation and institutional footer without changing stored text", async () => {
+  const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
+  assert.ok(source.includes('el("article", "abq-editorial-article")'));
+  assert.ok(source.includes('String(a.content || "")'));
+  assert.ok(source.includes('el("div", "abq-editorial-body abq-article-content", contentText)'));
+  assert.ok(source.includes("تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه"));
+  assert.ok(source.includes("هل تود قراءة اتجاهاتك وتحديد موقعك بدقة وفق منهجية العبقري للإتزان الشامل؟"));
+  assert.ok(source.includes("السجل التجاري: 92527"));
+  assert.ok(source.includes('explore.href = "/"'));
+  assert.ok(source.includes("if (!hasCenterCredit)"));
+  assert.ok(source.includes("if (!hasObservatoryInvite)"));
+  assert.ok(source.includes("if (!hasRegistration)"));
+  assert.equal(source.includes('el("h1", "", a.title)'), false);
+});
