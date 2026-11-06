@@ -294,7 +294,6 @@
             details.appendChild(el("summary", "", "قراءة البحث"));
             const editorial = el("article", "abq-editorial-article");
             const contentText = String(a.content || "");
-            const normalizedContent = contentText.normalize("NFKC").toLocaleLowerCase("ar");
             const hasCenterCredit = /مركز العبقري|أحمد السيد رَسَّه|أحمد الزمخشري/.test(contentText);
             const hasObservatoryInvite = /مرصد العبقري|الإتزان الشامل/.test(contentText);
             const hasRegistration = /92527/.test(contentText);
