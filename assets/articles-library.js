@@ -307,35 +307,52 @@
             }
             const body = el("div", "abq-editorial-body abq-article-content");
             body.setAttribute("dir", "rtl");
-            const sections = contentText.replace(/\r\n?/g, "\n").split(/(?=[📌🔬⚖️📜🎯🏷️])/u).filter(part => part.trim());
-            sections.forEach(section => {
-              const headingMatch = section.match(/^(📌\s*المقدمة|🔬\s*المحور[^:：]*|⚖️\s*المحور[^:：]*|📜\s*المحور[^:：]*|🎯\s*الخاتمة[^:：]*|🏷️\s*بيانات النشر[^:：]*)/u);
-              let remaining = section;
-              if (headingMatch) {
-                const heading = document.createElement("h4");
-                heading.textContent = headingMatch[1].replace(/[:：]$/, "");
-                body.appendChild(heading);
-                remaining = section.slice(headingMatch[0].length).replace(/^[:：]\s*/, "");
-              }
-              const blocks = remaining.split(/\n+|\s{2,}/u).map(value => value.trim()).filter(Boolean);
+            const normalizedContent = contentText.replace(/\r\n?/g, "\n");
+            const headingPattern = /(📌\s*المقدمة|🔬\s*المحور[^:：]*|⚖️\s*المحور[^:：]*|📜\s*المحور[^:：]*|🎯\s*الخاتمة[^:：]*|🏷️\s*بيانات النشر[^:：]*)/gu;
+            const headingMatches = Array.from(normalizedContent.matchAll(headingPattern));
+            const appendReadableBlocks = (container, rawText) => {
+              const chunks = rawText
+                .split(/\n+|\s{2,}|(?<=[.!؟])\s+(?=[\p{L}«“"(])/u)
+                .map(value => value.trim())
+                .filter(Boolean);
               let list = null;
-              blocks.forEach(block => {
-                if (/^(?:✅|❌|•|[-–])\s*/u.test(block)) {
-                  if (!list) {
-                    list = document.createElement("ul");
-                    body.appendChild(list);
+              chunks.forEach(chunk => {
+                const bulletParts = chunk.split(/\s+(?=✅|❌|•|[-–]\s)/u).filter(Boolean);
+                bulletParts.forEach(part => {
+                  const isBullet = /^(?:✅|❌|•|[-–])\s*/u.test(part);
+                  if (isBullet) {
+                    if (!list) {
+                      list = document.createElement("ul");
+                      container.appendChild(list);
+                    }
+                    const item = document.createElement("li");
+                    item.textContent = part.replace(/^(?:✅|❌|•|[-–])\s*/u, "");
+                    list.appendChild(item);
+                  } else {
+                    list = null;
+                    const paragraph = document.createElement("p");
+                    paragraph.textContent = part;
+                    container.appendChild(paragraph);
                   }
-                  const item = document.createElement("li");
-                  item.textContent = block.replace(/^(?:✅|❌|•|[-–])\s*/u, "");
-                  list.appendChild(item);
-                } else {
-                  list = null;
-                  const paragraph = document.createElement("p");
-                  paragraph.textContent = block;
-                  body.appendChild(paragraph);
-                }
+                });
               });
-            });
+            };
+            if (headingMatches.length) {
+              let cursor = 0;
+              headingMatches.forEach((match, index) => {
+                appendReadableBlocks(body, normalizedContent.slice(cursor, match.index));
+                const heading = document.createElement("h4");
+                heading.textContent = match[0].replace(/[:：]\s*$/, "").trim();
+                body.appendChild(heading);
+                const nextIndex = index + 1 < headingMatches.length
+                  ? headingMatches[index + 1].index
+                  : normalizedContent.length;
+                appendReadableBlocks(body, normalizedContent.slice(match.index + match[0].length, nextIndex));
+                cursor = nextIndex;
+              });
+            } else {
+              appendReadableBlocks(body, normalizedContent);
+            }
             editorial.appendChild(body);
             if (!hasObservatoryInvite) {
               const invitation = el("p", "abq-editorial-cta");
