@@ -305,8 +305,37 @@
               editorial.appendChild(el("p", "abq-editorial-byline",
                 "تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه (أحمد الزمخشري) • مركز العبقري للتدريب والإستشارات والطب التكميلي والتنمية البشرية"));
             }
-            const body = el("div", "abq-editorial-body abq-article-content", contentText);
+            const body = el("div", "abq-editorial-body abq-article-content");
             body.setAttribute("dir", "rtl");
+            const sections = contentText.replace(/\\r\\n?/g, "\\n").split(/(?=[📌🔬⚖️📜🎯🏷️])/u).filter(part => part.trim());
+            sections.forEach(section => {
+              const headingMatch = section.match(/^(📌\\s*المقدمة|🔬\\s*المحور[^:：]*|⚖️\\s*المحور[^:：]*|📜\\s*المحور[^:：]*|🎯\\s*الخاتمة[^:：]*|🏷️\\s*بيانات النشر[^:：]*)/u);
+              let remaining = section;
+              if (headingMatch) {
+                const heading = document.createElement("h4");
+                heading.textContent = headingMatch[1].replace(/[:：]$/, "");
+                body.appendChild(heading);
+                remaining = section.slice(headingMatch[0].length).replace(/^[:：]\\s*/, "");
+              }
+              const blocks = remaining.split(/\\n+|\\s{2,}/u).map(value => value.trim()).filter(Boolean);
+              let list = null;
+              blocks.forEach(block => {
+                if (/^(?:✅|❌|•|[-–])\\s*/u.test(block)) {
+                  if (!list) {
+                    list = document.createElement("ul");
+                    body.appendChild(list);
+                  }
+                  const item = document.createElement("li");
+                  item.textContent = block.replace(/^(?:✅|❌|•|[-–])\\s*/u, "");
+                  list.appendChild(item);
+                } else {
+                  list = null;
+                  const paragraph = document.createElement("p");
+                  paragraph.textContent = block;
+                  body.appendChild(paragraph);
+                }
+              });
+            });
             editorial.appendChild(body);
             if (!hasObservatoryInvite) {
               const invitation = el("p", "abq-editorial-cta");
