@@ -177,7 +177,11 @@ test("published article reading view applies editorial attribution, observatory 
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
   assert.ok(source.includes('el("article", "abq-editorial-article")'));
   assert.ok(source.includes('String(a.content || "")'));
-  assert.ok(source.includes('el("div", "abq-editorial-body abq-article-content", contentText)'));
+  assert.ok(source.includes('el("div", "abq-editorial-body abq-article-content")'));
+  assert.ok(source.includes("const sections = contentText"));
+  assert.ok(source.includes('document.createElement("h4")'));
+  assert.ok(source.includes("body.appendChild(paragraph)"));
+  assert.ok(source.includes("editorial.appendChild(body)"));
   assert.ok(source.includes("تأليف وإشراف: الدكتور/ أحمد السيد رَسَّه"));
   assert.ok(source.includes("هل تود قراءة اتجاهاتك وتحديد موقعك بدقة وفق منهجية العبقري للإتزان الشامل؟"));
   assert.ok(source.includes("السجل التجاري: 92527"));
