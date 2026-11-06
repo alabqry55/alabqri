@@ -178,7 +178,8 @@ test("published article reading view applies editorial attribution, observatory 
   assert.ok(source.includes('el("article", "abq-editorial-article")'));
   assert.ok(source.includes('String(a.content || "")'));
   assert.ok(source.includes('el("div", "abq-editorial-body abq-article-content")'));
-  assert.ok(source.includes("const sections = contentText"));
+  assert.ok(source.includes("const headingMatches = Array.from(normalizedContent.matchAll(headingPattern))"));
+  assert.ok(source.includes("const appendReadableBlocks = (container, rawText)"));
   assert.ok(source.includes('document.createElement("h4")'));
   assert.ok(source.includes("body.appendChild(paragraph)"));
   assert.ok(source.includes("editorial.appendChild(body)"));
