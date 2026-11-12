@@ -1588,3 +1588,24 @@ html body header.bg-white > div.container.mx-auto > div.abq-header-brand-license
     box-sizing: border-box !important;
   }
 }
+
+
+/* ALABQRI isolated heading preview — one heading only; do not merge without visual approval — 2026-10-16 */
+/* Preview target: the first main-section h3 only ("نبذة تعريفية"); all other headings and the site header remain untouched. */
+main > section:first-of-type > h3 {
+  box-sizing: border-box !important;
+  padding: 10px 14px !important;
+  border: 1px solid rgba(201, 164, 76, .78) !important;
+  border-inline-start: 4px solid #244d7c !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+  text-align: center !important;
+  box-shadow: 0 2px 7px rgba(23, 61, 112, .07) !important;
+}
+@media screen and (max-width: 767px) {
+  main > section:first-of-type > h3 {
+    padding: 8px 10px !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+  }
+}
