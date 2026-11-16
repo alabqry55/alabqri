@@ -48,8 +48,15 @@
   }
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
-    .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1100px;font-family:inherit}
-    .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.42fr);gap:.65rem;margin:1rem 0}
+    .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1160px;font-family:inherit}
+    .abq-library-intro{margin:1rem 0;padding:1.1rem 1.2rem;border:1px solid #d9e3dc;border-right:4px solid #b88a2b;border-radius:16px;background:#fbfcfa;line-height:1.9;color:#24352d}
+    .abq-library-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem;margin:1rem 0}
+    .abq-library-section{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #d8e2dc;border-radius:15px;background:#fff;color:#173b2d;text-align:right;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+    .abq-library-section:hover,.abq-library-section[aria-pressed="true"]{border-color:#b88a2b;background:#fbfaf5}
+    .abq-library-section:disabled{cursor:default;opacity:.68}
+    .abq-library-section strong{font-size:1rem;line-height:1.7}
+    .abq-library-section small{color:#64748b;line-height:1.6}
+    .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.42fr);gap:.65rem;margin:1rem 0}
     .abq-articles-tools input,.abq-articles-tools select{box-sizing:border-box;width:100%;min-width:0;padding:.75rem .85rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#172033;font:inherit}
     .abq-articles-status{padding:1rem;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.8}
     .abq-articles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1rem}
@@ -59,7 +66,7 @@
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
-    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}}
+    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}}
   `;
   function init() {
     if (window.__abqArticlesLibraryInitialized) return;
@@ -258,15 +265,66 @@
         if (!articles.length) {
           root.appendChild(el("div", "abq-articles-status", "لا توجد أبحاث أو مقالات محفوظة في المكتبة حاليًا. يمكنك فتح الإدارة للتحقق من قاعدة البيانات أو تحميل خطة النشر."));
         }
-        // Hidden anchor preserves the existing placement of administration controls without rendering any search field.
-        const tools = el("div");
-        tools.hidden = true;
+        // The public library is divided into clear subject areas while stored legacy
+        // categories remain unchanged for backward compatibility with the API and D1.
+        const librarySections = [
+          {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:null,comingSoon:true},
+          {title:"الذكر والاتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والتوازن",category:"الأذكار والاتزان"},
+          {title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
+          {title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
+          {title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
+          {title:"المعرفة والفكر",icon:"📚",description:"موضوعات معرفية وفكرية متنوعة",category:"موضوعات معرفية"}
+        ];
+        let selectedCategory = "";
+        const intro = el("div","abq-library-intro","مرحبًا بك في مكتبة العبقري؛ مساحة معرفية منظمة تجمع المقالات والأبحاث في أقسام واضحة، مع الحفاظ على المحتوى المنشور وبياناته.");
+        const sectionGrid = el("div","abq-library-sections");
+        const tools = el("div","abq-articles-tools");
+        const searchInput = el("input");
+        searchInput.type = "search";
+        searchInput.placeholder = "ابحث في العناوين والمحتوى والوسوم...";
+        searchInput.setAttribute("aria-label","البحث في مكتبة العبقري");
+        const categorySelect = el("select");
+        categorySelect.setAttribute("aria-label","تصفية حسب القسم");
+        const allOption = el("option","","جميع الأقسام");
+        allOption.value = "";
+        categorySelect.appendChild(allOption);
+        librarySections.filter(section => section.category).forEach(section => {
+          const option = el("option","",section.title);
+          option.value = section.category;
+          categorySelect.appendChild(option);
+        });
+        tools.append(searchInput,categorySelect);
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
-        root.append(tools, count, grid);
+        root.append(intro,sectionGrid,tools,count,grid);
+
+        function renderSections() {
+          sectionGrid.replaceChildren();
+          librarySections.forEach(section => {
+            const total = section.category ? articles.filter(article => article.category === section.category).length : 0;
+            const button = el("button","abq-library-section");
+            button.type = "button";
+            button.disabled = Boolean(section.comingSoon);
+            button.setAttribute("aria-pressed",String(selectedCategory === (section.category || "__quran__")));
+            button.append(el("span","",section.icon),el("strong","",section.title),
+              el("small","",section.comingSoon ? "قريبًا — لا توجد مواد مصنفة هنا بعد" : "عدد المواد: " + total));
+            if (section.category) button.addEventListener("click",() => {
+              selectedCategory = selectedCategory === section.category ? "" : section.category;
+              categorySelect.value = selectedCategory;
+              render();
+            });
+            sectionGrid.appendChild(button);
+          });
+        }
 
         function render() {
-          const visible = articles;
+          renderSections();
+          const query = searchInput.value.trim().toLocaleLowerCase("ar");
+          const visible = articles.filter(article => {
+            const categoryMatch = !selectedCategory || article.category === selectedCategory;
+            const haystack = [article.title,article.excerpt,article.content,article.category,...(Array.isArray(article.tags)?article.tags:[])].join(" ").toLocaleLowerCase("ar");
+            return categoryMatch && (!query || haystack.includes(query));
+          });
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
           if (!visible.length) {
@@ -299,6 +357,8 @@
             grid.appendChild(card);
           });
         }
+        searchInput.addEventListener("input",render);
+        categorySelect.addEventListener("change",() => { selectedCategory = categorySelect.value; render(); });
 
         // Owner authorization is verified server-side through the signed GitHub OAuth session.
         let adminAuthenticated = Boolean(initiallyAdmin);
@@ -365,6 +425,8 @@
         editCategoryWrap.appendChild(el("span", "", "التصنيف"));
         const editCategory = el("select");
         editCategory.name = "category";
+        // Persist only the five API-approved legacy category values; public labels
+        // are richer display names and do not alter stored records.
         ["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"].forEach(c => {
           const option = el("option", "", c); option.value = c; editCategory.appendChild(option);
         });

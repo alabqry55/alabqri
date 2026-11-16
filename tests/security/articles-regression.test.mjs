@@ -171,3 +171,18 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
     assert.equal(response.status, 503);
   }
 });
+
+
+test("new article library exposes subject sections and client-side search without changing stored category values", async () => {
+  const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
+  for (const section of ["القرآن الكريم وعلومه","الذكر والاتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
+    assert.ok(source.includes(section), "missing library section: " + section);
+  }
+  assert.ok(source.includes('searchInput.type = "search"'));
+  assert.ok(source.includes('categorySelect.setAttribute("aria-label","تصفية حسب القسم")'));
+  assert.ok(source.includes('article.category === selectedCategory'));
+  assert.ok(source.includes('comingSoon:true'));
+  // Existing API categories remain the only persisted category values in this phase.
+  const api = await readFile(new URL("../../functions/api/articles.js", import.meta.url), "utf8");
+  assert.ok(api.includes('const CATEGORIES = new Set(["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"])'));
+});
