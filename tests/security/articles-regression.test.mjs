@@ -183,7 +183,7 @@ test("new article library exposes subject sections and client-side search withou
   assert.ok(source.includes('searchInput.type = "search"'));
   assert.ok(source.includes('categorySelect.setAttribute("aria-label","تصفية حسب القسم")'));
   assert.ok(source.includes('article.category === selectedCategory'));
-  assert.ok(source.includes('comingSoon:true'));
+  assert.equal(source.includes('comingSoon:true'), false);
   // Admin exposes all six canonical labels. The five existing stored values remain
   // unchanged; Quran is added as the sixth supported persisted category.
   const adminCategories = [
