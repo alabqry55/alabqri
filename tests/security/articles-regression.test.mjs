@@ -98,13 +98,15 @@ test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KE
   assert.ok(html.includes("scheduledAt}"));
 });
 
-test("the legacy article list remains the only list renderer and has no legacy search IDs", async () => {
+test("six-section library replaces the legacy article list only after a valid API response", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
   assert.ok(html.includes('id="abq-articles-list"'));
   assert.equal(html.includes('id="abq-article-search"'), false);
   assert.equal(html.includes('id="abq-article-category"'), false);
-  assert.ok(source.includes('articleTab.querySelector("#abq-articles-list")'));
+  assert.ok(source.includes('const legacyArticleList = articleTab.querySelector("#abq-articles-list")'));
+  assert.equal(source.includes('if (articleTab.querySelector("#abq-articles-list")) { window.__abqArticlesLibraryInitialized = true; return; }'), false);
+  assert.ok(source.includes('if (legacyArticleList?.isConnected) legacyArticleList.replaceWith(root)'));
 });
 
 test("homepage cloud sync skips identical remote articles and reports the real API failure", async () => {
