@@ -72,8 +72,10 @@
     if (window.__abqArticlesLibraryInitialized) return;
     const articleTab = document.getElementById("articles");
     if (!articleTab) return;
-    // The legacy in-tab renderer is the single canonical list; do not mount a second grid.
-    if (articleTab.querySelector("#abq-articles-list")) { window.__abqArticlesLibraryInitialized = true; return; }
+    // Reuse the existing article-list position instead of aborting initialization.
+    // The legacy list stays visible until the API responds successfully; then the
+    // new six-section renderer replaces only that list container (not the admin UI).
+    const legacyArticleList = articleTab.querySelector("#abq-articles-list");
     const headingScope = articleTab;
     const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
@@ -241,6 +243,9 @@
       })
       .then(data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
+        // Promote the new renderer into the legacy list's exact location only after
+        // a valid API response, preserving the old list if loading fails.
+        if (legacyArticleList?.isConnected) legacyArticleList.replaceWith(root);
         const normalizeArticleTitle = value => String(value || "").normalize("NFKC").toLocaleLowerCase("ar")
           .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/[\u064B-\u065F\u0670ـ]/g, "")
           .replace(/[^\p{L}\p{N}]+/gu, "");
