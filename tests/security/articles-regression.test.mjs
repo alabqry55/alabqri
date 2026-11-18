@@ -98,6 +98,30 @@ test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KE
   assert.ok(html.includes("scheduledAt}"));
 });
 
+test("legacy article administration dashboard exposes the same six canonical categories", async () => {
+  const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+  const selectStart = html.indexOf('<select id="abq-admin-category-input"');
+  const selectEnd = html.indexOf("</select>", selectStart);
+  assert.ok(selectStart >= 0 && selectEnd > selectStart, "legacy admin category selector is missing");
+  const selector = html.slice(selectStart, selectEnd + "</select>".length);
+  for (const label of [
+    "القرآن الكريم وعلومه",
+    "الذكر والاتزان الإيماني",
+    "علم النفس الإسلامي والتنمية البشرية",
+    "الطب التكميلي والتوعية الصحية",
+    "الأبحاث والدراسات",
+    "المعرفة والفكر"
+  ]) assert.ok(selector.includes(label), "legacy admin selector missing: " + label);
+  for (const value of [
+    "القرآن الكريم وعلومه",
+    "الأذكار والاتزان",
+    "التنمية البشرية",
+    "الطب التكميلي",
+    "البحث العلمي",
+    "موضوعات معرفية"
+  ]) assert.ok(selector.includes('value="' + value + '"'), "legacy admin selector missing stored value: " + value);
+});
+
 test("six-section library replaces the legacy article list only after a valid API response", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
