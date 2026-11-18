@@ -273,7 +273,7 @@
         // The public library is divided into clear subject areas while stored legacy
         // categories remain unchanged for backward compatibility with the API and D1.
         const librarySections = [
-          {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:null,comingSoon:true},
+          {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
           {title:"الذكر والاتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والتوازن",category:"الأذكار والاتزان"},
           {title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
           {title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
@@ -430,10 +430,18 @@
         editCategoryWrap.appendChild(el("span", "", "التصنيف"));
         const editCategory = el("select");
         editCategory.name = "category";
-        // Persist only the five API-approved legacy category values; public labels
-        // are richer display names and do not alter stored records.
-        ["التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"].forEach(c => {
-          const option = el("option", "", c); option.value = c; editCategory.appendChild(option);
+        // Present the six canonical library sections in administration while preserving
+        // the five existing stored category values for backward compatibility.
+        // Quran is the only new persisted category and is available immediately.
+        [
+          ["القرآن الكريم وعلومه","القرآن الكريم وعلومه"],
+          ["الذكر والاتزان الإيماني","الأذكار والاتزان"],
+          ["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"],
+          ["الطب التكميلي والتوعية الصحية","الطب التكميلي"],
+          ["الأبحاث والدراسات","البحث العلمي"],
+          ["المعرفة والفكر","موضوعات معرفية"]
+        ].forEach(([label,value]) => {
+          const option = el("option", "", label); option.value = value; editCategory.appendChild(option);
         });
         editCategory.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit";
         editCategoryWrap.appendChild(editCategory);
