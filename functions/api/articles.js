@@ -13,7 +13,7 @@ const safeEqual = (a,b) => {
 async function hasChatGptPublishToken(request, env) {
   const configured = env.CHATGPT_PUBLISH_TOKEN;
   if (typeof configured !== "string" || configured.length < 32) return false;
-  const match = (request.headers.get("Authorization") || "").match(/^Bearer\\s+(.+)$/i);
+  const match = (request.headers.get("Authorization") || "").match(/^Bearer\s+(.+)$/i);
   return Boolean(match && await safeEqual(match[1], configured));
 }
 
