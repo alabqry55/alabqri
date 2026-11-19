@@ -6,7 +6,7 @@ info:
     Publish one new ALABQRI article only after the user explicitly approves
     publication. This API cannot read, update, schedule, bulk-import, or delete articles.
 servers:
-  - url: https://alabqri.pages.dev
+  - url: https://feature-chatgpt-article-publ.alabqri.pages.dev
 paths:
   /api/articles:
     post:
