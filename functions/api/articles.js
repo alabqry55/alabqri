@@ -4,6 +4,18 @@ import { readOwnerSession } from "../_lib/admin-auth.js";
 const CATEGORIES = new Set(["القرآن الكريم وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 const validId = id => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id);
+const safeEqual = (a,b) => {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i=0;i<a.length;i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+};
+async function hasChatGptPublishToken(request, env) {
+  const configured = env.CHATGPT_PUBLISH_TOKEN;
+  if (typeof configured !== "string" || configured.length < 32) return false;
+  const match = (request.headers.get("Authorization") || "").match(/^Bearer\\s+(.+)$/i);
+  return Boolean(match && await safeEqual(match[1], configured));
+}
 
 const canonicalAzkarArticle = {
   id: "azkar-balance",
@@ -132,14 +144,23 @@ async function ensureArticleMetadataColumns(db) {
 
 export async function onRequest({request, env}) {
   const ownerSession = await readOwnerSession(request, env);
+  const integrationAuthenticated = !ownerSession && await hasChatGptPublishToken(request, env);
   const isAdmin = Boolean(ownerSession);
   // Reject every write before touching the database unless the owner session is valid.
   if (request.method !== "GET" && request.method !== "POST") return json({error:"Method not allowed."},405);
-  if (request.method === "POST" && !isAdmin) return json({error:"Unauthorized."},401);
+  if (request.method === "POST" && !ownerSession && !integrationAuthenticated) return json({error:"Unauthorized."},401);
+  let body = null;
   if (request.method === "POST") {
-    const origin = request.headers.get("Origin");
-    if (!origin || origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
+    if (ownerSession) {
+      const origin = request.headers.get("Origin");
+      if (!origin || origin !== new URL(request.url).origin) return json({error:"Cross-origin request rejected."},403);
+    }
     if (!(request.headers.get("Content-Type")||"").toLowerCase().startsWith("application/json")) return json({error:"Content-Type must be application/json."},415);
+    body = await request.json().catch(()=>null);
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({error:"Invalid JSON body."},400);
+    if (integrationAuthenticated && (body.action !== "save" || body.publishApproved !== true)) {
+      return json({error:"ChatGPT integration may only publish one article after explicit approval."},403);
+    }
   }
   // Read-only fallback keeps the canonical article visible in preview environments
   // where the D1 binding is not attached. Writes still require a configured database.
@@ -220,36 +241,44 @@ export async function onRequest({request, env}) {
       return json({articles, admin:isAdmin});
     }
     // All POST actions are owner-authorized above by a signed, HttpOnly GitHub OAuth session.
-    const body = await request.json().catch(()=>null);
-    if (!body || typeof body !== "object") return json({error:"Invalid JSON body."},400);
     if (body.action === "save") {
       const a = body.article;
       if (!a || !validId(String(a.id||"")) || typeof a.title !== "string" || !a.title.trim() || a.title.length>240 || typeof a.content !== "string" || !a.content.trim() || a.content.length>200000 || !CATEGORIES.has(a.category) || typeof a.excerpt !== "string" || a.excerpt.length>2000 || typeof a.date !== "string" || a.date.length>80) return json({error:"Invalid article fields."},400);
       let metadata;
       try { metadata = metadataForSave(a); } catch (error) { return json({error:error.message},400); }
       const scheduledAt = a.scheduledAt == null || a.scheduledAt === "" ? null : String(a.scheduledAt);
+      if (integrationAuthenticated && scheduledAt !== null) return json({error:"ChatGPT integration publishes immediately only; scheduling remains available in the owner dashboard."},400);
       if (scheduledAt !== null && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(scheduledAt) || Number.isNaN(Date.parse(scheduledAt)))) {
         return json({error:"Invalid scheduled publication date."},400);
       }
-      const {results:existingRows=[]} = await env.DB.prepare("SELECT id,title FROM articles WHERE id <> ?1").bind(String(a.id)).all();
+      const {results:existingRows=[]} = integrationAuthenticated
+        ? await env.DB.prepare("SELECT id,title FROM articles").all()
+        : await env.DB.prepare("SELECT id,title FROM articles WHERE id <> ?1").bind(String(a.id)).all();
       const normalizedNewTitle = normalizeTitle(a.title);
-      const duplicate = existingRows.find(row => normalizeTitle(row.title) === normalizedNewTitle);
-      if (duplicate) return json({error:"يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.", duplicateId:duplicate.id},409);
+      const duplicate = existingRows.find(row =>
+        (integrationAuthenticated && String(row.id) === String(a.id)) ||
+        normalizeTitle(row.title) === normalizedNewTitle
+      );
+      if (duplicate) return json({error: integrationAuthenticated
+        ? "يوجد مقال محفوظ مسبقًا بالهوية أو العنوان نفسه؛ لم يتم استبدال أي محتوى."
+        : "يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.",
+        duplicateId:duplicate.id},409);
       const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
       if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
+      const insertSql = `INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,updated_at)
+        VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,CURRENT_TIMESTAMP)` +
+        (integrationAuthenticated ? "" : ` ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,tags_json=excluded.tags_json,seo_title=excluded.seo_title,seo_description=excluded.seo_description,seo_keywords=excluded.seo_keywords,canonical_url=excluded.canonical_url,og_image=excluded.og_image,updated_at=CURRENT_TIMESTAMP`);
       await env.DB.batch([
-        env.DB.prepare(`INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,updated_at)
-          VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,CURRENT_TIMESTAMP)
-          ON CONFLICT(id) DO UPDATE SET title=excluded.title,category=excluded.category,date=excluded.date,excerpt=excluded.excerpt,content=excluded.content,scheduled_at=excluded.scheduled_at,tags_json=excluded.tags_json,seo_title=excluded.seo_title,seo_description=excluded.seo_description,seo_keywords=excluded.seo_keywords,canonical_url=excluded.canonical_url,og_image=excluded.og_image,updated_at=CURRENT_TIMESTAMP`)
+        env.DB.prepare(insertSql)
           .bind(String(a.id),a.title.trim(),a.category,a.date,a.excerpt,a.content,scheduledAt,JSON.stringify(metadata.tags),metadata.seoTitle,metadata.seoDescription,metadata.seoKeywords,metadata.canonicalUrl,metadata.ogImage),
         env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
-          .bind(ownerSession.login,scheduledAt ? "schedule_or_update" : "publish_or_update",String(a.id),String(scheduledAt || "published").slice(0,500))
+          .bind(ownerSession?.login || "chatgpt-integration",integrationAuthenticated ? "chatgpt_publish" : (scheduledAt ? "schedule_or_update" : "publish_or_update"),String(a.id),String(scheduledAt || "published").slice(0,500))
       ]);
       const saved = await env.DB.prepare("SELECT id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image FROM articles WHERE id=?1").bind(String(a.id)).first();
       if (!saved || saved.title !== a.title.trim() || saved.category !== a.category || saved.date !== a.date || saved.excerpt !== a.excerpt || saved.content !== a.content || (saved.scheduled_at || null) !== scheduledAt || saved.tags_json !== JSON.stringify(metadata.tags) || saved.seo_title !== metadata.seoTitle || saved.seo_description !== metadata.seoDescription || saved.seo_keywords !== metadata.seoKeywords || (saved.canonical_url || "") !== metadata.canonicalUrl || (saved.og_image || "") !== metadata.ogImage) {
         return json({error:"Article save could not be verified in D1."},503);
       }
-      return json({ok:true,id:a.id,scheduledAt,verified:true});
+      return json({ok:true,id:a.id,title:saved.title,scheduledAt,verified:true,published:scheduledAt === null,source:integrationAuthenticated ? "chatgpt" : "owner-dashboard"});
     }
     if (body.action === "saveMany" || body.action === "seedSchedule") {
       const incoming = body.action === "seedSchedule" ? scheduledArticles : body.articles;
