@@ -146,7 +146,7 @@ export async function onRequest({request, env}) {
   const ownerSession = await readOwnerSession(request, env);
   const integrationAuthenticated = !ownerSession && await hasChatGptPublishToken(request, env);
   const isAdmin = Boolean(ownerSession);
-  // Reject every write before touching the database unless the owner session is valid.
+  // Reject every write before touching the database unless an owner session or the restricted integration token is valid.
   if (request.method !== "GET" && request.method !== "POST") return json({error:"Method not allowed."},405);
   if (request.method === "POST" && !ownerSession && !integrationAuthenticated) return json({error:"Unauthorized."},401);
   let body = null;
@@ -263,7 +263,10 @@ export async function onRequest({request, env}) {
         ? "يوجد مقال محفوظ مسبقًا بالهوية أو العنوان نفسه؛ لم يتم استبدال أي محتوى."
         : "يوجد مقال آخر بالعنوان نفسه. عدّل المقال الموجود بدل إنشاء نسخة مكررة.",
         duplicateId:duplicate.id},409);
-      const canonicalDuplicate = canonicalArticles.find(item => item.id !== String(a.id) && normalizeTitle(item.title) === normalizedNewTitle);
+      const canonicalDuplicate = canonicalArticles.find(item =>
+        normalizeTitle(item.title) === normalizedNewTitle ||
+        (integrationAuthenticated && item.id === String(a.id))
+      );
       if (canonicalDuplicate) return json({error:"العنوان موجود بالفعل ضمن المقالات المرجعية؛ راجع المقال الحالي بدل تكراره.", duplicateId:canonicalDuplicate.id},409);
       const insertSql = `INSERT INTO articles(id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image,updated_at)
         VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,CURRENT_TIMESTAMP)` +
