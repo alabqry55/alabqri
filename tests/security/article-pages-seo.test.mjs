@@ -123,7 +123,7 @@ test("article route supports HEAD and rejects write methods", async () => {
 test("dynamic sitemap uses public articles and preserves existing static URLs", async () => {
   const db = articleDb([
     articleFixture({ id: "article-one", canonical_url: null, updated_at: "2026-11-20T10:00:00.000Z" }),
-    articleFixture({ id: "article-two", canonical_url: "https://alabqri.example/articles/custom-slug", updated_at: null })
+    articleFixture({ id: "article-two", title: "عنوان المقال الثاني", seo_title: "SEO للمقال الثاني", canonical_url: "https://alabqri.example/articles/custom-slug", updated_at: null })
   ]);
   const response = await sitemapRequest({
     request: new Request(SITE + "/sitemap.xml"),
