@@ -60,7 +60,8 @@ export async function onRequest({ request, env }) {
         env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,a.content,
           c.primary_section_id,c.primary_specialty_id,c.content_type_id,
           c.editorial_status,c.editorial_note,c.updated_at AS classification_updated_at
-undefined`).all()
+          FROM articles a LEFT JOIN library_article_classification c ON c.article_id=a.id
+          ORDER BY a.updated_at DESC,a.created_at DESC`).all()
       ]);
       return json({ sections: sections.results || [], specialties: specialties.results || [], content_types: contentTypes.results || [], articles: articles.results || [] });
     }
