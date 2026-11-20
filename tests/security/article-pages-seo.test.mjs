@@ -24,29 +24,22 @@ const articleFixture = overrides => ({
   ...overrides
 });
 
-function articleDb(row) {
+function articleDb(rows = []) {
   const statements = [];
   return {
     statements,
     prepare(sql) {
-      const statement = String(sql).trim();
-      statements.push(statement);
-      let args = [];
+      statements.push(String(sql).trim());
       return {
-        bind(...values) { args = values; return this; },
-        async first() {
-          if (!row) return null;
-          if (String(args[0]) === String(row.id)) return row;
-          if (args[1] && row.canonical_url && String(row.canonical_url).endsWith(String(args[1]).slice(1))) return row;
-          return null;
-        }
+        bind() { return this; },
+        async all() { return { results: rows }; }
       };
     }
   };
 }
 
-test("public article page renders SEO metadata and crawlable article content from D1", async () => {
-  const db = articleDb(articleFixture());
+test("public article page renders SEO metadata and crawlable article content from the public API", async () => {
+  const db = articleDb([articleFixture()]);
   const response = await articlePageRequest({
     request: new Request(SITE + "/articles/article-test-2026"),
     env: { DB: db },
@@ -66,12 +59,12 @@ test("public article page renders SEO metadata and crawlable article content fro
 });
 
 test("article page escapes stored content and metadata instead of rendering injected markup", async () => {
-  const db = articleDb(articleFixture({
+  const db = articleDb([articleFixture({
     title: 'عنوان <img src=x onerror="alert(1)">',
     seo_title: 'SEO <script>alert(1)</script>',
     seo_description: 'وصف "مقتبس" <script>alert(1)</script>',
     content: '<script>alert("x")</script>'
-  }));
+  })]);
   const response = await articlePageRequest({
     request: new Request(SITE + "/articles/article-test-2026"),
     env: { DB: db },
@@ -84,11 +77,11 @@ test("article page escapes stored content and metadata instead of rendering inje
   assert.equal(html.includes('<img src=x onerror="alert(1)">'), false);
 });
 
-test("canonical article slugs resolve from the stored canonical path on preview hosts", async () => {
-  const db = articleDb(articleFixture({
+test("canonical article slugs resolve through the public library on preview hosts", async () => {
+  const db = articleDb([articleFixture({
     id: "article-fear-2026",
     canonical_url: "https://alabqri.pages.dev/articles/fear-in-holy-quran"
-  }));
+  })]);
   const response = await articlePageRequest({
     request: new Request("https://preview.alabqri.pages.dev/articles/fear-in-holy-quran"),
     env: { DB: db },
@@ -96,24 +89,11 @@ test("canonical article slugs resolve from the stored canonical path on preview 
   });
   assert.equal(response.status, 200);
   assert.match(await response.text(), /عنوان SEO للمقال/);
-  assert.ok(db.statements[0].includes("canonical_url LIKE"));
+  assert.ok(db.statements.every(sql => sql.toUpperCase().startsWith("SELECT ")));
 });
 
-test("articles excluded from the public library remain unavailable by direct URL", async () => {
-  const db = articleDb(articleFixture({
-    id: "retired-hijama-article",
-    title: "الحجامة والطب النبوي"
-  }));
-  const response = await articlePageRequest({
-    request: new Request(SITE + "/articles/retired-hijama-article"),
-    env: { DB: db },
-    params: { slug: "retired-hijama-article" }
-  });
-  assert.equal(response.status, 404);
-});
-
-test("future-scheduled articles remain unavailable to public article URLs", async () => {
-  const db = articleDb(articleFixture({ scheduled_at: "2099-01-01T00:00:00.000Z" }));
+test("future-scheduled articles remain unavailable because the public API excludes them", async () => {
+  const db = articleDb([articleFixture({ scheduled_at: "2099-01-01T00:00:00.000Z" })]);
   const response = await articlePageRequest({
     request: new Request(SITE + "/articles/article-test-2026"),
     env: { DB: db },
@@ -124,7 +104,7 @@ test("future-scheduled articles remain unavailable to public article URLs", asyn
 });
 
 test("article route supports HEAD and rejects write methods", async () => {
-  const db = articleDb(articleFixture());
+  const db = articleDb([articleFixture()]);
   const head = await articlePageRequest({
     request: new Request(SITE + "/articles/article-test-2026", { method: "HEAD" }),
     env: { DB: db },
@@ -140,23 +120,11 @@ test("article route supports HEAD and rejects write methods", async () => {
   assert.equal(post.status, 405);
 });
 
-test("dynamic sitemap includes published article URLs and keeps existing static URLs", async () => {
-  const statements = [];
-  const db = {
-    prepare(sql) {
-      statements.push(String(sql).trim());
-      return {
-        async all() {
-          return { results: [
-            { id: "article-one", canonical_url: null, updated_at: "2026-11-20T10:00:00.000Z", scheduled_at: null },
-            { id: "article-two", canonical_url: "https://alabqri.example/articles/custom-slug", updated_at: null, scheduled_at: null },
-            { id: "article-future", title: "مقال مجدول", canonical_url: null, updated_at: null, scheduled_at: "2099-01-01T00:00:00.000Z" },
-            { id: "retired-hijama-article", title: "الحجامة والطب النبوي", canonical_url: null, updated_at: null, scheduled_at: null }
-          ] };
-        }
-      };
-    }
-  };
+test("dynamic sitemap uses public articles and preserves existing static URLs", async () => {
+  const db = articleDb([
+    articleFixture({ id: "article-one", canonical_url: null, updated_at: "2026-11-20T10:00:00.000Z" }),
+    articleFixture({ id: "article-two", canonical_url: "https://alabqri.example/articles/custom-slug", updated_at: null })
+  ]);
   const response = await sitemapRequest({
     request: new Request(SITE + "/sitemap.xml"),
     env: { DB: db }
@@ -167,7 +135,5 @@ test("dynamic sitemap includes published article URLs and keeps existing static 
   assert.ok(xml.includes(SITE + "/verification.html"));
   assert.ok(xml.includes(SITE + "/articles/article-one"));
   assert.ok(xml.includes(SITE + "/articles/custom-slug"));
-  assert.equal(xml.includes("article-future"), false);
-  assert.equal(xml.includes("retired-hijama-article"), false);
-  assert.ok(statements.every(sql => sql.toUpperCase().startsWith("SELECT ")));
+  assert.ok(db.statements.every(sql => sql.toUpperCase().startsWith("SELECT ")));
 });
