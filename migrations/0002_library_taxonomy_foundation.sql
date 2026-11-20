@@ -66,7 +66,7 @@ CREATE INDEX IF NOT EXISTS idx_library_article_classification_status
 INSERT OR IGNORE INTO library_sections (id, name, sort_order) VALUES
   ('quran', 'القرآن الكريم وعلومه', 1),
   ('hadith', 'الحديث الشريف وعلومه', 2),
-  ('dhikr-balance', 'الذكر والاتزان الإيماني', 3),
+  ('dhikr-balance', 'الذكر والإتزان الإيماني', 3),
   ('islamic-psychology-development', 'علم النفس الإسلامي والتنمية البشرية', 4),
   ('complementary-health', 'الطب التكميلي والتوعية الصحية', 5),
   ('research-studies', 'الأبحاث والدراسات', 6),
@@ -90,8 +90,7 @@ INSERT OR IGNORE INTO library_specialties (id, name, sort_order) VALUES
 
 INSERT OR IGNORE INTO library_content_types (id, name, sort_order) VALUES
   ('article', 'مقال', 1),
-  ('research', 'بحث أصيل', 2),
-  ('study', 'دراسة تحليلية', 3),
-  ('guide', 'دليل إرشادي أو منهجي', 4),
-  ('educational-material', 'مادة تعليمية', 5),
-  ('institutional-profile', 'ملف تعريفي مؤسسي', 6);
+  ('research', 'بحث', 2),
+  ('study', 'دراسة', 3),
+  ('course', 'دورة', 4),
+  ('training-material', 'مادة تدريبية', 5);
