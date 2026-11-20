@@ -1,3 +1,5 @@
+import { onRequest as readArticlesApi } from "../api/articles.js";
+
 const SITE_NAME = "منصة العبقري للتدريب والإستشارات";
 const DEFAULT_IMAGE = "/assets/images/1784959287743-580091929.png";
 
@@ -20,22 +22,6 @@ function notFound(status = 404) {
       "x-robots-tag": "noindex, nofollow"
     }
   });
-}
-
-async function findArticle(db, slug, canonicalCandidate) {
-  const fullQuery = "SELECT id,title,category,date,excerpt,content,scheduled_at,seo_title,seo_description,seo_keywords,canonical_url,og_image,created_at,updated_at FROM articles WHERE id=?1 OR canonical_url LIKE ?2 LIMIT 1";
-  try {
-    return await db.prepare(fullQuery).bind(slug, "%" + canonicalCandidate).first();
-  } catch (error) {
-    if (!/no such column:/i.test(String(error?.message || error))) throw error;
-    const legacyQuery = "SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles WHERE id=?1 LIMIT 1";
-    try {
-      return await db.prepare(legacyQuery).bind(slug).first();
-    } catch (legacyError) {
-      if (!/no such column: scheduled_at/i.test(String(legacyError?.message || legacyError))) throw legacyError;
-      return await db.prepare("SELECT id,title,category,date,excerpt,content,created_at,updated_at FROM articles WHERE id=?1 LIMIT 1").bind(slug).first();
-    }
-  }
 }
 
 function renderArticle(article, requestUrl) {
@@ -158,23 +144,29 @@ export async function onRequest({ request, env, params }) {
   const url = new URL(request.url);
   let article;
   try {
-    article = await findArticle(env.DB, slug, url.pathname);
+    // Reuse the existing public library API as the single source of truth for
+    // visibility, scheduled publication, canonical records, and exclusions.
+    // Deliberately omit cookies so an owner session cannot expose scheduled drafts.
+    const publicRequest = new Request(new URL("/api/articles", url.origin), {
+      method: "GET",
+      headers: { "Accept": "application/json" }
+    });
+    const apiResponse = await readArticlesApi({ request: publicRequest, env });
+    if (!apiResponse.ok) throw new Error("Public articles API returned " + apiResponse.status);
+    const payload = await apiResponse.json();
+    const articles = Array.isArray(payload?.articles) ? payload.articles : [];
+    article = articles.find(item => String(item.id || "") === slug);
+    if (!article) {
+      article = articles.find(item => {
+        try { return new URL(item.canonical_url).pathname === url.pathname; }
+        catch (_) { return false; }
+      });
+    }
   } catch (error) {
-    console.error("[article-page] D1 read failed", error);
+    console.error("[article-page] Public article lookup failed", error);
     return notFound(503);
   }
   if (!article || !article.id || !article.title || !article.content) return notFound();
-
-  const normalizedTitle = String(article.title).normalize("NFKC").toLocaleLowerCase("ar")
-    .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-    .replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
-  if (String(article.id).toLowerCase().includes("hijama") ||
-      (normalizedTitle.includes("الحجامة") && normalizedTitle.includes("الطب النبوي"))) return notFound();
-
-  if (article.scheduled_at) {
-    const scheduledTime = Date.parse(article.scheduled_at);
-    if (!Number.isFinite(scheduledTime) || scheduledTime > Date.now()) return notFound();
-  }
 
   const response = renderArticle(article, url);
   if (request.method === "HEAD") return new Response(null, { status: response.status, headers: response.headers });
