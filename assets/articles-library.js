@@ -66,6 +66,7 @@
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
+    .abq-article-page-link{display:inline-block;margin-top:.7rem;padding:.45rem .75rem;border:1px solid #d9e3dc;border-radius:10px;color:#173b2d;background:#fbfcfa;text-decoration:none;font-weight:700}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}}
   `;
   function init() {
@@ -347,6 +348,17 @@
               card.appendChild(el("p", "abq-article-meta", "موعد النشر: " + (Number.isNaN(publishDate.getTime()) ? a.scheduled_at : publishDate.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"}))));
             }
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
+            const pageLink = el("a", "abq-article-page-link", "فتح صفحة المقال");
+            let pagePath = "/articles/" + encodeURIComponent(String(a.id || ""));
+            if (a.canonical_url) {
+              try {
+                const canonical = new URL(a.canonical_url, window.location.origin);
+                if (canonical.origin === window.location.origin && canonical.pathname.startsWith("/articles/")) pagePath = canonical.pathname;
+              } catch (_) {}
+            }
+            pageLink.href = pagePath;
+            pageLink.setAttribute("aria-label", "فتح صفحة مستقلة: " + a.title);
+            card.appendChild(pageLink);
             const details = el("details");
             details.appendChild(el("summary", "", "قراءة البحث"));
             details.appendChild(el("div", "abq-article-content", a.content));
