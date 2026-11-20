@@ -67,6 +67,7 @@ undefined`).all()
 
     const input = validateWrite(await request.json().catch(() => null));
     if (!input) return json({ error: "Invalid classification fields." }, 400);
+    if (PROTECTED_ARTICLE_IDS.has(input.articleId)) return json({ error: "This article is excluded from library classification by the owner policy." }, 403);
     const article = await env.DB.prepare("SELECT id,title,content FROM articles WHERE id=?1").bind(input.articleId).first();
     if (!article) return json({ error: "Article not found." }, 404);
     if (isProtectedArticle(article)) return json({ error: "This article is excluded from library classification by the owner policy." }, 403);
