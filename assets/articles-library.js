@@ -66,6 +66,13 @@
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
+    .abq-library-classification{margin:1rem 0;padding:1rem;border:1px solid #d8e2dc;border-right:4px solid #b88a2b;border-radius:16px;background:#fbfcfa;line-height:1.9}
+    .abq-library-classification[hidden]{display:none}
+    .abq-library-classification-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.7rem}
+    .abq-library-classification label{display:block;font-weight:700;color:#173b2d}
+    .abq-library-classification input,.abq-library-classification select,.abq-library-classification textarea{box-sizing:border-box;width:100%;min-width:0;margin-top:.3rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#172033;font:inherit}
+    .abq-library-classification textarea{min-height:88px;resize:vertical}
+    .abq-library-classification-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}}
   `;
   function init() {
@@ -373,11 +380,15 @@
         adminButton.type = "button";
         const addButton = el("button", "", "إضافة مقال مجدول");
         const logoutButton = el("button", "", "تسجيل الخروج");
+        const classificationButton = el("button", "", "تصنيف ومراجعة المكتبة");
+        classificationButton.type = "button";
         logoutButton.type = "button";
         addButton.type = "button";
         adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
         addButton.style.cssText = adminButton.style.cssText;
         logoutButton.style.cssText = adminButton.style.cssText;
+        classificationButton.style.cssText = adminButton.style.cssText;
+        classificationButton.hidden = !initiallyAdmin;
         logoutButton.hidden = !initiallyAdmin;
         logoutButton.addEventListener("click", async () => {
           logoutButton.disabled = true;
@@ -398,7 +409,7 @@
         addButton.hidden = !initiallyAdmin;
         if (initiallyAdmin) { adminMode = true; adminButton.textContent = "وضع الإدارة مفعّل"; }
         adminBar.style.gridTemplateColumns = "1fr";
-        adminBar.append(adminButton, addButton, logoutButton);
+        adminBar.append(adminButton, classificationButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
 
         const editForm = el("form", "abq-article-card");
@@ -477,6 +488,201 @@
         editorActions.append(saveButton,cancelButton);
         const editorStatus = el("p", "abq-article-meta", "");
         editForm.append(editorActions,editorStatus);
+
+        // Separate owner-only taxonomy workflow. It classifies one selected article
+        // at a time and never changes article content, legacy category, dates or SEO.
+        const classificationPanel = el("section", "abq-library-classification");
+        classificationPanel.hidden = true;
+        classificationPanel.setAttribute("aria-label", "إدارة تصنيف المكتبة");
+        const classificationHeading = el("h3", "", "التصنيف والمراجعة التحريرية");
+        const classificationIntro = el("p", "abq-article-meta", "اختر مقالًا واحدًا ثم حدّد قسمه ونوعه وتخصصه إن كان مناسبًا. لا تُسند تصنيفًا تلقائيًا، ولا يعني حفظ التصنيف اعتماد المقال علميًا أو شرعيًا.");
+        const classificationCount = el("p", "abq-article-meta", "");
+        const classificationSearch = el("input");
+        classificationSearch.type = "search";
+        classificationSearch.placeholder = "ابحث عن مقال بالعنوان...";
+        classificationSearch.setAttribute("aria-label", "البحث عن مقال للتصنيف");
+        const classificationGrid = el("div", "abq-library-classification-grid");
+        const classificationArticleWrap = el("label", "", "المقال");
+        const classificationArticle = el("select");
+        classificationArticle.setAttribute("aria-label", "اختيار المقال");
+        classificationArticleWrap.appendChild(classificationArticle);
+        const makeClassificationField = (labelText, control) => {
+          const wrap = el("label", "", labelText);
+          wrap.appendChild(control);
+          return wrap;
+        };
+        const classificationSection = el("select");
+        const classificationSpecialty = el("select");
+        const classificationType = el("select");
+        const classificationStatus = el("select");
+        const classificationNote = el("textarea");
+        classificationNote.maxLength = 2000;
+        classificationNote.placeholder = "ملاحظة المراجع: ما الذي يحتاج إلى تحقق أو مراجعة؟";
+        classificationGrid.append(
+          makeClassificationField("القسم الرئيسي", classificationSection),
+          makeClassificationField("التخصص الأساسي (اختياري)", classificationSpecialty),
+          makeClassificationField("نوع المحتوى", classificationType),
+          makeClassificationField("حالة المراجعة", classificationStatus),
+          makeClassificationField("ملاحظة تحريرية", classificationNote)
+        );
+        const classificationActions = el("div", "abq-library-classification-actions");
+        const classificationSave = el("button", "", "حفظ التصنيف والتحقق منه");
+        classificationSave.type = "button";
+        classificationSave.style.cssText = adminButton.style.cssText;
+        const classificationClose = el("button", "", "إغلاق");
+        classificationClose.type = "button";
+        classificationClose.style.cssText = "padding:.7rem 1rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font:inherit;cursor:pointer";
+        classificationActions.append(classificationSave, classificationClose);
+        const classificationPanelStatus = el("p", "abq-article-meta", "لم يتم تحميل بيانات التصنيف بعد.");
+        classificationPanelStatus.setAttribute("role", "status");
+        classificationPanel.append(classificationHeading, classificationIntro, classificationCount,
+          classificationSearch, classificationArticleWrap, classificationGrid, classificationActions, classificationPanelStatus);
+        root.insertBefore(classificationPanel, tools);
+
+        let classificationData = null;
+        const classificationStatusOptions = [
+          ["pending_review", "قيد المراجعة"],
+          ["needs_scientific_review", "تحتاج مراجعة علمية"],
+          ["needs_sharia_review", "تحتاج مراجعة شرعية"],
+          ["needs_editorial_review", "تحتاج مراجعة تحريرية"],
+          ["duplicate_or_title_review", "مراجعة العنوان أو التشابه"],
+          ["approved", "معتمد بعد المراجعة"]
+        ];
+        const fillClassificationSelect = (select, rows, placeholder, selected) => {
+          select.replaceChildren();
+          const first = el("option", "", placeholder);
+          first.value = "";
+          select.appendChild(first);
+          rows.forEach(row => {
+            const option = el("option", "", row.name);
+            option.value = row.id;
+            select.appendChild(option);
+          });
+          select.value = selected || "";
+        };
+        const selectedClassificationArticle = () => classificationData?.articles?.find(article => article.id === classificationArticle.value);
+        const selectedArticleClassification = article => classificationData?.classifications?.[article?.id] || article || {};
+        const populateClassificationFields = () => {
+          const article = selectedClassificationArticle();
+          const saved = selectedArticleClassification(article);
+          fillClassificationSelect(classificationSection, classificationData?.sections || [], "اختر القسم الرئيسي", saved.primary_section_id);
+          fillClassificationSelect(classificationSpecialty, (classificationData?.specialties || []).filter(specialty => specialty.primary_section_id === classificationSection.value), "لا يوجد تخصص محدد", saved.primary_specialty_id);
+          fillClassificationSelect(classificationType, classificationData?.content_types || [], "اختر نوع المحتوى", saved.content_type_id);
+          fillClassificationSelect(classificationStatus, classificationStatusOptions.map(([id,name]) => ({id,name})), "اختر حالة المراجعة", saved.editorial_status || "pending_review");
+          classificationNote.value = saved.editorial_note || "";
+        };
+        const renderClassificationArticleOptions = preserveId => {
+          if (!classificationData) return;
+          const query = classificationSearch.value.trim().toLocaleLowerCase("ar");
+          const rows = classificationData.articles.filter(article => !query || String(article.title || "").toLocaleLowerCase("ar").includes(query));
+          classificationArticle.replaceChildren();
+          rows.forEach(article => {
+            const assigned = Boolean(article.primary_section_id);
+            const option = el("option", "", String(article.title || article.id) + (assigned ? " — مصنف" : " — غير مصنف"));
+            option.value = article.id;
+            classificationArticle.appendChild(option);
+          });
+          if (preserveId && rows.some(article => article.id === preserveId)) classificationArticle.value = preserveId;
+          else if (rows.length) classificationArticle.value = rows[0].id;
+          populateClassificationFields();
+        };
+        const loadClassificationData = async () => {
+          if (!adminAuthenticated) throw new Error("يلزم تسجيل الدخول بحساب المالك أولًا.");
+          classificationPanelStatus.textContent = "جارٍ تحميل قواميس التصنيف والمقالات المسموح بمراجعتها...";
+          const response = await fetch("/api/admin/library-classification", {
+            headers: {"Accept":"application/json"}, credentials: "same-origin", cache: "no-store"
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.error || ("تعذر تحميل التصنيف (HTTP " + response.status + ")."));
+          if (!Array.isArray(data.articles) || !Array.isArray(data.sections) ||
+              !Array.isArray(data.specialties) || !Array.isArray(data.content_types)) {
+            throw new Error("استجابة التصنيف غير مكتملة؛ لم يتم إجراء أي تعديل.");
+          }
+          classificationData = {
+            articles: data.articles, sections: data.sections, specialties: data.specialties,
+            content_types: data.content_types,
+            classifications: Object.fromEntries(data.articles.map(article => [article.id, article]))
+          };
+          const assigned = data.articles.filter(article => article.primary_section_id).length;
+          classificationCount.textContent = "المقالات المتاحة للمراجعة: " + data.articles.length +
+            " • المصنفة: " + assigned + " • غير المصنفة: " + (data.articles.length - assigned);
+          renderClassificationArticleOptions(classificationArticle.value);
+          classificationPanelStatus.textContent = "تم تحميل القواميس. لم يُجرَ أي تصنيف تلقائي.";
+        };
+        classificationButton.addEventListener("click", async () => {
+          classificationPanel.hidden = !classificationPanel.hidden;
+          if (!classificationPanel.hidden && !classificationData) {
+            classificationButton.disabled = true;
+            try { await loadClassificationData(); }
+            catch (error) { classificationPanelStatus.textContent = error?.message || "تعذر تحميل بيانات التصنيف."; }
+            finally { classificationButton.disabled = false; }
+          }
+          if (!classificationPanel.hidden) classificationPanel.scrollIntoView({behavior:"smooth",block:"start"});
+        });
+        classificationClose.addEventListener("click", () => { classificationPanel.hidden = true; });
+        classificationSearch.addEventListener("input", () => renderClassificationArticleOptions(classificationArticle.value));
+        classificationArticle.addEventListener("change", populateClassificationFields);
+        classificationSection.addEventListener("change", () => {
+          const matchingSpecialties = (classificationData?.specialties || []).filter(specialty => specialty.primary_section_id === classificationSection.value);
+          fillClassificationSelect(classificationSpecialty, matchingSpecialties, "لا يوجد تخصص محدد", "");
+        });
+        classificationSave.addEventListener("click", async () => {
+          if (!adminAuthenticated || !classificationData) {
+            classificationPanelStatus.textContent = "تحقق من جلسة المالك وحمّل بيانات التصنيف أولًا.";
+            return;
+          }
+          const article = selectedClassificationArticle();
+          if (!article) { classificationPanelStatus.textContent = "اختر مقالًا متاحًا أولًا."; return; }
+          if (!classificationSection.value || !classificationType.value || !classificationStatus.value) {
+            classificationPanelStatus.textContent = "اختر القسم الرئيسي ونوع المحتوى وحالة المراجعة؛ التخصص اختياري.";
+            return;
+          }
+          classificationSave.disabled = true;
+          classificationSave.textContent = "جارٍ الحفظ...";
+          classificationPanelStatus.textContent = "جارٍ حفظ التصنيف وسجل التدقيق ثم التحقق من النتيجة...";
+          try {
+            const response = await fetch("/api/admin/library-classification", {
+              method: "POST",
+              headers: {"Accept":"application/json","Content-Type":"application/json"},
+              credentials: "same-origin", cache: "no-store",
+              body: JSON.stringify({
+                article_id: article.id,
+                primary_section_id: classificationSection.value,
+                primary_specialty_id: classificationSpecialty.value || null,
+                content_type_id: classificationType.value,
+                editorial_status: classificationStatus.value,
+                editorial_note: classificationNote.value.trim()
+              })
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || result.ok !== true || result.verified !== true) {
+              throw new Error(result.error || ("لم يتم تأكيد الحفظ (HTTP " + response.status + ")."));
+            }
+            const saved = result.classification;
+            classificationData.classifications[article.id] = {
+              ...article,
+              primary_section_id: saved.primary_section_id,
+              primary_specialty_id: saved.primary_specialty_id,
+              content_type_id: saved.content_type_id,
+              editorial_status: saved.editorial_status,
+              editorial_note: saved.editorial_note
+            };
+            classificationData.articles = classificationData.articles.map(item =>
+              item.id === article.id ? classificationData.classifications[article.id] : item
+            );
+            renderClassificationArticleOptions(article.id);
+            const totalAssigned = classificationData.articles.filter(item => item.primary_section_id).length;
+            classificationCount.textContent = "المقالات المتاحة للمراجعة: " + classificationData.articles.length +
+              " • المصنفة: " + totalAssigned + " • غير المصنفة: " + (classificationData.articles.length - totalAssigned);
+            classificationPanelStatus.textContent = "تم حفظ التصنيف والتحقق منه بنجاح، وسُجلت العملية في سجل الإدارة. هذا لا يعني اعتماد المحتوى علميًا أو شرعيًا.";
+          } catch (error) {
+            classificationPanelStatus.textContent = error?.message || "تعذر حفظ التصنيف.";
+          } finally {
+            classificationSave.disabled = false;
+            classificationSave.textContent = "حفظ التصنيف والتحقق منه";
+          }
+        });
+
         const adminStatus = el("p", "abq-article-meta", "");
         adminStatus.setAttribute("role", "status");
         adminStatus.style.cssText = "padding:.6rem .8rem;border-radius:10px;background:#f8fafc;line-height:1.8";
@@ -541,7 +747,7 @@
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
             adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
-            addButton.hidden = false; logoutButton.hidden = false; render();
+            addButton.hidden = false; logoutButton.hidden = false; classificationButton.hidden = false; render();
             setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
             editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
           } catch (error) { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); }
