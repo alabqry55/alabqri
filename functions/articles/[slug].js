@@ -23,9 +23,9 @@ function notFound(status = 404) {
 }
 
 async function findArticle(db, slug, canonicalCandidate) {
-  const fullQuery = "SELECT id,title,category,date,excerpt,content,scheduled_at,seo_title,seo_description,seo_keywords,canonical_url,og_image,created_at,updated_at FROM articles WHERE id=?1 OR canonical_url=?2 LIMIT 1";
+  const fullQuery = "SELECT id,title,category,date,excerpt,content,scheduled_at,seo_title,seo_description,seo_keywords,canonical_url,og_image,created_at,updated_at FROM articles WHERE id=?1 OR canonical_url LIKE ?2 LIMIT 1";
   try {
-    return await db.prepare(fullQuery).bind(slug, canonicalCandidate).first();
+    return await db.prepare(fullQuery).bind(slug, "%" + canonicalCandidate).first();
   } catch (error) {
     if (!/no such column:/i.test(String(error?.message || error))) throw error;
     const legacyQuery = "SELECT id,title,category,date,excerpt,content,scheduled_at,created_at,updated_at FROM articles WHERE id=?1 LIMIT 1";
@@ -158,7 +158,7 @@ export async function onRequest({ request, env, params }) {
   const url = new URL(request.url);
   let article;
   try {
-    article = await findArticle(env.DB, slug, url.origin + url.pathname);
+    article = await findArticle(env.DB, slug, url.pathname);
   } catch (error) {
     console.error("[article-page] D1 read failed", error);
     return notFound(503);
