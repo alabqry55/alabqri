@@ -28,11 +28,13 @@ export async function onRequest({ request, env }) {
   if (env.DB) {
     try {
       const result = await env.DB.prepare(
-        "SELECT id,canonical_url,updated_at,scheduled_at FROM articles ORDER BY updated_at DESC"
+        "SELECT id,title,canonical_url,updated_at,scheduled_at FROM articles ORDER BY updated_at DESC"
       ).all();
       const now = Date.now();
       for (const article of result.results || []) {
         if (!article?.id) continue;
+        const title = String(article.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
+        if (String(article.id).toLowerCase().includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"))) continue;
         if (article.scheduled_at) {
           const scheduledTime = Date.parse(article.scheduled_at);
           if (!Number.isFinite(scheduledTime) || scheduledTime > now) continue;
