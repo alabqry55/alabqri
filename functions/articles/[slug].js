@@ -167,7 +167,7 @@ export async function onRequest({ request, env, params }) {
 
   const normalizedTitle = String(article.title).normalize("NFKC").toLocaleLowerCase("ar")
     .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
-    .replace(/[\\u064B-\\u065F\\u0670ـ]/g, "").replace(/\\s+/g, " ").trim();
+    .replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
   if (String(article.id).toLowerCase().includes("hijama") ||
       (normalizedTitle.includes("الحجامة") && normalizedTitle.includes("الطب النبوي"))) return notFound();
 
