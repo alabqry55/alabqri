@@ -54,6 +54,19 @@ CREATE TABLE IF NOT EXISTS library_article_classification (
   FOREIGN KEY (content_type_id) REFERENCES library_content_types(id) ON DELETE RESTRICT
 );
 
+-- Ensure the owner audit sink exists for classification writes.
+-- IF NOT EXISTS preserves any existing audit history; the rollback intentionally leaves it intact.
+CREATE TABLE IF NOT EXISTS article_admin_audit (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  actor TEXT NOT NULL,
+  action TEXT NOT NULL,
+  article_id TEXT,
+  details TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created
+  ON article_admin_audit(created_at DESC);
+
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_section
   ON library_article_classification(primary_section_id);
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_specialty
