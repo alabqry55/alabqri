@@ -22,7 +22,14 @@ test("library taxonomy migration seeds exactly fourteen specialties and five app
   assert.deepEqual(types.map(row => row[2]), ["مقال", "بحث", "دراسة", "دورة", "مادة تدريبية"]);
 });
 
-test("foundation migration provisions the audit sink without dropping prior audit history", async () => {\n  const sql = await readFile(new URL("../../migrations/0002_library_taxonomy_foundation.sql", import.meta.url), "utf8");\n  assert.match(sql, /CREATE TABLE IF NOT EXISTS article_admin_audit/i);\n  const rollback = await readFile(new URL("../../migrations/rollback_0002_library_taxonomy_foundation.sql", import.meta.url), "utf8");\n  assert.doesNotMatch(rollback, /DROP TABLE IF EXISTS article_admin_audit/i);\n});\n\ntest("foundation migration does not mutate or insert into existing article records", async () => {
+test("foundation migration provisions the audit sink without dropping prior audit history", async () => {
+  const sql = await readFile(new URL("../../migrations/0002_library_taxonomy_foundation.sql", import.meta.url), "utf8");
+  assert.match(sql, /CREATE TABLE IF NOT EXISTS article_admin_audit/i);
+  const rollback = await readFile(new URL("../../migrations/rollback_0002_library_taxonomy_foundation.sql", import.meta.url), "utf8");
+  assert.doesNotMatch(rollback, /DROP TABLE IF EXISTS article_admin_audit/i);
+});
+
+test("foundation migration does not mutate or insert into existing article records", async () => {
   const sql = await readFile(new URL("../../migrations/0002_library_taxonomy_foundation.sql", import.meta.url), "utf8");
   assert.doesNotMatch(sql, /\bALTER\s+TABLE\s+articles\b/i);
   assert.doesNotMatch(sql, /\bUPDATE\s+articles\b/i);
