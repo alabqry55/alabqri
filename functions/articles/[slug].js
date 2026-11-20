@@ -165,6 +165,12 @@ export async function onRequest({ request, env, params }) {
   }
   if (!article || !article.id || !article.title || !article.content) return notFound();
 
+  const normalizedTitle = String(article.title).normalize("NFKC").toLocaleLowerCase("ar")
+    .replace(/[إأآ]/g, "ا").replace(/ى/g, "ي")
+    .replace(/[\\u064B-\\u065F\\u0670ـ]/g, "").replace(/\\s+/g, " ").trim();
+  if (String(article.id).toLowerCase().includes("hijama") ||
+      (normalizedTitle.includes("الحجامة") && normalizedTitle.includes("الطب النبوي"))) return notFound();
+
   if (article.scheduled_at) {
     const scheduledTime = Date.parse(article.scheduled_at);
     if (!Number.isFinite(scheduledTime) || scheduledTime > Date.now()) return notFound();
