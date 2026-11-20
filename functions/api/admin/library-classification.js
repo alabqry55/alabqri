@@ -45,7 +45,7 @@ export async function onRequest({ request, env }) {
         env.DB.prepare("SELECT id,name,sort_order FROM library_sections WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare("SELECT id,name,sort_order,primary_section_id FROM library_specialties WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare("SELECT id,name,sort_order FROM library_content_types WHERE active=1 ORDER BY sort_order").all(),
-        env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,a.content,
+        env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,
           c.primary_section_id,c.primary_specialty_id,c.content_type_id,
           c.editorial_status,c.editorial_note,c.updated_at AS classification_updated_at
           FROM articles a LEFT JOIN library_article_classification c ON c.article_id=a.id
