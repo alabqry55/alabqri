@@ -43,7 +43,7 @@ export async function onRequest({ request, env }) {
     if (request.method === "GET") {
       const [sections, specialties, contentTypes, articles] = await Promise.all([
         env.DB.prepare("SELECT id,name,sort_order FROM library_sections WHERE active=1 ORDER BY sort_order").all(),
-        env.DB.prepare("SELECT id,name,sort_order FROM library_specialties WHERE active=1 ORDER BY sort_order").all(),
+        env.DB.prepare("SELECT id,name,sort_order,primary_section_id FROM library_specialties WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare("SELECT id,name,sort_order FROM library_content_types WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,a.content,
           c.primary_section_id,c.primary_specialty_id,c.content_type_id,
@@ -62,7 +62,7 @@ export async function onRequest({ request, env }) {
     const contentType = await env.DB.prepare("SELECT id FROM library_content_types WHERE id=?1 AND active=1").bind(input.contentTypeId).first();
     if (!section || !contentType) return json({ error: "Unknown or inactive section/content type." }, 400);
     if (input.specialtyId) {
-      const specialty = await env.DB.prepare("SELECT id FROM library_specialties WHERE id=?1 AND active=1").bind(input.specialtyId).first();
+      const specialty = await env.DB.prepare("SELECT id FROM library_specialties WHERE id=?1 AND primary_section_id=?2 AND active=1").bind(input.specialtyId,input.sectionId).first();
       if (!specialty) return json({ error: "Unknown or inactive specialty." }, 400);
     }
     const before = await env.DB.prepare(`SELECT article_id,primary_section_id,primary_specialty_id,content_type_id,editorial_status,editorial_note
