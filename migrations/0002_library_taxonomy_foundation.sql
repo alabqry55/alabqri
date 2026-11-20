@@ -69,6 +69,8 @@ CREATE TABLE IF NOT EXISTS article_admin_audit (
 CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created
   ON article_admin_audit(created_at DESC);
 
+CREATE INDEX IF NOT EXISTS idx_library_specialties_section
+  ON library_specialties(primary_section_id);
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_section
   ON library_article_classification(primary_section_id);
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_specialty
