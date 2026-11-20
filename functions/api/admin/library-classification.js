@@ -10,6 +10,18 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
 });
 
 const validId = value => typeof value === "string" && /^[a-z0-9_-]{1,80}$/i.test(value);
+const PROTECTED_ARTICLE_IDS = new Set([
+  "article_1793791237005",
+  "article_1793804244058",
+  "article_1793869948469",
+  "article-mw21bjes-dly783",
+  "article_1793869474653",
+  "article-mw211mhx-yg6u9s"
+]);
+const PROTECTED_TERMS = ["الطاقة الحيوية", "الريكي", "الحجامة", "السوجوك", "سوجوك", "البرمجة اللغوية العصبية", "nlp"];
+const isProtectedArticle = article => PROTECTED_ARTICLE_IDS.has(String(article?.id || "")) ||
+  PROTECTED_TERMS.some(term => String(article?.title || "").concat(" ", String(article?.content || "")).toLocaleLowerCase("ar").includes(term));
+
 const EDITORIAL_STATUSES = new Set([
   "pending_review", "approved", "needs_scientific_review",
   "needs_sharia_review", "needs_editorial_review", "duplicate_or_title_review"
@@ -45,19 +57,19 @@ export async function onRequest({ request, env }) {
         env.DB.prepare("SELECT id,name,sort_order FROM library_sections WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare("SELECT id,name,sort_order FROM library_specialties WHERE active=1 ORDER BY sort_order").all(),
         env.DB.prepare("SELECT id,name,sort_order FROM library_content_types WHERE active=1 ORDER BY sort_order").all(),
-        env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,
+        env.DB.prepare(`SELECT a.id,a.title,a.category,a.date,a.scheduled_at,a.content,
           c.primary_section_id,c.primary_specialty_id,c.content_type_id,
           c.editorial_status,c.editorial_note,c.updated_at AS classification_updated_at
-          FROM articles a LEFT JOIN library_article_classification c ON c.article_id=a.id
-          ORDER BY a.updated_at DESC,a.created_at DESC`).all()
+undefined`).all()
       ]);
       return json({ sections: sections.results || [], specialties: specialties.results || [], content_types: contentTypes.results || [], articles: articles.results || [] });
     }
 
     const input = validateWrite(await request.json().catch(() => null));
     if (!input) return json({ error: "Invalid classification fields." }, 400);
-    const article = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(input.articleId).first();
+    const article = await env.DB.prepare("SELECT id,title,content FROM articles WHERE id=?1").bind(input.articleId).first();
     if (!article) return json({ error: "Article not found." }, 404);
+    if (isProtectedArticle(article)) return json({ error: "This article is excluded from library classification by the owner policy." }, 403);
     const section = await env.DB.prepare("SELECT id FROM library_sections WHERE id=?1 AND active=1").bind(input.sectionId).first();
     const contentType = await env.DB.prepare("SELECT id FROM library_content_types WHERE id=?1 AND active=1").bind(input.contentTypeId).first();
     if (!section || !contentType) return json({ error: "Unknown or inactive section/content type." }, 400);
