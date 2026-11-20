@@ -566,7 +566,7 @@
           const article = selectedClassificationArticle();
           const saved = selectedArticleClassification(article);
           fillClassificationSelect(classificationSection, classificationData?.sections || [], "اختر القسم الرئيسي", saved.primary_section_id);
-          fillClassificationSelect(classificationSpecialty, classificationData?.specialties || [], "لا يوجد تخصص محدد", saved.primary_specialty_id);
+          fillClassificationSelect(classificationSpecialty, (classificationData?.specialties || []).filter(specialty => specialty.primary_section_id === classificationSection.value), "لا يوجد تخصص محدد", saved.primary_specialty_id);
           fillClassificationSelect(classificationType, classificationData?.content_types || [], "اختر نوع المحتوى", saved.content_type_id);
           fillClassificationSelect(classificationStatus, classificationStatusOptions.map(([id,name]) => ({id,name})), "اختر حالة المراجعة", saved.editorial_status || "pending_review");
           classificationNote.value = saved.editorial_note || "";
@@ -622,6 +622,10 @@
         classificationClose.addEventListener("click", () => { classificationPanel.hidden = true; });
         classificationSearch.addEventListener("input", () => renderClassificationArticleOptions(classificationArticle.value));
         classificationArticle.addEventListener("change", populateClassificationFields);
+        classificationSection.addEventListener("change", () => {
+          const matchingSpecialties = (classificationData?.specialties || []).filter(specialty => specialty.primary_section_id === classificationSection.value);
+          fillClassificationSelect(classificationSpecialty, matchingSpecialties, "لا يوجد تخصص محدد", "");
+        });
         classificationSave.addEventListener("click", async () => {
           if (!adminAuthenticated || !classificationData) {
             classificationPanelStatus.textContent = "تحقق من جلسة المالك وحمّل بيانات التصنيف أولًا.";
