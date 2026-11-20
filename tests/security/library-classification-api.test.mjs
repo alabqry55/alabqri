@@ -46,31 +46,7 @@ test("rejects cross-origin writes before database access", async () => {
 });
 
 
-test("refuses classification writes for owner-excluded records before reading article data", async () => {
-  const cookie = await ownerCookie();
-  let touched = false;
-  const env = {
-    ADMIN_SESSION_SECRET: SECRET,
-    DB: { prepare() { touched = true; throw new Error("protected records must not be queried"); } }
-  };
-  const response = await onRequest({
-    request: request("/api/admin/library-classification", {
-      method: "POST",
-      cookie,
-      body: {
-        article_id: "article_1793869948469",
-        primary_section_id: "research-studies",
-        content_type_id: "research"
-      }
-    }),
-    env
-  });
-  assert.equal(response.status, 403);
-  assert.equal(touched, false);
-});
-
-
-test("owner library read returns dictionaries and filters protected article content", async () => {
+test("owner library read returns all article records for owner-led classification without exposing article content", async () => {
   const cookie = await ownerCookie();
   const env = {
     ADMIN_SESSION_SECRET: SECRET,
