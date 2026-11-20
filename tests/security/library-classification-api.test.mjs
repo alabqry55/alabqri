@@ -68,3 +68,35 @@ test("refuses classification writes for owner-excluded records before reading ar
   assert.equal(response.status, 403);
   assert.equal(touched, false);
 });
+
+
+test("owner library read returns dictionaries and filters protected article content", async () => {
+  const cookie = await ownerCookie();
+  const env = {
+    ADMIN_SESSION_SECRET: SECRET,
+    DB: {
+      prepare(sql) {
+        return {
+          async all() {
+            if (sql.includes("FROM library_sections")) return { results: [{ id: "quran", name: "القرآن الكريم وعلومه", sort_order: 1 }] };
+            if (sql.includes("FROM library_specialties")) return { results: [] };
+            if (sql.includes("FROM library_content_types")) return { results: [{ id: "article", name: "مقال", sort_order: 1 }] };
+            if (sql.includes("FROM articles a LEFT JOIN")) return { results: [
+              { id: "safe-article", title: "مقال معرفي", content: "نص عادي", category: "موضوعات معرفية", primary_section_id: null },
+              { id: "article_1793869948469", title: "مقال مستثنى", content: "محتوى", category: "موضوعات معرفية" },
+              { id: "nlp-article", title: "موضوع آخر", content: "يتناول NLP", category: "موضوعات معرفية" }
+            ] };
+            throw new Error("Unexpected SQL: " + sql);
+          }
+        };
+      }
+    }
+  };
+  const response = await onRequest({ request: request("/api/admin/library-classification", { cookie }), env });
+  assert.equal(response.status, 200);
+  const data = await response.json();
+  assert.equal(data.sections.length, 1);
+  assert.equal(data.content_types.length, 1);
+  assert.deepEqual(data.articles.map(article => article.id), ["safe-article"]);
+  assert.equal("content" in data.articles[0], false);
+});
