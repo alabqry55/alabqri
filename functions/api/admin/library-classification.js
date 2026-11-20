@@ -10,18 +10,6 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
 });
 
 const validId = value => typeof value === "string" && /^[a-z0-9_-]{1,80}$/i.test(value);
-const PROTECTED_ARTICLE_IDS = new Set([
-  "article_1793791237005",
-  "article_1793804244058",
-  "article_1793869948469",
-  "article-mw21bjes-dly783",
-  "article_1793869474653",
-  "article-mw211mhx-yg6u9s"
-]);
-const PROTECTED_TERMS = ["الطاقة الحيوية", "الريكي", "الحجامة", "السوجوك", "سوجوك", "البرمجة اللغوية العصبية", "nlp"];
-const isProtectedArticle = article => PROTECTED_ARTICLE_IDS.has(String(article?.id || "")) ||
-  PROTECTED_TERMS.some(term => String(article?.title || "").concat(" ", String(article?.content || "")).toLocaleLowerCase("ar").includes(term));
-
 const EDITORIAL_STATUSES = new Set([
   "pending_review", "approved", "needs_scientific_review",
   "needs_sharia_review", "needs_editorial_review", "duplicate_or_title_review"
@@ -68,10 +56,8 @@ export async function onRequest({ request, env }) {
 
     const input = validateWrite(await request.json().catch(() => null));
     if (!input) return json({ error: "Invalid classification fields." }, 400);
-    if (PROTECTED_ARTICLE_IDS.has(input.articleId)) return json({ error: "This article is excluded from library classification by the owner policy." }, 403);
-    const article = await env.DB.prepare("SELECT id,title,content FROM articles WHERE id=?1").bind(input.articleId).first();
+    const article = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(input.articleId).first();
     if (!article) return json({ error: "Article not found." }, 404);
-    if (isProtectedArticle(article)) return json({ error: "This article is excluded from library classification by the owner policy." }, 403);
     const section = await env.DB.prepare("SELECT id FROM library_sections WHERE id=?1 AND active=1").bind(input.sectionId).first();
     const contentType = await env.DB.prepare("SELECT id FROM library_content_types WHERE id=?1 AND active=1").bind(input.contentTypeId).first();
     if (!section || !contentType) return json({ error: "Unknown or inactive section/content type." }, 400);
