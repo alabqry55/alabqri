@@ -1,3 +1,5 @@
+import { onRequest as readArticlesApi } from "./api/articles.js";
+
 const STATIC_URLS = [
   "/",
   "/verification.html",
@@ -27,18 +29,17 @@ export async function onRequest({ request, env }) {
 
   if (env.DB) {
     try {
-      const result = await env.DB.prepare(
-        "SELECT id,title,canonical_url,updated_at,scheduled_at FROM articles ORDER BY updated_at DESC"
-      ).all();
-      const now = Date.now();
-      for (const article of result.results || []) {
+      // Build the sitemap from the same public article set used by the library.
+      // No owner cookie is forwarded, so scheduled drafts stay private.
+      const publicRequest = new Request(new URL("/api/articles", origin), {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+      });
+      const apiResponse = await readArticlesApi({ request: publicRequest, env });
+      if (!apiResponse.ok) throw new Error("Public articles API returned " + apiResponse.status);
+      const payload = await apiResponse.json();
+      for (const article of Array.isArray(payload?.articles) ? payload.articles : []) {
         if (!article?.id) continue;
-        const title = String(article.title || "").normalize("NFKC").replace(/[\u064B-\u065F\u0670ـ]/g, "").replace(/\s+/g, " ").trim();
-        if (String(article.id).toLowerCase().includes("hijama") || (title.includes("الحجامة") && title.includes("الطب النبوي"))) continue;
-        if (article.scheduled_at) {
-          const scheduledTime = Date.parse(article.scheduled_at);
-          if (!Number.isFinite(scheduledTime) || scheduledTime > now) continue;
-        }
         let pageUrl = new URL("/articles/" + encodeURIComponent(String(article.id)), origin).href;
         const canonical = String(article.canonical_url || "").trim();
         if (/^https:\/\//i.test(canonical)) {
@@ -49,14 +50,13 @@ export async function onRequest({ request, env }) {
             }
           } catch (_) {}
         }
-        const lastmod = article.updated_at && Number.isFinite(Date.parse(article.updated_at))
+        urls.set(pageUrl, article.updated_at && Number.isFinite(Date.parse(article.updated_at))
           ? new Date(article.updated_at).toISOString()
-          : "";
-        urls.set(pageUrl, lastmod);
+          : "");
       }
     } catch (error) {
-      console.error("[sitemap] D1 read failed", error);
-      // Keep the known static URLs available if the article inventory cannot be read.
+      console.error("[sitemap] Public article lookup failed", error);
+      // Keep known static URLs available if the public article API is unavailable.
     }
   }
 
