@@ -19,7 +19,7 @@ test("library taxonomy migration seeds exactly fourteen specialties and five app
   const specialties = [...specialtyBlock.matchAll(/\('([^']+)',\s*'([^']+)',\s*(\d+),\s*'([^']+)'\)/g)];
   const types = [...typeBlock.matchAll(/\('([^']+)',\s*'([^']+)',\s*(\d+)\)/g)];
   assert.equal(specialties.length, 14);
-  assert.deepEqual(specialties.map(row => row[3]), ["quran", "hadith", "quran", "hadith", "knowledge-thought", "dhikr-balance", "complementary-health", "knowledge-thought", "dhikr-balance", "complementary-health", "complementary-health", "complementary-health", "islamic-psychology-development", "knowledge-thought"]);
+  assert.deepEqual(specialties.map(row => row[4]), ["quran", "hadith", "quran", "hadith", "knowledge-thought", "dhikr-balance", "complementary-health", "knowledge-thought", "dhikr-balance", "complementary-health", "complementary-health", "complementary-health", "islamic-psychology-development", "knowledge-thought"]);
   assert.deepEqual(types.map(row => row[2]), ["مقال", "بحث", "دراسة", "دورة", "مادة تدريبية"]);
 });
 
