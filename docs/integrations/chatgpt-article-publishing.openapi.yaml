@@ -1,0 +1,131 @@
+openapi: 3.1.0
+info:
+  title: ALABQRI Approved Article Publishing
+  version: 1.0.0
+  description: >
+    Publish one new ALABQRI article only after the user explicitly approves
+    publication. This API cannot read, update, schedule, bulk-import, or delete articles.
+servers:
+  - url: https://feature-chatgpt-article-publ.alabqri.pages.dev
+paths:
+  /api/articles:
+    post:
+      operationId: publishApprovedAlabqriArticle
+      summary: Publish one user-approved new article to ALABQRI
+      description: >
+        Call this operation only after the user has reviewed the complete article
+        and explicitly instructed ChatGPT to publish it (for example: "انشر").
+        Never call it for a draft, a request to prepare an article, or an ambiguous
+        instruction. Each call publishes one article immediately. The server
+        rejects duplicate IDs and titles and does not permit overwriting existing
+        articles or scheduling through this integration.
+      x-openai-isConsequential: true
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [action, publishApproved, article]
+              properties:
+                action:
+                  type: string
+                  const: save
+                publishApproved:
+                  type: boolean
+                  const: true
+                article:
+                  type: object
+                  additionalProperties: false
+                  required: [id, title, category, date, excerpt, content]
+                  properties:
+                    id:
+                      type: string
+                      minLength: 1
+                      maxLength: 80
+                      pattern: '^[A-Za-z0-9_-]+$'
+                    title:
+                      type: string
+                      minLength: 1
+                      maxLength: 240
+                    category:
+                      type: string
+                      enum:
+                        - القرآن الكريم وعلومه
+                        - التنمية البشرية
+                        - الطب التكميلي
+                        - الأذكار والاتزان
+                        - البحث العلمي
+                        - موضوعات معرفية
+                    date:
+                      type: string
+                      maxLength: 80
+                    excerpt:
+                      type: string
+                      maxLength: 2000
+                    content:
+                      type: string
+                      minLength: 1
+                      maxLength: 200000
+                    tags:
+                      type: array
+                      maxItems: 20
+                      items:
+                        type: string
+                        maxLength: 80
+                    seoTitle:
+                      type: string
+                      maxLength: 240
+                    seoDescription:
+                      type: string
+                      maxLength: 500
+                    seoKeywords:
+                      type: string
+                      maxLength: 1000
+                    canonicalUrl:
+                      type: string
+                      maxLength: 500
+                    ogImage:
+                      type: string
+                      maxLength: 1000
+      responses:
+        '200':
+          description: Article stored and verified in D1.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, id, title, verified, published, source]
+                properties:
+                  ok:
+                    type: boolean
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  verified:
+                    type: boolean
+                  published:
+                    type: boolean
+                  source:
+                    type: string
+                    const: chatgpt
+        '400':
+          description: Invalid article data or scheduling is not allowed.
+        '401':
+          description: Missing or invalid bearer token.
+        '403':
+          description: Explicit approval missing or unsupported action.
+        '409':
+          description: Duplicate article ID or title.
+        '500':
+          description: Database operation failed.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token
