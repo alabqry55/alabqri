@@ -44,3 +44,27 @@ test("rejects cross-origin writes before database access", async () => {
   const response = await onRequest({ request: req, env });
   assert.equal(response.status, 403); assert.equal(touched, false);
 });
+
+
+test("refuses classification writes for owner-excluded records before reading article data", async () => {
+  const cookie = await ownerCookie();
+  let touched = false;
+  const env = {
+    ADMIN_SESSION_SECRET: SECRET,
+    DB: { prepare() { touched = true; throw new Error("protected records must not be queried"); } }
+  };
+  const response = await onRequest({
+    request: request("/api/admin/library-classification", {
+      method: "POST",
+      cookie,
+      body: {
+        article_id: "article_1793869948469",
+        primary_section_id: "research-studies",
+        content_type_id: "research"
+      }
+    }),
+    env
+  });
+  assert.equal(response.status, 403);
+  assert.equal(touched, false);
+});
