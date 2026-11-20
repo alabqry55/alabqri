@@ -46,6 +46,49 @@ test("rejects cross-origin writes before database access", async () => {
 });
 
 
+test("rejects a specialty that does not belong to the selected primary section", async () => {
+  const cookie = await ownerCookie();
+  let batched = false;
+  const env = {
+    ADMIN_SESSION_SECRET: SECRET,
+    DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              async first() {
+                if (sql.includes("FROM articles")) return { id: args[0], title: "اختبار" };
+                if (sql.includes("FROM library_sections")) return { id: args[0] };
+                if (sql.includes("FROM library_content_types")) return { id: args[0] };
+                if (sql.includes("FROM library_specialties")) return null;
+                return null;
+              }
+            };
+          },
+          async batch() { batched = true; }
+        };
+      }
+    }
+  };
+  const response = await onRequest({
+    request: request("/api/admin/library-classification", {
+      method: "POST",
+      cookie,
+      body: {
+        article_id: "safe-article",
+        primary_section_id: "quran",
+        primary_specialty_id: "sunnah-sciences",
+        content_type_id: "article",
+        editorial_status: "pending_review",
+        editorial_note: ""
+      }
+    }),
+    env
+  });
+  assert.equal(response.status, 400);
+  assert.equal(batched, false);
+});
+
 test("owner library read returns all article records for owner-led classification without exposing article content", async () => {
   const cookie = await ownerCookie();
   const env = {
