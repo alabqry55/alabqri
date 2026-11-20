@@ -63,7 +63,7 @@ export async function onRequest({ request, env }) {
           FROM articles a LEFT JOIN library_article_classification c ON c.article_id=a.id
           ORDER BY a.updated_at DESC,a.created_at DESC`).all()
       ]);
-      return json({ sections: sections.results || [], specialties: specialties.results || [], content_types: contentTypes.results || [], articles: articles.results || [] });
+      return json({ sections: sections.results || [], specialties: specialties.results || [], content_types: contentTypes.results || [], articles: (articles.results || []).filter(article => !isProtectedArticle(article)).map(({ content, ...article }) => article) });
     }
 
     const input = validateWrite(await request.json().catch(() => null));
