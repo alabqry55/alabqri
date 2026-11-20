@@ -1,5 +1,20 @@
 # ALABQRI — All-Articles Editorial Audit (Preview-first)
 
+## Permanent governance policy — Zamakhshari Decree
+
+This policy is adopted as the permanent editorial and technical governance standard for all current and future ALABQRI articles:
+
+- Build a scientifically coherent, correctly classified, documented, reviewed, and internally connected knowledge library.
+- Apply scientific, medical, historical, religious-source, and editorial review according to each article's actual subject matter.
+- Maintain article-specific SEO metadata and meaningful internal links without keyword stuffing or unsupported claims.
+- Preserve each article's identity and history, including its ID, creation/update history, publication date, and scheduling state; any substantive change must be traceable and authorized.
+- Record review status, reviewer/approver identity where available, decision rationale, and the scope of every substantive revision.
+- Distinguish draft, pending review, reviewed, and approved states; a technical save is not editorial approval.
+- Apply the same policy to new articles at creation time, not only to the existing backlog.
+- Keep Preview-first validation, owner-only administration, audit logging, and explicit production approval as release requirements.
+
+This policy governs editorial workflow and technical implementation. It does not itself authorize production data changes, publication, deletion, or merging of pending pull requests.
+
 ## Purpose
 
 Establish a complete, article-by-article editorial review for the current library before any bulk metadata or taxonomy changes. The known production baseline is 19 articles; reconcile the live count before proceeding.
