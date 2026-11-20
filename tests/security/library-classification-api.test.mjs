@@ -73,6 +73,6 @@ test("owner library read returns all article records for owner-led classificatio
   const data = await response.json();
   assert.equal(data.sections.length, 1);
   assert.equal(data.content_types.length, 1);
-  assert.deepEqual(data.articles.map(article => article.id), ["safe-article"]);
-  assert.equal("content" in data.articles[0], false);
+  assert.deepEqual(data.articles.map(article => article.id), ["safe-article", "article_1793869948469", "nlp-article"]);
+  assert.ok(data.articles.every(article => !("content" in article)));
 });
