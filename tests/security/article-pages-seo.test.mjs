@@ -99,6 +99,19 @@ test("canonical article slugs resolve from the stored canonical path on preview 
   assert.ok(db.statements[0].includes("canonical_url LIKE"));
 });
 
+test("articles excluded from the public library remain unavailable by direct URL", async () => {
+  const db = articleDb(articleFixture({
+    id: "retired-hijama-article",
+    title: "الحجامة والطب النبوي"
+  }));
+  const response = await articlePageRequest({
+    request: new Request(SITE + "/articles/retired-hijama-article"),
+    env: { DB: db },
+    params: { slug: "retired-hijama-article" }
+  });
+  assert.equal(response.status, 404);
+});
+
 test("future-scheduled articles remain unavailable to public article URLs", async () => {
   const db = articleDb(articleFixture({ scheduled_at: "2099-01-01T00:00:00.000Z" }));
   const response = await articlePageRequest({
@@ -137,7 +150,8 @@ test("dynamic sitemap includes published article URLs and keeps existing static 
           return { results: [
             { id: "article-one", canonical_url: null, updated_at: "2026-11-20T10:00:00.000Z", scheduled_at: null },
             { id: "article-two", canonical_url: "https://alabqri.example/articles/custom-slug", updated_at: null, scheduled_at: null },
-            { id: "article-future", canonical_url: null, updated_at: null, scheduled_at: "2099-01-01T00:00:00.000Z" }
+            { id: "article-future", title: "مقال مجدول", canonical_url: null, updated_at: null, scheduled_at: "2099-01-01T00:00:00.000Z" },
+            { id: "retired-hijama-article", title: "الحجامة والطب النبوي", canonical_url: null, updated_at: null, scheduled_at: null }
           ] };
         }
       };
@@ -154,5 +168,6 @@ test("dynamic sitemap includes published article URLs and keeps existing static 
   assert.ok(xml.includes(SITE + "/articles/article-one"));
   assert.ok(xml.includes(SITE + "/articles/custom-slug"));
   assert.equal(xml.includes("article-future"), false);
+  assert.equal(xml.includes("retired-hijama-article"), false);
   assert.ok(statements.every(sql => sql.toUpperCase().startsWith("SELECT ")));
 });
