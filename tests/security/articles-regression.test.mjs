@@ -201,18 +201,19 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
 
 test("new article library exposes subject sections and client-side search without changing stored category values", async () => {
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
-  for (const section of ["القرآن الكريم وعلومه","الذكر والاتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
+  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","03 📿 الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
     assert.ok(source.includes(section), "missing library section: " + section);
   }
   assert.ok(source.includes('searchInput.type = "search"'));
   assert.ok(source.includes('categorySelect.setAttribute("aria-label","تصفية حسب القسم")'));
   assert.ok(source.includes('article.category === selectedCategory'));
   assert.equal(source.includes('comingSoon:true'), false);
-  // Admin exposes all six canonical labels. The five existing stored values remain
-  // unchanged; Quran is added as the sixth supported persisted category.
+  // Admin exposes all seven canonical labels. Existing legacy category values remain
+  // unchanged; Quran and Hadith are supported as additional persisted categories.
   const adminCategories = [
     '["القرآن الكريم وعلومه","القرآن الكريم وعلومه"]',
-    '["الذكر والاتزان الإيماني","الأذكار والاتزان"]',
+    '["الحديث الشريف وعلومه","الحديث الشريف وعلومه"]',
+    '["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"]',
     '["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"]',
     '["الطب التكميلي والتوعية الصحية","الطب التكميلي"]',
     '["الأبحاث والدراسات","البحث العلمي"]',
@@ -222,5 +223,5 @@ test("new article library exposes subject sections and client-side search withou
   assert.ok(source.includes('category:"القرآن الكريم وعلومه"'));
   assert.equal(source.includes('comingSoon:true'), false);
   const api = await readFile(new URL("../../functions/api/articles.js", import.meta.url), "utf8");
-  assert.ok(api.includes('const CATEGORIES = new Set(["القرآن الكريم وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"])'));
+  assert.ok(api.includes('const CATEGORIES = new Set(["القرآن الكريم وعلومه","الحديث الشريف وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"])'));
 });
