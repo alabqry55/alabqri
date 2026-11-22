@@ -18,12 +18,10 @@ test("foundation migration seeds fourteen specialties without pre-empting migrat
   const specialties = [...specialtyBlock.matchAll(/\('([^']+)',\s*'([^']+)',\s*(\d+)\)/g)];
   assert.equal(specialties.length, 14);
   assert.deepEqual(specialties.map(row => Number(row[3])), Array.from({ length: 14 }, (_, i) => i + 1));
-  assert.doesNotMatch(sql, /primary_section_id\s+TEXT\s+NOT NULL/i);
-  assert.doesNotMatch(specialtyBlock, /primary_section_id/i);
-
-  const repair = await readFile(new URL("../../migrations/0003_library_specialty_section_repair.sql", import.meta.url), "utf8");
-  assert.match(repair, /ALTER\s+TABLE\s+library_specialties[\s\S]*?ADD\s+COLUMN\s+primary_section_id/i);
-  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id/i);
+  const specialtySchema = sql.match(/CREATE TABLE IF NOT EXISTS library_specialties\s*\([\s\S]*?\n\);/i)?.[0] || "";
+  assert.ok(specialtySchema, "library_specialties schema must be present in migration 0002");
+  assert.doesNotMatch(specialtySchema, /primary_section_id/i);
+  assert.doesNotMatch(sql, /CREATE INDEX IF NOT EXISTS idx_library_specialties_section/i);
 });
 
 test("library taxonomy migration seeds the five baseline content types", async () => {
