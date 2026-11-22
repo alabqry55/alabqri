@@ -1,6 +1,8 @@
 -- ALABQRI library taxonomy foundation (additive, preview-first)
 -- Does not UPDATE, DELETE, or INSERT into the existing articles table.
 -- Apply only to alabqri-db-preview-test after review and backup.
+-- primary_section_id is intentionally added by migration 0003 so this
+-- foundation also supports upgrading databases with a pre-existing specialties table.
 
 PRAGMA foreign_keys = ON;
 
@@ -12,14 +14,14 @@ CREATE TABLE IF NOT EXISTS library_sections (
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Keep this initial schema compatible with legacy databases.
+-- Migration 0003 adds primary_section_id and backfills the approved mapping.
 CREATE TABLE IF NOT EXISTS library_specialties (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   sort_order INTEGER NOT NULL UNIQUE,
-  primary_section_id TEXT NOT NULL,
   active INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (primary_section_id) REFERENCES library_sections(id) ON DELETE RESTRICT
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS library_content_types (
@@ -69,8 +71,6 @@ CREATE TABLE IF NOT EXISTS article_admin_audit (
 CREATE INDEX IF NOT EXISTS idx_article_admin_audit_created
   ON article_admin_audit(created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_library_specialties_section
-  ON library_specialties(primary_section_id);
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_section
   ON library_article_classification(primary_section_id);
 CREATE INDEX IF NOT EXISTS idx_library_article_classification_specialty
@@ -89,21 +89,21 @@ INSERT OR IGNORE INTO library_sections (id, name, sort_order) VALUES
   ('research-studies', 'الأبحاث والدراسات', 6),
   ('knowledge-thought', 'المعرفة والفكر', 7);
 
-INSERT OR IGNORE INTO library_specialties (id, name, sort_order, primary_section_id) VALUES
-  ('quran-sciences', 'علوم القرآن الكريم', 1, 'quran'),
-  ('sunnah-sciences', 'علوم السنة النبوية', 2, 'hadith'),
-  ('quran-rhetoric-numerical', 'علوم الإعجاز العددي والبياني في القرآن الكريم', 3, 'quran'),
-  ('prophetic-wisdom', 'علوم الحكمة المحمدية', 4, 'hadith'),
-  ('solomonic-wisdom', 'علوم الحكمة السليمانية', 5, 'knowledge-thought'),
-  ('names-invocations-ruqya', 'علوم الأسماء والدعوات والرقى', 6, 'dhikr-balance'),
-  ('human-energy', 'علوم الطاقة الإنسانية', 7, 'complementary-health'),
-  ('cosmic-energy', 'علوم الطاقة الكونية', 8, 'knowledge-thought'),
-  ('spiritual-energy', 'علوم الطاقة الروحية', 9, 'dhikr-balance'),
-  ('islamic-reiki', 'علوم الريكي الإسلامي', 10, 'complementary-health'),
-  ('healing-touch', 'علوم اللمسة الشفائية', 11, 'complementary-health'),
-  ('remote-therapy', 'علوم العلاج عن بعد', 12, 'complementary-health'),
-  ('life-quality-balance', 'علوم الحياة وهندسة الجودة والتوازن الشامل', 13, 'islamic-psychology-development'),
-  ('safe-access-method', 'منهج العبقري في سلامة الوصول', 14, 'knowledge-thought');
+INSERT OR IGNORE INTO library_specialties (id, name, sort_order) VALUES
+  ('quran-sciences', 'علوم القرآن الكريم', 1),
+  ('sunnah-sciences', 'علوم السنة النبوية', 2),
+  ('quran-rhetoric-numerical', 'علوم الإعجاز العددي والبياني في القرآن الكريم', 3),
+  ('prophetic-wisdom', 'علوم الحكمة المحمدية', 4),
+  ('solomonic-wisdom', 'علوم الحكمة السليمانية', 5),
+  ('names-invocations-ruqya', 'علوم الأسماء والدعوات والرقى', 6),
+  ('human-energy', 'علوم الطاقة الإنسانية', 7),
+  ('cosmic-energy', 'علوم الطاقة الكونية', 8),
+  ('spiritual-energy', 'علوم الطاقة الروحية', 9),
+  ('islamic-reiki', 'علوم الريكي الإسلامي', 10),
+  ('healing-touch', 'علوم اللمسة الشفائية', 11),
+  ('remote-therapy', 'علوم العلاج عن بعد', 12),
+  ('life-quality-balance', 'علوم الحياة وهندسة الجودة والتوازن الشامل', 13),
+  ('safe-access-method', 'منهج العبقري في سلامة الوصول', 14);
 
 INSERT OR IGNORE INTO library_content_types (id, name, sort_order) VALUES
   ('article', 'مقال', 1),
