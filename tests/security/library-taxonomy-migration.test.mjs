@@ -1,3 +1,4 @@
+// Re-run the security workflow after synchronizing the stacked taxonomy branches.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
