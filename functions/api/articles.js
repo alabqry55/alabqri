@@ -1,7 +1,7 @@
 import { scheduledArticles } from "../_lib/articles-schedule-2026.js";
 import { readOwnerSession } from "../_lib/admin-auth.js";
 /** Cloudflare Pages Function: D1-backed articles library. */
-const CATEGORIES = new Set(["القرآن الكريم وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
+const CATEGORIES = new Set(["القرآن الكريم وعلومه","الحديث الشريف وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"]);
 const json = (data, status = 200) => new Response(JSON.stringify(data), {status, headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 const validId = id => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id);
 
