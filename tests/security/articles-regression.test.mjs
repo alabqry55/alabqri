@@ -161,7 +161,7 @@ test("immutable Cloudflare preview login redirects to the configured stable bran
     env: OAUTH_ENV
   });
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login");
+  assert.equal(response.headers.get("location"), "https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login");
   assert.equal(response.headers.get("set-cookie"), null);
 });
 
@@ -176,7 +176,7 @@ test("OAuth callback rejects requests on a non-canonical preview hostname", asyn
 
 test("canonical branch login uses the exact configured GitHub callback URI", async () => {
   const response = await githubOAuthRequest({
-    request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+    request: new Request("https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login"),
     env: OAUTH_ENV
   });
   assert.equal(response.status, 302);
@@ -189,11 +189,11 @@ test("canonical branch login uses the exact configured GitHub callback URI", asy
 
 test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async () => {
   for (const redirect of [
-    "http://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+    "http://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/callback",
     "https://attacker.example/api/admin/github/callback"
   ]) {
     const response = await githubOAuthRequest({
-      request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+      request: new Request("https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login"),
       env: { ...OAUTH_ENV, GITHUB_REDIRECT_URI: redirect }
     });
     assert.equal(response.status, 503);
