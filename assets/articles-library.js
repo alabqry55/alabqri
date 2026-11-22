@@ -274,7 +274,8 @@
         // categories remain unchanged for backward compatibility with the API and D1.
         const librarySections = [
           {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
-          {title:"الذكر والاتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والتوازن",category:"الأذكار والاتزان"},
+          {title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
+          {title:"03 📿 الذكر والإتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
           {title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
           {title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
           {title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
@@ -430,12 +431,13 @@
         editCategoryWrap.appendChild(el("span", "", "التصنيف"));
         const editCategory = el("select");
         editCategory.name = "category";
-        // Present the six canonical library sections in administration while preserving
-        // the five existing stored category values for backward compatibility.
-        // Quran is the only new persisted category and is available immediately.
+        // Present all seven canonical library sections in administration while
+        // preserving the existing stored category values for backward compatibility.
+        // Quran and Hadith are new category values; legacy categories remain unchanged.
         [
           ["القرآن الكريم وعلومه","القرآن الكريم وعلومه"],
-          ["الذكر والاتزان الإيماني","الأذكار والاتزان"],
+          ["الحديث الشريف وعلومه","الحديث الشريف وعلومه"],
+          ["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"],
           ["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"],
           ["الطب التكميلي والتوعية الصحية","الطب التكميلي"],
           ["الأبحاث والدراسات","البحث العلمي"],
