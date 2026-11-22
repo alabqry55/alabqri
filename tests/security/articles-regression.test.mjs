@@ -98,7 +98,7 @@ test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KE
   assert.ok(html.includes("scheduledAt}"));
 });
 
-test("legacy article administration dashboard exposes the same six canonical categories", async () => {
+test("legacy article administration dashboard exposes all seven canonical categories", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const selectStart = html.indexOf('<select id="abq-admin-category-input"');
   const selectEnd = html.indexOf("</select>", selectStart);
@@ -106,7 +106,8 @@ test("legacy article administration dashboard exposes the same six canonical cat
   const selector = html.slice(selectStart, selectEnd + "</select>".length);
   for (const label of [
     "القرآن الكريم وعلومه",
-    "الذكر والاتزان الإيماني",
+    "الحديث الشريف وعلومه",
+    "03 📿 الذكر والإتزان الإيماني",
     "علم النفس الإسلامي والتنمية البشرية",
     "الطب التكميلي والتوعية الصحية",
     "الأبحاث والدراسات",
@@ -114,6 +115,7 @@ test("legacy article administration dashboard exposes the same six canonical cat
   ]) assert.ok(selector.includes(label), "legacy admin selector missing: " + label);
   for (const value of [
     "القرآن الكريم وعلومه",
+    "الحديث الشريف وعلومه",
     "الأذكار والاتزان",
     "التنمية البشرية",
     "الطب التكميلي",
@@ -122,7 +124,7 @@ test("legacy article administration dashboard exposes the same six canonical cat
   ]) assert.ok(selector.includes('value="' + value + '"'), "legacy admin selector missing stored value: " + value);
 });
 
-test("six-section library replaces the legacy article list only after a valid API response", async () => {
+test("seven-section library replaces the legacy article list only after a valid API response", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
   assert.ok(html.includes('id="abq-articles-list"'));
@@ -149,7 +151,7 @@ import { onRequest as githubOAuthRequest } from "../../functions/api/admin/githu
 const OAUTH_ENV = {
   GITHUB_CLIENT_ID: "test-client-id",
   GITHUB_CLIENT_SECRET: "test-client-secret",
-  GITHUB_REDIRECT_URI: "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+  GITHUB_REDIRECT_URI: "https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/callback",
   ADMIN_SESSION_SECRET: "test-session-secret-that-is-at-least-32-characters-long"
 };
 

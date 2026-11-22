@@ -74,7 +74,7 @@
     if (!articleTab) return;
     // Reuse the existing article-list position instead of aborting initialization.
     // The legacy list stays visible until the API responds successfully; then the
-    // new six-section renderer replaces only that list container (not the admin UI).
+    // new seven-section renderer replaces only that list container (not the admin UI).
     const legacyArticleList = articleTab.querySelector("#abq-articles-list");
     const headingScope = articleTab;
     const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
