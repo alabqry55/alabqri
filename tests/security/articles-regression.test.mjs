@@ -98,7 +98,7 @@ test("homepage article admin uses the owner OAuth session, not ARTICLES_ADMIN_KE
   assert.ok(html.includes("scheduledAt}"));
 });
 
-test("legacy article administration dashboard exposes the same six canonical categories", async () => {
+test("legacy article administration dashboard exposes all seven canonical categories", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const selectStart = html.indexOf('<select id="abq-admin-category-input"');
   const selectEnd = html.indexOf("</select>", selectStart);
@@ -106,7 +106,8 @@ test("legacy article administration dashboard exposes the same six canonical cat
   const selector = html.slice(selectStart, selectEnd + "</select>".length);
   for (const label of [
     "القرآن الكريم وعلومه",
-    "الذكر والاتزان الإيماني",
+    "الحديث الشريف وعلومه",
+    "03 📿 الذكر والإتزان الإيماني",
     "علم النفس الإسلامي والتنمية البشرية",
     "الطب التكميلي والتوعية الصحية",
     "الأبحاث والدراسات",
@@ -114,6 +115,7 @@ test("legacy article administration dashboard exposes the same six canonical cat
   ]) assert.ok(selector.includes(label), "legacy admin selector missing: " + label);
   for (const value of [
     "القرآن الكريم وعلومه",
+    "الحديث الشريف وعلومه",
     "الأذكار والاتزان",
     "التنمية البشرية",
     "الطب التكميلي",
@@ -122,7 +124,7 @@ test("legacy article administration dashboard exposes the same six canonical cat
   ]) assert.ok(selector.includes('value="' + value + '"'), "legacy admin selector missing stored value: " + value);
 });
 
-test("six-section library replaces the legacy article list only after a valid API response", async () => {
+test("seven-section library replaces the legacy article list only after a valid API response", async () => {
   const html = await readFile(new URL("../../index.html", import.meta.url), "utf8");
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
   assert.ok(html.includes('id="abq-articles-list"'));
@@ -149,7 +151,7 @@ import { onRequest as githubOAuthRequest } from "../../functions/api/admin/githu
 const OAUTH_ENV = {
   GITHUB_CLIENT_ID: "test-client-id",
   GITHUB_CLIENT_SECRET: "test-client-secret",
-  GITHUB_REDIRECT_URI: "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+  GITHUB_REDIRECT_URI: "https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/callback",
   ADMIN_SESSION_SECRET: "test-session-secret-that-is-at-least-32-characters-long"
 };
 
@@ -159,7 +161,7 @@ test("immutable Cloudflare preview login redirects to the configured stable bran
     env: OAUTH_ENV
   });
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), "https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login");
+  assert.equal(response.headers.get("location"), "https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login");
   assert.equal(response.headers.get("set-cookie"), null);
 });
 
@@ -174,7 +176,7 @@ test("OAuth callback rejects requests on a non-canonical preview hostname", asyn
 
 test("canonical branch login uses the exact configured GitHub callback URI", async () => {
   const response = await githubOAuthRequest({
-    request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+    request: new Request("https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login"),
     env: OAUTH_ENV
   });
   assert.equal(response.status, 302);
@@ -187,11 +189,11 @@ test("canonical branch login uses the exact configured GitHub callback URI", asy
 
 test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async () => {
   for (const redirect of [
-    "http://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/callback",
+    "http://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/callback",
     "https://attacker.example/api/admin/github/callback"
   ]) {
     const response = await githubOAuthRequest({
-      request: new Request("https://fix-article-cloud-sync-idemp.alabqri.pages.dev/api/admin/github/login"),
+      request: new Request("https://fix-library-specialty-sectio-mtg8.alabqri.pages.dev/api/admin/github/login"),
       env: { ...OAUTH_ENV, GITHUB_REDIRECT_URI: redirect }
     });
     assert.equal(response.status, 503);
@@ -201,18 +203,19 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
 
 test("new article library exposes subject sections and client-side search without changing stored category values", async () => {
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
-  for (const section of ["القرآن الكريم وعلومه","الذكر والاتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
+  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","03 📿 الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
     assert.ok(source.includes(section), "missing library section: " + section);
   }
   assert.ok(source.includes('searchInput.type = "search"'));
   assert.ok(source.includes('categorySelect.setAttribute("aria-label","تصفية حسب القسم")'));
   assert.ok(source.includes('article.category === selectedCategory'));
   assert.equal(source.includes('comingSoon:true'), false);
-  // Admin exposes all six canonical labels. The five existing stored values remain
-  // unchanged; Quran is added as the sixth supported persisted category.
+  // Admin exposes all seven canonical labels. Existing legacy category values remain
+  // unchanged; Quran and Hadith are supported as additional persisted categories.
   const adminCategories = [
     '["القرآن الكريم وعلومه","القرآن الكريم وعلومه"]',
-    '["الذكر والاتزان الإيماني","الأذكار والاتزان"]',
+    '["الحديث الشريف وعلومه","الحديث الشريف وعلومه"]',
+    '["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"]',
     '["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"]',
     '["الطب التكميلي والتوعية الصحية","الطب التكميلي"]',
     '["الأبحاث والدراسات","البحث العلمي"]',
@@ -222,5 +225,5 @@ test("new article library exposes subject sections and client-side search withou
   assert.ok(source.includes('category:"القرآن الكريم وعلومه"'));
   assert.equal(source.includes('comingSoon:true'), false);
   const api = await readFile(new URL("../../functions/api/articles.js", import.meta.url), "utf8");
-  assert.ok(api.includes('const CATEGORIES = new Set(["القرآن الكريم وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"])'));
+  assert.ok(api.includes('const CATEGORIES = new Set(["القرآن الكريم وعلومه","الحديث الشريف وعلومه","التنمية البشرية","الطب التكميلي","الأذكار والاتزان","البحث العلمي","موضوعات معرفية"])'));
 });

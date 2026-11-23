@@ -1,3 +1,5 @@
+// Re-run the security workflow after synchronizing the stacked taxonomy branches.
+// Keep this file in the security workflow path filter for stacked PR validation.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -44,4 +46,34 @@ test("foundation migration does not mutate or insert into existing article recor
   assert.doesNotMatch(sql, /\bUPDATE\s+articles\b/i);
   assert.doesNotMatch(sql, /\bDELETE\s+FROM\s+articles\b/i);
   assert.doesNotMatch(sql, /\bINSERT\s+INTO\s+articles\b/i);
+});
+
+test("migration 0003 adds the specialty section column and backfills the approved mapping", async () => {
+  const repair = await readFile(new URL("../../migrations/0003_library_specialty_section_repair.sql", import.meta.url), "utf8");
+  assert.match(repair, /ALTER\s+TABLE\s+library_specialties[\s\S]*?ADD\s+COLUMN\s+primary_section_id\s+TEXT/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'quran'/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'hadith'/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'dhikr-balance'/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'complementary-health'/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'islamic-psychology-development'/i);
+  assert.match(repair, /UPDATE\s+library_specialties\s+SET\s+primary_section_id\s*=\s*'knowledge-thought'/i);
+  assert.match(repair, /03 📿 الذكر والإتزان الإيماني/);
+});
+
+test("migration 0003 installs all four section integrity triggers", async () => {
+  const repair = await readFile(new URL("../../migrations/0003_library_specialty_section_repair.sql", import.meta.url), "utf8");
+  for (const trigger of [
+    "trg_library_specialties_section_insert",
+    "trg_library_specialties_section_update",
+    "trg_library_classification_specialty_section_insert",
+    "trg_library_classification_specialty_section_update"
+  ]) assert.match(repair, new RegExp("CREATE TRIGGER IF NOT EXISTS\\s+" + trigger, "i"));
+});
+
+test("migration 0003 preserves article, classification, content-type, and audit rows", async () => {
+  const repair = await readFile(new URL("../../migrations/0003_library_specialty_section_repair.sql", import.meta.url), "utf8");
+  assert.doesNotMatch(repair, /\b(?:INSERT|UPDATE|DELETE)\s+(?:INTO\s+)?articles\b/i);
+  assert.doesNotMatch(repair, /\b(?:INSERT|UPDATE|DELETE)\s+(?:INTO\s+)?library_article_classification\b/i);
+  assert.doesNotMatch(repair, /\b(?:INSERT|UPDATE|DELETE)\s+(?:INTO\s+)?library_content_types\b/i);
+  assert.doesNotMatch(repair, /\b(?:INSERT|UPDATE|DELETE)\s+(?:INTO\s+)?article_admin_audit\b/i);
 });
