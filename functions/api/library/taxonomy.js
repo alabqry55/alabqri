@@ -93,7 +93,8 @@ export async function onRequest({ request, env }) {
         missingColumns,
         sections: [],
         specialties: [],
-        contentTypes: []
+        contentTypes: [],
+        classifications: []
       }, 503);
     }
 
@@ -116,7 +117,8 @@ export async function onRequest({ request, env }) {
       requestId,
       sections: [],
       specialties: [],
-      contentTypes: []
+      contentTypes: [],
+      classifications: []
     }, 500);
   }
 }
