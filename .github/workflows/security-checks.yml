@@ -16,6 +16,7 @@ on:
   pull_request:
     branches:
       - main
+      - feat/library-taxonomy-preview-foundation
     paths:
       - "functions/api/admin/github/**"
       - "functions/_lib/admin-auth.js"
