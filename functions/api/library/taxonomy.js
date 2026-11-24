@@ -46,13 +46,14 @@ export async function onRequest({ request, env }) {
       code: "D1_NOT_CONFIGURED",
       sections: [],
       specialties: [],
-      contentTypes: []
+      contentTypes: [],
+      classifications: []
     }, 503);
   }
 
   try {
     const existing = await env.DB.prepare(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('library_sections','library_specialties','library_content_types')"
+      "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('library_sections','library_specialties','library_content_types','library_article_classification')"
     ).all();
     const existingNames = new Set((existing.results || []).map(row => String(row.name || "")));
     const missingTables = Object.values(TABLES)
@@ -66,7 +67,8 @@ export async function onRequest({ request, env }) {
         missingTables,
         sections: [],
         specialties: [],
-        contentTypes: []
+        contentTypes: [],
+        classifications: []
       }, 503);
     }
 
