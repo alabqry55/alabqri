@@ -4,13 +4,21 @@ import { onRequest as taxonomyRequest } from "../../functions/api/library/taxono
 
 const SITE = "https://alabqri.example";
 
-function taxonomyDb({ tables = true, complete = true } = {}) {
+function taxonomyDb({ tables = true, complete = true, scheduleColumn = true } = {}) {
   const statements = [];
+  const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const data = {
     library_sections: [{ id: "quran", name: "القرآن الكريم وعلومه", sort_order: 1, active: 1 }],
     library_specialties: [{ id: "quran-sciences", name: "علوم القرآن الكريم", sort_order: 1, active: 1, primary_section_id: "quran" }],
     library_content_types: [{ id: "article", name: "مقال", sort_order: 1, active: 1 }],
-    library_article_classification: [{ article_id: "a-1", primary_section_id: "quran", primary_specialty_id: "quran-sciences", content_type_id: "article", editorial_status: "approved" }]
+    articles: [
+      { id: "a-1", scheduled_at: null },
+      { id: "a-future", scheduled_at: futureDate }
+    ],
+    library_article_classification: [
+      { article_id: "a-1", primary_section_id: "quran", primary_specialty_id: "quran-sciences", content_type_id: "article", editorial_status: "approved" },
+      { article_id: "a-future", primary_section_id: "quran", primary_specialty_id: "quran-sciences", content_type_id: "article", editorial_status: "pending_review" }
+    ]
   };
   return {
     statements,
@@ -32,11 +40,22 @@ function taxonomyDb({ tables = true, complete = true } = {}) {
             };
             return { results: (columns[name] || []).map(column => ({ name: column })) };
           }
-          const table = Object.keys(data).find(name => statement.includes("FROM " + name + " "));
-          if (table === "library_article_classification") {
-            return { results: data[table].map(({article_id,primary_section_id,primary_specialty_id,content_type_id}) =>
-              ({article_id,primary_section_id,primary_specialty_id,content_type_id})) };
+          if (statement.startsWith("SELECT article_id,primary_section_id,primary_specialty_id,content_type_id FROM library_article_classification")) {
+            if (statement.includes("scheduled_at") && !scheduleColumn) throw new Error("no such column: scheduled_at");
+            const articleRows = data.articles.filter(article =>
+              !statement.includes("scheduled_at") ||
+              article.scheduled_at === null ||
+              Date.parse(article.scheduled_at) <= Date.now()
+            );
+            const visibleIds = new Set(articleRows.map(article => article.id));
+            return {
+              results: data.library_article_classification
+                .filter(row => visibleIds.has(row.article_id))
+                .map(({article_id,primary_section_id,primary_specialty_id,content_type_id}) =>
+                  ({article_id,primary_section_id,primary_specialty_id,content_type_id}))
+            };
           }
+          const table = Object.keys(data).find(name => statement.includes("FROM " + name + " "));
           if (table) return { results: data[table] };
           throw new Error("Unexpected query: " + statement);
         }
@@ -58,11 +77,34 @@ test("taxonomy endpoint returns ordered taxonomy collections using read-only que
   assert.equal(payload.sections[0].id, "quran");
   assert.equal(payload.specialties[0].primary_section_id, "quran");
   assert.equal(payload.contentTypes[0].id, "article");
+  assert.equal(payload.classifications.length, 1);
   assert.equal(payload.classifications[0].article_id, "a-1");
   assert.equal(payload.classifications[0].primary_specialty_id, "quran-sciences");
   assert.equal(Object.hasOwn(payload.classifications[0], "editorial_status"), false);
   assert.equal(db.statements.some(sql => sql.includes("editorial_status")), false);
   assert.ok(db.statements.every(sql => /^(SELECT|PRAGMA)\b/i.test(sql)), db.statements.join("\n"));
+});
+
+test("taxonomy endpoint never exposes classifications for future-scheduled articles", async () => {
+  const db = taxonomyDb();
+  const response = await taxonomyRequest({
+    request: new Request(SITE + "/api/library/taxonomy"),
+    env: { DB: db }
+  });
+  const payload = await response.json();
+  assert.equal(payload.classifications.some(row => row.article_id === "a-future"), false);
+  assert.ok(db.statements.some(sql => sql.includes("julianday(scheduled_at) <= julianday('now')")));
+});
+
+test("taxonomy endpoint follows the legacy public-article behavior when scheduling column is absent", async () => {
+  const db = taxonomyDb({ scheduleColumn: false });
+  const response = await taxonomyRequest({
+    request: new Request(SITE + "/api/library/taxonomy"),
+    env: { DB: db }
+  });
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.deepEqual(payload.classifications.map(row => row.article_id), ["a-1", "a-future"]);
 });
 
 test("taxonomy endpoint reports missing migrations without attempting writes", async () => {
