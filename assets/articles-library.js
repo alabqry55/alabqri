@@ -301,7 +301,7 @@
         ];
         const legacySectionById = new Map(legacySectionDefinitions.map(section => [section.id, section]));
         const librarySections = taxonomy
-          ? taxonomy.sections.map(section => {
+          ? taxonomy.sections.filter(section => section.active !== 0).map(section => {
               const legacy = legacySectionById.get(String(section.id)) || {};
               return {
                 id: String(section.id),
@@ -328,7 +328,7 @@
         let selectedSectionId = "";
         let selectedSpecialtyId = "";
         let selectedContentTypeId = "";
-        const intro = el("div","abq-library-intro","مرحبًا بك في مكتبة العبقري؛ مساحة معرفية منظمة تجمع المقالات والأبحاث في أقسام واضحة، مع الحفاظ على المحتوى المنشور وبياناته.");
+        const intro = el("div","abq-library-intro","مرحبًا بك في مكتبة العبقري؛ مساحة معرفية منظمة تجمع المقالات والأبحاث في أقسام واضحة، مع الحفاظ على المحتوى المنشور وبياناته. وتُستخدم التصنيفات المرتبطة بكل مادة عند توافرها، مع استمرار إظهار المواد القديمة وفق تصنيفاتها السابقة.");
         const sectionGrid = el("div","abq-library-sections");
         const tools = el("div","abq-articles-tools");
         const searchInput = el("input");
