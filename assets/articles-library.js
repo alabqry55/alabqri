@@ -923,6 +923,136 @@
           }
         });
 
+        const draftButton = el("button", "abq-editor-action", "حفظ كمسودة");
+        draftButton.type = "button";
+        draftButton.title = "يحفظ نسخة خاصة في مخزن المسودات دون نشرها أو تعديل المقالات المنشورة.";
+        editorActions.insertBefore(draftButton, cancelButton);
+
+        const draftsPanel = el("section", "abq-article-card");
+        draftsPanel.style.margin = "1rem 0";
+        const draftsHeading = el("h3", "", "المسودات الخاصة");
+        const draftsHelp = el("p", "abq-editor-intro", "المسودات محفوظة في مخزن KV مستقل، ولا تظهر للزوار ولا تُنشر تلقائيًا.");
+        const draftsSelect = el("select", "abq-editor-control");
+        draftsSelect.setAttribute("aria-label", "اختر مسودة لاستعادتها");
+        const draftsLoadButton = el("button", "abq-editor-action", "تحديث قائمة المسودات");
+        draftsLoadButton.type = "button";
+        const draftsRestoreButton = el("button", "abq-editor-action", "استعادة المسودة");
+        draftsRestoreButton.type = "button";
+        const draftsDeleteButton = el("button", "abq-editor-action", "حذف المسودة");
+        draftsDeleteButton.type = "button";
+        const draftsStatus = el("p", "abq-article-meta", "");
+        draftsStatus.setAttribute("role", "status");
+        const draftsActions = el("div", "abq-editor-actions");
+        draftsActions.append(draftsLoadButton, draftsRestoreButton, draftsDeleteButton);
+        draftsPanel.append(draftsHeading, draftsHelp, draftsSelect, draftsActions, draftsStatus);
+        root.insertBefore(draftsPanel, tools);
+        let draftRecords = [];
+
+        async function refreshDrafts() {
+          if (!adminAuthenticated) throw new Error("سجّل الدخول بحساب GitHub المالك أولًا.");
+          const response = await fetch("/api/admin/article-drafts", {
+            headers: {"Accept":"application/json"},
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !Array.isArray(data.drafts)) {
+            throw new Error(data.error || "تعذر تحميل المسودات. تحقق من ربط ARTICLE_DRAFTS في بيئة المعاينة.");
+          }
+          draftRecords = data.drafts;
+          draftsSelect.replaceChildren();
+          const placeholder = el("option", "", draftRecords.length ? "اختر مسودة محفوظة" : "لا توجد مسودات محفوظة");
+          placeholder.value = "";
+          draftsSelect.appendChild(placeholder);
+          for (const record of draftRecords) {
+            const option = el("option", "", (record.article?.title || "مسودة بلا عنوان") + " — " + new Date(record.updatedAt || Date.now()).toLocaleString("ar-EG"));
+            option.value = record.id;
+            draftsSelect.appendChild(option);
+          }
+          draftsStatus.textContent = "عدد المسودات المحفوظة: " + draftRecords.length;
+        }
+
+        draftsLoadButton.addEventListener("click", async () => {
+          draftsLoadButton.disabled = true;
+          try { await refreshDrafts(); }
+          catch (error) { draftsStatus.textContent = error.message || "تعذر تحميل المسودات."; }
+          finally { draftsLoadButton.disabled = false; }
+        });
+
+        draftsRestoreButton.addEventListener("click", () => {
+          const record = draftRecords.find(item => item.id === draftsSelect.value);
+          if (!record?.article) { draftsStatus.textContent = "اختر مسودة صالحة أولًا."; return; }
+          const existsInLibrary = articles.some(item => String(item.id) === String(record.id));
+          startEditing(record.article);
+          creatingArticle = !existsInLibrary;
+          editTitle.textContent = "استعادة مسودة: " + (record.article.title || "مسودة بلا عنوان");
+          editorStatus.textContent = "تم تحميل المسودة إلى المحرر. لم يتم نشرها أو تعديل المقالات المنشورة.";
+          draftsStatus.textContent = "تم تحميل المسودة إلى المحرر دون نشرها.";
+        });
+
+        draftsDeleteButton.addEventListener("click", async () => {
+          const id = draftsSelect.value;
+          if (!id) { draftsStatus.textContent = "اختر مسودة لحذفها أولًا."; return; }
+          if (!window.confirm("هل تريد حذف هذه المسودة الخاصة نهائيًا؟ لن يؤثر ذلك على المقالات المنشورة.")) return;
+          draftsDeleteButton.disabled = true;
+          try {
+            const response = await fetch("/api/admin/article-drafts", {
+              method: "POST",
+              headers: {"Content-Type":"application/json","Accept":"application/json"},
+              credentials: "same-origin",
+              body: JSON.stringify({action:"delete",id}),
+              cache: "no-store"
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || !result.deleted) throw new Error(result.error || "تعذر حذف المسودة.");
+            await refreshDrafts();
+            draftsStatus.textContent = "تم حذف المسودة من مخزنها المستقل.";
+          } catch (error) {
+            draftsStatus.textContent = error.message || "تعذر حذف المسودة.";
+          } finally { draftsDeleteButton.disabled = false; }
+        });
+
+        draftButton.addEventListener("click", async () => {
+          if (!adminAuthenticated) { editorStatus.textContent = "سجّل الدخول بحساب GitHub المالك أولًا."; return; }
+          const draft = {
+            id: editForm.elements.id.value,
+            title: editForm.elements.title.value.trim(),
+            category: editCategory.value,
+            date: editForm.elements.date.value.trim(),
+            excerpt: editForm.elements.excerpt.value.trim(),
+            content: editForm.elements.content.value,
+            tags: editForm.elements.tags.value.split(/[،,\\n]+|(?=#)/).map(tag => tag.trim()).filter(Boolean),
+            seoTitle: editForm.elements.seoTitle.value.trim(),
+            seoDescription: editForm.elements.seoDescription.value.trim(),
+            seoKeywords: editForm.elements.seoKeywords.value.trim(),
+            canonicalUrl: editForm.elements.canonicalUrl.value.trim(),
+            ogImage: editForm.elements.ogImage.value.trim(),
+            scheduledAt: editForm.elements.scheduledAt.value ? new Date(editForm.elements.scheduledAt.value).toISOString() : null
+          };
+          draftButton.disabled = true;
+          draftButton.textContent = "جارٍ حفظ المسودة...";
+          try {
+            const response = await fetch("/api/admin/article-drafts", {
+              method: "POST",
+              headers: {"Content-Type":"application/json","Accept":"application/json"},
+              credentials: "same-origin",
+              body: JSON.stringify({action:"save",id:draft.id,draft}),
+              cache: "no-store"
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || !result.verified) throw new Error(result.error || "تعذر تأكيد حفظ المسودة.");
+            await refreshDrafts();
+            draftsSelect.value = draft.id;
+            editorStatus.textContent = "تم حفظ المسودة والتحقق منها في مخزن KV المستقل. لم يتم نشرها ولم تتغير قاعدة المقالات.";
+            draftsStatus.textContent = "المسودة محفوظة بأمان في المخزن المستقل.";
+          } catch (error) {
+            editorStatus.textContent = error.message || "تعذر حفظ المسودة.";
+          } finally {
+            draftButton.disabled = false;
+            draftButton.textContent = "حفظ كمسودة";
+          }
+        });
+
         // All article-list search controls have been removed.
         render();
       })
