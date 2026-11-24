@@ -37,7 +37,9 @@
         replayedAdminTriggers.add(target);
         target.click();
       } else {
-        window.location.assign("/api/admin/github/login");
+        const activationButton = Array.from(document.querySelectorAll("button")).find(button => (button.textContent || "").trim() === "تفعيل أدوات الإدارة");
+        if (activationButton) activationButton.click();
+        else window.location.assign("/api/admin/github/login");
       }
     } catch (_) {
       window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
@@ -66,7 +68,26 @@
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
-    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}}
+    .abq-library-section{position:relative;min-height:118px;box-shadow:0 3px 12px #0f172a08}
+    .abq-library-section>span:first-child{font-size:1.35rem}
+    .abq-library-section:focus-visible,.abq-admin-button:focus-visible,.abq-editor-action:focus-visible{outline:3px solid #b88a2b;outline-offset:3px}
+    .abq-admin-bar{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;padding:.85rem;border:1px solid #d9e3dc;border-radius:16px;background:#fbfcfa}
+    .abq-admin-button,.abq-editor-action{padding:.75rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
+    .abq-admin-button-primary,.abq-editor-action-primary{background:#173b2d;color:#fff;border-color:#173b2d}
+    .abq-admin-button-danger{border-color:#e2b8b8;color:#9f2727}
+    .abq-admin-login{margin:1rem 0;padding:1.25rem;border:1px solid #d9e3dc;border-right:4px solid #b88a2b;border-radius:18px;background:linear-gradient(135deg,#fbfcfa,#f5f8f5);color:#24352d;text-align:center}
+    .abq-admin-login[hidden]{display:none}
+    .abq-admin-login-icon{display:grid;place-items:center;width:56px;height:56px;margin:0 auto .65rem;border-radius:50%;background:#e9f0eb;font-size:1.6rem}
+    .abq-admin-login h3,.abq-editor-section-title{margin:.35rem 0 .6rem;color:#173b2d;line-height:1.7}
+    .abq-admin-login p{line-height:1.9;color:#64748b}
+    .abq-admin-login-actions,.abq-editor-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem}
+    .abq-editor-form{border-color:#d9e3dc;border-radius:18px;padding:1.2rem}
+    .abq-editor-section-title{padding:.55rem .75rem;border-right:3px solid #b88a2b;border-radius:8px;background:#f7f9f6;font-size:1rem}
+    .abq-editor-field{display:block;margin:.75rem 0;font-weight:700;color:#24352d}
+    .abq-editor-control,.abq-editor-field input,.abq-editor-field textarea,.abq-editor-field select{display:block;box-sizing:border-box;width:100%;margin-top:.4rem;padding:.8rem .9rem;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#172033;font:inherit;line-height:1.8}
+    .abq-editor-field input:focus,.abq-editor-field textarea:focus,.abq-editor-field select:focus{outline:2px solid #b88a2b;outline-offset:1px;border-color:#b88a2b}
+    .abq-editor-status{padding:.7rem .85rem;border-radius:10px;background:#f8fafc;line-height:1.9}
+    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}.abq-admin-bar>*{width:100%}.abq-editor-form{padding:.9rem}}
   `;
   function init() {
     if (window.__abqArticlesLibraryInitialized) return;
@@ -293,7 +314,7 @@
         const legacySectionDefinitions = [
           {id:"quran",title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
           {id:"hadith",title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
-          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
+          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"📿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
           {id:"islamic-psychology-development",title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
           {id:"complementary-health",title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
           {id:"research-studies",title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
@@ -381,7 +402,7 @@
             const button = el("button","abq-library-section");
             button.type = "button";
             button.setAttribute("aria-pressed",String(selectedSectionId === section.id));
-            button.append(el("span","",section.icon),el("strong","",section.title),
+            button.append(el("span","",section.icon),el("strong","",String(librarySections.indexOf(section) + 1).padStart(2, "0") + " " + section.title),
               el("small","",section.description + " • عدد المواد: " + total));
             button.addEventListener("click",() => {
               selectedSectionId = selectedSectionId === section.id ? "" : section.id;
@@ -463,16 +484,16 @@
         // Owner authorization is verified server-side through the signed GitHub OAuth session.
         let adminAuthenticated = Boolean(initiallyAdmin);
         let adminMode = false;
-        const adminBar = el("div", "abq-articles-tools");
-        const adminButton = el("button", "", "تفعيل أدوات الإدارة");
+        const adminBar = el("div", "abq-admin-bar");
+        const adminButton = el("button", "abq-admin-button", "تفعيل أدوات الإدارة");
         adminButton.type = "button";
-        const addButton = el("button", "", "إضافة مقال مجدول");
-        const logoutButton = el("button", "", "تسجيل الخروج");
+        const addButton = el("button", "abq-admin-button abq-admin-button-primary", "إضافة مقال أو بحث");
+        const logoutButton = el("button", "abq-admin-button abq-admin-button-danger", "تسجيل الخروج");
         logoutButton.type = "button";
         addButton.type = "button";
-        adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-        addButton.style.cssText = adminButton.style.cssText;
-        logoutButton.style.cssText = adminButton.style.cssText;
+        adminButton.classList.add("abq-admin-button");
+        addButton.classList.add("abq-admin-button-primary");
+        logoutButton.classList.add("abq-admin-button-danger");
         logoutButton.hidden = !initiallyAdmin;
         logoutButton.addEventListener("click", async () => {
           logoutButton.disabled = true;
@@ -496,18 +517,35 @@
         adminBar.append(adminButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
 
-        const editForm = el("form", "abq-article-card");
+        const loginPanel = el("section", "abq-admin-login");
+        loginPanel.hidden = true;
+        loginPanel.setAttribute("aria-labelledby", "abq-admin-login-title");
+        loginPanel.appendChild(el("div", "abq-admin-login-icon", "🔐"));
+        loginPanel.appendChild(el("h3", "", "تفعيل أدوات الإدارة"));
+        loginPanel.lastChild.id = "abq-admin-login-title";
+        loginPanel.appendChild(el("p", "", "تسجيل الدخول بحساب GitHub المالك المعتمد فقط. يتم التحقق من الصلاحية على الخادم دون إدخال أو كشف أي مفتاح سري."));
+        const loginActions = el("div", "abq-admin-login-actions");
+        const githubLoginButton = el("button", "abq-admin-button abq-admin-button-primary", "المتابعة باستخدام GitHub");
+        githubLoginButton.type = "button";
+        githubLoginButton.addEventListener("click", () => window.location.assign("/api/admin/github/login"));
+        const closeLoginButton = el("button", "abq-admin-button", "إغلاق");
+        closeLoginButton.type = "button";
+        closeLoginButton.addEventListener("click", () => { loginPanel.hidden = true; });
+        loginActions.append(githubLoginButton, closeLoginButton);
+        loginPanel.appendChild(loginActions);
+        root.insertBefore(loginPanel, tools);
+
+        const editForm = el("form", "abq-article-card abq-editor-form");
         editForm.hidden = true;
         editForm.style.margin = "1rem 0";
         const field = (labelText, name, value, multiline=false) => {
-          const wrap = el("label");
-          wrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
+          const wrap = el("label", "abq-editor-field");
           wrap.appendChild(el("span", "", labelText));
           const input = multiline ? el("textarea") : el("input");
           input.name = name;
           input.value = value || "";
           input.required = ["title","date","excerpt","content"].includes(name);
-          input.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit;line-height:1.8";
+          input.className = "abq-editor-control";
           if (multiline) { input.rows = name === "content" ? 14 : 3; input.maxLength = name === "content" ? 200000 : (name === "seoDescription" ? 500 : (name === "seoKeywords" ? 1000 : 2000)); }
           else if (name === "date") input.maxLength = 80;
           else if (name === "title" || name === "seoTitle") input.maxLength = 240;
@@ -522,24 +560,20 @@
         editId.name = "id";
         const editCategoryWrap = el("label");
         editCategoryWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
-        editCategoryWrap.appendChild(el("span", "", "التصنيف"));
+        editCategoryWrap.className = "abq-editor-field";
+        editCategoryWrap.appendChild(el("span", "", "القسم الرئيسي"));
         const editCategory = el("select");
         editCategory.name = "category";
         // Present all seven canonical library sections in administration while
         // preserving the existing stored category values for backward compatibility.
         // Quran and Hadith are new category values; legacy categories remain unchanged.
-        [
-          ["القرآن الكريم وعلومه","القرآن الكريم وعلومه"],
-          ["الحديث الشريف وعلومه","الحديث الشريف وعلومه"],
-          ["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"],
-          ["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"],
-          ["الطب التكميلي والتوعية الصحية","الطب التكميلي"],
-          ["الأبحاث والدراسات","البحث العلمي"],
-          ["المعرفة والفكر","موضوعات معرفية"]
-        ].forEach(([label,value]) => {
-          const option = el("option", "", label); option.value = value; editCategory.appendChild(option);
+        librarySections.forEach((section, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          const option = el("option", "", number + " " + section.icon + " " + section.title);
+          option.value = section.category || section.title;
+          editCategory.appendChild(option);
         });
-        editCategory.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit";
+        editCategory.classList.add("abq-editor-control");
         editCategoryWrap.appendChild(editCategory);
         const scheduleWrap = el("label");
         scheduleWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
@@ -547,15 +581,19 @@
         const scheduleInput = el("input");
         scheduleInput.type = "datetime-local";
         scheduleInput.name = "scheduledAt";
-        scheduleInput.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit";
+        scheduleInput.className = "abq-editor-control";
         scheduleWrap.appendChild(scheduleInput);
         editForm.append(editTitle, editId,
-          field("عنوان المقال","title",""),
+          el("h4", "abq-editor-section-title", "أولًا: البيانات الأساسية"),
+          field("عنوان المقال أو البحث","title",""),
           editCategoryWrap,
+          el("h4", "abq-editor-section-title", "ثانيًا: بيانات النشر"),
           field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
           scheduleWrap,
+          el("h4", "abq-editor-section-title", "ثالثًا: محتوى المادة"),
           field("الوصف المختصر","excerpt","",true),
           field("المحتوى الكامل","content","",true),
+          el("h4", "abq-editor-section-title", "رابعًا: الوسوم وبيانات SEO"),
           field("الوسوم (افصل بينها بفاصلة)","tags",""),
           field("عنوان SEO","seoTitle",""),
           field("وصف SEO","seoDescription","",true),
@@ -563,15 +601,15 @@
           field("الرابط الأساسي Canonical URL (اختياري)","canonicalUrl",""),
           field("رابط صورة المشاركة Open Graph (اختياري)","ogImage",""));
         const editorActions = el("div");
-        editorActions.style.cssText = "display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem";
+        editorActions.className = "abq-editor-actions";
         const saveButton = el("button", "", "حفظ التعديلات");
         saveButton.type = "submit";
-        saveButton.style.cssText = adminButton.style.cssText;
+        saveButton.className = "abq-editor-action abq-editor-action-primary";
         const cancelButton = el("button", "", "إلغاء");
         cancelButton.type = "button";
-        cancelButton.style.cssText = "padding:.7rem 1rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font:inherit;cursor:pointer";
+        cancelButton.className = "abq-editor-action";
         editorActions.append(saveButton,cancelButton);
-        const editorStatus = el("p", "abq-article-meta", "");
+        const editorStatus = el("p", "abq-editor-status", "");
         editForm.append(editorActions,editorStatus);
         const adminStatus = el("p", "abq-article-meta", "");
         adminStatus.setAttribute("role", "status");
@@ -579,6 +617,11 @@
         function setAdminStatus(message) {
           adminStatus.textContent = message;
           editorStatus.textContent = message;
+        }
+        function showAdminLogin() {
+          loginPanel.hidden = false;
+          editForm.hidden = true;
+          loginPanel.scrollIntoView({behavior:"smooth",block:"center"});
         }
         root.insertBefore(adminStatus, tools);
         root.insertBefore(editForm, tools);
@@ -619,7 +662,7 @@
           editForm.reset();
           editForm.elements.id.value = "article-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
           editCategory.value = "موضوعات معرفية";
-          editTitle.textContent = "إضافة مقال جديد أو نشره فورًا";
+          editTitle.textContent = "إضافة مقال أو بحث";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
           editForm.elements.scheduledAt.required = false;
@@ -632,7 +675,8 @@
           try {
             const sessionResponse = await fetch("/api/admin/github/session", {credentials:"same-origin",cache:"no-store"});
             const session = await sessionResponse.json().catch(()=>({}));
-            if (!sessionResponse.ok || !session.admin || session.owner !== "alabqry55") { window.location.assign("/api/admin/github/login"); return; }
+            if (!sessionResponse.ok || !session.admin || session.owner !== "alabqry55") { showAdminLogin(); return; }
+            loginPanel.hidden = true;
             const response = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
