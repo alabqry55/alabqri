@@ -394,6 +394,22 @@
 
         function render() {
           renderSections();
+          if (taxonomy) {
+            const availableSpecialties = taxonomy.specialties.filter(item =>
+              item.active !== 0 && (!selectedSectionId || String(item.primary_section_id) === selectedSectionId)
+            );
+            specialtySelect.replaceChildren(el("option","","جميع التخصصات"));
+            specialtySelect.options[0].value = "";
+            availableSpecialties.forEach(item => {
+              const option = el("option","",item.name);
+              option.value = item.id;
+              specialtySelect.appendChild(option);
+            });
+            if (!availableSpecialties.some(item => String(item.id) === selectedSpecialtyId)) {
+              selectedSpecialtyId = "";
+            }
+            specialtySelect.value = selectedSpecialtyId;
+          }
           const query = searchInput.value.trim().toLocaleLowerCase("ar");
           const visible = articles.filter(article => {
             const classification = classificationsByArticle.get(String(article.id));
