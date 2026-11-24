@@ -87,6 +87,24 @@
     .abq-editor-control,.abq-editor-field input,.abq-editor-field textarea,.abq-editor-field select{display:block;box-sizing:border-box;width:100%;margin-top:.4rem;padding:.8rem .9rem;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#172033;font:inherit;line-height:1.8}
     .abq-editor-field input:focus,.abq-editor-field textarea:focus,.abq-editor-field select:focus{outline:2px solid #b88a2b;outline-offset:1px;border-color:#b88a2b}
     .abq-editor-status{padding:.7rem .85rem;border-radius:10px;background:#f8fafc;line-height:1.9}
+    .abq-editor-intro{margin:.2rem 0 1rem;padding:.8rem 1rem;border:1px solid #e3e9e3;border-radius:12px;background:#fbfcfa;color:#52645a;line-height:1.85}
+    .abq-editor-section-help{margin:-.25rem 0 .65rem;color:#64748b;font-size:.9rem;line-height:1.8}
+    .abq-editor-form>h3{font-size:1.25rem;color:#173b2d;margin:.1rem 0 .6rem;line-height:1.7}
+    .abq-admin-login .abq-admin-login-status{margin:.8rem 0 0;padding:.65rem .8rem;border-radius:10px;background:#fff8e8;color:#76551b;line-height:1.8}
+    .abq-admin-workspace{margin:1rem 0;padding:1rem;border:1px solid #d9e3dc;border-radius:18px;background:#fff}
+    .abq-workspace-nav{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1rem}
+    .abq-workspace-tab{padding:.65rem .85rem;border:1px solid #d9e3dc;border-radius:10px;background:#fbfcfa;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
+    .abq-workspace-tab[aria-pressed="true"]{background:#173b2d;border-color:#173b2d;color:#fff}
+    .abq-workspace-panel{display:grid;gap:.75rem}
+    .abq-workspace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:.7rem}
+    .abq-workspace-stat,.abq-workspace-item{padding:.85rem;border:1px solid #e1e8e2;border-radius:12px;background:#fbfcfa;min-width:0}
+    .abq-workspace-stat strong{display:block;font-size:1.35rem;color:#173b2d}
+    .abq-workspace-item h4{margin:0 0 .35rem;color:#173b2d;line-height:1.7}
+    .abq-workspace-item p{margin:.25rem 0;line-height:1.8;overflow-wrap:anywhere}
+    .abq-workspace-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem}
+    .abq-workspace-note{padding:.75rem;border-right:3px solid #b88a2b;background:#fbfaf5;border-radius:8px;line-height:1.85}
+    .abq-workspace-preview{padding:1rem;border:1px solid #d9e3dc;border-radius:14px;background:#fff;line-height:2;white-space:pre-wrap;overflow-wrap:anywhere}
+    @media(max-width:560px){.abq-workspace-tab{width:100%;text-align:right}.abq-admin-workspace{padding:.75rem}}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}.abq-admin-bar>*{width:100%}.abq-editor-form{padding:.9rem}}
   `;
   function init() {
@@ -326,7 +344,7 @@
               const legacy = legacySectionById.get(String(section.id)) || {};
               return {
                 id: String(section.id),
-                title: String(section.name || legacy.title || section.id).replace(/^\s*03\s+/, ""),
+                title: String(section.name || legacy.title || section.id).replace(/^\s*03\s+/, "").replace(/^📿\s*/, "").replace(/📿/g, "").trim(),
                 icon: legacy.icon || "📚",
                 description: legacy.description || "مواد معرفية ضمن هذا القسم",
                 category: legacy.category || ""
@@ -362,7 +380,7 @@
         allOption.value = "";
         categorySelect.appendChild(allOption);
         librarySections.forEach(section => {
-          const option = el("option","",section.title);
+          const option = el("option","",section.icon + " " + section.title);
           option.value = section.id;
           categorySelect.appendChild(option);
         });
@@ -415,6 +433,7 @@
 
         function render() {
           renderSections();
+          renderAdminWorkspace();
           if (taxonomy) {
             const availableSpecialties = taxonomy.specialties.filter(item =>
               item.active !== 0 && (!selectedSectionId || String(item.primary_section_id) === selectedSectionId)
@@ -517,6 +536,124 @@
         adminBar.append(adminButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
 
+        // Owner-only workspace views reuse the existing authenticated read/save API.
+        // Taxonomy remains read-only here: the current save endpoint does not accept
+        // specialty/content-type identifiers, so the UI must not imply those are saved.
+        const adminWorkspace = el("section", "abq-admin-workspace");
+        adminWorkspace.hidden = !adminMode;
+        adminWorkspace.setAttribute("aria-label", "مراكز إدارة المكتبة");
+        const workspaceNav = el("nav", "abq-workspace-nav");
+        workspaceNav.setAttribute("aria-label", "أقسام إدارة المكتبة");
+        const workspacePanel = el("div", "abq-workspace-panel");
+        adminWorkspace.append(workspaceNav, workspacePanel);
+        root.insertBefore(adminWorkspace, tools);
+        const workspaceViews = [
+          ["review","مراجعة المقالات والأبحاث"],
+          ["schedule","إدارة النشر والجدولة"],
+          ["taxonomy","التصنيفات والتخصصات"],
+          ["seo","بيانات SEO والفهرسة"],
+          ["preview","المعاينة والتحقق"]
+        ];
+        let activeWorkspace = "review";
+        let previewArticleId = "";
+        const workspaceTabs = new Map();
+        workspaceViews.forEach(([key,label]) => {
+          const tab = el("button", "abq-workspace-tab", label);
+          tab.type = "button";
+          tab.setAttribute("aria-pressed", String(key === activeWorkspace));
+          tab.addEventListener("click", () => {
+            activeWorkspace = key;
+            workspaceTabs.forEach((button, buttonKey) => button.setAttribute("aria-pressed", String(buttonKey === key)));
+            renderAdminWorkspace();
+          });
+          workspaceTabs.set(key, tab);
+          workspaceNav.appendChild(tab);
+        });
+        const workspaceAction = (label, handler, primary=false) => {
+          const button = el("button", primary ? "abq-editor-action abq-editor-action-primary" : "abq-editor-action", label);
+          button.type = "button";
+          button.addEventListener("click", handler);
+          return button;
+        };
+        const workspaceDate = value => {
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? String(value || "غير محدد") : date.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"});
+        };
+        function renderAdminWorkspace() {
+          if (!adminMode || !adminAuthenticated) { adminWorkspace.hidden = true; return; }
+          adminWorkspace.hidden = false;
+          workspacePanel.replaceChildren();
+          if (activeWorkspace === "review") {
+            const scheduled = articles.filter(article => article.scheduled_at && Date.parse(article.scheduled_at) > Date.now()).length;
+            const published = articles.length - scheduled;
+            const stats = el("div", "abq-workspace-grid");
+            [[articles.length,"إجمالي المواد"],[published,"مواد منشورة أو مستحقة"],[scheduled,"مواد مجدولة مستقبلًا"]].forEach(([value,label]) => {
+              const item = el("div", "abq-workspace-stat");
+              item.append(el("strong","",String(value)),el("span","",label));
+              stats.appendChild(item);
+            });
+            workspacePanel.append(stats,el("p","abq-workspace-note","مركز مراجعة المحتوى يعرض حالة النشر المتاحة في النظام. لا توجد حاليًا حالة اعتماد تحريرية مستقلة؛ لذلك لن نعرض المسودات أو الموافقات كأنها حالات محفوظة."));
+            articles.forEach(article => {
+              const item = el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","abq-article-meta",article.scheduled_at && Date.parse(article.scheduled_at)>Date.now() ? "مجدول للنشر • "+workspaceDate(article.scheduled_at) : "منشور / مستحق للعرض"));
+              item.append(el("p","",article.excerpt || "لا يوجد ملخص."));
+              const actions=el("div","abq-workspace-actions");
+              actions.append(workspaceAction("تحرير المادة",()=>startEditing(article),true),workspaceAction("فتح المعاينة",()=>{previewArticleId=String(article.id);activeWorkspace="preview";workspaceTabs.forEach((button,key)=>button.setAttribute("aria-pressed",String(key==="preview")));renderAdminWorkspace();}));
+              item.appendChild(actions);workspacePanel.appendChild(item);
+            });
+            if (!articles.length) workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مواد متاحة للمراجعة."));
+          } else if (activeWorkspace === "schedule") {
+            const scheduled = articles.filter(article => article.scheduled_at && Date.parse(article.scheduled_at)>Date.now()).sort((a,b)=>Date.parse(a.scheduled_at)-Date.parse(b.scheduled_at));
+            workspacePanel.append(el("p","abq-workspace-note","إدارة المواعيد تستخدم حقل الجدولة الموجود بالفعل. يمكنك فتح المادة وتعديل موعدها؛ ترك الموعد فارغًا يعني النشر الفوري وفق مسار الحفظ الحالي."));
+            if (!scheduled.length) workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مواد مجدولة في المستقبل حاليًا."));
+            scheduled.forEach(article=>{
+              const item=el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","abq-article-meta","موعد النشر: "+workspaceDate(article.scheduled_at)));
+              item.appendChild(workspaceAction("تعديل موعد النشر",()=>startEditing(article),true));
+              workspacePanel.appendChild(item);
+            });
+          } else if (activeWorkspace === "taxonomy") {
+            workspacePanel.append(el("p","abq-workspace-note","عرض التصنيفات من واجهة القراءة فقط. لا يتم تعديل التخصص أو نوع المادة من هذه الشاشة؛ لأن مسار الحفظ الحالي لا يستقبل معرفاتهما، ولن نضيف واجهة توحي بحفظ غير مدعوم."));
+            if (!taxonomy) { workspacePanel.appendChild(el("p","abq-articles-status","مصدر التصنيفات غير متاح في هذه البيئة؛ لم يتم إجراء أي تعديل على التصنيفات.")); return; }
+            librarySections.forEach(section=>{
+              const item=el("article","abq-workspace-item");
+              const linked=(taxonomy.specialties||[]).filter(s=>String(s.primary_section_id)===String(section.id)&&s.active!==0);
+              item.append(el("h4","",String(librarySections.indexOf(section)+1).padStart(2,"0")+" "+section.icon+" "+section.title));
+              item.append(el("p","",linked.length ? "التخصصات: "+linked.map(s=>s.name).join("، ") : "لا توجد تخصصات نشطة معروضة لهذا القسم."));
+              workspacePanel.appendChild(item);
+            });
+            const types=el("article","abq-workspace-item");
+            types.append(el("h4","","أنواع المحتوى"),el("p","",(taxonomy.contentTypes||[]).filter(t=>t.active!==0).map(t=>t.name).join(" • ")||"لا توجد أنواع محتوى نشطة."));
+            workspacePanel.appendChild(types);
+          } else if (activeWorkspace === "seo") {
+            workspacePanel.append(el("p","abq-workspace-note","مراجعة بيانات SEO المخزنة لكل مادة. هذه الشاشة لا تدّعي أن Google فهرس الصفحة؛ حالة الفهرسة الفعلية تُراجع من Search Console."));
+            articles.forEach(article=>{
+              const title=article.seo_title||article.seoTitle||article.title||"";
+              const description=article.seo_description||article.seoDescription||article.excerpt||"";
+              const canonical=article.canonical_url||article.canonicalUrl||"";
+              const image=article.og_image||article.ogImage||"";
+              const missing=[!title&&"عنوان SEO",!description&&"وصف SEO",!canonical&&"Canonical",!image&&"صورة المشاركة"].filter(Boolean);
+              const item=el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","", "عنوان SEO: "+(title||"غير متوفر")),el("p","","وصف SEO: "+(description||"غير متوفر")),el("p","","Canonical: "+(canonical||"غير محدد")),el("p","","Open Graph: "+(image||"غير محدد")),el("p","abq-article-meta",missing.length?"يحتاج مراجعة: "+missing.join("، "):"الحقول الأساسية متوفرة."));
+              item.appendChild(workspaceAction("تحرير بيانات SEO",()=>startEditing(article),true));
+              workspacePanel.appendChild(item);
+            });
+          } else if (activeWorkspace === "preview") {
+            const chosen=articles.find(article=>String(article.id)===previewArticleId)||articles[0];
+            if (!chosen) { workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مادة لمعاينتها.")); return; }
+            previewArticleId=String(chosen.id);
+            const picker=el("select","abq-editor-control");
+            picker.setAttribute("aria-label","اختر مادة للمعاينة");
+            articles.forEach(article=>{const option=el("option","",article.title);option.value=String(article.id);picker.appendChild(option);});
+            picker.value=previewArticleId;
+            picker.addEventListener("change",()=>{previewArticleId=picker.value;renderAdminWorkspace();});
+            const preview=el("article","abq-workspace-preview");
+            preview.append(el("h2","",chosen.title),el("p","abq-article-meta",[chosen.date,chosen.category].filter(Boolean).join(" • ")),el("p","",chosen.excerpt||""),el("div","",chosen.content||""));
+            workspacePanel.append(picker,preview,el("p","abq-workspace-note","المعاينة داخل لوحة الإدارة ولا تنشر المادة أو تغيّر حالتها."));
+            workspacePanel.appendChild(workspaceAction("تحرير المادة",()=>startEditing(chosen),true));
+          }
+        }
+
         const loginPanel = el("section", "abq-admin-login");
         loginPanel.hidden = true;
         loginPanel.setAttribute("aria-labelledby", "abq-admin-login-title");
@@ -538,6 +675,7 @@
         const editForm = el("form", "abq-article-card abq-editor-form");
         editForm.hidden = true;
         editForm.style.margin = "1rem 0";
+        editForm.setAttribute("aria-labelledby", "abq-editor-title");
         const field = (labelText, name, value, multiline=false) => {
           const wrap = el("label", "abq-editor-field");
           wrap.appendChild(el("span", "", labelText));
@@ -555,6 +693,8 @@
           return wrap;
         };
         const editTitle = el("h3", "", "تعديل مقال");
+        editTitle.id = "abq-editor-title";
+        const editIntro = el("p", "abq-editor-intro", "أدخل بيانات المادة في مجموعات واضحة. راجع القسم وبيانات النشر والمحتوى وبيانات SEO قبل الحفظ؛ ولن تُعلن الواجهة نجاح الحفظ إلا بعد تأكيده من الخدمة.");
         const editId = el("input");
         editId.type = "hidden";
         editId.name = "id";
@@ -583,17 +723,21 @@
         scheduleInput.name = "scheduledAt";
         scheduleInput.className = "abq-editor-control";
         scheduleWrap.appendChild(scheduleInput);
-        editForm.append(editTitle, editId,
+        editForm.append(editTitle, editId, editIntro,
           el("h4", "abq-editor-section-title", "أولًا: البيانات الأساسية"),
+          el("p", "abq-editor-section-help", "حدد عنوانًا واضحًا واختر القسم الرئيسي الأنسب للمادة."),
           field("عنوان المقال أو البحث","title",""),
           editCategoryWrap,
           el("h4", "abq-editor-section-title", "ثانيًا: بيانات النشر"),
+          el("p", "abq-editor-section-help", "احتفظ بتاريخ المادة الأصلي، واستخدم موعد الجدولة فقط إذا أردت نشرها لاحقًا."),
           field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
           scheduleWrap,
           el("h4", "abq-editor-section-title", "ثالثًا: محتوى المادة"),
+          el("p", "abq-editor-section-help", "اكتب ملخصًا مناسبًا ثم أدرج المحتوى الكامل مع تنظيم العناوين والفقرات."),
           field("الوصف المختصر","excerpt","",true),
           field("المحتوى الكامل","content","",true),
           el("h4", "abq-editor-section-title", "رابعًا: الوسوم وبيانات SEO"),
+          el("p", "abq-editor-section-help", "أضف وسومًا دقيقة، وراجع عنوان SEO والوصف والكلمات المفتاحية والروابط الاختيارية."),
           field("الوسوم (افصل بينها بفاصلة)","tags",""),
           field("عنوان SEO","seoTitle",""),
           field("وصف SEO","seoDescription","",true),
@@ -681,7 +825,7 @@
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
             adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
-            addButton.hidden = false; logoutButton.hidden = false; render();
+            addButton.hidden = false; logoutButton.hidden = false; adminWorkspace.hidden = false; render();
             setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
             editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
           } catch (error) { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); }
@@ -783,17 +927,23 @@
         render();
       })
       .catch(() => {
-        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات، ويمكنك فتح أداة الإدارة للتحقق من اتصال قاعدة البيانات.");
-        const fallbackBar = el("div", "abq-articles-tools");
-        fallbackBar.style.gridTemplateColumns = "1fr";
-        const fallbackAdminButton = el("button", "", "إدارة محتوى المقالات");
-        fallbackAdminButton.type = "button";
-        fallbackAdminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-        const fallbackStatus = el("p", "abq-article-meta", "لم يتم تحميل المكتبة؛ لم يُجرَ أي تعديل على المقالات.");
+        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات أو إجراء أي تعديل عليها.");
+        const fallbackPanel = el("section", "abq-admin-login");
+        fallbackPanel.setAttribute("aria-labelledby", "abq-library-fallback-title");
+        fallbackPanel.appendChild(el("div", "abq-admin-login-icon", "🔐"));
+        const fallbackTitle = el("h3", "", "تفعيل أدوات الإدارة");
+        fallbackTitle.id = "abq-library-fallback-title";
+        fallbackPanel.appendChild(fallbackTitle);
+        fallbackPanel.appendChild(el("p", "", "يمكنك المتابعة عبر GitHub للتحقق من حساب المالك. إذا استمر تعذر تحميل المكتبة، فتحقق من اتصال خدمة المقالات قبل إجراء أي تعديل."));
+        const fallbackStatus = el("p", "abq-admin-login-status", "حالة المكتبة: لم يكتمل التحميل؛ لم يتم حفظ أو حذف أي مادة.");
         fallbackStatus.setAttribute("role", "status");
-        fallbackBar.appendChild(fallbackAdminButton);
-        root.append(fallbackBar, fallbackStatus);
+        const fallbackAdminButton = el("button", "abq-admin-button abq-admin-button-primary", "المتابعة باستخدام GitHub");
+        fallbackAdminButton.type = "button";
         fallbackAdminButton.addEventListener("click", () => { window.location.assign("/api/admin/github/login"); });
+        const fallbackActions = el("div", "abq-admin-login-actions");
+        fallbackActions.appendChild(fallbackAdminButton);
+        fallbackPanel.append(fallbackStatus, fallbackActions);
+        root.appendChild(fallbackPanel);
       });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
