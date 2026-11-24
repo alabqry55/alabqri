@@ -9,7 +9,8 @@ function taxonomyDb({ tables = true, complete = true } = {}) {
   const data = {
     library_sections: [{ id: "quran", name: "القرآن الكريم وعلومه", sort_order: 1, active: 1 }],
     library_specialties: [{ id: "quran-sciences", name: "علوم القرآن الكريم", sort_order: 1, active: 1, primary_section_id: "quran" }],
-    library_content_types: [{ id: "article", name: "مقال", sort_order: 1, active: 1 }]
+    library_content_types: [{ id: "article", name: "مقال", sort_order: 1, active: 1 }],
+    library_article_classification: [{ article_id: "a-1", primary_section_id: "quran", primary_specialty_id: "quran-sciences", content_type_id: "article", editorial_status: "approved" }]
   };
   return {
     statements,
@@ -26,7 +27,8 @@ function taxonomyDb({ tables = true, complete = true } = {}) {
             const columns = {
               library_sections: ["id", "name", "sort_order", "active"],
               library_specialties: ["id", "name", "sort_order", "active", ...(complete ? ["primary_section_id"] : [])],
-              library_content_types: ["id", "name", "sort_order", "active"]
+              library_content_types: ["id", "name", "sort_order", "active"],
+              library_article_classification: ["article_id", "primary_section_id", "primary_specialty_id", "content_type_id", "editorial_status"]
             };
             return { results: (columns[name] || []).map(column => ({ name: column })) };
           }
@@ -52,6 +54,8 @@ test("taxonomy endpoint returns ordered taxonomy collections using read-only que
   assert.equal(payload.sections[0].id, "quran");
   assert.equal(payload.specialties[0].primary_section_id, "quran");
   assert.equal(payload.contentTypes[0].id, "article");
+  assert.equal(payload.classifications[0].article_id, "a-1");
+  assert.equal(payload.classifications[0].primary_specialty_id, "quran-sciences");
   assert.ok(db.statements.every(sql => /^(SELECT|PRAGMA)\b/i.test(sql)), db.statements.join("\n"));
 });
 
@@ -66,6 +70,7 @@ test("taxonomy endpoint reports missing migrations without attempting writes", a
   assert.equal(payload.available, false);
   assert.equal(payload.code, "TAXONOMY_NOT_INSTALLED");
   assert.deepEqual(payload.sections, []);
+  assert.deepEqual(payload.classifications, []);
   assert.ok(db.statements.every(sql => /^(SELECT|PRAGMA)\b/i.test(sql)));
 });
 
