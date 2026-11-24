@@ -107,7 +107,7 @@ test("legacy article administration dashboard exposes all seven canonical catego
   for (const label of [
     "القرآن الكريم وعلومه",
     "الحديث الشريف وعلومه",
-    "03 📿 الذكر والإتزان الإيماني",
+    "📿 الذكر والإتزان الإيماني",
     "علم النفس الإسلامي والتنمية البشرية",
     "الطب التكميلي والتوعية الصحية",
     "الأبحاث والدراسات",
@@ -203,7 +203,7 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
 
 test("new article library exposes subject sections and client-side search without changing stored category values", async () => {
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
-  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","03 📿 الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
+  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","📿 الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
     assert.ok(source.includes(section), "missing library section: " + section);
   }
   assert.ok(source.includes('searchInput.type = "search"'));
@@ -215,7 +215,7 @@ test("new article library exposes subject sections and client-side search withou
   const adminCategories = [
     '["القرآن الكريم وعلومه","القرآن الكريم وعلومه"]',
     '["الحديث الشريف وعلومه","الحديث الشريف وعلومه"]',
-    '["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"]',
+    '["📿 الذكر والإتزان الإيماني","الأذكار والاتزان"]',
     '["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"]',
     '["الطب التكميلي والتوعية الصحية","الطب التكميلي"]',
     '["الأبحاث والدراسات","البحث العلمي"]',
