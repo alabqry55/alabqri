@@ -56,7 +56,7 @@
     .abq-library-section:disabled{cursor:default;opacity:.68}
     .abq-library-section strong{font-size:1rem;line-height:1.7}
     .abq-library-section small{color:#64748b;line-height:1.6}
-    .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.42fr);gap:.65rem;margin:1rem 0}
+    .abq-articles-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:.65rem;margin:1rem 0}
     .abq-articles-tools input,.abq-articles-tools select{box-sizing:border-box;width:100%;min-width:0;padding:.75rem .85rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#172033;font:inherit}
     .abq-articles-status{padding:1rem;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.8}
     .abq-articles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1rem}
@@ -241,8 +241,26 @@
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
       })
-      .then(data => {
+      .then(async data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
+        // Taxonomy is an independent read-only source. If it is not installed yet,
+        // preserve the existing legacy-category library instead of hiding articles.
+        let taxonomy = null;
+        try {
+          const taxonomyResponse = await fetch("/api/library/taxonomy", {
+            headers: { "Accept": "application/json" },
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+          if (taxonomyResponse.ok) {
+            const candidate = await taxonomyResponse.json();
+            if (candidate?.available === true &&
+                Array.isArray(candidate.sections) &&
+                Array.isArray(candidate.specialties) &&
+                Array.isArray(candidate.contentTypes) &&
+                Array.isArray(candidate.classifications)) taxonomy = candidate;
+          }
+        } catch (_) { /* retain the legacy-compatible renderer */ }
         // Promote the new renderer into the legacy list's exact location only after
         // a valid API response, preserving the old list if loading fails.
         if (legacyArticleList?.isConnected) legacyArticleList.replaceWith(root);
@@ -272,16 +290,44 @@
         }
         // The public library is divided into clear subject areas while stored legacy
         // categories remain unchanged for backward compatibility with the API and D1.
-        const librarySections = [
-          {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
-          {title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
-          {title:"03 📿 الذكر والإتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
-          {title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
-          {title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
-          {title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
-          {title:"المعرفة والفكر",icon:"📚",description:"موضوعات معرفية وفكرية متنوعة",category:"موضوعات معرفية"}
+        const legacySectionDefinitions = [
+          {id:"quran",title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
+          {id:"hadith",title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
+          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
+          {id:"islamic-psychology-development",title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
+          {id:"complementary-health",title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
+          {id:"research-studies",title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
+          {id:"knowledge-thought",title:"المعرفة والفكر",icon:"📚",description:"موضوعات معرفية وفكرية متنوعة",category:"موضوعات معرفية"}
         ];
-        let selectedCategory = "";
+        const legacySectionById = new Map(legacySectionDefinitions.map(section => [section.id, section]));
+        const librarySections = taxonomy
+          ? taxonomy.sections.map(section => {
+              const legacy = legacySectionById.get(String(section.id)) || {};
+              return {
+                id: String(section.id),
+                title: String(section.name || legacy.title || section.id).replace(/^\\s*03\\s+/, ""),
+                icon: legacy.icon || "📚",
+                description: legacy.description || "مواد معرفية ضمن هذا القسم",
+                category: legacy.category || ""
+              };
+            })
+          : legacySectionDefinitions;
+        const classificationsByArticle = new Map(
+          (taxonomy?.classifications || []).map(item => [String(item.article_id), item])
+        );
+        const legacySectionByCategory = new Map(
+          legacySectionDefinitions.map(section => [section.category, section.id])
+        );
+        const sectionForArticle = article => {
+          const classification = classificationsByArticle.get(String(article.id));
+          if (classification?.primary_section_id) return String(classification.primary_section_id);
+          return legacySectionByCategory.get(String(article.category || "")) || "";
+        };
+        const specialtyNames = new Map((taxonomy?.specialties || []).map(item => [String(item.id), String(item.name || item.id)]));
+        const contentTypeNames = new Map((taxonomy?.contentTypes || []).map(item => [String(item.id), String(item.name || item.id)]));
+        let selectedSectionId = "";
+        let selectedSpecialtyId = "";
+        let selectedContentTypeId = "";
         const intro = el("div","abq-library-intro","مرحبًا بك في مكتبة العبقري؛ مساحة معرفية منظمة تجمع المقالات والأبحاث في أقسام واضحة، مع الحفاظ على المحتوى المنشور وبياناته.");
         const sectionGrid = el("div","abq-library-sections");
         const tools = el("div","abq-articles-tools");
@@ -294,12 +340,36 @@
         const allOption = el("option","","جميع الأقسام");
         allOption.value = "";
         categorySelect.appendChild(allOption);
-        librarySections.filter(section => section.category).forEach(section => {
+        librarySections.forEach(section => {
           const option = el("option","",section.title);
-          option.value = section.category;
+          option.value = section.id;
           categorySelect.appendChild(option);
         });
-        tools.append(searchInput,categorySelect);
+        const specialtySelect = el("select");
+        specialtySelect.setAttribute("aria-label","تصفية حسب التخصص");
+        specialtySelect.appendChild(el("option","","جميع التخصصات"));
+        specialtySelect.options[0].value = "";
+        const contentTypeSelect = el("select");
+        contentTypeSelect.setAttribute("aria-label","تصفية حسب نوع المادة");
+        contentTypeSelect.appendChild(el("option","","جميع أنواع المواد"));
+        contentTypeSelect.options[0].value = "";
+        if (taxonomy) {
+          taxonomy.specialties.filter(item => item.active !== 0).forEach(item => {
+            const option = el("option","",item.name);
+            option.value = item.id;
+            specialtySelect.appendChild(option);
+          });
+          taxonomy.contentTypes.filter(item => item.active !== 0).forEach(item => {
+            const option = el("option","",item.name);
+            option.value = item.id;
+            contentTypeSelect.appendChild(option);
+          });
+          tools.append(searchInput,categorySelect,specialtySelect,contentTypeSelect);
+        } else {
+          specialtySelect.hidden = true;
+          contentTypeSelect.hidden = true;
+          tools.append(searchInput,categorySelect);
+        }
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
         root.append(intro,sectionGrid,tools,count,grid);
@@ -307,16 +377,15 @@
         function renderSections() {
           sectionGrid.replaceChildren();
           librarySections.forEach(section => {
-            const total = section.category ? articles.filter(article => article.category === section.category).length : 0;
+            const total = articles.filter(article => sectionForArticle(article) === section.id).length;
             const button = el("button","abq-library-section");
             button.type = "button";
-            button.disabled = Boolean(section.comingSoon);
-            button.setAttribute("aria-pressed",String(selectedCategory === (section.category || "__quran__")));
+            button.setAttribute("aria-pressed",String(selectedSectionId === section.id));
             button.append(el("span","",section.icon),el("strong","",section.title),
-              el("small","",section.comingSoon ? "قريبًا — لا توجد مواد مصنفة هنا بعد" : "عدد المواد: " + total));
-            if (section.category) button.addEventListener("click",() => {
-              selectedCategory = selectedCategory === section.category ? "" : section.category;
-              categorySelect.value = selectedCategory;
+              el("small","",section.description + " • عدد المواد: " + total));
+            button.addEventListener("click",() => {
+              selectedSectionId = selectedSectionId === section.id ? "" : section.id;
+              categorySelect.value = selectedSectionId;
               render();
             });
             sectionGrid.appendChild(button);
@@ -327,9 +396,12 @@
           renderSections();
           const query = searchInput.value.trim().toLocaleLowerCase("ar");
           const visible = articles.filter(article => {
-            const categoryMatch = !selectedCategory || article.category === selectedCategory;
+            const classification = classificationsByArticle.get(String(article.id));
+            const sectionMatch = !selectedSectionId || sectionForArticle(article) === selectedSectionId;
+            const specialtyMatch = !selectedSpecialtyId || String(classification?.primary_specialty_id || "") === selectedSpecialtyId;
+            const contentTypeMatch = !selectedContentTypeId || String(classification?.content_type_id || "") === selectedContentTypeId;
             const haystack = [article.title,article.excerpt,article.content,article.category,...(Array.isArray(article.tags)?article.tags:[])].join(" ").toLocaleLowerCase("ar");
-            return categoryMatch && (!query || haystack.includes(query));
+            return sectionMatch && specialtyMatch && contentTypeMatch && (!query || haystack.includes(query));
           });
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
@@ -340,7 +412,11 @@
           visible.forEach(a => {
             const card = el("article", "abq-article-card");
             card.appendChild(el("h3", "", a.title));
-            const meta = [a.category, a.date].filter(Boolean).join(" • ");
+            const classification = classificationsByArticle.get(String(a.id));
+            const sectionName = librarySections.find(section => section.id === sectionForArticle(a))?.title || a.category;
+            const specialtyName = specialtyNames.get(String(classification?.primary_specialty_id || ""));
+            const contentTypeName = contentTypeNames.get(String(classification?.content_type_id || ""));
+            const meta = [sectionName, specialtyName, contentTypeName, a.date].filter(Boolean).join(" • ");
             if (meta) card.appendChild(el("p", "abq-article-meta", meta));
             if (Array.isArray(a.tags) && a.tags.length) card.appendChild(el("p", "abq-article-meta", a.tags.join(" • ")));
             if (adminMode && a.scheduled_at) {
@@ -364,7 +440,9 @@
           });
         }
         searchInput.addEventListener("input",render);
-        categorySelect.addEventListener("change",() => { selectedCategory = categorySelect.value; render(); });
+        categorySelect.addEventListener("change",() => { selectedSectionId = categorySelect.value; render(); });
+        specialtySelect.addEventListener("change",() => { selectedSpecialtyId = specialtySelect.value; render(); });
+        contentTypeSelect.addEventListener("change",() => { selectedContentTypeId = contentTypeSelect.value; render(); });
 
         // Owner authorization is verified server-side through the signed GitHub OAuth session.
         let adminAuthenticated = Boolean(initiallyAdmin);
