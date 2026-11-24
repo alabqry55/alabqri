@@ -34,6 +34,7 @@ test("section display normalization does not mutate the stored taxonomy value", 
   assert.ok(ui.includes("String(section.name || legacy.title || section.id)"));
   assert.ok(ui.includes("section.name"));
   assert.ok(ui.includes('.replace(/^📿\\s*/, "")'), "the third section icon must not be repeated in its display title");
+  assert.ok(ui.includes('.replace(/📿/g, "").trim()'), "all duplicate prayer-bead glyphs must be removed from the display title");
 });
 
 test("unclassified legacy articles remain mapped through their original category", () => {
