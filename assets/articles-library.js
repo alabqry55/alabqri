@@ -314,7 +314,7 @@
         const legacySectionDefinitions = [
           {id:"quran",title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
           {id:"hadith",title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
-          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
+          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"📿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
           {id:"islamic-psychology-development",title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
           {id:"complementary-health",title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
           {id:"research-studies",title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
