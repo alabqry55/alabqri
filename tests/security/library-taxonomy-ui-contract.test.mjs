@@ -40,3 +40,31 @@ test("unclassified legacy articles remain mapped through their original category
   assert.ok(ui.includes('String(article.category || "")'));
   assert.ok(ui.includes("return legacySectionByCategory.get"));
 });
+
+
+test("admin visual entry keeps owner-only GitHub sign-in behind a clear activation panel", () => {
+  assert.ok(ui.includes('el("section", "abq-admin-login")'));
+  assert.ok(ui.includes("تفعيل أدوات الإدارة"));
+  assert.ok(ui.includes("المتابعة باستخدام GitHub"));
+  assert.ok(ui.includes('window.location.assign("/api/admin/github/login")'));
+  assert.ok(ui.includes('session.owner !== "alabqry55"'));
+});
+
+test("article editor presents the seven approved sections and grouped article fields", () => {
+  assert.ok(ui.includes('el("button", "abq-admin-button abq-admin-button-primary", "إضافة مقال أو بحث")'));
+  assert.ok(ui.includes('librarySections.forEach((section, index) =>'));
+  assert.ok(ui.includes('number + " " + section.icon + " " + section.title'));
+  for (const title of [
+    "القرآن الكريم وعلومه",
+    "الحديث الشريف وعلومه",
+    "الذكر والإتزان الإيماني",
+    "علم النفس الإسلامي والتنمية البشرية",
+    "الطب التكميلي والتوعية الصحية",
+    "الأبحاث والدراسات",
+    "المعرفة والفكر"
+  ]) assert.ok(ui.includes(title), "missing approved section: " + title);
+  assert.ok(ui.includes("أولًا: البيانات الأساسية"));
+  assert.ok(ui.includes("ثانيًا: بيانات النشر"));
+  assert.ok(ui.includes("ثالثًا: محتوى المادة"));
+  assert.ok(ui.includes("رابعًا: الوسوم وبيانات SEO"));
+});
