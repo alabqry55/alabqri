@@ -376,7 +376,7 @@
         allOption.value = "";
         categorySelect.appendChild(allOption);
         librarySections.forEach(section => {
-          const option = el("option","",section.title);
+          const option = el("option","",section.icon + " " + section.title);
           option.value = section.id;
           categorySelect.appendChild(option);
         });
