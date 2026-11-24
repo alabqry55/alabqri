@@ -56,6 +56,7 @@ test("taxonomy endpoint returns ordered taxonomy collections using read-only que
   assert.equal(payload.contentTypes[0].id, "article");
   assert.equal(payload.classifications[0].article_id, "a-1");
   assert.equal(payload.classifications[0].primary_specialty_id, "quran-sciences");
+  assert.equal(Object.hasOwn(payload.classifications[0], "editorial_status"), false);
   assert.ok(db.statements.every(sql => /^(SELECT|PRAGMA)\b/i.test(sql)), db.statements.join("\n"));
 });
 
