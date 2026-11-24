@@ -146,6 +146,19 @@ test("homepage cloud sync skips identical remote articles and reports the real A
 });
 
 
+test("article deletion is guarded when a library classification still references it", async () => {
+  const source = await readFile(new URL("../../functions/api/articles.js", import.meta.url), "utf8");
+  const deleteStart = source.indexOf('if (body.action === "delete")');
+  const deleteEnd = source.indexOf('return json({error:"Unsupported action."}', deleteStart);
+  assert.ok(deleteStart >= 0 && deleteEnd > deleteStart, "delete handler is missing");
+  const handler = source.slice(deleteStart, deleteEnd);
+  assert.ok(handler.includes("library_article_classification"));
+  assert.ok(handler.includes("ARTICLE_CLASSIFICATION_EXISTS"));
+  assert.ok(handler.includes("},409)"));
+  assert.ok(handler.indexOf("ARTICLE_CLASSIFICATION_EXISTS") < handler.indexOf('env.DB.batch(['),
+    "classification conflict must be returned before deleting the article or writing the audit row");
+});
+
 import { onRequest as githubOAuthRequest } from "../../functions/api/admin/github/[action].js";
 
 const OAUTH_ENV = {
