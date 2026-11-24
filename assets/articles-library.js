@@ -344,7 +344,7 @@
               const legacy = legacySectionById.get(String(section.id)) || {};
               return {
                 id: String(section.id),
-                title: String(section.name || legacy.title || section.id).replace(/^\s*03\s+/, "").replace(/^📿\s*/, ""),
+                title: String(section.name || legacy.title || section.id).replace(/^\s*03\s+/, "").replace(/^📿\s*/, "").replace(/📿/g, "").trim(),
                 icon: legacy.icon || "📚",
                 description: legacy.description || "مواد معرفية ضمن هذا القسم",
                 category: legacy.category || ""
