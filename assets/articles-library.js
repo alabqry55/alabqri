@@ -87,6 +87,10 @@
     .abq-editor-control,.abq-editor-field input,.abq-editor-field textarea,.abq-editor-field select{display:block;box-sizing:border-box;width:100%;margin-top:.4rem;padding:.8rem .9rem;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#172033;font:inherit;line-height:1.8}
     .abq-editor-field input:focus,.abq-editor-field textarea:focus,.abq-editor-field select:focus{outline:2px solid #b88a2b;outline-offset:1px;border-color:#b88a2b}
     .abq-editor-status{padding:.7rem .85rem;border-radius:10px;background:#f8fafc;line-height:1.9}
+    .abq-editor-intro{margin:.2rem 0 1rem;padding:.8rem 1rem;border:1px solid #e3e9e3;border-radius:12px;background:#fbfcfa;color:#52645a;line-height:1.85}
+    .abq-editor-section-help{margin:-.25rem 0 .65rem;color:#64748b;font-size:.9rem;line-height:1.8}
+    .abq-editor-form>h3{font-size:1.25rem;color:#173b2d;margin:.1rem 0 .6rem;line-height:1.7}
+    .abq-admin-login .abq-admin-login-status{margin:.8rem 0 0;padding:.65rem .8rem;border-radius:10px;background:#fff8e8;color:#76551b;line-height:1.8}
     .abq-admin-workspace{margin:1rem 0;padding:1rem;border:1px solid #d9e3dc;border-radius:18px;background:#fff}
     .abq-workspace-nav{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1rem}
     .abq-workspace-tab{padding:.65rem .85rem;border:1px solid #d9e3dc;border-radius:10px;background:#fbfcfa;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
@@ -671,6 +675,7 @@
         const editForm = el("form", "abq-article-card abq-editor-form");
         editForm.hidden = true;
         editForm.style.margin = "1rem 0";
+        editForm.setAttribute("aria-labelledby", "abq-editor-title");
         const field = (labelText, name, value, multiline=false) => {
           const wrap = el("label", "abq-editor-field");
           wrap.appendChild(el("span", "", labelText));
@@ -688,6 +693,8 @@
           return wrap;
         };
         const editTitle = el("h3", "", "تعديل مقال");
+        editTitle.id = "abq-editor-title";
+        const editIntro = el("p", "abq-editor-intro", "أدخل بيانات المادة في مجموعات واضحة. راجع القسم وبيانات النشر والمحتوى وبيانات SEO قبل الحفظ؛ ولن تُعلن الواجهة نجاح الحفظ إلا بعد تأكيده من الخدمة.");
         const editId = el("input");
         editId.type = "hidden";
         editId.name = "id";
@@ -716,17 +723,21 @@
         scheduleInput.name = "scheduledAt";
         scheduleInput.className = "abq-editor-control";
         scheduleWrap.appendChild(scheduleInput);
-        editForm.append(editTitle, editId,
+        editForm.append(editTitle, editId, editIntro,
           el("h4", "abq-editor-section-title", "أولًا: البيانات الأساسية"),
+          el("p", "abq-editor-section-help", "حدد عنوانًا واضحًا واختر القسم الرئيسي الأنسب للمادة."),
           field("عنوان المقال أو البحث","title",""),
           editCategoryWrap,
           el("h4", "abq-editor-section-title", "ثانيًا: بيانات النشر"),
+          el("p", "abq-editor-section-help", "احتفظ بتاريخ المادة الأصلي، واستخدم موعد الجدولة فقط إذا أردت نشرها لاحقًا."),
           field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
           scheduleWrap,
           el("h4", "abq-editor-section-title", "ثالثًا: محتوى المادة"),
+          el("p", "abq-editor-section-help", "اكتب ملخصًا مناسبًا ثم أدرج المحتوى الكامل مع تنظيم العناوين والفقرات."),
           field("الوصف المختصر","excerpt","",true),
           field("المحتوى الكامل","content","",true),
           el("h4", "abq-editor-section-title", "رابعًا: الوسوم وبيانات SEO"),
+          el("p", "abq-editor-section-help", "أضف وسومًا دقيقة، وراجع عنوان SEO والوصف والكلمات المفتاحية والروابط الاختيارية."),
           field("الوسوم (افصل بينها بفاصلة)","tags",""),
           field("عنوان SEO","seoTitle",""),
           field("وصف SEO","seoDescription","",true),
@@ -916,17 +927,23 @@
         render();
       })
       .catch(() => {
-        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات، ويمكنك فتح أداة الإدارة للتحقق من اتصال قاعدة البيانات.");
-        const fallbackBar = el("div", "abq-articles-tools");
-        fallbackBar.style.gridTemplateColumns = "1fr";
-        const fallbackAdminButton = el("button", "", "إدارة محتوى المقالات");
-        fallbackAdminButton.type = "button";
-        fallbackAdminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-        const fallbackStatus = el("p", "abq-article-meta", "لم يتم تحميل المكتبة؛ لم يُجرَ أي تعديل على المقالات.");
+        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات أو إجراء أي تعديل عليها.");
+        const fallbackPanel = el("section", "abq-admin-login");
+        fallbackPanel.setAttribute("aria-labelledby", "abq-library-fallback-title");
+        fallbackPanel.appendChild(el("div", "abq-admin-login-icon", "🔐"));
+        const fallbackTitle = el("h3", "", "تفعيل أدوات الإدارة");
+        fallbackTitle.id = "abq-library-fallback-title";
+        fallbackPanel.appendChild(fallbackTitle);
+        fallbackPanel.appendChild(el("p", "", "يمكنك المتابعة عبر GitHub للتحقق من حساب المالك. إذا استمر تعذر تحميل المكتبة، فتحقق من اتصال خدمة المقالات قبل إجراء أي تعديل."));
+        const fallbackStatus = el("p", "abq-admin-login-status", "حالة المكتبة: لم يكتمل التحميل؛ لم يتم حفظ أو حذف أي مادة.");
         fallbackStatus.setAttribute("role", "status");
-        fallbackBar.appendChild(fallbackAdminButton);
-        root.append(fallbackBar, fallbackStatus);
+        const fallbackAdminButton = el("button", "abq-admin-button abq-admin-button-primary", "المتابعة باستخدام GitHub");
+        fallbackAdminButton.type = "button";
         fallbackAdminButton.addEventListener("click", () => { window.location.assign("/api/admin/github/login"); });
+        const fallbackActions = el("div", "abq-admin-login-actions");
+        fallbackActions.appendChild(fallbackAdminButton);
+        fallbackPanel.append(fallbackStatus, fallbackActions);
+        root.appendChild(fallbackPanel);
       });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
