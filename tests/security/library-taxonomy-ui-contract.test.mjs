@@ -67,4 +67,5 @@ test("article editor presents the seven approved sections and grouped article fi
   assert.ok(ui.includes("ثانيًا: بيانات النشر"));
   assert.ok(ui.includes("ثالثًا: محتوى المادة"));
   assert.ok(ui.includes("رابعًا: الوسوم وبيانات SEO"));
+  assert.ok(ui.includes('id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"📿"'));
 });
