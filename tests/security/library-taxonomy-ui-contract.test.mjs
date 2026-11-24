@@ -69,3 +69,30 @@ test("article editor presents the seven approved sections and grouped article fi
   assert.ok(ui.includes("رابعًا: الوسوم وبيانات SEO"));
   assert.ok(ui.includes('id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"📿"'));
 });
+
+
+test("category filter preserves the all-sections option and displays all seven icon labels", () => {
+  assert.ok(ui.includes('el("option","","جميع الأقسام")'), "the all-sections option must remain available");
+  assert.ok(ui.includes('section.icon + " " + section.title'), "filter labels must include the section icon");
+  for (const [icon,title] of [
+    ["📖","القرآن الكريم وعلومه"],
+    ["📜","الحديث الشريف وعلومه"],
+    ["📿","الذكر والإتزان الإيماني"],
+    ["🧠","علم النفس الإسلامي والتنمية البشرية"],
+    ["🌱","الطب التكميلي والتوعية الصحية"],
+    ["🔬","الأبحاث والدراسات"],
+    ["📚","المعرفة والفكر"]
+  ]) {
+    assert.ok(ui.includes('icon:"' + icon + '",description:') && ui.includes('title:"' + title + '"'),
+      "missing icon/title mapping: " + icon + " " + title);
+  }
+});
+
+test("article editor gives structured guidance and fallback keeps the owner sign-in path clear", () => {
+  assert.ok(ui.includes("abq-editor-intro"));
+  assert.ok(ui.includes("abq-editor-section-help"));
+  assert.ok(ui.includes("abq-library-fallback-title"));
+  assert.ok(ui.includes("حالة المكتبة: لم يكتمل التحميل"));
+  assert.ok(ui.includes("المتابعة باستخدام GitHub"));
+  assert.ok(ui.includes('window.location.assign("/api/admin/github/login")'));
+});
