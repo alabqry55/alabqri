@@ -33,6 +33,10 @@ function taxonomyDb({ tables = true, complete = true } = {}) {
             return { results: (columns[name] || []).map(column => ({ name: column })) };
           }
           const table = Object.keys(data).find(name => statement.includes("FROM " + name + " "));
+          if (table === "library_article_classification") {
+            return { results: data[table].map(({article_id,primary_section_id,primary_specialty_id,content_type_id}) =>
+              ({article_id,primary_section_id,primary_specialty_id,content_type_id})) };
+          }
           if (table) return { results: data[table] };
           throw new Error("Unexpected query: " + statement);
         }
@@ -57,6 +61,7 @@ test("taxonomy endpoint returns ordered taxonomy collections using read-only que
   assert.equal(payload.classifications[0].article_id, "a-1");
   assert.equal(payload.classifications[0].primary_specialty_id, "quran-sciences");
   assert.equal(Object.hasOwn(payload.classifications[0], "editorial_status"), false);
+  assert.equal(db.statements.some(sql => sql.includes("editorial_status")), false);
   assert.ok(db.statements.every(sql => /^(SELECT|PRAGMA)\b/i.test(sql)), db.statements.join("\n"));
 });
 
