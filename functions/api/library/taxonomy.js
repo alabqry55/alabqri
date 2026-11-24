@@ -23,6 +23,11 @@ const TABLES = {
     name: "library_content_types",
     columns: ["id", "name", "sort_order", "active"],
     sql: "SELECT id,name,sort_order,active FROM library_content_types ORDER BY sort_order ASC,id ASC"
+  },
+  classifications: {
+    name: "library_article_classification",
+    columns: ["article_id", "primary_section_id", "primary_specialty_id", "content_type_id", "editorial_status"],
+    sql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id,editorial_status FROM library_article_classification ORDER BY article_id ASC"
   }
 };
 
