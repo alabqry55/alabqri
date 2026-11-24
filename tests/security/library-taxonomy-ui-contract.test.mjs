@@ -9,7 +9,8 @@ test("library UI reads taxonomy independently and keeps legacy rendering as fall
   assert.ok(ui.includes('candidate?.available === true'));
   assert.ok(ui.includes("legacySectionDefinitions"));
   assert.ok(ui.includes("retain the legacy-compatible renderer"));
-  assert.ok(ui.includes("taxonomy ?"));
+  assert.ok(ui.includes("const librarySections = taxonomy"));
+  assert.ok(ui.includes(": legacySectionDefinitions;"));
 });
 
 test("library UI exposes section, specialty, and content-type filters", () => {
