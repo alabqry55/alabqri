@@ -1,4 +1,4 @@
-import { readOwnerSession } from "../../../_lib/admin-auth.js";
+import { readOwnerSession } from "../../_lib/admin-auth.js";
 
 const OWNER_LOGIN = "alabqry55";
 const PREFIX = "owner:alabqry55:drafts:";
