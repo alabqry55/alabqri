@@ -203,7 +203,7 @@ test("OAuth callback configuration rejects non-HTTPS and foreign hosts", async (
 
 test("new article library exposes subject sections and client-side search without changing stored category values", async () => {
   const source = await readFile(new URL("../../assets/articles-library.js", import.meta.url), "utf8");
-  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","03 📿 الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
+  for (const section of ["القرآن الكريم وعلومه","الحديث الشريف وعلومه","الذكر والإتزان الإيماني","علم النفس الإسلامي والتنمية البشرية","الطب التكميلي والتوعية الصحية","الأبحاث والدراسات","المعرفة والفكر"]) {
     assert.ok(source.includes(section), "missing library section: " + section);
   }
   assert.ok(source.includes('searchInput.type = "search"'));
@@ -211,18 +211,12 @@ test("new article library exposes subject sections and client-side search withou
   assert.ok(source.includes('const sectionMatch = !selectedSectionId || sectionForArticle(article) === selectedSectionId;'));
   assert.ok(source.includes('(!query || haystack.includes(query))'));
   assert.equal(source.includes('comingSoon:true'), false);
-  // Admin exposes all seven canonical labels. Existing legacy category values remain
-  // unchanged; Quran and Hadith are supported as additional persisted categories.
-  const adminCategories = [
-    '["القرآن الكريم وعلومه","القرآن الكريم وعلومه"]',
-    '["الحديث الشريف وعلومه","الحديث الشريف وعلومه"]',
-    '["03 📿 الذكر والإتزان الإيماني","الأذكار والاتزان"]',
-    '["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"]',
-    '["الطب التكميلي والتوعية الصحية","الطب التكميلي"]',
-    '["الأبحاث والدراسات","البحث العلمي"]',
-    '["المعرفة والفكر","موضوعات معرفية"]'
-  ];
-  for (const category of adminCategories) assert.ok(source.includes(category), "missing admin category mapping: " + category);
+  // Editor options are generated from canonical section definitions and preserve legacy category values.
+  assert.ok(source.includes('librarySections.forEach((section, index) =>'));
+  assert.ok(source.includes('option.value = section.category || section.title;'));
+  for (const category of ['category:"القرآن الكريم وعلومه"','category:"الحديث الشريف وعلومه"','category:"الأذكار والاتزان"','category:"التنمية البشرية"','category:"الطب التكميلي"','category:"البحث العلمي"','category:"موضوعات معرفية"']) {
+    assert.ok(source.includes(category), "missing stored category mapping: " + category);
+  }
   assert.ok(source.includes('category:"القرآن الكريم وعلومه"'));
   assert.equal(source.includes('comingSoon:true'), false);
   const api = await readFile(new URL("../../functions/api/articles.js", import.meta.url), "utf8");
