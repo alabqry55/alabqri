@@ -208,7 +208,8 @@ test("new article library exposes subject sections and client-side search withou
   }
   assert.ok(source.includes('searchInput.type = "search"'));
   assert.ok(source.includes('categorySelect.setAttribute("aria-label","تصفية حسب القسم")'));
-  assert.ok(source.includes('article.category === selectedCategory'));
+  assert.ok(source.includes('const sectionMatch = !selectedSectionId || sectionForArticle(article) === selectedSectionId;'));
+  assert.ok(source.includes('(!query || haystack.includes(query))'));
   assert.equal(source.includes('comingSoon:true'), false);
   // Admin exposes all seven canonical labels. Existing legacy category values remain
   // unchanged; Quran and Hadith are supported as additional persisted categories.
