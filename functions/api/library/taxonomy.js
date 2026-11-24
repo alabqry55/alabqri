@@ -26,8 +26,8 @@ const TABLES = {
   },
   classifications: {
     name: "library_article_classification",
-    columns: ["article_id", "primary_section_id", "primary_specialty_id", "content_type_id", "editorial_status"],
-    sql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id,editorial_status FROM library_article_classification ORDER BY article_id ASC"
+    columns: ["article_id", "primary_section_id", "primary_specialty_id", "content_type_id"],
+    sql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id FROM library_article_classification ORDER BY article_id ASC"
   }
 };
 
