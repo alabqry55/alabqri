@@ -322,13 +322,34 @@ export async function onRequest({request, env}) {
     }
     if (body.action === "delete") {
       if (!validId(String(body.id||""))) return json({error:"Invalid article id."},400);
-      const targetArticle = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(String(body.id)).first();
+      const articleId = String(body.id);
+      const targetArticle = await env.DB.prepare("SELECT id,title FROM articles WHERE id=?1").bind(articleId).first();
+
+      // The taxonomy relation intentionally uses ON DELETE RESTRICT. Never attempt
+      // to delete an article while a classification row still references it:
+      // preserve both records and return an actionable conflict instead of a 500.
+      const classificationTable = await env.DB.prepare(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='library_article_classification'"
+      ).first();
+      if (classificationTable) {
+        const classification = await env.DB.prepare(
+          "SELECT article_id FROM library_article_classification WHERE article_id=?1"
+        ).bind(articleId).first();
+        if (classification) {
+          return json({
+            error:"لا يمكن حذف المقال لأنه مرتبط بتصنيف في مكتبة العبقري. أزل ارتباط التصنيف أولًا ثم أعد المحاولة.",
+            code:"ARTICLE_CLASSIFICATION_EXISTS",
+            id:articleId
+          },409);
+        }
+      }
+
       await env.DB.batch([
-        env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(String(body.id)),
+        env.DB.prepare("DELETE FROM articles WHERE id=?1").bind(articleId),
         env.DB.prepare("INSERT INTO article_admin_audit(actor,action,article_id,details) VALUES(?1,?2,?3,?4)")
-          .bind(ownerSession.login,"permanent_delete",String(body.id),String(targetArticle?.title || "not_found").slice(0,500))
+          .bind(ownerSession.login,"permanent_delete",articleId,String(targetArticle?.title || "not_found").slice(0,500))
       ]);
-      return json({ok:true,id:body.id});
+      return json({ok:true,id:articleId});
     }
     return json({error:"Unsupported action."},400);
   } catch (error) {
