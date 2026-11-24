@@ -27,13 +27,27 @@ const TABLES = {
   classifications: {
     name: "library_article_classification",
     columns: ["article_id", "primary_section_id", "primary_specialty_id", "content_type_id"],
-    sql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id FROM library_article_classification ORDER BY article_id ASC"
+    sql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id FROM library_article_classification WHERE article_id IN (SELECT id FROM articles WHERE scheduled_at IS NULL OR julianday(scheduled_at) <= julianday('now')) ORDER BY article_id ASC",
+    legacySql: "SELECT article_id,primary_section_id,primary_specialty_id,content_type_id FROM library_article_classification WHERE article_id IN (SELECT id FROM articles) ORDER BY article_id ASC"
   }
 };
 
 async function tableColumns(db, tableName) {
   const result = await db.prepare("PRAGMA table_info(" + tableName + ")").all();
   return new Set((result.results || []).map(column => String(column.name || "")));
+}
+
+async function readRows(db, table) {
+  try {
+    return await db.prepare(table.sql).all();
+  } catch (error) {
+    // Older article tables may not have the scheduling column yet. In that
+    // schema the public articles API also treats every article as immediate.
+    if (table.legacySql && /no such column:\s*scheduled_at/i.test(String(error?.message || error))) {
+      return db.prepare(table.legacySql).all();
+    }
+    throw error;
+  }
 }
 
 export async function onRequest({ request, env }) {
@@ -99,7 +113,7 @@ export async function onRequest({ request, env }) {
     }
 
     const rows = await Promise.all(
-      tableEntries.map(([, table]) => env.DB.prepare(table.sql).all())
+      tableEntries.map(([, table]) => readRows(env.DB, table))
     );
     const payload = { available: true };
     for (let index = 0; index < tableEntries.length; index++) {
