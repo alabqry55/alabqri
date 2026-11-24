@@ -765,6 +765,7 @@
         function showAdminLogin() {
           loginPanel.hidden = false;
           editForm.hidden = true;
+          draftsPanel.hidden = true;
           loginPanel.scrollIntoView({behavior:"smooth",block:"center"});
         }
         root.insertBefore(adminStatus, tools);
@@ -825,6 +826,7 @@
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
             adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
+            draftsPanel.hidden = false;
             addButton.hidden = false; logoutButton.hidden = false; adminWorkspace.hidden = false; render();
             setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
             editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
@@ -945,6 +947,7 @@
         const draftsActions = el("div", "abq-editor-actions");
         draftsActions.append(draftsLoadButton, draftsRestoreButton, draftsDeleteButton);
         draftsPanel.append(draftsHeading, draftsHelp, draftsSelect, draftsActions, draftsStatus);
+        draftsPanel.hidden = !adminAuthenticated;
         root.insertBefore(draftsPanel, tools);
         let draftRecords = [];
 
