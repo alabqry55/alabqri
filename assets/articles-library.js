@@ -109,6 +109,36 @@
     .abq-workspace-preview{padding:1rem;border:1px solid #d9e3dc;border-radius:14px;background:#fff;line-height:2;white-space:pre-wrap;overflow-wrap:anywhere}
     @media(max-width:560px){.abq-workspace-tab{width:100%;text-align:right}.abq-admin-workspace{padding:.75rem}}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}.abq-admin-bar>*{width:100%}.abq-editor-form{padding:.9rem}}
+
+    /* Unified approved blue frame for every boxed control and content panel in the library tab. */
+    .abq-articles-library .abq-library-section,
+    .abq-articles-library .abq-articles-tools input,
+    .abq-articles-library .abq-articles-tools select,
+    .abq-articles-library .abq-articles-status,
+    .abq-articles-library .abq-article-card,
+    .abq-articles-library .abq-article-content,
+    .abq-articles-library .abq-admin-bar,
+    .abq-articles-library .abq-admin-button,
+    .abq-articles-library .abq-admin-login,
+    .abq-articles-library .abq-admin-login-icon,
+    .abq-articles-library .abq-admin-login-status,
+    .abq-articles-library .abq-admin-workspace,
+    .abq-articles-library .abq-workspace-tab,
+    .abq-articles-library .abq-workspace-stat,
+    .abq-articles-library .abq-workspace-item,
+    .abq-articles-library .abq-workspace-note,
+    .abq-articles-library .abq-workspace-preview,
+    .abq-articles-library .abq-editor-form,
+    .abq-articles-library .abq-editor-action,
+    .abq-articles-library .abq-editor-control,
+    .abq-articles-library .abq-editor-field input,
+    .abq-articles-library .abq-editor-field textarea,
+    .abq-articles-library .abq-editor-field select,
+    .abq-articles-library .abq-editor-section-title,
+    .abq-articles-library .abq-editor-intro,
+    .abq-articles-library .abq-editor-status {
+      border: 3px solid #2563eb !important;
+    }
   `;
   function renameLibraryNavigationTab() {
     const targetSelectors = [
@@ -257,8 +287,7 @@
       (el.textContent || "").replace(/\s+/g, " ").trim().includes(headingText)
     );
     if (!heading) return;
-    const section = heading.closest("section") || heading.parentElement;
-    if (!section) return;
+    const section = heading.closest("section") || heading.parentElement;    if (!section) return;
     if (section.querySelector(".abq-articles-library")) { window.__abqArticlesLibraryInitialized = true; return; }
     window.__abqArticlesLibraryInitialized = true;
     if (!document.getElementById("abq-articles-library-style")) {
@@ -517,8 +546,7 @@
         const allOption = el("option","","جميع الأقسام");
         allOption.value = "";
         categorySelect.appendChild(allOption);
-        librarySections.forEach(section => {
-          const option = el("option","",section.icon + " " + section.title);
+        librarySections.forEach(section => {          const option = el("option","",section.icon + " " + section.title);
           option.value = section.id;
           categorySelect.appendChild(option);
         });
@@ -777,8 +805,7 @@
               item.appendChild(workspaceAction("تعديل موعد النشر",()=>startEditing(article),true));
               workspacePanel.appendChild(item);
             });
-          } else if (activeWorkspace === "taxonomy") {
-            workspacePanel.append(el("p","abq-workspace-note","عرض التصنيفات من واجهة القراءة فقط. لا يتم تعديل التخصص أو نوع المادة من هذه الشاشة؛ لأن مسار الحفظ الحالي لا يستقبل معرفاتهما، ولن نضيف واجهة توحي بحفظ غير مدعوم."));
+          } else if (activeWorkspace === "taxonomy") {            workspacePanel.append(el("p","abq-workspace-note","عرض التصنيفات من واجهة القراءة فقط. لا يتم تعديل التخصص أو نوع المادة من هذه الشاشة؛ لأن مسار الحفظ الحالي لا يستقبل معرفاتهما، ولن نضيف واجهة توحي بحفظ غير مدعوم."));
             if (!taxonomy) { workspacePanel.appendChild(el("p","abq-articles-status","مصدر التصنيفات غير متاح في هذه البيئة؛ لم يتم إجراء أي تعديل على التصنيفات.")); return; }
             librarySections.forEach(section=>{
               const item=el("article","abq-workspace-item");
@@ -1037,8 +1064,7 @@
             if (!response.ok || !result.ok) {
               if (response.status === 401) { adminAuthenticated = false; throw new Error("انتهت جلسة المالك. سجّل الدخول مجددًا بحساب GitHub alabqry55."); }
               if (response.status === 409) throw new Error(result.error || "هذا العنوان موجود بالفعل؛ لم يتم إنشاء نسخة مكررة.");
-              const detail = result.error || ("فشل الحفظ (HTTP "+response.status+").");
-              throw new Error(result.requestId ? detail + " رقم التتبع: " + result.requestId : detail);
+              const detail = result.error || ("فشل الحفظ (HTTP "+response.status+").");              throw new Error(result.requestId ? detail + " رقم التتبع: " + result.requestId : detail);
             }
             editorStatus.textContent = "تم تأكيد الحفظ السحابي. جارٍ إعادة تحميل القائمة من قاعدة البيانات...";
             const refreshed = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
