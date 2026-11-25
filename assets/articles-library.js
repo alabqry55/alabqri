@@ -191,12 +191,15 @@
           intro = oldDescription;
           intro.classList.add("abq-library-intro");
           const firstParagraph = document.createElement("p");
-          firstParagraph.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.";
-          firstParagraph.style.cssText = "margin:0;white-space:pre-line";
+          firstParagraph.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.";
+          firstParagraph.style.cssText = "margin:0;white-space:normal";
           const secondParagraph = document.createElement("p");
-          secondParagraph.textContent = "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
-          secondParagraph.style.cssText = "margin:.85rem 0 0";
-          intro.replaceChildren(firstParagraph, secondParagraph);
+          secondParagraph.textContent = "هنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.";
+          secondParagraph.style.cssText = "margin:1em 0 0;white-space:normal";
+          const attributionParagraph = document.createElement("p");
+          attributionParagraph.textContent = "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+          attributionParagraph.style.cssText = "margin:.85rem 0 0";
+          intro.replaceChildren(firstParagraph, secondParagraph, attributionParagraph);
           intro.style.whiteSpace = "pre-line";
         }
       }
@@ -209,7 +212,7 @@
         // so browser defaults cannot alter their font size or line spacing.
         Array.from(intro.querySelectorAll(":scope > p")).forEach((paragraph, index) => {
           typographyProperties.forEach(property => { paragraph.style[property] = referenceStyle[property]; });
-          paragraph.style.margin = index === 0 ? "0" : ".55em 0 0";
+          paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
           paragraph.style.padding = "0";
           paragraph.style.whiteSpace = "pre-line";
           paragraph.style.background = "transparent";
