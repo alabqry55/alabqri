@@ -215,6 +215,7 @@
           paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
           paragraph.style.padding = "0";
           paragraph.style.whiteSpace = "pre-line";
+          paragraph.style.fontWeight = "700";
           paragraph.style.background = "transparent";
           paragraph.style.border = "0";
           paragraph.style.boxShadow = "none";
