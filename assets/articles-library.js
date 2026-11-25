@@ -190,7 +190,13 @@
         if (oldDescription) {
           intro = oldDescription;
           intro.classList.add("abq-library-intro");
-          intro.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\n\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\\n\\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+          const firstParagraph = document.createElement("p");
+          firstParagraph.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.";
+          firstParagraph.style.cssText = "margin:0;white-space:pre-line";
+          const secondParagraph = document.createElement("p");
+          secondParagraph.textContent = "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+          secondParagraph.style.cssText = "margin:.85rem 0 0";
+          intro.replaceChildren(firstParagraph, secondParagraph);
           intro.style.whiteSpace = "pre-line";
         }
       }
