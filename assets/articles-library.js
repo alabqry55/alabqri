@@ -37,7 +37,9 @@
         replayedAdminTriggers.add(target);
         target.click();
       } else {
-        window.location.assign("/api/admin/github/login");
+        const activationButton = Array.from(document.querySelectorAll("button")).find(button => (button.textContent || "").trim() === "تفعيل أدوات الإدارة");
+        if (activationButton) activationButton.click();
+        else window.location.assign("/api/admin/github/login");
       }
     } catch (_) {
       window.alert("تعذر الاتصال بخدمة التحقق؛ لم يتم فتح لوحة التحكم.");
@@ -49,14 +51,14 @@
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1160px;font-family:inherit}
-    .abq-library-intro{margin:1rem 0;padding:1.1rem 1.2rem;border:1px solid #d9e3dc;border-right:4px solid #b88a2b;border-radius:16px;background:#fbfcfa;line-height:1.9;color:#24352d}
+    .abq-library-intro{display:block;margin:2px 0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:1.9;font-size:1rem;color:#24352d;white-space:pre-line}#abq-unified-4way-nav .abq-unified-core img{pointer-events:none!important;cursor:default!important}
     .abq-library-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem;margin:1rem 0}
     .abq-library-section{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #d8e2dc;border-radius:15px;background:#fff;color:#173b2d;text-align:right;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
     .abq-library-section:hover,.abq-library-section[aria-pressed="true"]{border-color:#b88a2b;background:#fbfaf5}
     .abq-library-section:disabled{cursor:default;opacity:.68}
     .abq-library-section strong{font-size:1rem;line-height:1.7}
     .abq-library-section small{color:#64748b;line-height:1.6}
-    .abq-articles-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.42fr);gap:.65rem;margin:1rem 0}
+    .abq-articles-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:.65rem;margin:1rem 0}
     .abq-articles-tools input,.abq-articles-tools select{box-sizing:border-box;width:100%;min-width:0;padding:.75rem .85rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#172033;font:inherit}
     .abq-articles-status{padding:1rem;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.8}
     .abq-articles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1rem}
@@ -66,15 +68,189 @@
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-content{margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere}
     .abq-article-card details>summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#075985}
-    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}}
+    .abq-library-section{position:relative;min-height:118px;box-shadow:0 3px 12px #0f172a08}
+    .abq-library-section>span:first-child{font-size:1.35rem}
+    .abq-library-section:focus-visible,.abq-admin-button:focus-visible,.abq-editor-action:focus-visible{outline:3px solid #b88a2b;outline-offset:3px}
+    .abq-admin-bar{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;padding:.85rem;border:1px solid #d9e3dc;border-radius:16px;background:#fbfcfa}
+    .abq-admin-trigger-pair{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;margin:.85rem 0;direction:rtl}
+    .abq-admin-trigger-pair>*{flex:0 1 auto}
+    @media(max-width:560px){.abq-admin-trigger-pair>*{flex:1 1 100%;width:100%}}
+    .abq-admin-button,.abq-editor-action{padding:.75rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
+    .abq-admin-button-primary,.abq-editor-action-primary{background:#173b2d;color:#fff;border-color:#173b2d}
+    .abq-admin-button-danger{border-color:#e2b8b8;color:#9f2727}
+    .abq-admin-login{margin:1rem 0;padding:1.25rem;border:1px solid #d9e3dc;border-right:4px solid #b88a2b;border-radius:18px;background:linear-gradient(135deg,#fbfcfa,#f5f8f5);color:#24352d;text-align:center}
+    .abq-admin-login[hidden]{display:none}
+    .abq-admin-login-icon{display:grid;place-items:center;width:56px;height:56px;margin:0 auto .65rem;border-radius:50%;background:#e9f0eb;font-size:1.6rem}
+    .abq-admin-login h3,.abq-editor-section-title{margin:.35rem 0 .6rem;color:#173b2d;line-height:1.7}
+    .abq-admin-login p{line-height:1.9;color:#64748b}
+    .abq-admin-login-actions,.abq-editor-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem}
+    .abq-editor-form{border-color:#d9e3dc;border-radius:18px;padding:1.2rem}
+    .abq-editor-section-title{padding:.55rem .75rem;border-right:3px solid #b88a2b;border-radius:8px;background:#f7f9f6;font-size:1rem}
+    .abq-editor-field{display:block;margin:.75rem 0;font-weight:700;color:#24352d}
+    .abq-editor-control,.abq-editor-field input,.abq-editor-field textarea,.abq-editor-field select{display:block;box-sizing:border-box;width:100%;margin-top:.4rem;padding:.8rem .9rem;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#172033;font:inherit;line-height:1.8}
+    .abq-editor-field input:focus,.abq-editor-field textarea:focus,.abq-editor-field select:focus{outline:2px solid #b88a2b;outline-offset:1px;border-color:#b88a2b}
+    .abq-editor-status{padding:.7rem .85rem;border-radius:10px;background:#f8fafc;line-height:1.9}
+    .abq-editor-intro{margin:.2rem 0 1rem;padding:.8rem 1rem;border:1px solid #e3e9e3;border-radius:12px;background:#fbfcfa;color:#52645a;line-height:1.85}
+    .abq-editor-section-help{margin:-.25rem 0 .65rem;color:#64748b;font-size:.9rem;line-height:1.8}
+    .abq-editor-form>h3{font-size:1.25rem;color:#173b2d;margin:.1rem 0 .6rem;line-height:1.7}
+    .abq-admin-login .abq-admin-login-status{margin:.8rem 0 0;padding:.65rem .8rem;border-radius:10px;background:#fff8e8;color:#76551b;line-height:1.8}
+    .abq-admin-workspace{margin:1rem 0;padding:1rem;border:1px solid #d9e3dc;border-radius:18px;background:#fff}
+    .abq-workspace-nav{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1rem}
+    .abq-workspace-tab{padding:.65rem .85rem;border:1px solid #d9e3dc;border-radius:10px;background:#fbfcfa;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
+    .abq-workspace-tab[aria-pressed="true"]{background:#173b2d;border-color:#173b2d;color:#fff}
+    .abq-workspace-panel{display:grid;gap:.75rem}
+    .abq-workspace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:.7rem}
+    .abq-workspace-stat,.abq-workspace-item{padding:.85rem;border:1px solid #e1e8e2;border-radius:12px;background:#fbfcfa;min-width:0}
+    .abq-workspace-stat strong{display:block;font-size:1.35rem;color:#173b2d}
+    .abq-workspace-item h4{margin:0 0 .35rem;color:#173b2d;line-height:1.7}
+    .abq-workspace-item p{margin:.25rem 0;line-height:1.8;overflow-wrap:anywhere}
+    .abq-workspace-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem}
+    .abq-workspace-note{padding:.75rem;border-right:3px solid #b88a2b;background:#fbfaf5;border-radius:8px;line-height:1.85}
+    .abq-workspace-preview{padding:1rem;border:1px solid #d9e3dc;border-radius:14px;background:#fff;line-height:2;white-space:pre-wrap;overflow-wrap:anywhere}
+    @media(max-width:560px){.abq-workspace-tab{width:100%;text-align:right}.abq-admin-workspace{padding:.75rem}}
+    @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}.abq-admin-bar>*{width:100%}.abq-editor-form{padding:.9rem}}
   `;
+  function renameLibraryNavigationTab() {
+    const targetSelectors = [
+      'nav a[href="#articles"]',
+      'nav button[aria-controls="articles"]',
+      'nav [role="tab"][aria-controls="articles"]',
+      'nav [data-target="#articles"]',
+      'nav [data-bs-target="#articles"]',
+      'nav [onclick*="articles"]'
+    ];
+    let tab = targetSelectors.flatMap(selector => Array.from(document.querySelectorAll(selector)))[0] || null;
+    if (!tab) {
+      tab = Array.from(document.querySelectorAll("nav a, nav button, nav [role='tab']")).find(node => {
+        const label = (node.textContent || "").replace(/\\s+/g, " ").trim();
+        return label.includes("أحدث المقالات والأبحاث") ||
+          label.includes("المقالات والأبحاث") ||
+          label.includes("إدارة محتوى المقالات");
+      }) || null;
+    }
+    const coursesTab = document.querySelector('.nav-btn[onclick*="courses"]');
+    const coursesIcon = coursesTab?.querySelector(".abq-tab-icon");
+    if (coursesIcon) coursesIcon.textContent = "🧠";
+    if (!tab) return false;
+    const libraryIcon = tab.querySelector(".abq-tab-icon");
+    const libraryLabel = tab.querySelector(".abq-tab-label");
+    if (libraryIcon && libraryLabel) {
+      libraryIcon.textContent = "📚";
+      libraryLabel.textContent = "مكتبة وأبحاث العبقري";
+    } else {
+      tab.textContent = "📚 مكتبة وأبحاث العبقري";
+    }
+    tab.setAttribute("aria-label", "📚 مكتبة وأبحاث العبقري");
+    return true;
+  }
+
   function init() {
     if (window.__abqArticlesLibraryInitialized) return;
+    renameLibraryNavigationTab();
     const articleTab = document.getElementById("articles");
     if (!articleTab) return;
+    // Give the library's visible page heading the approved public identity and
+    // remove only its obsolete one-line explainer; keep all article content intact.
+    const normalizeLibraryLabel = value => String(value || "").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
+    let libraryHeadingUpdated = false;
+    let libraryIntroUpdated = false;
+    const applyLibraryPageIdentity = () => {
+      // Remove the retired explanatory sentence without disturbing surrounding library content.
+      const obsoleteExplainer = "مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية، مع إمكانية فتح المحتوى الكامل من خلال زر «اقرأ».";
+      Array.from(articleTab.querySelectorAll("p,small,span,div"))
+        .filter(node => normalizeLibraryLabel(node.textContent) === normalizeLibraryLabel(obsoleteExplainer))
+        .sort((a,b) => a.querySelectorAll("*").length - b.querySelectorAll("*").length)
+        .forEach(node => node.remove());
+      // Match the visible title by its text, even if the page shell uses a div/span
+      // rather than a semantic heading element.
+      if (!libraryHeadingUpdated) {
+        const headingCandidates = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading'],p,div,span,strong"))
+          .filter(node => {
+            const label = normalizeLibraryLabel(node.textContent);
+            return label.includes("المكتبة المعرفية") && label.length <= 80;
+          })
+          .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length);
+        const heading = headingCandidates[0];
+        if (heading) {
+          heading.textContent = "📚 مكتبة وأبحاث العبقري";
+          libraryHeadingUpdated = true;
+        } else {
+          libraryHeadingUpdated = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading'],p,div,span,strong"))
+            .some(node => normalizeLibraryLabel(node.textContent) === "📚 مكتبة وأبحاث العبقري");
+        }
+      }
+
+      // Build the library introduction directly in the rendered library container.
+      // Do not depend on the course-tab reference paragraph: it may not exist when
+      // the library mounts, which previously prevented the bold treatment from running.
+      let intro = Array.from(document.querySelectorAll(".abq-library-intro"))
+        .find(node => node.closest("#articles") || node.closest("[id='articles']"))
+        || document.querySelector(".abq-library-intro")
+        || null;
+
+      // Some page builds do not include the intro node in the initial HTML.
+      // Create it inside the articles tab at the same position as the reference
+      // preview, so the typography treatment always targets a real rendered node.
+      if (!intro) {
+        intro = document.createElement("div");
+        intro.className = "abq-library-intro";
+        const librarySectionHeading = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4,h5,h6"))
+          .find(node => normalizeLibraryLabel(node.textContent).includes(headingText));
+        if (librarySectionHeading?.parentNode) {
+          librarySectionHeading.parentNode.insertBefore(intro, librarySectionHeading);
+        } else {
+          articleTab.prepend(intro);
+        }
+      }
+
+      if (intro) {
+        const paragraphs = [
+          "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.",
+          "هنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.",
+          "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)"
+        ];
+        const currentText = normalizeLibraryLabel(intro.textContent);
+        const expectedText = paragraphs.map(normalizeLibraryLabel).join("");
+        if (currentText !== expectedText) {
+          intro.replaceChildren(...paragraphs.map((value, index) => {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = value;
+            paragraph.style.margin = index === 0 ? "0" : "2px 0 0";
+            return paragraph;
+          }));
+        }
+        intro.style.background = "transparent";
+        intro.style.border = "0";
+        intro.style.borderRadius = "0";
+        intro.style.boxShadow = "none";
+        intro.style.padding = "0";
+        intro.style.whiteSpace = "pre-line";
+        intro.style.setProperty("font-weight", "700", "important");
+        intro.querySelectorAll("p, p *").forEach(node => {
+          node.style.setProperty("font-weight", "700", "important");
+        });
+        intro.querySelectorAll(":scope > p").forEach(paragraph => {
+          paragraph.style.setProperty("font-weight", "700", "important");
+          paragraph.style.whiteSpace = "pre-line";
+          paragraph.style.background = "transparent";
+          paragraph.style.border = "0";
+          paragraph.style.boxShadow = "none";
+        });
+        libraryIntroUpdated = true;
+      } else {
+        libraryIntroUpdated = false;
+      }
+      return libraryHeadingUpdated && libraryIntroUpdated;
+    };
+    applyLibraryPageIdentity();
+    const libraryIdentityObserver = new MutationObserver(() => {
+      if (applyLibraryPageIdentity()) libraryIdentityObserver.disconnect();
+    });
+    libraryIdentityObserver.observe(document.documentElement, {childList:true,subtree:true});
+
     // Reuse the existing article-list position instead of aborting initialization.
     // The legacy list stays visible until the API responds successfully; then the
-    // new six-section renderer replaces only that list container (not the admin UI).
+    // new seven-section renderer replaces only that list container (not the admin UI).
     const legacyArticleList = articleTab.querySelector("#abq-articles-list");
     const headingScope = articleTab;
     const heading = Array.from(headingScope.querySelectorAll("h1,h2,h3,h4")).find(el =>
@@ -219,6 +395,7 @@
     });
     if (articleTab) legacySearchObserver.observe(articleTab, { childList: true, subtree: true });
     const articleHero = heading.closest(".hero-bg");
+    heading.remove();
     if (articleHero) articleHero.insertAdjacentElement("afterend", root);
     else section.appendChild(root);
     const status = document.createElement("div");
@@ -241,8 +418,26 @@
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
       })
-      .then(data => {
+      .then(async data => {
         if (!data || !Array.isArray(data.articles)) throw new Error("Invalid articles response");
+        // Taxonomy is an independent read-only source. If it is not installed yet,
+        // preserve the existing legacy-category library instead of hiding articles.
+        let taxonomy = null;
+        try {
+          const taxonomyResponse = await fetch("/api/library/taxonomy", {
+            headers: { "Accept": "application/json" },
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+          if (taxonomyResponse.ok) {
+            const candidate = await taxonomyResponse.json();
+            if (candidate?.available === true &&
+                Array.isArray(candidate.sections) &&
+                Array.isArray(candidate.specialties) &&
+                Array.isArray(candidate.contentTypes) &&
+                Array.isArray(candidate.classifications)) taxonomy = candidate;
+          }
+        } catch (_) { /* retain the legacy-compatible renderer */ }
         // Promote the new renderer into the legacy list's exact location only after
         // a valid API response, preserving the old list if loading fails.
         if (legacyArticleList?.isConnected) legacyArticleList.replaceWith(root);
@@ -272,16 +467,45 @@
         }
         // The public library is divided into clear subject areas while stored legacy
         // categories remain unchanged for backward compatibility with the API and D1.
-        const librarySections = [
-          {title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
-          {title:"الذكر والاتزان الإيماني",icon:"🌿",description:"الأذكار والأدعية والتوازن",category:"الأذكار والاتزان"},
-          {title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
-          {title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
-          {title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
-          {title:"المعرفة والفكر",icon:"📚",description:"موضوعات معرفية وفكرية متنوعة",category:"موضوعات معرفية"}
+        const legacySectionDefinitions = [
+          {id:"quran",title:"القرآن الكريم وعلومه",icon:"📖",description:"القرآن والتدبر والتفسير وعلومه",category:"القرآن الكريم وعلومه"},
+          {id:"hadith",title:"الحديث الشريف وعلومه",icon:"📜",description:"السنة النبوية والحديث الشريف وعلومه",category:"الحديث الشريف وعلومه"},
+          {id:"dhikr-balance",title:"الذكر والإتزان الإيماني",icon:"📿",description:"الأذكار والأدعية والاتزان الإيماني",category:"الأذكار والاتزان"},
+          {id:"islamic-psychology-development",title:"علم النفس الإسلامي والتنمية البشرية",icon:"🧠",description:"النفس والشخصية والمهارات الإنسانية",category:"التنمية البشرية"},
+          {id:"complementary-health",title:"الطب التكميلي والتوعية الصحية",icon:"🌱",description:"الممارسات التكميلية والمعرفة الصحية",category:"الطب التكميلي"},
+          {id:"research-studies",title:"الأبحاث والدراسات",icon:"🔬",description:"الدراسات والتحليل العلمي",category:"البحث العلمي"},
+          {id:"knowledge-thought",title:"المعرفة والفكر",icon:"📚",description:"موضوعات معرفية وفكرية متنوعة",category:"موضوعات معرفية"}
         ];
-        let selectedCategory = "";
-        const intro = el("div","abq-library-intro","مرحبًا بك في مكتبة العبقري؛ مساحة معرفية منظمة تجمع المقالات والأبحاث في أقسام واضحة، مع الحفاظ على المحتوى المنشور وبياناته.");
+        const legacySectionById = new Map(legacySectionDefinitions.map(section => [section.id, section]));
+        const librarySections = taxonomy
+          ? taxonomy.sections.filter(section => section.active !== 0).map(section => {
+              const legacy = legacySectionById.get(String(section.id)) || {};
+              return {
+                id: String(section.id),
+                title: String(section.name || legacy.title || section.id).replace(/^\s*03\s+/, "").replace(/^📿\s*/, "").replace(/📿/g, "").trim(),
+                icon: legacy.icon || "📚",
+                description: legacy.description || "مواد معرفية ضمن هذا القسم",
+                category: legacy.category || ""
+              };
+            })
+          : legacySectionDefinitions;
+        const classificationsByArticle = new Map(
+          (taxonomy?.classifications || []).map(item => [String(item.article_id), item])
+        );
+        const legacySectionByCategory = new Map(
+          legacySectionDefinitions.map(section => [section.category, section.id])
+        );
+        const sectionForArticle = article => {
+          const classification = classificationsByArticle.get(String(article.id));
+          if (classification?.primary_section_id) return String(classification.primary_section_id);
+          return legacySectionByCategory.get(String(article.category || "")) || "";
+        };
+        const specialtyNames = new Map((taxonomy?.specialties || []).map(item => [String(item.id), String(item.name || item.id)]));
+        const contentTypeNames = new Map((taxonomy?.contentTypes || []).map(item => [String(item.id), String(item.name || item.id)]));
+        let selectedSectionId = "";
+        let selectedSpecialtyId = "";
+        let selectedContentTypeId = "";
+
         const sectionGrid = el("div","abq-library-sections");
         const tools = el("div","abq-articles-tools");
         const searchInput = el("input");
@@ -293,29 +517,52 @@
         const allOption = el("option","","جميع الأقسام");
         allOption.value = "";
         categorySelect.appendChild(allOption);
-        librarySections.filter(section => section.category).forEach(section => {
-          const option = el("option","",section.title);
-          option.value = section.category;
+        librarySections.forEach(section => {
+          const option = el("option","",section.icon + " " + section.title);
+          option.value = section.id;
           categorySelect.appendChild(option);
         });
-        tools.append(searchInput,categorySelect);
+        const specialtySelect = el("select");
+        specialtySelect.setAttribute("aria-label","تصفية حسب التخصص");
+        specialtySelect.appendChild(el("option","","جميع التخصصات"));
+        specialtySelect.options[0].value = "";
+        const contentTypeSelect = el("select");
+        contentTypeSelect.setAttribute("aria-label","تصفية حسب نوع المادة");
+        contentTypeSelect.appendChild(el("option","","جميع أنواع المواد"));
+        contentTypeSelect.options[0].value = "";
+        if (taxonomy) {
+          taxonomy.specialties.filter(item => item.active !== 0).forEach(item => {
+            const option = el("option","",item.name);
+            option.value = item.id;
+            specialtySelect.appendChild(option);
+          });
+          taxonomy.contentTypes.filter(item => item.active !== 0).forEach(item => {
+            const option = el("option","",item.name);
+            option.value = item.id;
+            contentTypeSelect.appendChild(option);
+          });
+          tools.append(searchInput,categorySelect,specialtySelect,contentTypeSelect);
+        } else {
+          specialtySelect.hidden = true;
+          contentTypeSelect.hidden = true;
+          tools.append(searchInput,categorySelect);
+        }
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
-        root.append(intro,sectionGrid,tools,count,grid);
+        root.append(sectionGrid,tools,count,grid);
 
         function renderSections() {
           sectionGrid.replaceChildren();
           librarySections.forEach(section => {
-            const total = section.category ? articles.filter(article => article.category === section.category).length : 0;
+            const total = articles.filter(article => sectionForArticle(article) === section.id).length;
             const button = el("button","abq-library-section");
             button.type = "button";
-            button.disabled = Boolean(section.comingSoon);
-            button.setAttribute("aria-pressed",String(selectedCategory === (section.category || "__quran__")));
-            button.append(el("span","",section.icon),el("strong","",section.title),
-              el("small","",section.comingSoon ? "قريبًا — لا توجد مواد مصنفة هنا بعد" : "عدد المواد: " + total));
-            if (section.category) button.addEventListener("click",() => {
-              selectedCategory = selectedCategory === section.category ? "" : section.category;
-              categorySelect.value = selectedCategory;
+            button.setAttribute("aria-pressed",String(selectedSectionId === section.id));
+            button.append(el("span","",section.icon),el("strong","",String(librarySections.indexOf(section) + 1).padStart(2, "0") + " " + section.title),
+              el("small","",section.description + " • عدد المواد: " + total));
+            button.addEventListener("click",() => {
+              selectedSectionId = selectedSectionId === section.id ? "" : section.id;
+              categorySelect.value = selectedSectionId;
               render();
             });
             sectionGrid.appendChild(button);
@@ -324,11 +571,31 @@
 
         function render() {
           renderSections();
+          renderAdminWorkspace();
+          if (taxonomy) {
+            const availableSpecialties = taxonomy.specialties.filter(item =>
+              item.active !== 0 && (!selectedSectionId || String(item.primary_section_id) === selectedSectionId)
+            );
+            specialtySelect.replaceChildren(el("option","","جميع التخصصات"));
+            specialtySelect.options[0].value = "";
+            availableSpecialties.forEach(item => {
+              const option = el("option","",item.name);
+              option.value = item.id;
+              specialtySelect.appendChild(option);
+            });
+            if (!availableSpecialties.some(item => String(item.id) === selectedSpecialtyId)) {
+              selectedSpecialtyId = "";
+            }
+            specialtySelect.value = selectedSpecialtyId;
+          }
           const query = searchInput.value.trim().toLocaleLowerCase("ar");
           const visible = articles.filter(article => {
-            const categoryMatch = !selectedCategory || article.category === selectedCategory;
+            const classification = classificationsByArticle.get(String(article.id));
+            const sectionMatch = !selectedSectionId || sectionForArticle(article) === selectedSectionId;
+            const specialtyMatch = !selectedSpecialtyId || String(classification?.primary_specialty_id || "") === selectedSpecialtyId;
+            const contentTypeMatch = !selectedContentTypeId || String(classification?.content_type_id || "") === selectedContentTypeId;
             const haystack = [article.title,article.excerpt,article.content,article.category,...(Array.isArray(article.tags)?article.tags:[])].join(" ").toLocaleLowerCase("ar");
-            return categoryMatch && (!query || haystack.includes(query));
+            return sectionMatch && specialtyMatch && contentTypeMatch && (!query || haystack.includes(query));
           });
           grid.replaceChildren();
           count.textContent = "عدد النتائج: " + visible.length;
@@ -339,7 +606,11 @@
           visible.forEach(a => {
             const card = el("article", "abq-article-card");
             card.appendChild(el("h3", "", a.title));
-            const meta = [a.category, a.date].filter(Boolean).join(" • ");
+            const classification = classificationsByArticle.get(String(a.id));
+            const sectionName = librarySections.find(section => section.id === sectionForArticle(a))?.title || a.category;
+            const specialtyName = specialtyNames.get(String(classification?.primary_specialty_id || ""));
+            const contentTypeName = contentTypeNames.get(String(classification?.content_type_id || ""));
+            const meta = [sectionName, specialtyName, contentTypeName, a.date].filter(Boolean).join(" • ");
             if (meta) card.appendChild(el("p", "abq-article-meta", meta));
             if (Array.isArray(a.tags) && a.tags.length) card.appendChild(el("p", "abq-article-meta", a.tags.join(" • ")));
             if (adminMode && a.scheduled_at) {
@@ -363,21 +634,23 @@
           });
         }
         searchInput.addEventListener("input",render);
-        categorySelect.addEventListener("change",() => { selectedCategory = categorySelect.value; render(); });
+        categorySelect.addEventListener("change",() => { selectedSectionId = categorySelect.value; render(); });
+        specialtySelect.addEventListener("change",() => { selectedSpecialtyId = specialtySelect.value; render(); });
+        contentTypeSelect.addEventListener("change",() => { selectedContentTypeId = contentTypeSelect.value; render(); });
 
         // Owner authorization is verified server-side through the signed GitHub OAuth session.
         let adminAuthenticated = Boolean(initiallyAdmin);
         let adminMode = false;
-        const adminBar = el("div", "abq-articles-tools");
-        const adminButton = el("button", "", "تفعيل أدوات الإدارة");
+        const adminBar = el("div", "abq-admin-bar");
+        const adminButton = el("button", "abq-admin-button", "تفعيل أدوات الإدارة");
         adminButton.type = "button";
-        const addButton = el("button", "", "إضافة مقال مجدول");
-        const logoutButton = el("button", "", "تسجيل الخروج");
+        const addButton = el("button", "abq-admin-button abq-admin-button-primary", "إضافة مقال أو بحث");
+        const logoutButton = el("button", "abq-admin-button abq-admin-button-danger", "تسجيل الخروج");
         logoutButton.type = "button";
         addButton.type = "button";
-        adminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-        addButton.style.cssText = adminButton.style.cssText;
-        logoutButton.style.cssText = adminButton.style.cssText;
+        adminButton.classList.add("abq-admin-button");
+        addButton.classList.add("abq-admin-button-primary");
+        logoutButton.classList.add("abq-admin-button-danger");
         logoutButton.hidden = !initiallyAdmin;
         logoutButton.addEventListener("click", async () => {
           logoutButton.disabled = true;
@@ -401,18 +674,181 @@
         adminBar.append(adminButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
 
-        const editForm = el("form", "abq-article-card");
+        // Keep the activation control beside the existing article-admin entry point.
+        const adminTriggerPair = document.createElement("div");
+        adminTriggerPair.className = "abq-admin-trigger-pair";
+        adminTriggerPair.setAttribute("role", "group");
+        adminTriggerPair.setAttribute("aria-label", "أدوات دخول وإدارة المقالات والأبحاث");
+        function placeAdminActivationButton() {
+          const trigger = Array.from(document.querySelectorAll("button,a,[role='button']")).find(node =>
+            node !== adminButton && !adminTriggerPair.contains(node) &&
+            [node.innerText, node.textContent, node.getAttribute("aria-label"), node.getAttribute("title")]
+              .filter(Boolean).join(" ").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ")
+              .replace(/\\s+/g, " ").trim()
+              .includes("لوحة تحكم المقالات والأبحاث") &&
+            [node.innerText, node.textContent, node.getAttribute("aria-label"), node.getAttribute("title")]
+              .filter(Boolean).join(" ").includes("إضافة ومراجعة")
+          );
+          if (!trigger || trigger.parentElement === adminTriggerPair) return Boolean(trigger);
+          trigger.parentNode.insertBefore(adminTriggerPair, trigger);
+          adminTriggerPair.append(trigger, adminButton);
+          return true;
+        }
+        if (!placeAdminActivationButton()) {
+          const adminTriggerObserver = new MutationObserver(() => {
+            if (placeAdminActivationButton()) adminTriggerObserver.disconnect();
+          });
+          adminTriggerObserver.observe(document.body, {childList:true,subtree:true});
+        }
+
+        // Owner-only workspace views reuse the existing authenticated read/save API.
+        // Taxonomy remains read-only here: the current save endpoint does not accept
+        // specialty/content-type identifiers, so the UI must not imply those are saved.
+        const adminWorkspace = el("section", "abq-admin-workspace");
+        adminWorkspace.hidden = !adminMode;
+        adminWorkspace.setAttribute("aria-label", "مراكز إدارة المكتبة");
+        const workspaceNav = el("nav", "abq-workspace-nav");
+        workspaceNav.setAttribute("aria-label", "أقسام إدارة المكتبة");
+        const workspacePanel = el("div", "abq-workspace-panel");
+        adminWorkspace.append(workspaceNav, workspacePanel);
+        root.insertBefore(adminWorkspace, tools);
+        const workspaceViews = [
+          ["review","مراجعة المقالات والأبحاث"],
+          ["schedule","إدارة النشر والجدولة"],
+          ["taxonomy","التصنيفات والتخصصات"],
+          ["seo","بيانات SEO والفهرسة"],
+          ["preview","المعاينة والتحقق"]
+        ];
+        let activeWorkspace = "review";
+        let previewArticleId = "";
+        const workspaceTabs = new Map();
+        workspaceViews.forEach(([key,label]) => {
+          const tab = el("button", "abq-workspace-tab", label);
+          tab.type = "button";
+          tab.setAttribute("aria-pressed", String(key === activeWorkspace));
+          tab.addEventListener("click", () => {
+            activeWorkspace = key;
+            workspaceTabs.forEach((button, buttonKey) => button.setAttribute("aria-pressed", String(buttonKey === key)));
+            renderAdminWorkspace();
+          });
+          workspaceTabs.set(key, tab);
+          workspaceNav.appendChild(tab);
+        });
+        const workspaceAction = (label, handler, primary=false) => {
+          const button = el("button", primary ? "abq-editor-action abq-editor-action-primary" : "abq-editor-action", label);
+          button.type = "button";
+          button.addEventListener("click", handler);
+          return button;
+        };
+        const workspaceDate = value => {
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? String(value || "غير محدد") : date.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"});
+        };
+        function renderAdminWorkspace() {
+          if (!adminMode || !adminAuthenticated) { adminWorkspace.hidden = true; return; }
+          adminWorkspace.hidden = false;
+          workspacePanel.replaceChildren();
+          if (activeWorkspace === "review") {
+            const scheduled = articles.filter(article => article.scheduled_at && Date.parse(article.scheduled_at) > Date.now()).length;
+            const published = articles.length - scheduled;
+            const stats = el("div", "abq-workspace-grid");
+            [[articles.length,"إجمالي المواد"],[published,"مواد منشورة أو مستحقة"],[scheduled,"مواد مجدولة مستقبلًا"]].forEach(([value,label]) => {
+              const item = el("div", "abq-workspace-stat");
+              item.append(el("strong","",String(value)),el("span","",label));
+              stats.appendChild(item);
+            });
+            workspacePanel.append(stats,el("p","abq-workspace-note","مركز مراجعة المحتوى يعرض حالة النشر المتاحة في النظام. لا توجد حاليًا حالة اعتماد تحريرية مستقلة؛ لذلك لن نعرض المسودات أو الموافقات كأنها حالات محفوظة."));
+            articles.forEach(article => {
+              const item = el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","abq-article-meta",article.scheduled_at && Date.parse(article.scheduled_at)>Date.now() ? "مجدول للنشر • "+workspaceDate(article.scheduled_at) : "منشور / مستحق للعرض"));
+              item.append(el("p","",article.excerpt || "لا يوجد ملخص."));
+              const actions=el("div","abq-workspace-actions");
+              actions.append(workspaceAction("تحرير المادة",()=>startEditing(article),true),workspaceAction("فتح المعاينة",()=>{previewArticleId=String(article.id);activeWorkspace="preview";workspaceTabs.forEach((button,key)=>button.setAttribute("aria-pressed",String(key==="preview")));renderAdminWorkspace();}));
+              item.appendChild(actions);workspacePanel.appendChild(item);
+            });
+            if (!articles.length) workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مواد متاحة للمراجعة."));
+          } else if (activeWorkspace === "schedule") {
+            const scheduled = articles.filter(article => article.scheduled_at && Date.parse(article.scheduled_at)>Date.now()).sort((a,b)=>Date.parse(a.scheduled_at)-Date.parse(b.scheduled_at));
+            workspacePanel.append(el("p","abq-workspace-note","إدارة المواعيد تستخدم حقل الجدولة الموجود بالفعل. يمكنك فتح المادة وتعديل موعدها؛ ترك الموعد فارغًا يعني النشر الفوري وفق مسار الحفظ الحالي."));
+            if (!scheduled.length) workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مواد مجدولة في المستقبل حاليًا."));
+            scheduled.forEach(article=>{
+              const item=el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","abq-article-meta","موعد النشر: "+workspaceDate(article.scheduled_at)));
+              item.appendChild(workspaceAction("تعديل موعد النشر",()=>startEditing(article),true));
+              workspacePanel.appendChild(item);
+            });
+          } else if (activeWorkspace === "taxonomy") {
+            workspacePanel.append(el("p","abq-workspace-note","عرض التصنيفات من واجهة القراءة فقط. لا يتم تعديل التخصص أو نوع المادة من هذه الشاشة؛ لأن مسار الحفظ الحالي لا يستقبل معرفاتهما، ولن نضيف واجهة توحي بحفظ غير مدعوم."));
+            if (!taxonomy) { workspacePanel.appendChild(el("p","abq-articles-status","مصدر التصنيفات غير متاح في هذه البيئة؛ لم يتم إجراء أي تعديل على التصنيفات.")); return; }
+            librarySections.forEach(section=>{
+              const item=el("article","abq-workspace-item");
+              const linked=(taxonomy.specialties||[]).filter(s=>String(s.primary_section_id)===String(section.id)&&s.active!==0);
+              item.append(el("h4","",String(librarySections.indexOf(section)+1).padStart(2,"0")+" "+section.icon+" "+section.title));
+              item.append(el("p","",linked.length ? "التخصصات: "+linked.map(s=>s.name).join("، ") : "لا توجد تخصصات نشطة معروضة لهذا القسم."));
+              workspacePanel.appendChild(item);
+            });
+            const types=el("article","abq-workspace-item");
+            types.append(el("h4","","أنواع المحتوى"),el("p","",(taxonomy.contentTypes||[]).filter(t=>t.active!==0).map(t=>t.name).join(" • ")||"لا توجد أنواع محتوى نشطة."));
+            workspacePanel.appendChild(types);
+          } else if (activeWorkspace === "seo") {
+            workspacePanel.append(el("p","abq-workspace-note","مراجعة بيانات SEO المخزنة لكل مادة. هذه الشاشة لا تدّعي أن Google فهرس الصفحة؛ حالة الفهرسة الفعلية تُراجع من Search Console."));
+            articles.forEach(article=>{
+              const title=article.seo_title||article.seoTitle||article.title||"";
+              const description=article.seo_description||article.seoDescription||article.excerpt||"";
+              const canonical=article.canonical_url||article.canonicalUrl||"";
+              const image=article.og_image||article.ogImage||"";
+              const missing=[!title&&"عنوان SEO",!description&&"وصف SEO",!canonical&&"Canonical",!image&&"صورة المشاركة"].filter(Boolean);
+              const item=el("article","abq-workspace-item");
+              item.append(el("h4","",article.title),el("p","", "عنوان SEO: "+(title||"غير متوفر")),el("p","","وصف SEO: "+(description||"غير متوفر")),el("p","","Canonical: "+(canonical||"غير محدد")),el("p","","Open Graph: "+(image||"غير محدد")),el("p","abq-article-meta",missing.length?"يحتاج مراجعة: "+missing.join("، "):"الحقول الأساسية متوفرة."));
+              item.appendChild(workspaceAction("تحرير بيانات SEO",()=>startEditing(article),true));
+              workspacePanel.appendChild(item);
+            });
+          } else if (activeWorkspace === "preview") {
+            const chosen=articles.find(article=>String(article.id)===previewArticleId)||articles[0];
+            if (!chosen) { workspacePanel.appendChild(el("p","abq-articles-status","لا توجد مادة لمعاينتها.")); return; }
+            previewArticleId=String(chosen.id);
+            const picker=el("select","abq-editor-control");
+            picker.setAttribute("aria-label","اختر مادة للمعاينة");
+            articles.forEach(article=>{const option=el("option","",article.title);option.value=String(article.id);picker.appendChild(option);});
+            picker.value=previewArticleId;
+            picker.addEventListener("change",()=>{previewArticleId=picker.value;renderAdminWorkspace();});
+            const preview=el("article","abq-workspace-preview");
+            preview.append(el("h2","",chosen.title),el("p","abq-article-meta",[chosen.date,chosen.category].filter(Boolean).join(" • ")),el("p","",chosen.excerpt||""),el("div","",chosen.content||""));
+            workspacePanel.append(picker,preview,el("p","abq-workspace-note","المعاينة داخل لوحة الإدارة ولا تنشر المادة أو تغيّر حالتها."));
+            workspacePanel.appendChild(workspaceAction("تحرير المادة",()=>startEditing(chosen),true));
+          }
+        }
+
+        const loginPanel = el("section", "abq-admin-login");
+        loginPanel.hidden = true;
+        loginPanel.setAttribute("aria-labelledby", "abq-admin-login-title");
+        loginPanel.appendChild(el("div", "abq-admin-login-icon", "🔐"));
+        loginPanel.appendChild(el("h3", "", "تفعيل أدوات الإدارة"));
+        loginPanel.lastChild.id = "abq-admin-login-title";
+        loginPanel.appendChild(el("p", "", "تسجيل الدخول بحساب GitHub المالك المعتمد فقط. يتم التحقق من الصلاحية على الخادم دون إدخال أو كشف أي مفتاح سري."));
+        const loginActions = el("div", "abq-admin-login-actions");
+        const githubLoginButton = el("button", "abq-admin-button abq-admin-button-primary", "المتابعة باستخدام GitHub");
+        githubLoginButton.type = "button";
+        githubLoginButton.addEventListener("click", () => window.location.assign("/api/admin/github/login"));
+        const closeLoginButton = el("button", "abq-admin-button", "إغلاق");
+        closeLoginButton.type = "button";
+        closeLoginButton.addEventListener("click", () => { loginPanel.hidden = true; });
+        loginActions.append(githubLoginButton, closeLoginButton);
+        loginPanel.appendChild(loginActions);
+        root.insertBefore(loginPanel, tools);
+
+        const editForm = el("form", "abq-article-card abq-editor-form");
         editForm.hidden = true;
         editForm.style.margin = "1rem 0";
+        editForm.setAttribute("aria-labelledby", "abq-editor-title");
         const field = (labelText, name, value, multiline=false) => {
-          const wrap = el("label");
-          wrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
+          const wrap = el("label", "abq-editor-field");
           wrap.appendChild(el("span", "", labelText));
           const input = multiline ? el("textarea") : el("input");
           input.name = name;
           input.value = value || "";
           input.required = ["title","date","excerpt","content"].includes(name);
-          input.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit;line-height:1.8";
+          input.className = "abq-editor-control";
           if (multiline) { input.rows = name === "content" ? 14 : 3; input.maxLength = name === "content" ? 200000 : (name === "seoDescription" ? 500 : (name === "seoKeywords" ? 1000 : 2000)); }
           else if (name === "date") input.maxLength = 80;
           else if (name === "title" || name === "seoTitle") input.maxLength = 240;
@@ -422,28 +858,27 @@
           return wrap;
         };
         const editTitle = el("h3", "", "تعديل مقال");
+        editTitle.id = "abq-editor-title";
+        const editIntro = el("p", "abq-editor-intro", "أدخل بيانات المادة في مجموعات واضحة. راجع القسم وبيانات النشر والمحتوى وبيانات SEO قبل الحفظ؛ ولن تُعلن الواجهة نجاح الحفظ إلا بعد تأكيده من الخدمة.");
         const editId = el("input");
         editId.type = "hidden";
         editId.name = "id";
         const editCategoryWrap = el("label");
         editCategoryWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
-        editCategoryWrap.appendChild(el("span", "", "التصنيف"));
+        editCategoryWrap.className = "abq-editor-field";
+        editCategoryWrap.appendChild(el("span", "", "القسم الرئيسي"));
         const editCategory = el("select");
         editCategory.name = "category";
-        // Present the six canonical library sections in administration while preserving
-        // the five existing stored category values for backward compatibility.
-        // Quran is the only new persisted category and is available immediately.
-        [
-          ["القرآن الكريم وعلومه","القرآن الكريم وعلومه"],
-          ["الذكر والاتزان الإيماني","الأذكار والاتزان"],
-          ["علم النفس الإسلامي والتنمية البشرية","التنمية البشرية"],
-          ["الطب التكميلي والتوعية الصحية","الطب التكميلي"],
-          ["الأبحاث والدراسات","البحث العلمي"],
-          ["المعرفة والفكر","موضوعات معرفية"]
-        ].forEach(([label,value]) => {
-          const option = el("option", "", label); option.value = value; editCategory.appendChild(option);
+        // Present all seven canonical library sections in administration while
+        // preserving the existing stored category values for backward compatibility.
+        // Quran and Hadith are new category values; legacy categories remain unchanged.
+        librarySections.forEach((section, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          const option = el("option", "", number + " " + section.icon + " " + section.title);
+          option.value = section.category || section.title;
+          editCategory.appendChild(option);
         });
-        editCategory.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit";
+        editCategory.classList.add("abq-editor-control");
         editCategoryWrap.appendChild(editCategory);
         const scheduleWrap = el("label");
         scheduleWrap.style.cssText = "display:block;margin:.7rem 0;font-weight:700";
@@ -451,15 +886,23 @@
         const scheduleInput = el("input");
         scheduleInput.type = "datetime-local";
         scheduleInput.name = "scheduledAt";
-        scheduleInput.style.cssText = "display:block;box-sizing:border-box;width:100%;margin-top:.35rem;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font:inherit";
+        scheduleInput.className = "abq-editor-control";
         scheduleWrap.appendChild(scheduleInput);
-        editForm.append(editTitle, editId,
-          field("عنوان المقال","title",""),
+        editForm.append(editTitle, editId, editIntro,
+          el("h4", "abq-editor-section-title", "أولًا: البيانات الأساسية"),
+          el("p", "abq-editor-section-help", "حدد عنوانًا واضحًا واختر القسم الرئيسي الأنسب للمادة."),
+          field("عنوان المقال أو البحث","title",""),
           editCategoryWrap,
+          el("h4", "abq-editor-section-title", "ثانيًا: بيانات النشر"),
+          el("p", "abq-editor-section-help", "احتفظ بتاريخ المادة الأصلي، واستخدم موعد الجدولة فقط إذا أردت نشرها لاحقًا."),
           field("التاريخ الأصلي الظاهر للمقال (لا يتغير تلقائيًا)","date",""),
           scheduleWrap,
+          el("h4", "abq-editor-section-title", "ثالثًا: محتوى المادة"),
+          el("p", "abq-editor-section-help", "اكتب ملخصًا مناسبًا ثم أدرج المحتوى الكامل مع تنظيم العناوين والفقرات."),
           field("الوصف المختصر","excerpt","",true),
           field("المحتوى الكامل","content","",true),
+          el("h4", "abq-editor-section-title", "رابعًا: الوسوم وبيانات SEO"),
+          el("p", "abq-editor-section-help", "أضف وسومًا دقيقة، وراجع عنوان SEO والوصف والكلمات المفتاحية والروابط الاختيارية."),
           field("الوسوم (افصل بينها بفاصلة)","tags",""),
           field("عنوان SEO","seoTitle",""),
           field("وصف SEO","seoDescription","",true),
@@ -467,15 +910,15 @@
           field("الرابط الأساسي Canonical URL (اختياري)","canonicalUrl",""),
           field("رابط صورة المشاركة Open Graph (اختياري)","ogImage",""));
         const editorActions = el("div");
-        editorActions.style.cssText = "display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem";
+        editorActions.className = "abq-editor-actions";
         const saveButton = el("button", "", "حفظ التعديلات");
         saveButton.type = "submit";
-        saveButton.style.cssText = adminButton.style.cssText;
+        saveButton.className = "abq-editor-action abq-editor-action-primary";
         const cancelButton = el("button", "", "إلغاء");
         cancelButton.type = "button";
-        cancelButton.style.cssText = "padding:.7rem 1rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font:inherit;cursor:pointer";
+        cancelButton.className = "abq-editor-action";
         editorActions.append(saveButton,cancelButton);
-        const editorStatus = el("p", "abq-article-meta", "");
+        const editorStatus = el("p", "abq-editor-status", "");
         editForm.append(editorActions,editorStatus);
         const adminStatus = el("p", "abq-article-meta", "");
         adminStatus.setAttribute("role", "status");
@@ -483,6 +926,12 @@
         function setAdminStatus(message) {
           adminStatus.textContent = message;
           editorStatus.textContent = message;
+        }
+        function showAdminLogin() {
+          loginPanel.hidden = false;
+          editForm.hidden = true;
+          draftsPanel.hidden = true;
+          loginPanel.scrollIntoView({behavior:"smooth",block:"center"});
         }
         root.insertBefore(adminStatus, tools);
         root.insertBefore(editForm, tools);
@@ -523,7 +972,7 @@
           editForm.reset();
           editForm.elements.id.value = "article-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
           editCategory.value = "موضوعات معرفية";
-          editTitle.textContent = "إضافة مقال جديد أو نشره فورًا";
+          editTitle.textContent = "إضافة مقال أو بحث";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
           editForm.elements.scheduledAt.required = false;
@@ -536,12 +985,14 @@
           try {
             const sessionResponse = await fetch("/api/admin/github/session", {credentials:"same-origin",cache:"no-store"});
             const session = await sessionResponse.json().catch(()=>({}));
-            if (!sessionResponse.ok || !session.admin || session.owner !== "alabqry55") { window.location.assign("/api/admin/github/login"); return; }
+            if (!sessionResponse.ok || !session.admin || session.owner !== "alabqry55") { showAdminLogin(); return; }
+            loginPanel.hidden = true;
             const response = await fetch("/api/articles", {headers:{"Accept":"application/json"},credentials:"same-origin",cache:"no-store"});
             const data = await response.json().catch(()=>({}));
             if (!response.ok || !Array.isArray(data.articles) || !data.admin) throw new Error(data.fallback ? "نسخة المعاينة لا تتصل بقاعدة D1 عبر binding باسم DB؛ لم يتم حفظ أو تغيير أي مقال." : (data.error || "تعذر تحميل المقالات المجدولة."));
             adminAuthenticated = true; articles = filterUniqueArticles(data.articles); adminMode = true;
-            addButton.hidden = false; logoutButton.hidden = false; render();
+            draftsPanel.hidden = false;
+            addButton.hidden = false; logoutButton.hidden = false; adminWorkspace.hidden = false; render();
             setAdminStatus("تم التحقق من حساب GitHub المالك وتحميل المقالات المنشورة والمجدولة.");
             editForm.hidden = true; adminButton.textContent = "وضع الإدارة مفعّل";
           } catch (error) { setAdminStatus(error.message || "تعذر تفعيل الإدارة."); }
@@ -639,21 +1090,158 @@
           }
         });
 
+        const draftButton = el("button", "abq-editor-action", "حفظ كمسودة");
+        draftButton.type = "button";
+        draftButton.title = "يحفظ نسخة خاصة في مخزن المسودات دون نشرها أو تعديل المقالات المنشورة.";
+        editorActions.insertBefore(draftButton, cancelButton);
+
+        const draftsPanel = el("section", "abq-article-card");
+        draftsPanel.style.margin = "1rem 0";
+        const draftsHeading = el("h3", "", "المسودات الخاصة");
+        const draftsHelp = el("p", "abq-editor-intro", "المسودات محفوظة في مخزن KV مستقل، ولا تظهر للزوار ولا تُنشر تلقائيًا.");
+        const draftsSelect = el("select", "abq-editor-control");
+        draftsSelect.setAttribute("aria-label", "اختر مسودة لاستعادتها");
+        const draftsLoadButton = el("button", "abq-editor-action", "تحديث قائمة المسودات");
+        draftsLoadButton.type = "button";
+        const draftsRestoreButton = el("button", "abq-editor-action", "استعادة المسودة");
+        draftsRestoreButton.type = "button";
+        const draftsDeleteButton = el("button", "abq-editor-action", "حذف المسودة");
+        draftsDeleteButton.type = "button";
+        const draftsStatus = el("p", "abq-article-meta", "");
+        draftsStatus.setAttribute("role", "status");
+        const draftsActions = el("div", "abq-editor-actions");
+        draftsActions.append(draftsLoadButton, draftsRestoreButton, draftsDeleteButton);
+        draftsPanel.append(draftsHeading, draftsHelp, draftsSelect, draftsActions, draftsStatus);
+        draftsPanel.hidden = !adminAuthenticated;
+        root.insertBefore(draftsPanel, tools);
+        let draftRecords = [];
+
+        async function refreshDrafts() {
+          if (!adminAuthenticated) throw new Error("سجّل الدخول بحساب GitHub المالك أولًا.");
+          const response = await fetch("/api/admin/article-drafts", {
+            headers: {"Accept":"application/json"},
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !Array.isArray(data.drafts)) {
+            throw new Error(data.error || "تعذر تحميل المسودات. تحقق من ربط ARTICLE_DRAFTS في بيئة المعاينة.");
+          }
+          draftRecords = data.drafts;
+          draftsSelect.replaceChildren();
+          const placeholder = el("option", "", draftRecords.length ? "اختر مسودة محفوظة" : "لا توجد مسودات محفوظة");
+          placeholder.value = "";
+          draftsSelect.appendChild(placeholder);
+          for (const record of draftRecords) {
+            const option = el("option", "", (record.article?.title || "مسودة بلا عنوان") + " — " + new Date(record.updatedAt || Date.now()).toLocaleString("ar-EG"));
+            option.value = record.id;
+            draftsSelect.appendChild(option);
+          }
+          draftsStatus.textContent = "عدد المسودات المحفوظة: " + draftRecords.length;
+        }
+
+        draftsLoadButton.addEventListener("click", async () => {
+          draftsLoadButton.disabled = true;
+          try { await refreshDrafts(); }
+          catch (error) { draftsStatus.textContent = error.message || "تعذر تحميل المسودات."; }
+          finally { draftsLoadButton.disabled = false; }
+        });
+
+        draftsRestoreButton.addEventListener("click", () => {
+          const record = draftRecords.find(item => item.id === draftsSelect.value);
+          if (!record?.article) { draftsStatus.textContent = "اختر مسودة صالحة أولًا."; return; }
+          const existsInLibrary = articles.some(item => String(item.id) === String(record.id));
+          startEditing(record.article);
+          creatingArticle = !existsInLibrary;
+          editTitle.textContent = "استعادة مسودة: " + (record.article.title || "مسودة بلا عنوان");
+          editorStatus.textContent = "تم تحميل المسودة إلى المحرر. لم يتم نشرها أو تعديل المقالات المنشورة.";
+          draftsStatus.textContent = "تم تحميل المسودة إلى المحرر دون نشرها.";
+        });
+
+        draftsDeleteButton.addEventListener("click", async () => {
+          const id = draftsSelect.value;
+          if (!id) { draftsStatus.textContent = "اختر مسودة لحذفها أولًا."; return; }
+          if (!window.confirm("هل تريد حذف هذه المسودة الخاصة نهائيًا؟ لن يؤثر ذلك على المقالات المنشورة.")) return;
+          draftsDeleteButton.disabled = true;
+          try {
+            const response = await fetch("/api/admin/article-drafts", {
+              method: "POST",
+              headers: {"Content-Type":"application/json","Accept":"application/json"},
+              credentials: "same-origin",
+              body: JSON.stringify({action:"delete",id}),
+              cache: "no-store"
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || !result.deleted) throw new Error(result.error || "تعذر حذف المسودة.");
+            await refreshDrafts();
+            draftsStatus.textContent = "تم حذف المسودة من مخزنها المستقل.";
+          } catch (error) {
+            draftsStatus.textContent = error.message || "تعذر حذف المسودة.";
+          } finally { draftsDeleteButton.disabled = false; }
+        });
+
+        draftButton.addEventListener("click", async () => {
+          if (!adminAuthenticated) { editorStatus.textContent = "سجّل الدخول بحساب GitHub المالك أولًا."; return; }
+          const draft = {
+            id: editForm.elements.id.value,
+            title: editForm.elements.title.value.trim(),
+            category: editCategory.value,
+            date: editForm.elements.date.value.trim(),
+            excerpt: editForm.elements.excerpt.value.trim(),
+            content: editForm.elements.content.value,
+            tags: editForm.elements.tags.value.split(/[،,\\n]+|(?=#)/).map(tag => tag.trim()).filter(Boolean),
+            seoTitle: editForm.elements.seoTitle.value.trim(),
+            seoDescription: editForm.elements.seoDescription.value.trim(),
+            seoKeywords: editForm.elements.seoKeywords.value.trim(),
+            canonicalUrl: editForm.elements.canonicalUrl.value.trim(),
+            ogImage: editForm.elements.ogImage.value.trim(),
+            scheduledAt: editForm.elements.scheduledAt.value ? new Date(editForm.elements.scheduledAt.value).toISOString() : null
+          };
+          draftButton.disabled = true;
+          draftButton.textContent = "جارٍ حفظ المسودة...";
+          try {
+            const response = await fetch("/api/admin/article-drafts", {
+              method: "POST",
+              headers: {"Content-Type":"application/json","Accept":"application/json"},
+              credentials: "same-origin",
+              body: JSON.stringify({action:"save",id:draft.id,draft}),
+              cache: "no-store"
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || !result.verified) throw new Error(result.error || "تعذر تأكيد حفظ المسودة.");
+            await refreshDrafts();
+            draftsSelect.value = draft.id;
+            editorStatus.textContent = "تم حفظ المسودة والتحقق منها في مخزن KV المستقل. لم يتم نشرها ولم تتغير قاعدة المقالات.";
+            draftsStatus.textContent = "المسودة محفوظة بأمان في المخزن المستقل.";
+          } catch (error) {
+            editorStatus.textContent = error.message || "تعذر حفظ المسودة.";
+          } finally {
+            draftButton.disabled = false;
+            draftButton.textContent = "حفظ كمسودة";
+          }
+        });
+
         // All article-list search controls have been removed.
         render();
       })
       .catch(() => {
-        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات، ويمكنك فتح أداة الإدارة للتحقق من اتصال قاعدة البيانات.");
-        const fallbackBar = el("div", "abq-articles-tools");
-        fallbackBar.style.gridTemplateColumns = "1fr";
-        const fallbackAdminButton = el("button", "", "إدارة محتوى المقالات");
-        fallbackAdminButton.type = "button";
-        fallbackAdminButton.style.cssText = "padding:.7rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#17345b;font:inherit;font-weight:700;cursor:pointer";
-        const fallbackStatus = el("p", "abq-article-meta", "لم يتم تحميل المكتبة؛ لم يُجرَ أي تعديل على المقالات.");
+        showStatus("تعذر تحميل قائمة المقالات من الخدمة الآن. لم يتم حذف أي بيانات أو إجراء أي تعديل عليها.");
+        const fallbackPanel = el("section", "abq-admin-login");
+        fallbackPanel.setAttribute("aria-labelledby", "abq-library-fallback-title");
+        fallbackPanel.appendChild(el("div", "abq-admin-login-icon", "🔐"));
+        const fallbackTitle = el("h3", "", "تفعيل أدوات الإدارة");
+        fallbackTitle.id = "abq-library-fallback-title";
+        fallbackPanel.appendChild(fallbackTitle);
+        fallbackPanel.appendChild(el("p", "", "يمكنك المتابعة عبر GitHub للتحقق من حساب المالك. إذا استمر تعذر تحميل المكتبة، فتحقق من اتصال خدمة المقالات قبل إجراء أي تعديل."));
+        const fallbackStatus = el("p", "abq-admin-login-status", "حالة المكتبة: لم يكتمل التحميل؛ لم يتم حفظ أو حذف أي مادة.");
         fallbackStatus.setAttribute("role", "status");
-        fallbackBar.appendChild(fallbackAdminButton);
-        root.append(fallbackBar, fallbackStatus);
+        const fallbackAdminButton = el("button", "abq-admin-button abq-admin-button-primary", "المتابعة باستخدام GitHub");
+        fallbackAdminButton.type = "button";
         fallbackAdminButton.addEventListener("click", () => { window.location.assign("/api/admin/github/login"); });
+        const fallbackActions = el("div", "abq-admin-login-actions");
+        fallbackActions.appendChild(fallbackAdminButton);
+        fallbackPanel.append(fallbackStatus, fallbackActions);
+        root.appendChild(fallbackPanel);
       });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
