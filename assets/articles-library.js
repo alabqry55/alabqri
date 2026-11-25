@@ -151,30 +151,65 @@
     if (!articleTab) return;
     // Give the library's visible page heading the approved public identity and
     // remove only its obsolete one-line explainer; keep all article content intact.
-    const normalizeLibraryLabel = value => String(value || "").replace(/[\u200B-\u200F\uFEFF]/g, " ").replace(/\s+/g, " ").trim();
+    const normalizeLibraryLabel = value => String(value || "").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
+    let libraryHeadingUpdated = false;
+    let libraryIntroUpdated = false;
     const applyLibraryPageIdentity = () => {
-      // The site shell may render the article tab after this script initializes.
-      // Search the full document and retry while the page is hydrating.
-      const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading']"));
-      const libraryHeading = headings.find(node => normalizeLibraryLabel(node.textContent).includes("المكتبة المعرفية"));
-      if (!libraryHeading) return false;
+      // Match the visible title by its text, even if the page shell uses a div/span
+      // rather than a semantic heading element.
+      if (!libraryHeadingUpdated) {
+        const headingCandidates = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading'],p,div,span,strong"))
+          .filter(node => {
+            const label = normalizeLibraryLabel(node.textContent);
+            return label.includes("المكتبة المعرفية") && label.length <= 80;
+          })
+          .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length);
+        const heading = headingCandidates[0];
+        if (heading) {
+          heading.textContent = "📚 مكتبة وأبحاث العبقري";
+          libraryHeadingUpdated = true;
+        } else {
+          libraryHeadingUpdated = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading'],p,div,span,strong"))
+            .some(node => normalizeLibraryLabel(node.textContent) === "📚 مكتبة وأبحاث العبقري");
+        }
+      }
 
-      libraryHeading.textContent = "📚 مكتبة وأبحاث العبقري";
-      const hero = libraryHeading.closest(".hero-bg") || libraryHeading.parentElement;
-      const descriptionRoots = [hero, articleTab, document].filter(Boolean);
-      let obsoleteDescription = null;
-      for (const root of descriptionRoots) {
-        obsoleteDescription = Array.from(root.querySelectorAll("p,div"))
-          .filter(node => node !== libraryHeading &&
-            normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"))
+      // The course-tab paragraph is the typography reference. Copy its text
+      // treatment (not its surrounding card/background) to keep the library
+      // introduction visually consistent with that existing tab.
+      const referenceIntro = Array.from(document.querySelectorAll("#courses p,#courses div,#courses span,p,div,span"))
+        .filter(node => normalizeLibraryLabel(node.textContent).startsWith("نافذة معرفية واسعة تجمع نخبة من"))
+        .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length)[0] || null;
+
+      let intro = Array.from(document.querySelectorAll(".abq-library-intro"))
+        .find(node => node.closest("#articles") || node.closest("[id='articles']")) || null;
+      if (!intro) {
+        const oldDescription = Array.from(document.querySelectorAll("#articles p,#articles div,#articles span,p,div,span"))
+          .filter(node => normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"))
           .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length)[0] || null;
-        if (obsoleteDescription) break;
+        if (oldDescription) {
+          intro = oldDescription;
+          intro.classList.add("abq-library-intro");
+          intro.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\n\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\\n\\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+          intro.style.whiteSpace = "pre-line";
+        }
       }
-      if (obsoleteDescription) {
-        obsoleteDescription.classList.add("abq-library-intro");
-        obsoleteDescription.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+
+      if (intro && referenceIntro) {
+        const referenceStyle = window.getComputedStyle(referenceIntro);
+        ["fontFamily","fontSize","fontWeight","fontStyle","lineHeight","color","textAlign","letterSpacing","textTransform","marginTop","marginRight","marginBottom","marginLeft"]
+          .forEach(property => { intro.style[property] = referenceStyle[property]; });
+        intro.style.background = "transparent";
+        intro.style.border = "0";
+        intro.style.borderRadius = "0";
+        intro.style.boxShadow = "none";
+        intro.style.padding = "0";
+        intro.style.whiteSpace = "pre-line";
+        libraryIntroUpdated = true;
+      } else if (intro && !referenceIntro) {
+        libraryIntroUpdated = false;
       }
-      return true;
+      return libraryHeadingUpdated && libraryIntroUpdated;
     };
     applyLibraryPageIdentity();
     const libraryIdentityObserver = new MutationObserver(() => {
