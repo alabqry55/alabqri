@@ -174,55 +174,30 @@
         }
       }
 
-      // The course-tab paragraph is the typography reference. Copy its text
-      // treatment (not its surrounding card/background) to keep the library
-      // introduction visually consistent with that existing tab.
-      const referenceIntro = Array.from(document.querySelectorAll("#courses p,#courses div,#courses span,p,div,span"))
-        .filter(node => normalizeLibraryLabel(node.textContent).startsWith("نافذة معرفية واسعة تجمع نخبة من"))
-        .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length)[0] || null;
+      // Build the library introduction directly in the rendered library container.
+      // Do not depend on the course-tab reference paragraph: it may not exist when
+      // the library mounts, which previously prevented the bold treatment from running.
+      const intro = Array.from(document.querySelectorAll(".abq-library-intro"))
+        .find(node => node.closest("#articles") || node.closest("[id='articles']"))
+        || document.querySelector(".abq-library-intro")
+        || null;
 
-      let intro = Array.from(document.querySelectorAll(".abq-library-intro"))
-        .find(node => node.closest("#articles") || node.closest("[id='articles']")) || null;
-      if (!intro) {
-        const oldDescription = Array.from(document.querySelectorAll("#articles p,#articles div,#articles span,p,div,span"))
-          .filter(node => normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"))
-          .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length)[0] || null;
-        if (oldDescription) {
-          intro = oldDescription;
-          intro.classList.add("abq-library-intro");
-          const firstParagraph = document.createElement("p");
-          firstParagraph.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.";
-          firstParagraph.style.cssText = "margin:0;white-space:normal";
-          const secondParagraph = document.createElement("p");
-          secondParagraph.textContent = "هنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.";
-          secondParagraph.style.cssText = "margin:1em 0 0;white-space:normal";
-          const attributionParagraph = document.createElement("p");
-          attributionParagraph.textContent = "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
-          attributionParagraph.style.cssText = "margin:.85rem 0 0";
-          intro.replaceChildren(firstParagraph, secondParagraph, attributionParagraph);
-          intro.style.whiteSpace = "pre-line";
+      if (intro) {
+        const paragraphs = [
+          "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.",
+          "هنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.",
+          "إعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)"
+        ];
+        const currentText = normalizeLibraryLabel(intro.textContent);
+        const expectedText = paragraphs.map(normalizeLibraryLabel).join("");
+        if (currentText !== expectedText) {
+          intro.replaceChildren(...paragraphs.map((value, index) => {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = value;
+            paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
+            return paragraph;
+          }));
         }
-      }
-
-      if (intro && referenceIntro) {
-        const referenceStyle = window.getComputedStyle(referenceIntro);
-        const typographyProperties = ["fontFamily","fontSize","fontWeight","fontStyle","lineHeight","color","textAlign","letterSpacing","textTransform"];
-        typographyProperties.forEach(property => { intro.style[property] = referenceStyle[property]; });
-        // Apply the reference typography to each of the two paragraphs themselves,
-        // so browser defaults cannot alter their font size or line spacing.
-        Array.from(intro.querySelectorAll(":scope > p")).forEach((paragraph, index) => {
-          typographyProperties.forEach(property => { paragraph.style[property] = referenceStyle[property]; });
-          paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
-          paragraph.style.padding = "0";
-          paragraph.style.whiteSpace = "pre-line";
-          paragraph.style.setProperty("font-weight", "700", "important");
-          paragraph.querySelectorAll("*").forEach(child => {
-            child.style.setProperty("font-weight", "700", "important");
-          });
-          paragraph.style.background = "transparent";
-          paragraph.style.border = "0";
-          paragraph.style.boxShadow = "none";
-        });
         intro.style.background = "transparent";
         intro.style.border = "0";
         intro.style.borderRadius = "0";
@@ -233,8 +208,15 @@
         intro.querySelectorAll("p, p *").forEach(node => {
           node.style.setProperty("font-weight", "700", "important");
         });
+        intro.querySelectorAll(":scope > p").forEach(paragraph => {
+          paragraph.style.setProperty("font-weight", "700", "important");
+          paragraph.style.whiteSpace = "pre-line";
+          paragraph.style.background = "transparent";
+          paragraph.style.border = "0";
+          paragraph.style.boxShadow = "none";
+        });
         libraryIntroUpdated = true;
-      } else if (intro && !referenceIntro) {
+      } else {
         libraryIntroUpdated = false;
       }
       return libraryHeadingUpdated && libraryIntroUpdated;
