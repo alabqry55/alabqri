@@ -73,8 +73,8 @@
     .abq-library-section:focus-visible,.abq-admin-button:focus-visible,.abq-editor-action:focus-visible{outline:3px solid #b88a2b;outline-offset:3px}
     .abq-admin-bar{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;padding:.85rem;border:1px solid #d9e3dc;border-radius:16px;background:#fbfcfa}
     .abq-admin-trigger-pair{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;margin:.85rem 0;direction:rtl}
-    .abq-admin-trigger-pair>*{flex:1 1 0;min-width:0;width:auto;white-space:normal}
-    @media(max-width:560px){.abq-admin-trigger-pair{flex-wrap:nowrap;gap:.35rem}.abq-admin-trigger-pair>*{flex:1 1 0;min-width:0;width:auto;padding:.65rem .5rem;font-size:.88rem}}
+    .abq-admin-trigger-pair>*{flex:0 1 auto}
+    @media(max-width:560px){.abq-admin-trigger-pair>*{flex:1 1 100%;width:100%}}
     .abq-admin-button,.abq-editor-action{padding:.75rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
     .abq-admin-button-primary,.abq-editor-action-primary{background:#173b2d;color:#fff;border-color:#173b2d}
     .abq-admin-button-danger{border-color:#e2b8b8;color:#9f2727}
@@ -162,7 +162,10 @@
           const obsoleteDescription = Array.from(hero.querySelectorAll("p,div"))
             .find(node => node !== libraryHeading && !node.querySelector("h1,h2,h3,h4") &&
               normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"));
-          if (obsoleteDescription) obsoleteDescription.remove();
+          if (obsoleteDescription) {
+            obsoleteDescription.classList.add("abq-library-intro");
+            obsoleteDescription.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات•تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+          }
         }
       }
       return Boolean(libraryHeading);
@@ -425,7 +428,7 @@
         let selectedSectionId = "";
         let selectedSpecialtyId = "";
         let selectedContentTypeId = "";
-        const intro = el("div","abq-library-intro","صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات•تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)");
+
         const sectionGrid = el("div","abq-library-sections");
         const tools = el("div","abq-articles-tools");
         const searchInput = el("input");
@@ -469,7 +472,7 @@
         }
         const grid = el("div", "abq-articles-grid");
         const count = el("p", "abq-article-meta", "");
-        root.append(intro,sectionGrid,tools,count,grid);
+        root.append(sectionGrid,tools,count,grid);
 
         function renderSections() {
           sectionGrid.replaceChildren();
