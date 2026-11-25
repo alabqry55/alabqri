@@ -132,10 +132,15 @@
     const coursesIcon = coursesTab?.querySelector(".abq-tab-icon");
     if (coursesIcon) coursesIcon.textContent = "🧠";
     if (!tab) return false;
-    if ((tab.textContent || "").replace(/\\s+/g, " ").trim() !== "مكتبة وأبحاث العبقري") {
-      tab.textContent = "مكتبة وأبحاث العبقري";
+    const libraryIcon = tab.querySelector(".abq-tab-icon");
+    const libraryLabel = tab.querySelector(".abq-tab-label");
+    if (libraryIcon && libraryLabel) {
+      libraryIcon.textContent = "📚";
+      libraryLabel.textContent = "مكتبة وأبحاث العبقري";
+    } else {
+      tab.textContent = "📚 مكتبة وأبحاث العبقري";
     }
-    tab.setAttribute("aria-label", "مكتبة وأبحاث العبقري");
+    tab.setAttribute("aria-label", "📚 مكتبة وأبحاث العبقري");
     return true;
   }
 
