@@ -155,6 +155,12 @@
     let libraryHeadingUpdated = false;
     let libraryIntroUpdated = false;
     const applyLibraryPageIdentity = () => {
+      // Remove the retired explanatory sentence without disturbing surrounding library content.
+      const obsoleteExplainer = "مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية، مع إمكانية فتح المحتوى الكامل من خلال زر «اقرأ».";
+      Array.from(articleTab.querySelectorAll("p,small,span,div"))
+        .filter(node => normalizeLibraryLabel(node.textContent) === normalizeLibraryLabel(obsoleteExplainer))
+        .sort((a,b) => a.querySelectorAll("*").length - b.querySelectorAll("*").length)
+        .forEach(node => node.remove());
       // Match the visible title by its text, even if the page shell uses a div/span
       // rather than a semantic heading element.
       if (!libraryHeadingUpdated) {
@@ -209,7 +215,7 @@
           intro.replaceChildren(...paragraphs.map((value, index) => {
             const paragraph = document.createElement("p");
             paragraph.textContent = value;
-            paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
+            paragraph.style.margin = index === 0 ? "0" : "2px 0 0";
             return paragraph;
           }));
         }
