@@ -137,7 +137,7 @@
     .abq-articles-library .abq-editor-section-title,
     .abq-articles-library .abq-editor-intro,
     .abq-articles-library .abq-editor-status {
-      border: 3px solid #2563eb !important;
+      border: 2px solid #2563eb !important;
     }
   `;
   function renameLibraryNavigationTab() {
