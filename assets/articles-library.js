@@ -203,8 +203,19 @@
 
       if (intro && referenceIntro) {
         const referenceStyle = window.getComputedStyle(referenceIntro);
-        ["fontFamily","fontSize","fontWeight","fontStyle","lineHeight","color","textAlign","letterSpacing","textTransform","marginTop","marginRight","marginBottom","marginLeft"]
-          .forEach(property => { intro.style[property] = referenceStyle[property]; });
+        const typographyProperties = ["fontFamily","fontSize","fontWeight","fontStyle","lineHeight","color","textAlign","letterSpacing","textTransform"];
+        typographyProperties.forEach(property => { intro.style[property] = referenceStyle[property]; });
+        // Apply the reference typography to each of the two paragraphs themselves,
+        // so browser defaults cannot alter their font size or line spacing.
+        Array.from(intro.querySelectorAll(":scope > p")).forEach((paragraph, index) => {
+          typographyProperties.forEach(property => { paragraph.style[property] = referenceStyle[property]; });
+          paragraph.style.margin = index === 0 ? "0" : ".55em 0 0";
+          paragraph.style.padding = "0";
+          paragraph.style.whiteSpace = "pre-line";
+          paragraph.style.background = "transparent";
+          paragraph.style.border = "0";
+          paragraph.style.boxShadow = "none";
+        });
         intro.style.background = "transparent";
         intro.style.border = "0";
         intro.style.borderRadius = "0";
