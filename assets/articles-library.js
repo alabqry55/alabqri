@@ -177,10 +177,25 @@
       // Build the library introduction directly in the rendered library container.
       // Do not depend on the course-tab reference paragraph: it may not exist when
       // the library mounts, which previously prevented the bold treatment from running.
-      const intro = Array.from(document.querySelectorAll(".abq-library-intro"))
+      let intro = Array.from(document.querySelectorAll(".abq-library-intro"))
         .find(node => node.closest("#articles") || node.closest("[id='articles']"))
         || document.querySelector(".abq-library-intro")
         || null;
+
+      // Some page builds do not include the intro node in the initial HTML.
+      // Create it inside the articles tab at the same position as the reference
+      // preview, so the typography treatment always targets a real rendered node.
+      if (!intro) {
+        intro = document.createElement("div");
+        intro.className = "abq-library-intro";
+        const librarySectionHeading = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4,h5,h6"))
+          .find(node => normalizeLibraryLabel(node.textContent).includes(headingText));
+        if (librarySectionHeading?.parentNode) {
+          librarySectionHeading.parentNode.insertBefore(intro, librarySectionHeading);
+        } else {
+          articleTab.prepend(intro);
+        }
+      }
 
       if (intro) {
         const paragraphs = [
