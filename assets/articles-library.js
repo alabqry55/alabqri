@@ -110,8 +110,35 @@
     @media(max-width:560px){.abq-workspace-tab{width:100%;text-align:right}.abq-admin-workspace{padding:.75rem}}
     @media(max-width:560px){.abq-articles-tools{grid-template-columns:1fr}.abq-library-section{min-height:92px}.abq-admin-bar>*{width:100%}.abq-editor-form{padding:.9rem}}
   `;
+  function renameLibraryNavigationTab() {
+    const targetSelectors = [
+      'nav a[href="#articles"]',
+      'nav button[aria-controls="articles"]',
+      'nav [role="tab"][aria-controls="articles"]',
+      'nav [data-target="#articles"]',
+      'nav [data-bs-target="#articles"]',
+      'nav [onclick*="articles"]'
+    ];
+    let tab = targetSelectors.flatMap(selector => Array.from(document.querySelectorAll(selector)))[0] || null;
+    if (!tab) {
+      tab = Array.from(document.querySelectorAll("nav a, nav button, nav [role='tab']")).find(node => {
+        const label = (node.textContent || "").replace(/\\s+/g, " ").trim();
+        return label.includes("أحدث المقالات والأبحاث") ||
+          label.includes("المقالات والأبحاث") ||
+          label.includes("إدارة محتوى المقالات");
+      }) || null;
+    }
+    if (!tab) return false;
+    if ((tab.textContent || "").replace(/\\s+/g, " ").trim() !== "📚 مكتبة العبقري") {
+      tab.textContent = "📚 مكتبة العبقري";
+    }
+    tab.setAttribute("aria-label", "مكتبة العبقري");
+    return true;
+  }
+
   function init() {
     if (window.__abqArticlesLibraryInitialized) return;
+    renameLibraryNavigationTab();
     const articleTab = document.getElementById("articles");
     if (!articleTab) return;
     // Reuse the existing article-list position instead of aborting initialization.
