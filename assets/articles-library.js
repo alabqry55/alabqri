@@ -151,26 +151,37 @@
     if (!articleTab) return;
     // Give the library's visible page heading the approved public identity and
     // remove only its obsolete one-line explainer; keep all article content intact.
-    const normalizeLibraryLabel = value => String(value || "").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
+    const normalizeLibraryLabel = value => String(value || "").replace(/[\u200B-\u200F\uFEFF]/g, " ").replace(/\s+/g, " ").trim();
     const applyLibraryPageIdentity = () => {
-      const headings = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4"));
+      // The site shell may render the article tab after this script initializes.
+      // Search the full document and retry while the page is hydrating.
+      const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,[role='heading']"));
       const libraryHeading = headings.find(node => normalizeLibraryLabel(node.textContent).includes("المكتبة المعرفية"));
-      if (libraryHeading) {
-        libraryHeading.textContent = "📚 مكتبة وأبحاث العبقري";
-        const hero = libraryHeading.closest(".hero-bg") || libraryHeading.parentElement;
-        if (hero) {
-          const obsoleteDescription = Array.from(hero.querySelectorAll("p,div"))
-            .find(node => node !== libraryHeading && !node.querySelector("h1,h2,h3,h4") &&
-              normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"));
-          if (obsoleteDescription) {
-            obsoleteDescription.classList.add("abq-library-intro");
-            obsoleteDescription.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات•تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
-          }
-        }
+      if (!libraryHeading) return false;
+
+      libraryHeading.textContent = "📚 مكتبة وأبحاث العبقري";
+      const hero = libraryHeading.closest(".hero-bg") || libraryHeading.parentElement;
+      const descriptionRoots = [hero, articleTab, document].filter(Boolean);
+      let obsoleteDescription = null;
+      for (const root of descriptionRoots) {
+        obsoleteDescription = Array.from(root.querySelectorAll("p,div"))
+          .filter(node => node !== libraryHeading &&
+            normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"))
+          .sort((a,b) => normalizeLibraryLabel(a.textContent).length - normalizeLibraryLabel(b.textContent).length)[0] || null;
+        if (obsoleteDescription) break;
       }
-      return Boolean(libraryHeading);
+      if (obsoleteDescription) {
+        obsoleteDescription.classList.add("abq-library-intro");
+        obsoleteDescription.textContent = "صرحٌ معرفي يجمع المقالات والأبحاث والدراسات في مختلف التخصصات، ضمن منظومة علمية منظمة تُيسّر الوصول إلى المعرفة وتُثري الفكر وتدعم التعلم المستمر.\\nهنا تلتقي أصالة المعرفة بمنهجية البحث؛ لنقدّم محتوى هادفًا، منظمًا، ومتعدد المجالات، يُعين القارئ على الفهم والاطلاع، ويجعل من العلم والمعرفة أساسًا للوعي والتطوير.\\nإعداد وتطوير: مركز العبقري للتدريب والإستشارات • تحت إشراف: د. أحمد السيد رَسَّه (أحمد الزمخشري)";
+      }
+      return true;
     };
     applyLibraryPageIdentity();
+    const libraryIdentityObserver = new MutationObserver(() => {
+      if (applyLibraryPageIdentity()) libraryIdentityObserver.disconnect();
+    });
+    libraryIdentityObserver.observe(document.documentElement, {childList:true,subtree:true});
+
     // Reuse the existing article-list position instead of aborting initialization.
     // The legacy list stays visible until the API responds successfully; then the
     // new seven-section renderer replaces only that list container (not the admin UI).
