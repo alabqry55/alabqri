@@ -215,7 +215,10 @@
           paragraph.style.margin = index === 0 ? "0" : index === 1 ? "1em 0 0" : ".85rem 0 0";
           paragraph.style.padding = "0";
           paragraph.style.whiteSpace = "pre-line";
-          paragraph.style.fontWeight = "700";
+          paragraph.style.setProperty("font-weight", "700", "important");
+          paragraph.querySelectorAll("*").forEach(child => {
+            child.style.setProperty("font-weight", "700", "important");
+          });
           paragraph.style.background = "transparent";
           paragraph.style.border = "0";
           paragraph.style.boxShadow = "none";
@@ -226,6 +229,10 @@
         intro.style.boxShadow = "none";
         intro.style.padding = "0";
         intro.style.whiteSpace = "pre-line";
+        intro.style.setProperty("font-weight", "700", "important");
+        intro.querySelectorAll("p, p *").forEach(node => {
+          node.style.setProperty("font-weight", "700", "important");
+        });
         libraryIntroUpdated = true;
       } else if (intro && !referenceIntro) {
         libraryIntroUpdated = false;
