@@ -51,7 +51,7 @@
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1160px;font-family:inherit}
-    .abq-library-intro{margin:1rem 0;padding:1.1rem 1.2rem;border:1px solid #d9e3dc;border-right:4px solid #b88a2b;border-radius:16px;background:#fbfcfa;line-height:1.9;font-size:1rem;color:#24352d;white-space:pre-line}#abq-unified-4way-nav .abq-unified-core img{pointer-events:none!important;cursor:default!important}
+    .abq-library-intro{display:block;margin:1rem 0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:1.9;font-size:1rem;color:#24352d;white-space:pre-line}#abq-unified-4way-nav .abq-unified-core img{pointer-events:none!important;cursor:default!important}
     .abq-library-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem;margin:1rem 0}
     .abq-library-section{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #d8e2dc;border-radius:15px;background:#fff;color:#173b2d;text-align:right;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
     .abq-library-section:hover,.abq-library-section[aria-pressed="true"]{border-color:#b88a2b;background:#fbfaf5}
