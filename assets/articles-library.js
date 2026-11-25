@@ -73,8 +73,8 @@
     .abq-library-section:focus-visible,.abq-admin-button:focus-visible,.abq-editor-action:focus-visible{outline:3px solid #b88a2b;outline-offset:3px}
     .abq-admin-bar{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;padding:.85rem;border:1px solid #d9e3dc;border-radius:16px;background:#fbfcfa}
     .abq-admin-trigger-pair{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;margin:.85rem 0;direction:rtl}
-    .abq-admin-trigger-pair>*{flex:0 1 auto}
-    @media(max-width:560px){.abq-admin-trigger-pair>*{flex:1 1 100%;width:100%}}
+    .abq-admin-trigger-pair>*{flex:1 1 0;min-width:0;width:auto;white-space:normal}
+    @media(max-width:560px){.abq-admin-trigger-pair{flex-wrap:nowrap;gap:.35rem}.abq-admin-trigger-pair>*{flex:1 1 0;min-width:0;width:auto;padding:.65rem .5rem;font-size:.88rem}}
     .abq-admin-button,.abq-editor-action{padding:.75rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
     .abq-admin-button-primary,.abq-editor-action-primary{background:#173b2d;color:#fff;border-color:#173b2d}
     .abq-admin-button-danger{border-color:#e2b8b8;color:#9f2727}
@@ -149,6 +149,25 @@
     renameLibraryNavigationTab();
     const articleTab = document.getElementById("articles");
     if (!articleTab) return;
+    // Give the library's visible page heading the approved public identity and
+    // remove only its obsolete one-line explainer; keep all article content intact.
+    const normalizeLibraryLabel = value => String(value || "").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ").replace(/\\s+/g, " ").trim();
+    const applyLibraryPageIdentity = () => {
+      const headings = Array.from(articleTab.querySelectorAll("h1,h2,h3,h4"));
+      const libraryHeading = headings.find(node => normalizeLibraryLabel(node.textContent).includes("المكتبة المعرفية"));
+      if (libraryHeading) {
+        libraryHeading.textContent = "📚 مكتبة وأبحاث العبقري";
+        const hero = libraryHeading.closest(".hero-bg") || libraryHeading.parentElement;
+        if (hero) {
+          const obsoleteDescription = Array.from(hero.querySelectorAll("p,div"))
+            .find(node => node !== libraryHeading && !node.querySelector("h1,h2,h3,h4") &&
+              normalizeLibraryLabel(node.textContent).startsWith("مساحة مستقلة لعرض المقالات والأبحاث والموضوعات المعرفية"));
+          if (obsoleteDescription) obsoleteDescription.remove();
+        }
+      }
+      return Boolean(libraryHeading);
+    };
+    applyLibraryPageIdentity();
     // Reuse the existing article-list position instead of aborting initialization.
     // The legacy list stays visible until the API responds successfully; then the
     // new seven-section renderer replaces only that list container (not the admin UI).
