@@ -72,6 +72,9 @@
     .abq-library-section>span:first-child{font-size:1.35rem}
     .abq-library-section:focus-visible,.abq-admin-button:focus-visible,.abq-editor-action:focus-visible{outline:3px solid #b88a2b;outline-offset:3px}
     .abq-admin-bar{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;padding:.85rem;border:1px solid #d9e3dc;border-radius:16px;background:#fbfcfa}
+    .abq-admin-trigger-pair{display:flex;align-items:stretch;gap:.65rem;flex-wrap:wrap;margin:.85rem 0;direction:rtl}
+    .abq-admin-trigger-pair>*{flex:0 1 auto}
+    @media(max-width:560px){.abq-admin-trigger-pair>*{flex:1 1 100%;width:100%}}
     .abq-admin-button,.abq-editor-action{padding:.75rem 1rem;border:1px solid #b88a2b;border-radius:12px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
     .abq-admin-button-primary,.abq-editor-action-primary{background:#173b2d;color:#fff;border-color:#173b2d}
     .abq-admin-button-danger{border-color:#e2b8b8;color:#9f2727}
@@ -535,6 +538,33 @@
         adminBar.style.gridTemplateColumns = "1fr";
         adminBar.append(adminButton, addButton, logoutButton);
         root.insertBefore(adminBar, tools);
+
+        // Keep the activation control beside the existing article-admin entry point.
+        const adminTriggerPair = document.createElement("div");
+        adminTriggerPair.className = "abq-admin-trigger-pair";
+        adminTriggerPair.setAttribute("role", "group");
+        adminTriggerPair.setAttribute("aria-label", "أدوات دخول وإدارة المقالات والأبحاث");
+        function placeAdminActivationButton() {
+          const trigger = Array.from(document.querySelectorAll("button,a,[role='button']")).find(node =>
+            node !== adminButton && !adminTriggerPair.contains(node) &&
+            [node.innerText, node.textContent, node.getAttribute("aria-label"), node.getAttribute("title")]
+              .filter(Boolean).join(" ").replace(/[\\u200B-\\u200F\\uFEFF]/g, " ")
+              .replace(/\\s+/g, " ").trim()
+              .includes("لوحة تحكم المقالات والأبحاث") &&
+            [node.innerText, node.textContent, node.getAttribute("aria-label"), node.getAttribute("title")]
+              .filter(Boolean).join(" ").includes("إضافة ومراجعة")
+          );
+          if (!trigger || trigger.parentElement === adminTriggerPair) return Boolean(trigger);
+          trigger.parentNode.insertBefore(adminTriggerPair, trigger);
+          adminTriggerPair.append(trigger, adminButton);
+          return true;
+        }
+        if (!placeAdminActivationButton()) {
+          const adminTriggerObserver = new MutationObserver(() => {
+            if (placeAdminActivationButton()) adminTriggerObserver.disconnect();
+          });
+          adminTriggerObserver.observe(document.body, {childList:true,subtree:true});
+        }
 
         // Owner-only workspace views reuse the existing authenticated read/save API.
         // Taxonomy remains read-only here: the current save endpoint does not accept
