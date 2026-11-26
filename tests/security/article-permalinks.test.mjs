@@ -121,7 +121,7 @@ test("Markdown renderer escapes raw HTML and script payloads", () => {
 });
 
 test("public article page uses the safe Markdown renderer and preserves stored editorial text", async () => {
-  const contentText="## بيانات النشر المقترحة\\n\\nحالة المادة: جاهز للإدخال في نظام النشر بعد المراجعة.";
+  const contentText="## بيانات النشر المقترحة\n\nحالة المادة: جاهز للإدخال في نظام النشر بعد المراجعة.";
   const db=mockDb({...baseArticle,content:contentText});
   const response=await articlePage({
     request:new Request("https://alabqri.pages.dev/articles/raqya-001"),
