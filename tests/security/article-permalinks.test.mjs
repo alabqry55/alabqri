@@ -137,7 +137,7 @@ test("public article page uses the safe Markdown renderer and preserves stored e
 
 test("Quran article presentation hides the internal publishing block without changing stored content", async () => {
   const id="article-mwwwneov-5167dz";
-  const stored="## مقدمة\nمحتوى المقال الأصلي.\n\n## بيانات النشر المقترحة\nعنوان SEO داخلي\nحالة المادة: جاهز للإدخال في نظام النشر.\n#الرقية*الشرعية";
+  const stored="## مقدمة\nمحتوى المقال الأصلي.\n\n**بيانات النشر المقترحة**\n\n- عنوان SEO داخلي\n- حالة المادة: جاهز للإدخال في نظام النشر.\n#الرقية*الشرعية";
   const db=mockDb({...baseArticle,id,title:"مفهوم الرقية الشرعية وضوابطها",content:stored,tags_json:'["الرقية*الشرعية"]'});
   const response=await articlePage({request:new Request("https://alabqri.pages.dev/articles/"+id),params:{id},env:{DB:db}});
   const html=await response.text();
