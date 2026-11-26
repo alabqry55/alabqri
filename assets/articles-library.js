@@ -68,6 +68,7 @@
     .abq-article-card.is-expanded{grid-column:1 / -1;width:100%;max-width:none;box-sizing:border-box}
     .abq-article-card.is-expanded .abq-article-content{width:100%;max-width:none;box-sizing:border-box}
     .abq-reader-back{display:inline-flex;align-items:center;justify-content:center;margin-top:1rem;padding:.65rem 1rem;border:2px solid #2563eb;border-radius:10px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
+    .abq-article-permalink{display:inline-flex;align-items:center;margin:.75rem .5rem 0 0;padding:.55rem .85rem;border:2px solid #2563eb;border-radius:10px;background:#fff;color:#173b2d;text-decoration:none;font-weight:700}
     .abq-article-card h3{font-size:1.08rem;line-height:1.7;margin:0 0 .5rem}
     .abq-article-meta{font-size:.82rem;color:#64748b;margin:.3rem 0 .65rem}
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -443,6 +444,10 @@
       if (text !== undefined) node.textContent = text;
       return node;
     };
+    const permalinkForArticle = article => {
+      const id = String(article?.id || "");
+      return /^[A-Za-z0-9_-]{1,80}$/.test(id) ? "https://alabqri.pages.dev/articles/" + encodeURIComponent(id) : "";
+    };
     const showStatus = message => {
       root.replaceChildren();
       root.appendChild(el("div", "abq-articles-status", message));
@@ -651,6 +656,12 @@
               card.appendChild(el("p", "abq-article-meta", "موعد النشر: " + (Number.isNaN(publishDate.getTime()) ? a.scheduled_at : publishDate.toLocaleString("ar-EG", {timeZone:"Africa/Cairo"}))));
             }
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
+            if (String(a.id || "").match(/^[A-Za-z0-9_-]{1,80}$/)) {
+              const permalink = el("a", "abq-article-permalink", "فتح المقال في صفحة مستقلة");
+              permalink.href = "/articles/" + encodeURIComponent(String(a.id));
+              permalink.setAttribute("aria-label", "فتح المقال في صفحة مستقلة: " + String(a.title || ""));
+              card.appendChild(permalink);
+            }
             const details = el("details");
             const summary = el("summary", "", "قراءة البحث");
             details.appendChild(summary);
@@ -846,7 +857,7 @@
             articles.forEach(article=>{
               const title=article.seo_title||article.seoTitle||article.title||"";
               const description=article.seo_description||article.seoDescription||article.excerpt||"";
-              const canonical=article.canonical_url||article.canonicalUrl||"";
+              const canonical=article.canonical_url||article.canonicalUrl||permalinkForArticle(article);
               const image=article.og_image||article.ogImage||"";
               const missing=[!title&&"عنوان SEO",!description&&"وصف SEO",!canonical&&"Canonical",!image&&"صورة المشاركة"].filter(Boolean);
               const item=el("article","abq-workspace-item");
@@ -1008,7 +1019,7 @@
           editForm.elements.seoTitle.value = article.seo_title || article.title || "";
           editForm.elements.seoDescription.value = article.seo_description || article.excerpt || "";
           editForm.elements.seoKeywords.value = article.seo_keywords || "";
-          editForm.elements.canonicalUrl.value = article.canonical_url || "";
+          editForm.elements.canonicalUrl.value = article.canonical_url || permalinkForArticle(article);
           editForm.elements.ogImage.value = article.og_image || "";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
