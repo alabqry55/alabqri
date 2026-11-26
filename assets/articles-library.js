@@ -857,7 +857,7 @@
             articles.forEach(article=>{
               const title=article.seo_title||article.seoTitle||article.title||"";
               const description=article.seo_description||article.seoDescription||article.excerpt||"";
-              const canonical=article.canonical_url||article.canonicalUrl||"";
+              const canonical=article.canonical_url||article.canonicalUrl||permalinkForArticle(article);
               const image=article.og_image||article.ogImage||"";
               const missing=[!title&&"عنوان SEO",!description&&"وصف SEO",!canonical&&"Canonical",!image&&"صورة المشاركة"].filter(Boolean);
               const item=el("article","abq-workspace-item");
