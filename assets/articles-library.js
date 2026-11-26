@@ -444,6 +444,10 @@
       if (text !== undefined) node.textContent = text;
       return node;
     };
+    const permalinkForArticle = article => {
+      const id = String(article?.id || "");
+      return /^[A-Za-z0-9_-]{1,80}$/.test(id) ? "https://alabqri.pages.dev/articles/" + encodeURIComponent(id) : "";
+    };
     const showStatus = message => {
       root.replaceChildren();
       root.appendChild(el("div", "abq-articles-status", message));
@@ -1015,7 +1019,7 @@
           editForm.elements.seoTitle.value = article.seo_title || article.title || "";
           editForm.elements.seoDescription.value = article.seo_description || article.excerpt || "";
           editForm.elements.seoKeywords.value = article.seo_keywords || "";
-          editForm.elements.canonicalUrl.value = article.canonical_url || "";
+          editForm.elements.canonicalUrl.value = article.canonical_url || permalinkForArticle(article);
           editForm.elements.ogImage.value = article.og_image || "";
           editForm.elements.title.required = true;
           editForm.elements.date.required = true;
