@@ -78,12 +78,12 @@ export async function onRequest({request, env, params}) {
     "@type":"Article",
     "headline":String(article.title),
     "description":description,
-    "datePublished":String(article.date || ""),
     "author":{"@type":"Organization","name":"مركز العبقري للتدريب والإستشارات"},
     "publisher":{"@type":"Organization","name":"مركز العبقري للتدريب والإستشارات"},
     "mainEntityOfPage":{"@type":"WebPage","@id":canonical},
     "image":[image]
   };
+  if (/^\\d{4}-\\d{2}-\\d{2}(?:T.*)?$/.test(String(article.date || ""))) structured.datePublished = String(article.date);
   const body = `<!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title><meta name="description" content="${esc(description)}">
