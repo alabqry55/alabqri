@@ -96,7 +96,7 @@ export async function onRequest({request, env, params}) {
   if (publicPresentation.hideEditorialTail) {
     // Hide the internal SEO/publication handoff block from the public page only.
     // Keep the original content unchanged in D1 and retain the separately rendered tags.
-    publicContent = publicContent.replace(/^\s*#{1,6}\s*بيانات النشر المقترحة\s*$[\s\\S]*$/m, "").trim();
+    publicContent = publicContent.replace(/^\s*#{1,6}\s*بيانات النشر المقترحة\s*$[\s\S]*$/m, "").trim();
   }
   const canonical = SITE_ORIGIN + "/articles/" + encodeURIComponent(id);
   const title = String(publicPresentation.seoTitle || article.seo_title || publicTitle).slice(0,240);
