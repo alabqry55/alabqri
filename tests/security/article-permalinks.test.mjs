@@ -94,7 +94,7 @@ test("library cards expose direct links while preserving the existing reader UI"
   const source=await readFile(new URL("../../assets/articles-library.js",import.meta.url),"utf8");
   assert.ok(source.includes('permalink.href = "/articles/" + encodeURIComponent(String(a.id))'));
   assert.ok(source.includes('const permalinkForArticle = article =>'));
-  assert.ok(source.includes('article.canonical_url||permalinkForArticle(article)'));
+  assert.ok(source.includes('article.canonical_url||article.canonicalUrl||permalinkForArticle(article)'));
   assert.ok(source.includes('article.canonical_url || permalinkForArticle(article)'));
   assert.ok(source.includes('details.appendChild(summary)'));
   assert.ok(source.includes('classList.add("is-expanded")'));
