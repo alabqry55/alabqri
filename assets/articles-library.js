@@ -53,6 +53,8 @@
     .abq-articles-library{direction:rtl;text-align:right;margin:1rem 0;width:100%;max-width:none;min-width:0;box-sizing:border-box;font-family:inherit}
     .abq-library-intro{display:block;margin:2px 0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:1.9;font-size:1rem;color:#24352d;white-space:pre-line}#abq-unified-4way-nav .abq-unified-core img{pointer-events:none!important;cursor:default!important}
     .abq-library-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem;margin:1rem 0}
+    /* One shared outer frame encloses the seven individually framed library sections. */
+    .abq-articles-library .abq-library-sections{border:2px solid #2563eb; border-radius:18px; padding:12px; box-sizing:border-box;}
     .abq-library-section{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #d8e2dc;border-radius:15px;background:#fff;color:#173b2d;text-align:right;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
     .abq-library-section:hover,.abq-library-section[aria-pressed="true"]{border-color:#b88a2b;background:#fbfaf5}
     .abq-library-section:disabled{cursor:default;opacity:.68}
