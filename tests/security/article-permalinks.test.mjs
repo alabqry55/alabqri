@@ -48,6 +48,22 @@ test("permalink renders a public article with stable canonical and social metada
   assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
 });
 
+test("canonical Azkar permalink resolves a legacy row by title when its database ID differs", async () => {
+  const row={...baseArticle,id:"legacy-azkar-row",title:"🌿 أثر الأذكار في الإتزان النفسي"};
+  const statements=[];
+  const db={prepare(sql){statements.push(String(sql));return{bind(){return this;},async first(){return statements.length===1?null:row;}};}};
+  const response=await articlePage({
+    request:new Request("https://alabqri.pages.dev/articles/azkar-balance"),
+    params:{id:"azkar-balance"},
+    env:{DB:db}
+  });
+  assert.equal(response.status,200);
+  const html=await response.text();
+  assert.match(html,/canonical" href="https:\/\/alabqri\.pages\.dev\/articles\/azkar-balance"/);
+  assert.match(html,/أثر الأذكار/);
+  assert.ok(statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
+});
+
 test("permalink hides articles scheduled for a future date", async () => {
   const db=mockDb({...baseArticle,scheduled_at:"2999-01-01T00:00:00.000Z"});
   const response=await articlePage({
