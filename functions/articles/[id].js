@@ -44,6 +44,21 @@ export async function onRequest({request, env, params}) {
       return page(503,"تعذر تحميل المقال","تعذر الوصول إلى بيانات المقال حاليًا.");
     }
   }
+  // The public API normalizes the legacy Azkar article to this stable ID,
+  // even when its original D1 row was saved under a different ID.
+  if (!article && id === "azkar-balance") {
+    try {
+      article = await env.DB.prepare(
+        "SELECT id,title,category,date,excerpt,content,scheduled_at,tags_json,seo_title,seo_description,seo_keywords,canonical_url,og_image FROM articles WHERE title LIKE ?1 ORDER BY updated_at DESC LIMIT 1"
+      ).bind("%أثر الأذكار في الاتزان النفسي%").first();
+    } catch (_) {
+      try {
+        article = await env.DB.prepare(
+          "SELECT id,title,category,date,excerpt,content,scheduled_at FROM articles WHERE title LIKE ?1 ORDER BY updated_at DESC LIMIT 1"
+        ).bind("%أثر الأذكار في الاتزان النفسي%").first();
+      } catch (_) { /* keep the not-found response below */ }
+    }
+  }
   if (!article || !article.title || !article.content) return page(404,"المقال غير موجود","لم نعثر على مقال بهذا الرابط.");
   if (article.scheduled_at) {
     const scheduled = Date.parse(article.scheduled_at);
