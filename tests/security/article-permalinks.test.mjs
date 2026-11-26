@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { onRequest as articlePage } from "../../functions/articles/[id].js";
+import { renderMarkdown } from "../../functions/_shared/markdown.js";
 
 function mockDb(row) {
   const statements=[];
@@ -98,4 +99,37 @@ test("library cards expose direct links while preserving the existing reader UI"
   assert.ok(source.includes('article.canonical_url || permalinkForArticle(article)'));
   assert.ok(source.includes('details.appendChild(summary)'));
   assert.ok(source.includes('classList.add("is-expanded")'));
+});
+
+
+test("article Markdown renders structure and inline emphasis without exposing raw syntax", () => {
+  const rendered=renderMarkdown("# عنوان رئيسي\n\n## محور **مهم**\n\nهذا **نص عريض** و\x60كود\x60.\n\n- بند أول\n- بند ثانٍ\n\n> اقتباس موثق\n\n---");
+  assert.match(rendered,/<h1>عنوان رئيسي<\/h1>/);
+  assert.match(rendered,/<h2>محور <strong>مهم<\/strong><\/h2>/);
+  assert.match(rendered,/<strong>نص عريض<\/strong>/);
+  assert.match(rendered,/<code>كود<\/code>/);
+  assert.match(rendered,/<ul>[\s\S]*<li>بند أول<\/li>[\s\S]*<li>بند ثانٍ<\/li>[\s\S]*<\/ul>/);
+  assert.match(rendered,/<blockquote><p>اقتباس موثق<\/p><\/blockquote>/);
+  assert.match(rendered,/<hr>/);
+  assert.doesNotMatch(rendered,/##|\*\*|---/);
+});
+
+test("Markdown renderer escapes raw HTML and script payloads", () => {
+  const rendered=renderMarkdown('<script>alert(1)</script> **آمن**');
+  assert.equal(rendered,'<p>&lt;script&gt;alert(1)&lt;/script&gt; <strong>آمن</strong></p>');
+  assert.doesNotMatch(rendered,/<script>/i);
+});
+
+test("public article page uses the safe Markdown renderer and preserves stored editorial text", async () => {
+  const contentText="## بيانات النشر المقترحة\\n\\nحالة المادة: جاهز للإدخال في نظام النشر بعد المراجعة.";
+  const db=mockDb({...baseArticle,content:contentText});
+  const response=await articlePage({
+    request:new Request("https://alabqri.pages.dev/articles/raqya-001"),
+    params:{id:"raqya-001"},
+    env:{DB:db}
+  });
+  const html=await response.text();
+  assert.match(html,/<h2>بيانات النشر المقترحة<\/h2>/);
+  assert.match(html,/حالة المادة: جاهز للإدخال في نظام النشر بعد المراجعة\./);
+  assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
 });
