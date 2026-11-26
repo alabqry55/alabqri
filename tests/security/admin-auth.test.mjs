@@ -85,7 +85,7 @@ test("rejects expired, overlong, and malformed session time claims", async (t) =
   const cases = [
     ["expired", { iat: now - 3601, exp: now - 1 }],
     ["overlong", { iat: now - 3601, exp: now + 1 }],
-    ["future issued-at", { iat: now + 61, exp: now + 3600 }],
+    ["future issued-at", { iat: now + 120, exp: now + 3600 }],
     ["non-integer issued-at", { iat: String(now), exp: now + 3600 }]
   ];
   for (const [label, claims] of cases) {

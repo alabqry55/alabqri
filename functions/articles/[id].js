@@ -1,3 +1,4 @@
+import { renderMarkdown } from "../_shared/markdown.js";
 const SITE_ORIGIN = "https://alabqri.pages.dev";
 const SITE_NAME = "منصة العبقري للتدريب والإستشارات";
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -99,7 +100,17 @@ export async function onRequest({request, env, params}) {
 article{padding:clamp(1rem,3vw,2rem);border:2px solid #2563eb;border-radius:18px;background:#fff;line-height:2.05;overflow-wrap:anywhere}
 h1{font-size:clamp(1.45rem,3vw,2.2rem);line-height:1.65;margin:.2rem 0 .6rem;color:#173b2d}
 .meta{color:#64748b;font-size:.92rem;margin:.3rem 0 1.2rem}.excerpt{font-weight:700;margin:1rem 0;padding:1rem;background:#f7faf8;border-right:4px solid #b88a2b;border-radius:10px;white-space:pre-wrap}
-.content{white-space:pre-wrap;overflow-wrap:anywhere}.tags{margin-top:1.5rem;color:#475569;font-size:.9rem}
+.content{overflow-wrap:anywhere}
+.content h2,.content h3,.content h4{color:#173b2d;line-height:1.7;margin:1.5rem 0 .65rem}
+.content h2{font-size:1.45rem;border-right:4px solid #b88a2b;padding-right:.7rem}
+.content h3{font-size:1.2rem}
+.content p{margin:.8rem 0;white-space:normal}
+.content ul,.content ol{padding-right:1.6rem;margin:.6rem 0 1rem}
+.content li{margin:.35rem 0}
+.content blockquote{margin:1rem 0;padding:.7rem 1rem;border-right:4px solid #b88a2b;background:#f7faf8;border-radius:8px;color:#40564a}
+.content hr{border:0;border-top:1px solid #dbe5df;margin:1.4rem 0}
+.content pre{direction:ltr;text-align:left;white-space:pre-wrap;overflow:auto;padding:1rem;background:#f1f5f9;border-radius:8px}
+.content code{font-family:Consolas,monospace;background:#eef2f7;padding:.1rem .3rem;border-radius:4px}.tags{margin-top:1.5rem;color:#475569;font-size:.9rem}
 .back{display:inline-block;margin-top:1.3rem;padding:.65rem 1rem;border:2px solid #2563eb;border-radius:10px;color:#173b2d;text-decoration:none;font-weight:700}
 footer{text-align:center;color:#64748b;font-size:.9rem;padding:1rem}
 </style></head><body>
@@ -107,7 +118,7 @@ footer{text-align:center;color:#64748b;font-size:.9rem;padding:1rem}
 <main class="wrap"><article><h1>${esc(article.title)}</h1>
 <p class="meta">${esc(article.category || "مكتبة وأبحاث العبقري")}${article.date?" • "+esc(article.date):""}</p>
 ${article.excerpt?`<div class="excerpt">${esc(article.excerpt)}</div>`:""}
-<div class="content">${esc(article.content)}</div>
+<div class="content">${renderMarkdown(article.content)}</div>
 ${tags.length?`<p class="tags">${tags.map(tag=>"#"+esc(String(tag).replace(/^#/,""))).join(" • ")}</p>`:""}
 <a class="back" href="/#articles">العودة إلى مكتبة وأبحاث العبقري</a></article></main>
 <footer>مركز العبقري للتدريب والإستشارات • تحت إشراف د. أحمد السيد رَسَّه</footer></body></html>`;
