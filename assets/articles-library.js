@@ -50,7 +50,7 @@
   }
   const headingText = "أحدث المقالات والأبحاث";
   const styleText = `
-    .abq-articles-library{direction:rtl;text-align:right;margin:1rem auto;max-width:1160px;font-family:inherit}
+    .abq-articles-library{direction:rtl;text-align:right;margin:1rem 0;width:100%;max-width:none;min-width:0;box-sizing:border-box;font-family:inherit}
     .abq-library-intro{display:block;margin:2px 0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:1.9;font-size:1rem;color:#24352d;white-space:pre-line}#abq-unified-4way-nav .abq-unified-core img{pointer-events:none!important;cursor:default!important}
     .abq-library-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem;margin:1rem 0}
     .abq-library-section{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #d8e2dc;border-radius:15px;background:#fff;color:#173b2d;text-align:right;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
@@ -63,6 +63,9 @@
     .abq-articles-status{padding:1rem;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.8}
     .abq-articles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1rem}
     .abq-article-card{min-width:0;padding:1rem;border:1px solid #d6e0ec;border-radius:16px;background:#fff;box-shadow:0 3px 12px #0f172a0a;color:#172033}
+    .abq-article-card.is-expanded{grid-column:1 / -1;width:100%;max-width:none;box-sizing:border-box}
+    .abq-article-card.is-expanded .abq-article-content{width:100%;max-width:none;box-sizing:border-box}
+    .abq-reader-back{display:inline-flex;align-items:center;justify-content:center;margin-top:1rem;padding:.65rem 1rem;border:2px solid #2563eb;border-radius:10px;background:#fff;color:#173b2d;font:inherit;font-weight:700;cursor:pointer}
     .abq-article-card h3{font-size:1.08rem;line-height:1.7;margin:0 0 .5rem}
     .abq-article-meta{font-size:.82rem;color:#64748b;margin:.3rem 0 .65rem}
     .abq-article-excerpt{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -647,8 +650,27 @@
             }
             if (a.excerpt) card.appendChild(el("p", "abq-article-excerpt", a.excerpt));
             const details = el("details");
-            details.appendChild(el("summary", "", "قراءة البحث"));
+            const summary = el("summary", "", "قراءة البحث");
+            details.appendChild(summary);
             details.appendChild(el("div", "abq-article-content", a.content));
+            const backButton = el("button", "abq-reader-back", "العودة إلى قائمة الأبحاث");
+            backButton.type = "button";
+            backButton.addEventListener("click", () => { details.open = false; summary.focus(); });
+            details.appendChild(backButton);
+            details.addEventListener("toggle", () => {
+              if (details.open) {
+                grid.querySelectorAll("details[open]").forEach(openDetails => {
+                  if (openDetails === details) return;
+                  openDetails.open = false;
+                  openDetails.closest(".abq-article-card")?.classList.remove("is-expanded");
+                });
+                card.classList.add("is-expanded");
+                summary.textContent = "إغلاق البحث";
+              } else {
+                card.classList.remove("is-expanded");
+                summary.textContent = "قراءة البحث";
+              }
+            });
             card.appendChild(details);
             if (adminMode) {
               const btn = el("button", "", "تعديل المقال");
