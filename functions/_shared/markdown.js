@@ -4,16 +4,16 @@ const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
 
 function renderInline(value) {
   const code = [];
-  let source = String(value ?? "").replace(/`([^`]+)`/g, (_, text) => {
+  let source = String(value ?? "").replace(/[\x60]([^\x60]+)[\x60]/g, (_, text) => {
     const token = String.fromCharCode(0xE000 + code.length);
     code.push("<code>" + escapeHtml(text) + "</code>");
     return token;
   });
   source = escapeHtml(source);
   source = source
-    .replace(/**(.+?)**/g, "<strong>$1</strong>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/__(.+?)__/g, "<strong>$1</strong>")
-    .replace(/(^|[^*])*([^*\n]+)*/g, "$1<em>$2</em>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
     .replace(/(^|[^_])_([^_\n]+)_/g, "$1<em>$2</em>");
   return source.replace(/[\uE000-\uF8FF]/g, token => {
     const index = token.charCodeAt(0) - 0xE000;
@@ -45,7 +45,7 @@ export function renderMarkdown(input) {
   };
 
   for (const line of lines) {
-    const fence = line.match(/^\s*```/);
+    const fence = line.match(/^\s*[\x60]{3}/);
     if (code !== null) {
       if (fence) {
         output.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>");
