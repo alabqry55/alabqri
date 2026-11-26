@@ -70,14 +70,42 @@ export async function onRequest({request, env, params}) {
   let tags=[];
   try { tags=Array.isArray(article.tags_json)?article.tags_json:JSON.parse(article.tags_json || "[]"); } catch (_) {}
   if (!Array.isArray(tags)) tags=[];
+  // Public presentation corrections for the three reviewed Quran-section articles.
+  // These are render-time overrides only: the stored D1 article rows remain untouched.
+  const publicPresentation = {
+    "article-mwwwneov-5167dz": {
+      hideEditorialTail: true
+    },
+    "article-mwlxs57o-6mvjtf": {
+      title: "الفرق بين الخوف والخشية في القرآن الكريم: دراسة موجزة",
+      seoTitle: "الفرق بين الخوف والخشية في القرآن الكريم | دراسة موجزة",
+      description: "دراسة موجزة تشرح دلالات الخوف والخشية في القرآن الكريم، وصلتهما بالعلم والتعظيم، وآثارهما الإيمانية والنفسية والتربوية.",
+      excerpt: "دراسة قرآنية موجزة تتناول دلالات الخوف والخشية، والفروق بينهما في الاستعمال القرآني، وعلاقة الخشية بالعلم والتعظيم وأثرهما في سلوك المؤمن."
+    },
+    "article_1794992060280": {
+      title: "الفرق بين الخوف والخشية في القرآن الكريم: دراسة موسعة",
+      seoTitle: "الفرق بين الخوف والخشية في القرآن الكريم | دراسة موسعة",
+      description: "بحث قرآني لغوي ونفسي موسع يوضح مفهوم الخوف والخشية والفروق الدلالية بينهما، وشواهدهما القرآنية وآثارهما التربوية وتطبيقاتهما العملية.",
+      excerpt: "دراسة موسعة تجمع بين التفسير القرآني والتحليل اللغوي والتأمل النفسي والتوجيه التربوي لفهم الخوف والخشية وآثارهما في حياة الإنسان."
+    }
+  }[id] || {};
+  const publicTitle = String(publicPresentation.title || article.title);
+  const publicExcerpt = String(publicPresentation.excerpt || article.excerpt || "");
+  const publicDescription = String(publicPresentation.description || article.seo_description || article.excerpt || "").replace(/\s+/g," ").trim().slice(0,500);
+  let publicContent = String(article.content || "");
+  if (publicPresentation.hideEditorialTail) {
+    // Hide the internal SEO/publication handoff block from the public page only.
+    // Keep the original content unchanged in D1 and retain the separately rendered tags.
+    publicContent = publicContent.replace(/^\s*#{1,6}\s*بيانات النشر المقترحة\s*$[\s\S]*$/m, "").trim();
+  }
   const canonical = SITE_ORIGIN + "/articles/" + encodeURIComponent(id);
-  const title = String(article.seo_title || article.title).slice(0,240);
-  const description = String(article.seo_description || article.excerpt || "").replace(/\s+/g," ").trim().slice(0,500);
+  const title = String(publicPresentation.seoTitle || article.seo_title || publicTitle).slice(0,240);
+  const description = publicDescription;
   const image = /^https:\/\//i.test(String(article.og_image || "")) ? String(article.og_image) : SITE_ORIGIN + "/assets/images/1784959287743-580091929.png";
   const structured = {
     "@context":"https://schema.org",
     "@type":"Article",
-    "headline":String(article.title),
+    "headline":publicTitle,
     "description":description,
     "author":{"@type":"Organization","name":"مركز العبقري للتدريب والإستشارات"},
     "publisher":{"@type":"Organization","name":"مركز العبقري للتدريب والإستشارات"},
@@ -115,11 +143,11 @@ h1{font-size:clamp(1.45rem,3vw,2.2rem);line-height:1.65;margin:.2rem 0 .6rem;col
 footer{text-align:center;color:#64748b;font-size:.9rem;padding:1rem}
 </style></head><body>
 <header class="site-head"><a href="/">🎓 منصة العبقري للتدريب والإستشارات</a><div>🌿 الطب التكميلي والتنمية البشرية</div></header>
-<main class="wrap"><article><h1>${esc(article.title)}</h1>
+<main class="wrap"><article><h1>${esc(publicTitle)}</h1>
 <p class="meta">${esc(article.category || "مكتبة وأبحاث العبقري")}${article.date?" • "+esc(article.date):""}</p>
-${article.excerpt?`<div class="excerpt">${esc(article.excerpt)}</div>`:""}
-<div class="content">${renderMarkdown(article.content)}</div>
-${tags.length?`<p class="tags">${tags.map(tag=>"#"+esc(String(tag).replace(/^#/,""))).join(" • ")}</p>`:""}
+${publicExcerpt?`<div class="excerpt">${esc(publicExcerpt)}</div>`:""}
+<div class="content">${renderMarkdown(publicContent)}</div>
+${tags.length?`<p class="tags">${tags.map(tag=>"#"+esc(String(tag).replace(/^#/,"").replace(/\*/g,"_"))).join(" • ")}</p>`:""}
 <a class="back" href="/#articles">العودة إلى مكتبة وأبحاث العبقري</a></article></main>
 <footer>مركز العبقري للتدريب والإستشارات • تحت إشراف د. أحمد السيد رَسَّه</footer></body></html>`;
   const response = html(title,description,body,200);

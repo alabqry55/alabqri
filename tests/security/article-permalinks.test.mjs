@@ -133,3 +133,41 @@ test("public article page uses the safe Markdown renderer and preserves stored e
   assert.match(html,/حالة المادة: جاهز للإدخال في نظام النشر بعد المراجعة\./);
   assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
 });
+
+
+test("Quran article presentation hides the internal publishing block without changing stored content", async () => {
+  const id="article-mwwwneov-5167dz";
+  const stored="## مقدمة\nمحتوى المقال الأصلي.\n\n## بيانات النشر المقترحة\nعنوان SEO داخلي\nحالة المادة: جاهز للإدخال في نظام النشر.\n#الرقية*الشرعية";
+  const db=mockDb({...baseArticle,id,title:"مفهوم الرقية الشرعية وضوابطها",content:stored,tags_json:'["الرقية*الشرعية"]'});
+  const response=await articlePage({request:new Request("https://alabqri.pages.dev/articles/"+id),params:{id},env:{DB:db}});
+  const html=await response.text();
+  assert.equal(response.status,200);
+  assert.match(html,/محتوى المقال الأصلي/);
+  assert.doesNotMatch(html,/بيانات النشر المقترحة|عنوان SEO داخلي|حالة المادة: جاهز للإدخال/);
+  assert.match(html,/#الرقية_الشرعية/);
+  assert.equal(stored.includes("حالة المادة: جاهز للإدخال"),true);
+  assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
+});
+
+test("the short fear article receives a matching public title, excerpt and SEO metadata", async () => {
+  const id="article-mwlxs57o-6mvjtf";
+  const db=mockDb({...baseArticle,id,title:"الخوف في القرآن الكريم",excerpt:"ملخص قديم لا يطابق المتن",content:"## الفرق بين الخوف والخشية في القرآن الكريم\nمحتوى الدراسة الموجزة."});
+  const response=await articlePage({request:new Request("https://alabqri.pages.dev/articles/"+id),params:{id},env:{DB:db}});
+  const html=await response.text();
+  assert.match(html,/<h1>الفرق بين الخوف والخشية في القرآن الكريم: دراسة موجزة<\/h1>/);
+  assert.match(html,/دراسة قرآنية موجزة تتناول دلالات الخوف والخشية/);
+  assert.match(html,/<title>الفرق بين الخوف والخشية في القرآن الكريم \| دراسة موجزة<\/title>/);
+  assert.match(html,/headline":"الفرق بين الخوف والخشية في القرآن الكريم: دراسة موجزة/);
+  assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
+});
+
+test("the expanded fear article is clearly distinguished in its public title and SEO", async () => {
+  const id="article_1794992060280";
+  const db=mockDb({...baseArticle,id,title:"الفرق بين الخوف والخشية في القرآن الكريم",excerpt:"ملخص قديم",content:"## المحور الأول\nمحتوى الدراسة الموسعة."});
+  const response=await articlePage({request:new Request("https://alabqri.pages.dev/articles/"+id),params:{id},env:{DB:db}});
+  const html=await response.text();
+  assert.match(html,/<h1>الفرق بين الخوف والخشية في القرآن الكريم: دراسة موسعة<\/h1>/);
+  assert.match(html,/<title>الفرق بين الخوف والخشية في القرآن الكريم \| دراسة موسعة<\/title>/);
+  assert.match(html,/بحث قرآني لغوي ونفسي موسع/);
+  assert.ok(db.statements.every(sql=>sql.trim().toUpperCase().startsWith("SELECT ")));
+});
