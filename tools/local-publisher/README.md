@@ -1,5 +1,7 @@
 # أداة الحفظ المحلية لمقالات ALABQRI
 
+تنبيه: هذه الأداة ومسار الحفظ الجديد لن يعملا على الموقع الإنتاجي حتى مراجعة PR #147 ودمجه ونشره بنجاح. لا تنفذ خطوات الحفظ قبل ذلك.
+
 هذه أداة محلية تستخدم جلسة المالك في نافذة متصفح مخصصة لإرسال طلب حفظ من نفس نطاق الموقع إلى مسار الحفظ الجديد /api/articles-publish. يضيف مسارًا خادميًا محدودًا لا ينفذ أي CREATE أو ALTER أو migration؛ يتحقق أولًا من وجود مخطط D1 الحالي.
 
 ## حدود الأمان
@@ -25,8 +27,8 @@
 أغلق أي نافذة قديمة تستخدم المنفذ 9222. افتح PowerShell ونفّذ (لمتصفح Edge):
 
 \`\`\`powershell
-$profile = "$env:LOCALAPPDATA\\ALABQRI-Publisher-Profile"
-$edge = "\${env:ProgramFiles(x86)}\\Microsoft\\Edge\\Application\\msedge.exe"
+$profile = "$env:LOCALAPPDATA\ALABQRI-Publisher-Profile"
+$edge = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
 Start-Process $edge -ArgumentList @("--remote-debugging-port=9222", "--user-data-dir=$profile", "https://alabqri.pages.dev/")
 \`\`\`
 
