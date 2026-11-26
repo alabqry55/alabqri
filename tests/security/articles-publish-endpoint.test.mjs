@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { webcrypto } from "node:crypto";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { onRequest as publishRequest } from "../../functions/api/articles-publish.js";
 
 globalThis.crypto ||= webcrypto;
@@ -138,4 +140,10 @@ test("publishing endpoint accepts only saveMany and cannot expose delete", async
   });
   assert.equal(response.status, 400);
   assert.equal(db.statements.some(sql => /^\s*DELETE\b/i.test(sql)), false);
+});
+
+test("local publisher script passes the Node.js syntax check", () => {
+  const script = fileURLToPath(new URL("../../tools/local-publisher/publish-articles.cjs", import.meta.url));
+  const result = spawnSync(process.execPath, ["--check", script], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
 });
