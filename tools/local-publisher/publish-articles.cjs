@@ -4,10 +4,10 @@
  * Requires Node.js 22+. Uses only built-in fetch and WebSocket.
  * Create-only: saveMany only. Never reads or exports browser cookies.
  */
-import fs from "node:fs";
-import path from "node:path";
-import readline from "node:readline/promises";
-import { stdin, stdout } from "node:process";
+const fs = require("node:fs");
+const path = require("node:path");
+const readline = require("node:readline/promises");
+const { stdin, stdout } = require("node:process");
 
 const ORIGIN = "https://alabqri.pages.dev";
 const CDP_ENDPOINT = "http://127.0.0.1:9222/json/list";
