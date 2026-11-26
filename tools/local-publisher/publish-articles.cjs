@@ -128,7 +128,7 @@ async function main() {
     if (answer.trim() !== "نشر") throw new Error("أُلغيت العملية؛ لم يُرسل طلب الحفظ.");
 
     const b64 = Buffer.from(JSON.stringify(payload), "utf8").toString("base64");
-    const expression = '(async()=>{const b=Uint8Array.from(atob("' + b64 + '"),c=>c.charCodeAt(0));const body=new TextDecoder().decode(b);const r=await fetch("/api/articles",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body});const d=await r.json().catch(()=>({error:"استجابة غير مفهومة"}));return {status:r.status,data:d}})()';
+    const expression = '(async()=>{const b=Uint8Array.from(atob("' + b64 + '"),c=>c.charCodeAt(0));const body=new TextDecoder().decode(b);const r=await fetch("/api/articles-publish",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body});const d=await r.json().catch(()=>({error:"استجابة غير مفهومة"}));return {status:r.status,data:d}})()';
     const result = await evaluate(expression);
     console.log("\nاستجابة الخادم:");
     console.log(JSON.stringify(result, null, 2));
